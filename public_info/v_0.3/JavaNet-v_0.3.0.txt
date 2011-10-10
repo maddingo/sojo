@@ -1,0 +1,24 @@
+The Open Source project Sojo has announced the third release (version 0.3.0). 
+The intention for this project is a Java framework, that convert JavaBeans in a simplified representation . 
+So it is easy and uniformly to handle and control the access to JavaBeans properties. 
+This framework want to complement POJOs, where Java communicate with "other worlds. Other worlds are interfaces, 
+where object orientation is not supported or is not the best decision.
+
+In cases, where object orientation and not object orientation must work together, exist the problem of independent mismatched. 
+The SOJO want to do this problem a little bit smaller. 
+
+The main changes are:
+
+Support for the data interchange format JSON adn XML-RPC and minor bug fixes.
+
+
+
+Homepage:
+
+http://sojo.sourceforge.net
+
+Download: 
+
+http://sourceforge.net/project/showfiles.php?group_id=178713
+
+simple serialization for JSON, XML-RPC and more with SOJO

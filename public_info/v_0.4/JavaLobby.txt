@@ -1,0 +1,85 @@
+Dear JavaLobby Community,
+
+The Open Source project SOJO has announced the next release of version 0.4.0. 
+
+This Java framework want to support the developer by converting JavaBeans in a simplified representation. 
+So it is easy and uniformly to handle and control the access to JavaBeans properties. 
+This framework want to complement POJOs, where object orientation is not supported or is not the best decision.
+
+This framework is developed und tested with Java 2 Platform Standard Edition, v 1.4.2.
+The SOJO framework has no dependencies to external libraries!!!
+
+The SOJO framework is available under the Apache License Version 2.0. 
+
+Supported functionality are:
+
+- data interchange to easy communication with non-Java processes:
+
+Serializer serializer = new JsonSerializer(); 
+// XmlRpcSerializer | ObjectSerializer | CsvSerializer
+Object result = serializer.serialize(anObject);
+Object anObjectCopy = serializer.deserialize(result);
+
+
+- operations with complex Java-Objects-graphs (common / navigation):
+
+* copy or clone complex object graph (for data transfer objects (DTO), can manage different versions from one object graph (object history))
+
+Object anObjectCopy = new ObjectUtil().copy(anObject);
+
+* compare complex object graph
+
+boolean equals = ObjectUtil.equals(obj1, obj2);
+
+// for example for the equals method, compare all values
+public boolean equals(Object obj) {
+  <b>return ObjectUtil.equals(obj, this);</b>
+}
+
+// the complement, the hashCode - method
+public int hashCode() {
+  <b>return ObjectUtil.hashCode(this);</b>
+}
+
+// show the first finded different value
+CompareResult result = ObjectUtil.compare(obj1, obj2);
+
+// show all finded different value
+CompareResult result[] = ObjectUtil.compareAll(obj1, obj2);
+
+// less, equal, greater (for JavaBeans too)
+int compareTo = ObjectUtil.compareTo(obj1, obj2);
+
+
+* Convert objects (respectively object graphs)
+
+// transform a Exception, what is usefull by client/server applications, 
+// to transport the value over the network
+ObjectUtil util = new ObjectUtil();
+Map throwableMap = (Map) util.makeSimple(new ConversionException("Test"));
+ConversionException conversionException = (ConversionException) util.makeComplex(throwableMap);
+
+// or transform to an other Exception, what is usefull by client/server applications,
+// where the client doesn't know the server Exception  (e.g. DaoException/TechnicalException)
+ClientException clientException = (ClientException) util.makeComplex(throwableMap, ClientException.class);
+
+
+The main new feature:
+
+- CSV data interchange (Feature Request: 1639781)
+- ThrowableConverterInterceptor: This interceptor transform a Exception to a ThrowableWrapper. 
+  The benefit of this conversion is, that can wrap a Throwable instance and can save the stack trace and the exception message without a 
+  knowledge of the original exception - class (Feature Request: 1662346). 
+- Set desired date format:CURRENT serialized with JSON: {"dob":"Tue Feb 20 10:25:19 EST 2007","id":10} DESIRED serialized form: {"dob":"02/20/2007","id":10} (Feature Request: 1664604)
+
+
+Have fun with SOJO and say, 
+where should the way from SOJO go in future? 
+
+Homepage:
+
+http://sojo.sourceforge.net
+
+Download: 
+
+http://sourceforge.net/project/showfiles.php?group_id=178713

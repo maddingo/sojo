@@ -1,0 +1,122 @@
+<document>
+
+  <body>
+
+	<section name="Navigation on a complex Java-Objects-graphs">				
+		<p>
+		If you want to navigate with a description (language) on a object graph, than you can use the SOJO navigation language.
+		SOJO has three kinds of navigations:
+		<ul>
+			<li><strong>Simple: </strong> Simple values (getter/setter) from  JavaBean properties.
+				(Example: <i>name</i> is correspond to call <i>getName()</i> on a JavaBean with the property <i>name</i>)
+			</li>
+			<li><strong>Iterateable: </strong> An Iterateable property are collection or array of objects, that can be accessed 
+			    by an integer-valued (index, non-negative). 
+			    (Example: <i>childs[0]</i> is correspond to call <i>getChilds().get(0)</i> on a JavaBean with the property <i>childs</i>.
+			    They get the first elemet from the list <i>childs</i>)
+			</li>
+			<li><strong>Map: </strong>A Map property is a property with a implementation from the java interface <i>java.util.Map</i>.
+			    The elements are composite key-value pairs. You can set and retrieve individual values via a key. 
+    			    (Example: <i>namedChild(key1)</i> is correspond to call <i>getNamedChild().get("key1")</i> on a JavaBean with the property <i>namedChild</i>.
+			    They get the  elemet for the key <i>key1</i> from a map).
+
+			</li>				
+		</ul>
+		This three kinds can you combinate with each other. The name for this case is <strong>Nested</strong>.
+		(Example: <i>childs[0].name</i> is correspond to call <i>((Node) getChilds().get(0)).getName()</i> on a JavaBean with the property <i>childs</i>,
+		where this property is from type list and contains on the first position a Node - object.
+		</p>					
+		
+		<subsection name="Easy navigation on an complex object graph">
+		<p>
+		Examples for <i>get</i> properties:
+		</p>							
+<source>
+// simple example
+Node node = new Node("Node");
+// result = Node
+Object result = PathExecuter.getSimpleProperty(node, "name");
+
+// more complex example (iterateale)
+Node node = new Node("Node");
+Node childNode1 = new Node("Child-Node-1");
+Node childNode2 = new Node("Child-Node-2");
+node.getChilds().add(childNode1);
+node.getChilds().add(childNode2);
+
+// result = Child-Node-1
+Object result = PathExecuter.getNestedProperty(node, "childs[0].name");
+
+</source>		
+
+		<p>
+		Examples for <i>set</i> properties:
+		</p>							
+<source>
+// simple example
+Node node = new Node("Node");
+// name of node is: New-Node
+PathExecuter.setSimpleProperty(node, "name", "New-Node");
+
+// more complex example (map)
+Node node = new Node("Test-Node");
+node.getNamedChilds().put("N1", new Node("N1"));
+node.getNamedChilds().put("N2", new Node("N2"));
+
+PathExecuter.setNestedProperty(node, "namedChilds(N3)", new Node("N3"));
+
+// add element to a list, after the last element from the list (no index is set)
+node.getChilds().add(new Node("N1-List"));
+// is equals to call the PathExecuter
+PathExecuter.setNestedProperty(node, "childs[]", new Node("N1-List"));
+</source>		
+
+		<p>
+		Combinate <i>get</i> and <i>set</i> properties (this is the basis, for interfaces, where read from source object (and optional convert the value)
+		and write to the target value):
+		</p>							
+<source>
+Node node = new Node("Test-Node");
+node.getNamedChilds().put("N1", new Node("N1"));
+node.getNamedChilds().put("N2", new Node("N2"));
+node.getNamedChilds().put("N3", new Node("N3"));
+
+Object node3 = PathExecuter.getNestedProperty(node, "namedChilds(N3)");
+PathExecuter.setNestedProperty(node3, "name", "New-N3");
+</source>		
+
+		<p>
+		You can observe the "walk" about a object graph. A application for the case is, if you want to record all pathes,
+		where use from the object graph:
+		</p>							
+
+<source>
+Node node = new Node("Test-Node");
+ObjectGraphWalker walker = new ObjectGraphWalker();
+PathRecordInterceptor interceptor = new PathRecordInterceptor();
+walker.addInterceptor(interceptor);
+
+			
+walker.walk(node);
+Map pathes = interceptor.getAllRecordedPathes();
+Iterator iter = pathes.entrySet().iterator();
+while (iter.hasNext()) {
+	Map.Entry entry = (Entry) iter.next();
+	System.out.println(entry.getKey() + ": " + entry.getValue());
+}
+
+// the output is (all getter-method, with values):
+childs[]: []
+namedChilds(): {}
+class: test.net.sf.sojo.model.Node
+name: Test-Node
+parent: null
+</source>
+
+		</subsection>
+		
+	</section>
+	
+
+  </body>
+</document>

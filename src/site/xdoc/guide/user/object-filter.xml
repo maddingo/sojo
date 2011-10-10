@@ -1,0 +1,187 @@
+<document>
+
+  <body>
+	<section name="Class-Property-Filter">
+		<p>
+		In some cases wan't transformation not all properties of a class or with other words, not all
+		properties are persistent (by data interchange), but transient. For this cases can set a filter for separating
+		this special properties. 
+		</p>			
+		<p>
+		The question is, how can specify the transient properties? The first idea is, with annotations. But jdk 1.4 can't understand
+		annotations and SOJO has the aim, none or few dependencies to external libraries. This is the reseans for different solutions,
+		that are described in the next sections.
+		</p>			
+
+		<subsection name="The simplest way for filtering properties">
+		<p>
+		By this example, you can define properties for the (root) object, which are excluded.
+		</p>
+<source>
+Car car = new Car("BMW");
+car.setBuild(new Date());
+car.setDescription("This is my car");
+		
+ObjectUtil objectUtil = new ObjectUtil();
+Car carAfter = (Car) objectUtil.makeSimple(car, new String[] { "build" });
+		
+assertEquals(car.getName(), carAfter.getName());
+assertEquals(car.getDescription(), carAfter.getDescription());
+assertNull(carAfter.getBuild());
+
+</source>
+		<p>
+		Or filtering properties by use the <i>Serializer</i>:
+		</p>
+
+<source>		
+Serializer serializer = new JsonSerializer(); 
+Object result = serializer.serialize(car, new String[] { "build" });
+Car carAfter = (Car) serializer.deserialize(result);
+</source>		
+
+		</subsection>
+
+		
+		<subsection name="Filter with jdk 1.4 resources">
+		<p>
+		The first way is, describe the filters with jdk 1.4 resources. This means, with the Class <i>ClassPropertyFilter</i>.
+		This class has two parts. The first part is the class, where the filter is to assign. The second part is a array of property - names.
+		For example:
+		</p>			
+<source>
+// create filter for the class: Car
+ClassPropertyFilter classPropertyFilter = new ClassPropertyFilter(Car.class);
+classPropertyFilter.addProperty(UniqueIdGenerator.UNIQUE_ID_PROPERTY);
+// add the property: build
+classPropertyFilter.addProperty("build");
+// create a handler for the filter (this is the jdk 1.4 handler)
+ClassPropertyFilterHandlerImpl handler = new ClassPropertyFilterHandlerImpl();
+// and add the filter to the handler
+handler.addClassPropertyFilter(classPropertyFilter);
+					
+// create the Serializer
+Serializer serializer = new JsonSerializer();
+// set the handler to the Serializer
+serializer.setClassPropertyFilterHandler(handler);
+					
+// create a Car-object
+Car car = new Car();
+car.setName("MyCar");
+car.setBuild(new Date());
+					
+// print result
+System.out.println( serializer.serialize(car) );
+// print {"name":"MyCar","class":"test.net.sf.sojo.model.Car"}
+// the build (date) property was filtered
+</source>		
+
+		<p>
+		Maybe a little shorter:
+		</p>			
+
+<source>		
+ClassPropertyFilterHandlerImpl handler = new ClassPropertyFilterHandlerImpl(
+     new ClassPropertyFilter(Car.class, new String [] { "build", UniqueIdGenerator.UNIQUE_ID_PROPERTY})
+     );
+					
+//	 create the Serializer
+Serializer serializer = new JsonSerializer();
+// set the handler to the Serializer
+serializer.setClassPropertyFilterHandler(handler);
+					
+// create a Car-object
+Car car = new Car();
+car.setName("MyCar");
+car.setBuild(new Date());
+					
+// print result
+System.out.println( serializer.serialize(car) );
+// print {"name":"MyCar","class":"test.net.sf.sojo.model.Car"}
+// the build (date) property was filtered
+</source>		
+
+
+		</subsection>
+		
+		<subsection name="Filter with commons attributes">
+		<p>
+		The second way is with annotations. SOJO is compatible with jdk 1.4. This is the reason for the decision for <a href="http://jakarta.apache.org/commons/attributes/">commons attributes</a>.
+		This is an compromise between annotation and jdk 1.4. For this decision is a external library necessary. Therefore is this implementation in the <i>optional</i> package.
+		</p>			
+		
+		<p>
+		For example the annotations for the class <i>Person</i> and a filter for the <i>birthDay</i> property.
+		</p>			
+		
+<source>		
+/**
+ * @@ClassAttribute(filterUniqueId=true, filter4ClassProperty=false)
+ */
+public class Person {
+
+	/** @@PropertyAttribute() */		
+	private String firstName = null;
+	private String lastName = null;
+	private Date birthDay = null;
+
+	/**
+	 * @@PropertyAttribute()
+	 */	
+	public Date getBirthDay() {
+	   return this.birthDay;
+	}
+	public void setBirthDay(Date birthDay) {
+	   this.birthDay = birthDay;
+	}
+	public String getFirstName() {
+	   return this.firstName;
+	}
+
+   ...	
+</source>		
+
+		<p>
+		The <i>PropertyAttribute</i> can write to JavaDoc by the getter - method from the property or to the property field. The property filed name must be equals to the getter method name, without the prefix
+		get ant beginning with the lower case (how in the example, by the field <i>firstname</i>).
+		</p>			
+		
+		<p>
+		The next example is showing, how the annotation filter is to activation:
+		</p>
+
+<source>		
+   ...
+// create the Serializer
+Serializer serializer = new JsonSerializer();
+// set the annotation - handler to the Serializer
+serializer.setClassPropertyFilterHandler(new ClassPropertyFilterHanlderForAttributes());
+   ...	
+</source>		
+		
+		</subsection>
+		
+	
+		
+		<subsection name="Filter with Java 5 annotation">
+
+		<p>
+		Certainly is it possible to integrate Java 5 annotation. For this integration must implement the interface <i>ClassPropertyFilterHandler</i>. This class is a mapping from the class, which properties
+		are to filtering, to the descriptor <i>ClassPropertyFilter</i>:
+		</p>			
+		
+<source>		
+ public interface ClassPropertyFilterHandler {
+
+	public ClassPropertyFilter getClassPropertyFilterByClass(Class pvClass);
+}	
+</source>		
+		
+		</subsection>
+		
+		
+	</section>
+	
+
+  </body>
+</document>

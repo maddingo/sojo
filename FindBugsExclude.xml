@@ -1,0 +1,12 @@
+<FindBugsFilter>
+
+     <Match classregex="test.*" />
+     <Match classregex="net.sf.sojo.interchange.json.generate.*" />
+     
+     <Match classregex=".*" >
+       <BugCode name="EI,EI2" />
+     </Match>
+
+     
+
+</FindBugsFilter>

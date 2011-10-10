@@ -1,0 +1,165 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>net.sf.sojo</groupId>
+  <artifactId>sojo</artifactId>
+  <packaging>jar</packaging>
+  <version>0.1.0</version>
+  <name>SOJO</name>
+  <url>http://sojo.sourceforge.net</url>
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>commons-logging</groupId>
+      <artifactId>commons-logging</artifactId>
+      <version>1.1</version>
+      <scope>compile</scope>
+    </dependency>    
+    <dependency>
+      <groupId>commons-attributes</groupId>
+      <artifactId>commons-attributes-compiler</artifactId>
+      <version>2.2</version>
+      <scope>compile</scope>
+    </dependency>    
+    <dependency>
+      <groupId>commons-attributes</groupId>
+      <artifactId>commons-attributes-api</artifactId>
+      <version>2.2</version>
+      <scope>compile</scope>
+    </dependency>    
+  </dependencies>
+ <build>
+       <plugins>
+          <plugin>
+             <artifactId>maven-assembly-plugin</artifactId>
+            <version>2.0</version>
+             <configuration>
+                <descriptor>assembly.xml</descriptor>
+                <finalName>${pom.artifactId}-${pom.version}</finalName>
+                <outputDirectory>target</outputDirectory>
+                <workDirectory>target/assembly/work</workDirectory>
+             </configuration>
+          </plugin>
+       </plugins>
+    </build>
+  
+  
+  
+	         
+  <reporting>
+    <plugins>
+       <plugin>
+         <groupId>org.apache.maven.plugins</groupId>
+         <artifactId>maven-project-info-reports-plugin</artifactId>
+           <reportSets>
+             <reportSet>
+                      <reports>
+                         <report>project-team</report>
+                         <report>license</report>
+                         <report>mailing-list</report>
+                         <report>scm</report>
+                      </reports>
+             </reportSet>
+           </reportSets>
+       </plugin>
+
+          
+       <plugin>
+         <groupId>org.apache.maven.plugins</groupId>
+         <artifactId>maven-javadoc-plugin</artifactId>
+       </plugin>
+       <plugin>
+         <groupId>org.apache.maven.plugins</groupId>
+         <artifactId>maven-pmd-plugin</artifactId>
+       </plugin>       
+       <plugin>
+         <groupId>org.apache.maven.plugins</groupId>
+         <artifactId>maven-surefire-plugin</artifactId>
+       </plugin>
+       <plugin>
+         <groupId>org.apache.maven.plugins</groupId>
+         <artifactId>maven-surefire-report-plugin</artifactId>
+       </plugin>
+       <plugin>
+         <groupId>org.apache.maven.plugins</groupId>
+         <artifactId>maven-jxr-plugin</artifactId>
+       </plugin>   
+
+
+       
+<!--       
+
+<excludeTransitive>true</excludeTransitive>
+       <plugin>
+		 <groupId>org.apache.maven.plugin</groupId>
+         <artifactId>dependency-maven-plugin</artifactId>
+       </plugin>   
+
+
+       <plugin>
+         <groupId>org.apache.maven.plugins</groupId>
+         <artifactId>maven-clover-plugin</artifactId>
+	 		<configuration>
+	 			<licenseLocation>${basedir}/src/license/clover.license</licenseLocation>
+	 	
+	 	
+      			<generatePdf>true</generatePdf>
+      			<generateXml>true</generateXml>
+      			<generateHtml>false</generateHtml>
+    
+	 		</configuration>
+	       	<executions>
+	          <execution>
+	            <phase>pre-site</phase>
+	            <goals>
+	              <goal>instrument</goal>
+	            </goals>
+	          </execution>
+	        </executions>         
+       </plugin>       
+       <plugin>
+         <groupId>org.apache.maven.plugins</groupId>
+         <artifactId>jdepend-maven-plugin</artifactId>
+       </plugin>   
+-->
+
+
+
+              
+       
+       
+    </plugins>          
+  </reporting>
+  
+  <developers>
+       <developer>
+          <id>linkemario</id>
+          <name>
+          <![CDATA[
+          Mario &nbsp;Linke
+          ]]>
+		</name>
+          <email>linkemario@users.sourceforge.net</email>
+          <roles>
+             <role>Architect</role>
+             <role>Developer</role>
+          </roles>
+          <timezone>+1</timezone>
+      </developer>
+  </developers>
+<!--  
+  <licenses>
+       <license>
+          <name>The Apache Software License, Version 2.0</name>
+          <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+          <distribution>repo</distribution>
+       </license>
+  </licenses>
+ --> 
+</project>

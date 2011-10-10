@@ -1,0 +1,180 @@
+<project name="sojo" default="compile" basedir=".">
+  <description>SOJO</description>
+		
+  <!-- set global properties for this build -->
+  <property name="source" location="."/>
+  <property name="root.dir" location="../../.."/>	
+  <property name="source.test" location="${root.dir}/src/test/java"/>	
+  <property name="source.site" location="${root.dir}/src/site"/>	
+  <property name="source.all" location="${root.dir}/src"/>	
+  <property name="target" location="${root.dir}/target"/>	
+  <property name="lib"  location="${root.dir}/lib"/>
+  <property name="lib.optional"  location="${lib}/optional"/>	
+	
+  <property name="classes" location="${target}/classes"/>
+  <property name="deploy"  location="${target}/deploy"/>
+  <property name="deploy.src"  location="${target}/deploy/src"/>
+  <property name="deploy.bin"  location="${target}/deploy/bin"/>	
+  <property name="javadoc"  location="${deploy}/javadoc"/>
+  <property name="test"  location="${deploy}/test"/>  
+  <property name="test_report"  location="${test}/reports"/> 
+	
+  <property name="developer.user.name" value="Mario Linke" /> 
+  <property name="version"   value="1.0.0" />  
+
+	
+  <!-- classpath -->
+   <path id="class.path.id">
+      	<!-- pathelement location="${lib}/commons-logging-1.1.jar"/ -->
+	    <pathelement location="${lib.optional}/attributes/commons-attributes-api-2.2.jar"/>
+    	<pathelement location="${lib.optional}/attributes/commons-attributes-compiler-2.2.jar"/>   	
+    	<pathelement location="${lib.optional}/attributes/qdox-1.5.jar"/>
+    </path>
+  <!-- -->
+	
+  <!-- Init -->  
+  <target name="init"> 
+    <tstamp/> 
+    <echo>init the Ant-Script</echo>
+  </target>
+
+	
+  <!-- Compile -->
+  <target name="compile" depends="init" description="compile the sources" >
+  	<echo>compile the sources</echo>
+    <javac srcdir="${source}" destdir="${classes}" classpathref="class.path.id" >
+    
+    </javac>
+  </target>
+
+	
+	
+	 
+	<!-- Create a tutorial.html document -->     
+	<target name="docbook-html">
+	   <xslt 
+	      in="${root.dir}/test/tutorial.xml" 
+	      out="${root.dir}/test/tutorial.html"
+	      style="C:/projects/software/docbook-xsl-1.71.1/html/docbook.xsl">
+	      <outputproperty name="method" value="xml"/>
+	      <outputproperty name="standalone" value="yes"/>
+	      <outputproperty name="encoding" value="iso8859_1"/>
+	      <outputproperty name="indent" value="yes"/>  
+	   </xslt>
+	</target>	
+	
+	
+  <!-- JavaCC -->
+  <target name="javacc JSON" depends="init" description="JavaCC - JSON">
+  	<echo>start JavaCC for JSON</echo>
+	<javacc
+	    target="${source}/net/sf/sojo/interchange/json/JsonParser.jj"
+	    outputdirectory="${source}/net/sf/sojo/interchange/json/generate"
+	    javacchome="${lib}/javacc-4.0"
+	    static="false"
+	/>
+  </target>  	
+
+  <target name="javacc CSV" depends="init" description="JavaCC - CSV">
+  	<echo>start JavaCC for CSV</echo>
+	<javacc
+	    target="${source}/net/sf/sojo/interchange/csv/CsvParser.jj"
+	    outputdirectory="${source}/net/sf/sojo/interchange/csv/generate"
+	    javacchome="${lib}/javacc-4.0"
+	/>
+  </target>  	
+
+	
+	
+ 	<target name="_jar-props-main" depends="" description="create the Core-Jar-File with optional-package" >
+ 		<property name="exclude.filer" value="test/**,**/optional/**,**/*.html,*.xml"/>
+ 		<property name="sojo.jar.file.name" value="sojo-${version}.jar"/>
+  	</target>
+	
+ 	<target name="_jar-props-no-tests-options" depends="" description="create the Core-Jar-File" >
+ 		<property name="exclude.filer" value="test/**,**/*.html,*.xml"/>
+ 		<property name="sojo.jar.file.name" value="sojo-optional-${version}.jar"/>
+  	</target>
+
+ 	<target name="_jar-props-with-tests" depends="" description="create the Core-Jar-File with tests" >
+ 		<property name="exclude.filer" value="**/*.html,*.xml"/>
+ 		<property name="sojo.jar.file.name" value="sojo-with-tests-${version}.jar"/>
+  	</target>
+	
+  	
+  <!-- Jar core -->
+  <target name="_jar-main" depends="init, compile" description="create the Core-Jar-File" >
+  	<mkdir dir="${deploy}"/>
+    <jar jarfile="${deploy}/${sojo.jar.file.name}"  basedir="${classes}"  excludes="${exclude.filer}">
+  	  <manifest>
+  	    <attribute name="Built-By" value="${developer.user.name}"/>
+  	    <section name="net.sf.sojo">
+  	      <attribute name="Specification-Title" value="SOJO"/>
+  	      <attribute name="Specification-Version" value="${version}"/>
+  	      <attribute name="Specification-Vendor" value="... Organization"/>
+  	      <attribute name="Implementation-Title" value="net.sf.sojo"/>
+  	      <attribute name="Implementation-Version" value="${version} on ${TODAY}"/> 
+  	      <attribute name="Implementation-Vendor" value="... Corp."/>
+  	    </section>
+  	  </manifest>    
+    </jar>
+  </target>
+	
+	<target name="jar-main" depends="_jar-props-main, _jar-main" description="create the Core-Jar-File"  />
+	<target name="jar-main-optional" depends="_jar-props-no-tests-options, _jar-main" description="create the Core-Jar-File" />
+	<target name="jar-main-with-tests" depends="_jar-props-with-tests, _jar-main" description="create the Core-Jar-File with tests" />	
+	
+	<!--  =========== EXTENSIONS =============== -->
+    <taskdef resource="org/apache/commons/attributes/anttasks.properties" classpathref="class.path.id"/>
+	
+    <target name="compile-attributes" description="==> Run the commons-attributes precompiler">
+    	<echo>Source-Test-Path: ${source.test}</echo>
+        <attribute-compiler destdir="${source.test}"  attributepackages="net.sf.sojo.optional.filter.attributes">
+            <fileset dir="${source.test}" includes="test/net/sf/sojo/optional/filter/model/**/*.java"/>
+        </attribute-compiler>
+    </target>
+	
+	
+
+	<target name="deploy-source" description="==> copy all sources for deploy">
+	 <delete dir="${deploy.src}"/>
+	 <mkdir dir="${deploy.src}"/>
+	 <copy file="${target}/docs/sojo.pdf" todir="${deploy.src}"/>
+	 <copy todir="${deploy.src}">
+	 	<fileset dir="${source.all}" excludes="**/*.svn"/>
+	  </copy>
+	  <copy file="${root.dir}/.classpath" todir="${deploy.src}"/>		
+	  <copy file="${root.dir}/.project" todir="${deploy.src}"/>
+	  <copy file="${root.dir}/project.xml" todir="${deploy.src}"/>
+	  <copy file="${root.dir}/LICENSE.txt" todir="${deploy.src}"/>
+	  <copy file="${root.dir}/maven.xml" todir="${deploy.src}"/>
+	  <copy file="${root.dir}/project.properties" todir="${deploy.src}"/>
+	  <copy file="${root.dir}/FindBugsExclude.xml" todir="${deploy.src}"/>
+	  <copy file="${root.dir}/.pmd" todir="${deploy.src}"/>
+			
+	  <zip destfile="${target}/sojo-${version}-src.zip" basedir="${deploy.src}"/>
+	</target>
+
+	<target name="deploy-bin" depends="jar-main, jar-main-optional, jar-main-with-tests" description="==> copy all bins for deploy">
+	 <delete dir="${deploy.bin}"/>
+	 <mkdir dir="${deploy.bin}"/>
+	 <mkdir dir="${deploy.bin}/docs"/>	
+	 <mkdir dir="${deploy.bin}/lib"/>	
+		
+	 <copy todir="${deploy.bin}/docs">
+		    <fileset dir="${target}/docs"/>
+	 </copy>
+	 <copy todir="${deploy.bin}/lib">
+			<fileset dir="${lib.optional}" excludes="**/*.svn"/>
+	 </copy>		
+		
+	 <copy file="${target}/deploy/sojo-${version}.jar" todir="${deploy.bin}"/>		
+	 <copy file="${target}/deploy/sojo-optional-${version}.jar" todir="${deploy.bin}"/>		
+	 <copy file="${target}/deploy/sojo-with-tests-${version}.jar" todir="${deploy.bin}"/>		
+	 <copy file="${root.dir}/LICENSE.txt" todir="${deploy.bin}"/>
+	
+		
+	 <zip destfile="${target}/sojo-${version}-bin.zip" basedir="${deploy.bin}"/>
+	</target>
+
+</project>

@@ -1,0 +1,51 @@
+xmlrpc-dev@ws.apache.org
+
+Hello XML-RPC team,
+
+I am the founder of the Open Source project SOJO.
+The intention of this project is a Java framework, 
+that convert JavaBeans in a simplified representation. 
+
+Why is this interesting for XML-RPC?
+
+The XML-RPC specification don't supported JavaBeans.
+The extensions from apache XML-RPC don't direct supported JavaBeans too.
+It is possible with java.io.Serializable (ex:serializable)
+
+Example:
+
+public class Account {
+  private String name;
+  private Long id;
+
+  public String getName();
+  public void setName(String name)
+
+  public Long getId();
+  public void setId(Long id)
+
+}
+
+XmlRpcClient client = new XmlRpcClient();
+Object[] params = new Object[]{ new Account() };
+Account result = (Account) client.execute("AccountService.insertAccount", params);
+
+My proposal:
+
+Before the execute-method send the Account-object, it can transform with SOJO:
+
+ObjectUtil util = new ObjectUtil();
+Map accountMap = (Map) util.makeSimple(accountObj);
+
+Maps are supported by XML-RPC.
+And before get the result:
+
+Account account = (Account) util.makeComplex(accountMap);
+
+SOJO supported complex object graphs (manages cycle detection, as well).
+
+
+Is this interesting for XML-RPC team?
+
+Thanks Mario.
+

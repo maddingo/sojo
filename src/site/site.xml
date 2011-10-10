@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="SOJO">
+  <bannerLeft>
+    <name>SOJO</name>
+    <href>http://sojo.sourceforge.net/</href>
+  </bannerLeft>
+<!--
+  <bannerRight>
+    <src>http://maven.apache.org/images/maven-small.gif</src>
+  </bannerRight>
+-->
+
+  <body>
+    <links>
+      <item name="Home" href="./index.html" />
+      <item name="@Sourceforge" href="http://sourceforge.net/projects/sojo/"/>
+      <item name="Download" href="http://sourceforge.net/projects/sojo/"/>
+    </links>
+
+    <menu name="SOJO-Menu">
+      <item name="Home" href="index.html"/>
+      <item name="Road Map" href="roadmap.html" />
+    </menu>
+
+
+    ${reports}
+
+
+  </body>
+</project>

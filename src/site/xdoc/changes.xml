@@ -1,0 +1,273 @@
+<document>
+  <properties>
+    <title>Changelog</title>
+    <author email="">Mario Linke</author>
+  </properties>
+  <body>
+
+   <release version="1.0.0" date="2009-05-30" description="The first stable version">
+    	<action dev="lm" type="fix">
+    	Bug in compare  
+ 		(Bug: 1722101, thanks Avihai).
+      	</action>
+    	<action dev="lm" type="fix">
+    	Deserialization of JSON object breaks on array of bytes.  
+ 		(Bug: 1728214, thanks P. Wolny).
+      	</action>
+    	<action dev="lm" type="fix">
+    	Invalid JSON serialization of empty string  
+ 		(Bug: 1744253 and 1958512, thanks P. Wolny).
+      	</action>
+    	<action dev="lm" type="fix">
+    	ReflectionMethodHelper should support "is" getters  
+ 		(Bug: 1828028, thanks D. Carrillo).
+      	</action>
+    	<action dev="lm" type="fix">
+    	JSON serialize don't work by Map (String,Object).  
+ 		(Bug: 1755893, thanks boci).
+      	</action>
+    	<action dev="lm" type="fix">
+    	Incorrectly escapized backslash.  
+ 		(Bug: 1769131, thanks T. Zalusky).
+      	</action>
+    	<action dev="lm" type="fix">
+    	Add additional Java date format (i.e. EST timezone).  
+ 		(Bug: 2164723, thanks T. Hein).
+      	</action>
+    	<action dev="lm" type="fix">
+    	Support for Beans with properties with type java.net.URL.  
+ 		(Bug: 2164752, thanks T. Hein).
+      	</action>
+    	<action dev="lm" type="fix">
+    	CsvParser throws exception when parsing certain data.  
+ 		(Bug: 1793604, thanks Ryan (rptsang)).
+      	</action>
+    	<action dev="lm" type="fix">
+    	Using the field "class" to represent the java class name breaks IE since class is a special word.   
+ 		(Bug: 1784930, thanks amccarri).
+      	</action>
+    	<action dev="lm" type="fix">
+    	 Multiple references to same bean from another bean.   
+ 		(Bug: 2759772, thanks gokturk3).
+      	</action>
+    	<action dev="lm" type="fix">
+    	Support for Beans with properties with type Object.  
+ 		(Bug: 2477567).
+      	</action>
+    	<action dev="lm" type="fix">
+    	NPE in ConversionIterator. 
+    	This exception appaer, when the object is not null, but the toString method get null.   
+ 		(Bug: 2786172).
+      	</action> 
+      	
+    	<action dev="lm" type="add">
+    	Convert Objects per fields, not methods.
+    	In some case it is better, the converter used the attributes per fields and not per method.
+		This is better, if not exist for every body attribute a setter method. 
+ 		(Feature: 2786181).
+      	</action> 
+      	
+	</release>
+
+   <release version="0.5.0" date="2007-05-01" description="The second release with development status: Beta">
+    	<action dev="lm" type="fix">
+    	Can't create a new instance of StackTraceElement in Java 5  
+ 		(Bug: 1678348).
+      	</action>
+      	<action dev="lm" type="fix">
+    	Classloaders issue: In muliple classloaders environment (like application container) it would
+		be nice if Sojo could be loaded by parent classloader of classloader of the
+		application. Solution: Replacing
+		Class.forName(className) with Class.forName(className, true, Thread.currentThread().getContextClassloader()).  
+ 		(Bug: 1686733, thanks  B. Hunt).
+      	</action>                    
+    	<action dev="lm" type="fix">
+    	Deserialization of JSON object breaks on valid unicode char.  
+ 		(Bug: 1686652, thanks  B. Hunt).
+      	</action>
+    	<action dev="lm" type="fix">
+    	Deserialization of JSON object breaks on Timestamp.  
+ 		(Bug: 1688969, thanks  B. Hunt).
+      	</action>
+    	<action dev="lm" type="fix">
+    	Methods: equals and compare are breaking.  
+ 		(Bug: 1692340).
+      	</action>
+    	<action dev="lm" type="fix">
+    	JsonSerializer not Thread Safe.
+		JsonSerializer.deserialize cannot be used in a Thread safe way, since the method delegates calls to satic parser JsonParserGenerate.
+		A better way would be to generate the JsonParserGenerate with STATIC=false and use one Parser per JsonSerializer.    	  
+ 		(Bug: 1694100, thanks T. Huhtanen).
+      	</action>
+    	<action dev="lm" type="fix">
+    	Repeated call of JSONSerializer with different value.
+ 		(Bug: 1705249, thanks T. Nagy).
+      	</action>
+
+      	                    
+		<action dev="lm" type="add">  
+		Sort List, Set, Map and Array there contains JavaBeans.
+		(Feature Request: 1673100)
+		</action>
+		<action dev="lm" type="add">  
+		Support for filtering by equals, hashCode and compare.
+		(Feature Request: 1692337)
+		</action>
+		<action dev="lm" type="add">  
+		Support for regexp by filtering.
+		(Feature Request: 1706577)
+		</action>
+	</release>
+
+
+
+   <release version="0.4.0" date="2007-03-04" description="This is the first release with development status: Beta">
+    	<action dev="lm" type="fix">  
+      	Inconsistences return types between Xml and Json Serializer: the return type from XmlRpcSerializer.deserialize is a list that contain a desterilized Object as first element 
+      	but this is not the same in JsonSerializer.deserialize , as this method return the desterilized Object directly not in a List
+ 		(Bug: 1633051).
+      	</action>                    
+    	<action dev="lm" type="fix">  
+     	XmlRpcSerializer is not thread safe in version 0.3. In version 0.2 of sojo the XmlRpcSerializer was a thread safe but in 0.3 this isn't true.
+		The XmlRpcSerializer was changed, because so that is uniform to the other Serializer (JsonSerializer for example)
+ 		(Bug: 1632206).
+      	</action>                    
+    	<action dev="lm" type="fix">  
+		By the org.xml.sax.helpers.DefaultHandler class in the
+		characters-method can be data lose. The reason is to call this
+		callback-method more than one times for more performance from the
+		SAXParser. This is the case by the
+		xerces implementation (org.apache.xerces.jaxp.SAXParserFactoryImpl). This
+		can be a promlem by big XML-files.
+ 		(Bug: 1664621).
+      	</action>                    
+
+		<action dev="lm" type="add">  
+		CSV data interchange
+		(Feature Request: 1639781)
+		</action>
+		<action dev="lm" type="add">  
+		Calculate over all values the hashCode. This is the complement to the ObjectUtil.equals - Method.
+		(Feature Request: 1671151)
+		</action>
+		<action dev="lm" type="add">  
+		CompareTo method for all objects (JavaBeans too)
+		(Feature Request: 1671946)
+		</action>						
+		<action dev="lm" type="add">  
+		Extend Serializer method deserialize:
+		The Serializer get a second deserialize method with an additional parameter:
+		public abstract Object deserialize(Object pvSourceObject, Class pvRootClass);
+		So can deserialize Objects, where in the serialize isen't the class information.		
+		(Feature Request: 1656910)
+		</action>
+		<action dev="lm" type="add">  
+		Create ThrowableConverterInterceptor:
+		Can add a ThrowableConverterInterceptor to the Converter.
+		This interceptor transform a Exception to a ThrowableWrapper. The benefit
+		of this Conversion is, that can wrap a Throwable instance and can do an
+		StackTrace or show the ExceptionMessage without a knowledge of the original
+		ExceptionClass. For example, the server thrown a 'HibernateException' and
+		the client don't know the hibernate library. In the StackTrace you can see
+		the StackTrace of the server.
+		(Feature Request: 1662346)
+		</action>
+		<action dev="lm" type="add">  
+		Add parameter to type by ConverterInterceptor (beforeConvert / afterConvert).
+		This is more flexible to define the to class type.
+		(Feature Request: 1662347)
+		</action>
+		<action dev="lm" type="add">  
+		Set desired date format:CURRENT serialized with JSON: {"dob":"Tue Feb 20 10:25:19 EST 2007","id":10}
+		DESIRED serialized form: {"dob":"02/20/2007","id":10}
+		(Feature Request: 1664604, thanks J. Saremi)
+		</action>
+	</release>
+
+
+   <release version="0.3.0" date="2007-01-08" description="The third release">
+    <action dev="lm" type="fix">  
+		Can't call twice time the method ObjectUtil.makeSimple. By the second call is the result the same,
+		how call of method ObjectUtil.makeComplex
+ 		(Bug: 1622475).
+      </action>                    
+      <action dev="lm" type="fix">  
+		The result-Maps of ReflectionMethodHelper are modifiable (e.g. getAllGetterMethod).
+		This is critical, because this Map's are static. If one instance this map change, work all instances with this changed map.
+ 		(Bug: 1621357)
+      </action>                 
+      <action dev="lm" type="fix">  
+		JsonSerializer serialize Map with no String key not correct. This mean, the key was ignored
+ 		(Bug: 1615199).
+      </action>                 
+      <action dev="lm" type="fix">  
+		JsonSerializer don't wrapped in double quotes and using backslash escapes
+ 		(Bug: 1616053, thanks T. Nagy).
+      </action>                 
+
+      	<action dev="lm" type="add">  
+		Filter for properties. Not all properties of a class want to include by converting objects. 
+		Especial by interchange data are not all data (properties) relevant. 
+		With a filter can select the (transient) properties, that are filtered by serialize objects
+		(Feature Request: 1612707, thanks G. Greg).
+		</action>	
+		<action dev="lm" type="add">  
+		Refactor package and class-names (remove common loggings library and replace with net.sf.sojo.core.NonCriticalExceptionHandler)
+		(Feature Request: 1615202).
+		</action>	
+		<action dev="lm" type="add">  
+		Remove all dependencies to external libraries
+		(Feature Request: 1625003)
+		</action>			
+	</release>
+	
+   <release version="0.2.0" date="2006-11-06" description="The second release">
+      <action dev="lm" type="fix">  
+		Conversions don't detect cycels by Collections and Maps.
+		This problem is occurrence, if Collections/Maps are nested in a other Collections/Maps.
+ 		(Bug: 1589317)
+      </action>                 
+      <action dev="lm" type="fix">  
+		Only the call in the constructor CommonObjectUtil (true/false) is effected. 
+ 		(Bug: 1580303)
+      </action>                 
+      <action dev="lm" type="add">  
+		Support for interchange format JSON.
+		(Feature Request: 1580533)
+      </action>                 
+      <action dev="lm" type="add">  
+		Support for interchange format XML-RPC.
+		(Feature Request: 1583118)
+      </action>                       
+    </release>
+
+   <release version="0.1.0" date="2006-10-15" description="The first version 0.1.0">
+      <action dev="lm" type="add">  
+	      serialize/deserialize complex object graph  (Feature Requests: 1576716). 
+      </action>                 
+      <action dev="lm" type="add">  
+	      easy navigate on the complex object graph  (Feature Requests: 1576711). 
+      </action>                 
+      <action dev="lm" type="add">  
+	      compare complex object graph  (Feature Requests: 1576709). 
+      </action>                 
+      <action dev="lm" type="add">  
+	      copy or clone complex object graph  (Feature Requests: 1576708). 
+      </action>                 
+    </release>
+
+
+<!--
+      <action dev="lm" type="fix">           
+      FIX
+      </action>                    		
+
+      <action dev="lm" type="update">
+			UPDATE
+      </action>                      
+
+-->
+
+
+  </body>
+</document>

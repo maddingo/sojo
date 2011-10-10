@@ -1,0 +1,18 @@
+The Open Source project Sojo has announced the first initial release (version 0.1.0). 
+The intention for this project is a Java framework, that convert JavaBeans in a simplified representation . 
+So it is easy and uniformly to handle the access to JavaBeans properties. 
+The framework want complement POJO's, where Java must communicate with "other worlds. Other worlds are interfaces, 
+where object orientation is not supported or is not the best decision.
+
+In cases, where object orientation and not object orientation must work together, exist the problem of independent mismatched. 
+The SOJO want to do this problem a little bit smaller. 
+
+
+
+Homepage:
+
+http://sojo.sourceforge.net
+
+Download: 
+
+http://sourceforge.net/project/showfiles.php?group_id=178713

@@ -1,0 +1,90 @@
+#breadcrumbs {
+	height: 13px;
+	padding: 5px 10px 14px 20px;
+  	font-size: x-small;
+  	margin: 0pt;	
+	background-image: url(../images/breadcrumbs.jpg);	
+}
+
+* html #breadcrumbs {
+	padding-bottom: 0px;
+}
+
+a:link {
+	color: rgb(102, 153, 204);
+}
+
+a:visited {
+	color: rgb(102, 153, 204);
+}
+
+a:active {
+	color: rgb(102, 153, 204);
+}
+
+
+
+h2 {
+	padding: 2px 4px 4px 6px;
+	margin: 10px 4px 4px 4px;
+	border-style: solid;
+	border-color: ( 156, 178, 199);
+	border-width: 1px 0px 1px 0px;
+	color: rgb(102, 153, 204); 	
+	background-color: rgb(240, 240, 240);
+	font-weight: 900;
+	font-size: 11pt;
+/*	
+	background-image: url(../images/h3.jpg); 
+	background-position:center;
+
+	background-image:url(../images/h3.jpg); 
+	background-repeat:no-repeat;
+	background-position:0px 5px;
+*/	
+}
+
+
+h3 {
+	padding: 2px 4px 4px 6px;
+	margin: 6px 2px 4px 4px;
+	border-style: solid;
+	border-color: ( 156, 178, 199);
+	border-width: 1px 0px 1px 0px;
+	color: rgb(102, 153, 204); 
+	background-color: white;
+	font-weight: bold;
+	font-size: 10pt;
+}
+
+h4 {
+	padding: 2px 4px 4px 6px;
+	margin: 6px 2px 4px 4px;
+	border-style: solid;
+	border-color: ( 156, 178, 199);
+	border-width: 1px 0px 1px 0px;
+	color: rgb(102, 153, 204); 
+	background-color: white;
+	font-weight: normal;
+	font-size: 9pt;
+}
+
+div.source {
+	background-color: rgb(250, 250, 210);
+}
+
+#navcolumn h5 {
+	font-size: 8pt;
+	border-width: 2px 0px 0px 0px;
+	border-color: white;
+	border-style: solid;
+	padding: 5px 0px 6px 0px;
+	color: rgb(102, 153, 204); 
+	margin: 7px 7px 0 7px;
+}
+
+#navcolumn ul li {
+	padding-bottom: 7px;
+	font-size: 9pt;
+	color: gray;
+}

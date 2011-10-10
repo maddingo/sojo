@@ -1,0 +1,238 @@
+<document>
+
+  <body>
+	<section name="Common operation of complex Java-Objects-graphs">
+		<p>
+		In the first section you can see examples, where you can use SOJO for a better/easyer operate on object graphs.
+		The aim is, to get operations, how you know from associate with simple Java objects.
+		</p>			
+		
+		<subsection name="Copy/clone a complex object graph">
+		<p>
+		This subsection describe, how you can copy/clone complex object graph. Both graph have your own instance from
+		the objects, but the instances have the same values. Example:
+		</p>			
+		
+<source>
+Node node = new Node("Node");
+Node childNode1 = new Node("Child-Node-1");
+Node childNode2 = new Node("Child-Node-2");
+node.getChilds().add(childNode1);
+node.getChilds().add(childNode2);
+		
+Node nodeCopy = (Node) new ObjectUtil().copy(node);
+</source>
+		<p>
+		The Node <i>node</i> and <i>nodeCopy</i> are equals from your values, but not the same objects.
+		You can change values from Node <i>node</i> and can back (undo) to the original values, 
+		if you want reject your changes.
+		</p>			
+		<p>
+		With copy from object graphs, you can manage different version (object history) from one object graph.
+		</p>							
+		</subsection>
+		
+		
+		<subsection name="Compare complex object graph">
+		<p>
+		If you want to control the copy operation from the section before, than can you use the <i>equals</i> method.
+		</p>					
+<source>
+...
+// equals is true
+boolean equals = new ObjectUtil().equals(node, nodeCopy);
+
+childNode2.setName("Rename-Child-Node-2");
+// equals is false
+equals = new ObjectUtil().equals(node, nodeCopy);
+</source>
+
+		<p>
+		The complement to the <i>equals</i> method, the <i>hashCode</i> - method.
+		</p>					
+<source>
+public int hashCode() {
+  return new ObjectUtil().hashCode(this);
+}
+
+// or a more performance variant
+...
+private ObjectUtil objectUtil = new ObjectUtil();
+private Integer hashCode = null;
+
+public int hashCode() {
+  if (hashCode == null) {
+  	hashCode = new Integer(objectUtil.hashCode(this));
+  }
+  return hashCode.intValue();
+}
+</source>
+
+
+		<p>
+		If you want to get more information by compare object graph, than use the <i>compare</i> method. This method find the first differents and than
+		is the search breaking.
+		</p>					
+<source>
+Node node1 = new Node("Test-Node");
+Node node2 = new Node("Test-Node");
+ObjectUtil objectUtil = new ObjectUtil();
+CompareResult result = objectUtil.compare(node1, node2);
+// result is null, both nodes are equals
+
+node2 = new Node("Test-Node-OTHER");
+result = objectUtil.compare(node1, node2);
+// result is:
+// result.differentPath = "name"
+// result.differentValue1 = "Test-Node"
+// result.differentValue2 = "Test-Node-OTHER"
+</source>
+
+		<p>
+		For find all differents by comparing object graphs, use the  <i>compareAll</i> method. This method find all differents.
+		</p>					
+<source>
+Car car1 = new Car("BMW");
+car1.setDescription("my car");
+car1.setProperties(new Properties());
+car1.getProperties().put("key", "value");
+		
+Car car2 = new Car("BMW");
+car2.setDescription("your car");
+car2.setProperties(new Properties());
+car2.getProperties().put("key", "other-value");
+
+CompareResult result[] = new ObjectUtil().compareAll(car1, car2);
+// result is:
+// path: description - first value: my car - second value: your car
+// path: properties(key) - first value: value - second value: other-value
+
+</source>
+
+		</subsection>
+<!--
+		<subsection name="Serialize/Deserialize complex object graph">
+		<p>
+		In different situations want serialize/deserialize Java Objects (e.g. transport objects over the network with RMI or
+		save objects to the fole system and so on). The <b>very importent hint</b> is, that classes must
+		<b>not</b> implement the <i>java.io.Serializable</i>!
+		</p>					
+<source>
+// write to ByteArray-Stream
+Car car = new Car("Ferrari");
+CommonObjectSerialiser serialiser = new CommonObjectSerialiser();
+ByteArrayOutputStream out = new ByteArrayOutputStream();
+serialiser.serialize(car, out);
+		
+// load from ByteArray-Stream
+ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray());
+Car car2 = (Car) serialiser.deserialize(in);
+</source>
+
+		<p>
+		The second example write and load the object stream to the file system:
+		</p>					
+<source>
+Car car = new Car("Ferrari");
+CommonObjectSerialiser serialiser = new CommonObjectSerialiser();
+serialiser.serialize(car, "c:/temp/car.ser");
+		
+Car car2 = (Car) serialiser.deserialize("c:/temp/car.ser");
+</source>		
+		</subsection>
+-->		
+		<subsection name="Walk over (to traverse) object graph">
+		<p>
+		If you want to traverse a object graph, than can use the helper <i>ObjectGraphWalker</i>. By registration from a
+		<i>WalkerInterceptor</i> can you get information about the visited object (path to this object, number of recursion and so on).
+		</p>	
+<source>
+Car car = new Car("Ferrari");
+ObjectGraphWalker walker = new ObjectGraphWalker();
+PathRecordWalkerInterceptor interceptor = new PathRecordWalkerInterceptor();
+walker.addInterceptor(interceptor);
+		
+walker.walk(car);
+Map visitedPathes = interceptor.getAllRecordedPathes();
+
+// test the path
+Object carName = PathExecuter.getNestedProperty(car, "name");
+assertEquals(carName, visitedPathes.get("name"));
+</source>								
+
+		<p>
+		You can write your own <i>WalkerInterceptor</i>:
+		</p>							
+<source>								
+public class MyWalkerInterceptor implements WalkerInterceptor {
+
+	public void startWalk(Object startObject) { 
+		System.out.println("Start the walking.");
+	}
+	
+	public void endWalk() { 
+		System.out.println("\nWalking is done.");
+	}
+
+
+	public boolean visitElement(Object key, int index, Object value, int type, String path, int numberOfRecursion) {
+		if (type == Constants.TYPE_SIMPLE || type == Constants.TYPE_NULL) {
+			System.out.print(path + ": " + value + ", ");	
+		}
+		return false;
+	}
+
+	public void visitIterateableElement(Object value, int type, String path, int typeBeginOrEnd) {
+
+		if (typeBeginOrEnd == Constants.ITERATOR_BEGIN) {
+			if (type == Constants.TYPE_ITERATEABLE) {
+				System.out.print("[");
+			} else if (type == Constants.TYPE_MAP) {
+				System.out.print("(");
+			}
+		} else if (typeBeginOrEnd == Constants.ITERATOR_END) {
+			if (type == Constants.TYPE_ITERATEABLE) {
+				System.out.print("]");
+			} else if (type == Constants.TYPE_MAP) {
+				System.out.print(")");
+			}
+		}
+		
+	}
+
+
+}
+</source>								
+		<p>
+		The type can you find in the interface <i>net.sf.sojo.Constants</i>. Possible values are: <i>TYPE_SIMPLE, TYPE_ITERATEABLE, TYPE_MAP, TYPE_NULL</i>.
+		</p>
+		</subsection>
+
+
+<!--
+		<subsection name="Extend objects to additional information">
+		<p>
+		...
+		</p>							
+		</subsection>
+
+
+		<subsection name="Mapping from one property to other property">
+		<p>
+		...
+		</p>							
+		</subsection>
+
+		<subsection name="Making object-values immutable">
+		<p>
+		...
+		</p>							
+		</subsection>
+-->
+
+		
+	</section>
+	
+
+  </body>
+</document>

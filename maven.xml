@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ 
+<!-- $Revision$ $Date$ -->
+
+<project 
+    xmlns:j="jelly:core"
+    xmlns:maven="jelly:maven"
+    xmlns:deploy="deploy"
+    xmlns:ant="jelly:ant">
+
+    <!-- um FAQ zu aktivieren -->
+    <preGoal name="xdoc:jelly-transform">
+    	<attainGoal name="faq"/>
+    </preGoal>
+    
+</project>

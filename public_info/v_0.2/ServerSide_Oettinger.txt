@@ -1,0 +1,56 @@
+Simplified data interchange  and operations with complex Java-Objects
+
+"SOJO" stands for "Simplify your Old Java Objects" or, in noun form, 
+"Simplified Old Java Objects." The goal of the SOJO project is to provide a library 
+to convert object graphs into a specific structure - 
+which could be a CSV representation, JSON, XML, or any other available format - 
+to ease communication with non-Java processes. SOJO manages cycle detection, as well, 
+so complex object graphs can be represented and transmitted. 
+The conversions are pluggable, so even custom formats can be used.
+
+
+Can SOJO complement POJOs?
+
+The intention for the SOJO project is a Java framework, that convert JavaBeans in a simplified representation. 
+So it is easy and uniformly to handle and control the access to JavaBeans properties in comparison to handle complex object graphs.
+This framework want to complement POJOs, where Java must communicate with "other worlds". Other worlds are interfaces, where object orientation is not supported or is not the best decision.
+In cases, where object orientation and not object orientation must work together, exist the problem of independent mismatched. The SOJO want to do this problem a little bit smaller. 
+
+Application area are:
+<ul>
+<li> data interchange: 
+	<ul>
+	<li> JSON (JavaScript Object Notation) a lightweight data-interchange format 
+	<li> Object To XML - where is XML-RPC a special case 
+	<li> Java serialization, without implements the interface java.io.Serializable 
+	  (e.g. cluster, cache, remote communication, ...) 
+	</ul>
+<li> operation of complex Java-Objects-graphs: 
+	<ul>
+	<li> copy or clone from a complex object graph (can manage different versions from one object graph (object history)) 
+	<li> compare complex object graph 
+	<li> walk over object graph (to traverse) 
+	<li> easy navigate on the complex object graph (with a navigation language) 
+	</ul>
+<li> remote acces/communication: 
+	<ul>
+	<li> HTTP protocol - request and response are based on String representation 
+	<li> RMI (Java-Object must serializable (marshalling) or deserializable (unmarshalling)) 
+	<li> WebService or XML RPC - convert Java-Object in special String representation, in XML 
+	<li> create "value objects" or "transfer objects" to sent objects over the network 
+	</ul>
+<li> data access: 
+	<ul>
+	<li> object/relational persistence respectively object/relational mapping 
+	<li> flat files (convert Java-Object-Graph to a flat representation) 
+	<li> property files (e.g. convert Strings to Long, Date, ... by reading a property file and map the value to setter from a Bean) 
+	<li> legacy systems 
+	</ul>
+<li> GUI interface: 
+	<ul>
+	<li> transform business models to GUI-models (DataBinder) 
+	<li> every changes on the GUI-model must to notice (integrated PropertyChangeListener or VetoableChangeListener) 
+	</ul>	
+</ul>
+
+Homepage: http://sojo.sourceforge.net

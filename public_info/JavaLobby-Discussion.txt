@@ -1,0 +1,62 @@
+Java interact with non-Java processes?
+
+In many cases want interchanged data with other systems. 
+It is necessary to convert Java-Object-Graphs (JavaBeans) in a simplified representation. So can easy and uniformly handle and control the access to the properties or convert object graphs into a specific structure - which could be a JSON representation, XML, CSV or any other available format - to ease communication with non-Java processes. 
+
+A condition for the transformation is, manages cycle detection, so complex object graphs can be represented and transmitted. The conversions must be pluggable, as well, so even custom formats can be used.
+
+[code]
+Serializer serializer = new JsonSerializer(); 
+// XmlRpcSerializer | CsvSerializer | ObjectSerializer
+Object result = serializer.serialize(anObjectGraph);
+Object anObjectGraphCopy = serializer.deserialize(result);
+[/code]
+<b>Which interchange formats are missing and must provide?</b>
+
+The goal of the SOJO project is to provide a library to convert object graphs into a specific structure.
+SOJO stands for Simplify your Old Java Objects or, in noun form, Simplify Old Java Objects.
+ 
+Other goals are to simplified standard object operations how:
+
+<ul>
+<li>copy or clone complex object graph (for data transfer objects (DTO), can manage different versions from one object graph (object history)):
+[code]
+Object anObjectCopy = new ObjectUtil().copy(anObject);
+[/code]
+</li>
+
+<li>compare complex object graph:
+[code]
+boolean equals = ObjectUtil.equals(obj1, obj2);
+
+// show the first finded different value
+CompareResult result = ObjectUtil.compare(obj1, obj2);
+
+// show all finded different value
+CompareResult result[] = ObjectUtil.compareAll(obj1, obj2);
+
+// less, equal, greater (for JavaBeans too)
+int compareTo = ObjectUtil.compareTo(obj1, obj2);
+[/code]
+</li>
+
+<li>standard Object operations:
+[code]
+// for example for the equals method, compare all values
+public boolean equals(Object obj) {
+  return ObjectUtil.equals(obj, this);
+}
+
+// the complement, the hashCode - method
+public int hashCode() {
+  return ObjectUtil.hashCode(this);
+}
+[/code]
+</li>
+</ul>
+
+Have fun with SOJO and say, where should the way from SOJO go in future? 
+
+Homepage: http://sojo.sourceforge.net
+
+Download: http://sourceforge.net/project/showfiles.php?group_id=178713

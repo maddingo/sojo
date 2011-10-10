@@ -1,0 +1,42 @@
+<document>
+
+  <body>
+	<section name="Roadmap">
+		<p>
+		Planning for the first release version 0.1 are operation of complex Java-Objects-graphs:
+		</p>
+		<p>
+		<ul>
+				<li>copy or clone complex object graph (can manage different version (object history) from one object graph)</li>
+				<li>compare complex object graph</li>
+				<li>serialize complex object graph without implementation from the interface <i>java.io.Serializable</i></li>										
+				<li>walk over (to traverse) object graph</li>						
+				<li>easy navigate on the complex object graph</li>						
+		</ul>
+		</p>
+
+		<p>
+		Planning for the second version 0.2 are:
+		</p>
+		<p>
+		<ul>
+				<li>extend objects to additional information (e.g.: object-versions (number of changes), change date or user)</li>						
+				<li>mapping from one property to other property (name to name mapping (by naming conflicts) or value to value mapping (to convert values))</li>
+				<li>making object-values immutable, for testing concurrent access - multi threading)</li>						
+				<li>...</li>						
+		</ul>
+		</p>
+
+<!--
+		<p>
+			<span style="border-width:1px; border-color::#3333FF; border-style:solid; padding:5px;">
+			<span style="color:blue">=&gt; </span>The first release is planning on monday of 2006-10-16.
+			</span>					
+		
+		</p>
+-->		
+	</section>
+	
+
+  </body>
+</document>

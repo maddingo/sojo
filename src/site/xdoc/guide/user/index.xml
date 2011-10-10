@@ -1,0 +1,230 @@
+<document>
+
+  <body>
+	<section name="User-Guide">
+	<p>
+	This section describe the core SOJO API. The main aim from this framework is, to provide a "pluggable" basis to integrate different kind of conversions 
+	(also your own implementations). With this infrastructure can solve problems, where POJOs are not supported or are not the best decision. 
+	</p>
+	
+
+		<subsection name="SOJO design description?">
+			The possible property types, that are supported by a JavaBean (and SOJO) can be broken into three groups:
+			<ul>
+				<li><strong>Simple: </strong> Simple properties are such as int, long, double (primitive data types) or a simple object 
+				    (such as a <i>java.lang.String, java.lang.Long, java.uilt.Date</i> and so on). The class <i>net.sf.sojo.core.reflect.ReflectionHelper</i>
+				    is to be responsible for define classes, which are simple (can test it with method <i>isSimpleType</i>). 
+				    With the method <i>addSimpleType</i> can add more types at runtime.
+				</li>
+				<li><strong>Iterateable: </strong> An Iterateable property stores a collection of objects that can be accessed 
+				    by an integer-valued (index, non-negative) or by an iterator. 
+				    Interfaces for this category are <i>java.util.List, java.util.Set</i> or the super interface <i>java.util.Collection</i>.
+					An Iterateable property can also be an <i>Array</i>.
+				</li>
+				<li><strong>Map: </strong>A Map property is a property with a implementation from the java interface <i>java.util.Map</i>.
+				    The elements are composite key-value pairs. You can set and retrieve individual values via a key. 
+				    <!--
+				    Supported key-values are, where the value from <i>toString</> is equivalent to 
+				    -->
+				</li>				
+			</ul>
+			
+			The outcome of this categories of JavaBeans-properties are kinds of conversion. The main classes for conversions are
+			the Java interface <i>net.sf.sojo.core.Conversion</i> respectively the abstract implementation <i>net.sf.sojo.core.AbstractConversion</i>.
+			The first extensions are <i>net.sf.sojo.core.SimpleConversion</i> and <i>net.sf.sojo.core.ConversionIterator</i>.
+			The <i>net.sf.sojo.core.ConversionIterator</i> is splitting in <i>net.sf.sojo.core.ComplexConversion</i> and
+			<i>net.sf.sojo.core.IterateableConversion</i>.
+			<br/>
+			
+			
+			
+			
+			For different kind of properties (category) exist different kind of strategies for conversions:
+			<ul>
+				<li><strong>SimpleConversion: </strong>Convert a <b>Simple</b> to a simple type. A example is the transformation from String to Long.
+					For this problem you can use the:<i>net.sf.sojo.core.conversion.Simple2SimpleConversion</i>
+				</li>
+				<li><strong>ConversionIterator: </strong>is splitting in sub classes:
+					<ul>
+						<li><strong>IterateableConversion: </strong>This category is equivalent to JavaBean category <b>Iterateable</b>. Conversions implementations are:
+							<i>net.sf.sojo.core.conversion.Iterateable2IterateableConversion or net.sf.sojo.core.conversion.IterateableMap2MapConversion
+							or net.sf.sojo.core.conversion.IterateableMap2BeanConversion</i>
+						</li>
+						<li><strong>ComplexConversion: </strong>This category is equivalent to JavaBean category <b>Map</b>. Conversions implementations are:
+							<i>net.sf.sojo..coreconversion.ComplexBean2MapConversion</i>
+						</li>					
+					</ul>
+				</li>
+			</ul>
+		</subsection>		
+
+		<subsection name="How can start with SOJO?">
+
+			<p>
+			This examples are an initiation to the SOJO API and they explain how this framework can use:
+			<ol>
+			 <li>Create a instance from the <i>Converter</i> class</li>
+			 <li>add conversions to the <i>Converter</i> instance</li>
+			 <li>call the convert method to transform source object to the target object</li>
+			</ol>
+			An other example is to invoke the convert method two of times. So you can copy/clone every object. This means, that 
+			the first convert method make the object simple and the second call produced again a complex object with 
+			the same values, how the original source object. 
+			<br/>
+			The <i>Converter</i> find cycles in the object graph and create after the copy the same number of objects.
+			<br/>
+			This little examples shows a extract from the SOJO-API and illustrate the entrance in this framework. This is a simple example, that
+			shown, how can convert Strings to other types (e.g.: if values are come from (property, XML) file).
+			</p>
+					
+<source>
+ Converter converter = new Converter();
+ converter.addConversion(new Simple2SimpleConversion(String.class, Long.class));
+ 
+ String s = "57";
+ Object result = converter.convert(s);
+ assertEquals(Long.class, result.getClass());
+ assertEquals(new Long("57"), result);		
+</source>
+				
+
+			<p>
+			The second example illustrate a customer with your adresses that is converted in a simplified representation. This means, objects
+			are converted to maps.
+			The benefit from this idea is, with this representation (convert and convert back = copy or clone) can solve problems there are
+			described in the previous subsection POJOs versus SOJO.
+			<br/>			
+			<img alt="example for a conversion for JavaBeans" src="./../../images/conversion.JPG"/>
+			<br/>
+			The figure show the transformation from JavaBeans to a simplified representation. On the left side you can find the
+			classes customer with a relation (one to many) to adress and on the right side you find a instance from a converted 
+			customer instance to a <i>java.util.Map</i>. The same is with adress.
+			</p>		
+
+					
+				
+<source>
+ Converter converter = new Converter(); 
+ converter.addConversion(new ComplexBean2MapConversion());
+ converter.addConversion(new Iterateable2IterateableConversion());
+		
+		
+ Customer customer = new Customer();
+ customer.setFirstName("Paul");
+ customer.getAdresses().add(new Adress("London")); 
+ customer.getAdresses().add(new Adress("Berlin")); 
+
+ Object result = converter.convert(customer);
+ assertTrue(result instanceof Map);
+ Map map = (Map) result;
+ assertEquals(Customer.class.getName(), map.get("class"));
+ assertEquals("Paul", map.get("firstName"));
+ assertTrue(((List) map.get("adresses")).get(0)  instanceof Map);
+</source>
+			
+			<p>
+			In the second example you can see one advantage. The navigation is simplified. It exist three types:
+			<ul>
+				<li>gets on a map with a simple result type <i>map.get("name")</i></li>
+				<li>gets on a map with a result as <i>List - map.get("adresses")</i></li>
+				<li>gets on a map with a result as <i>Map - ((List) map.get("adresses")).get(0)</i> 
+				=&gt; a simple navigatin path can be: <i>adresses[0].postal</i>
+				</li>
+			</ul>
+			Thats are all possibilities!
+			
+			<br/>
+			
+			<span style="border-width:1px; border-color::#3333FF; border-style:solid; padding:5px;">
+			<span style="color:blue">=&gt; </span>This is simplification! This is SOJO!
+			</span>					
+			</p> 
+		</subsection>
+
+
+	
+	
+	<subsection name="Convert one structure to other">
+	<p>
+	This simple Example convert String in a Double value (It is usefull, if the value (String) come from
+	a property-file and want to set to a JavaBean.):
+	</p>							
+	
+<source>
+ Converter converter = new Converter();
+ converter.addConversion(new Simple2SimpleConversion(String.class, Double.class));
+ 
+ String s = "57.3";
+ Object result = converter.convert(s);
+ assertEquals(Double.class, result.getClass());
+ assertEquals(new Double("57.3"), result);		
+</source>
+	
+	<p>
+	This Example convert every Bean in a Map, where the property are the keys and the property-values are the map-values:
+	</p>							
+<source>
+Node node = new Node("Test-Node");
+node.getNamedChilds().put("N1", new Node("N1"));
+node.getNamedChilds().put("N2", new Node("N2"));
+node.getNamedChilds().put("N3", new Node("N3"));
+
+Converter converter = new Converter();
+converter.addConversion(new IterateableMap2MapConversion());
+converter.addConversion(new Iterateable2IterateableConversion());
+converter.addConversion(new ComplexBean2MapConversion());
+
+
+Object simple = converter.convert(node);
+Map map = (Map) simple;
+System.out.println("Name: " + map.get("name"));
+// print: Name: Test-Node
+
+// and back to the Node-Object
+Node nodeCopy = (Node) converter.convert(simple);
+</source>		
+
+	<p>
+	The same result, but a easy call is this variante:
+	</p>							
+<source>
+Node node = new Node("Test-Node");
+node.getNamedChilds().put("N1", new Node("N1"));
+node.getNamedChilds().put("N2", new Node("N2"));
+node.getNamedChilds().put("N3", new Node("N3"));
+
+ObjectUtil objectUtil = new ObjectUtil();
+Object simple = objectUtil.makeSimple(node);
+
+// and back to the Node-Object
+Node nodeCopy = (Node) objectUtil.makeComplex(simple);
+</source>		
+	
+	</subsection>
+
+	<subsection name="Switch from method access to field access">
+	<p>
+	The default access to JavaBean properties by SOJO is per method (Setter and Getter method access).
+	In some cases it doesn't work. An example for this case <i>javax.swing.tree.DefaultMutableTreeNode</i>.
+	This class is not a correct JavaBean. You can add a child node with the <i>add</i> method and not with a setter method.
+	</p>							
+
+	<p>
+	The solution is a switch from method access to a field access. The switch is activate with register the class:
+	
+<source>
+// first parameter is the class, second parameter is a possible filter
+ReflectionFieldHelper.addAllFields2MapByClass(DefaultMutableTreeNode.class, null);
+
+// the inverse switch is the remove class
+ReflectionFieldHelper.removePropertiesByClass(DefaultMutableTreeNode.class);
+</source>			
+	</p>							
+	
+	</subsection>
+		
+	</section>
+	
+
+  </body>
+</document>

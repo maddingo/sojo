@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+  <project name="sojo">
+	<!-- Page Title -->
+	<title>Welcome to SOJO</title>
+	<!-- logo href="/images/sf_logo.GIF">XML-RPC</logo -->
+
+
+  <body>
+  
+  	<!-- breadcrumbs>
+      		<item name="Home"             href="/index.html"/>
+   	</breadcrumbs -->
+
+	<!-- Links defined across the top right of the site -->
+	<links>
+   		<item name="Home"            		href="http://sojo.sourceforge.net/index.html"/> 		
+   		<item name="Download"          		href="http://sourceforge.net/project/showfiles.php?group_id=178713"/> 		
+ 		<item name="@SourceForge"    		href="http://sourceforge.net/projects/sojo/"/>             		
+<!-- 		
+		<item name="Download"        		href="http://sourceforge.net/project/showfiles.php?group_id=140162"/>
+		
+		<item name="Browse CVS" 		href="http://crispy.cvs.sourceforge.net/crispy/"/> 				
+		<item name="Create an Issue" 		href="http://sourceforge.net/tracker/?group_id=140162"/> 				
+		<item name="PDF Documentation"  href="/crispy.pdf" img="/images/pdf.gif"/>
+-->		
+	</links>
+		
+
+	<!-- Menu in the Left Navigation -->
+	<menu name="SOJO-Menu">
+	      <item name="Home" 	href="index.html"/>
+	      <item name="Download" 	href="download.html" />			      
+<!-- 			      
+	      <item name="Road Map" 	href="roadmap.html" />
+-->			      
+	      <item name="User Guide"	href="/guide/user/index.html">	
+	      		<item name="Common"			href="/guide/user/object-common.html"/>	
+      			<item name="Filter"				href="/guide/user/object-filter.html"/>	
+      			<item name="Interchange"		href="/guide/user/object-interchange.html"/>	
+	      		<item name="Navigation"		href="/guide/user/object-navigation.html"/>	      			
+	      </item>
+
+	</menu>	
+
+
+
+    <powered-by>
+      <item name="Code Coverage by Clover" href="http://www.cenqua.com/clover" img="http://www.cenqua.com/images/clovered1.gif"/>
+      <item name="JavaToolbox" href="http://javatoolbox.com/" img="http://sojo.sourceforge.net/images/JavaToolbox.png"/>
+      <item name="LinuxLinks" href="http://www.linuxlinks.com/" img="http://sojo.sourceforge.net/images/LinuxLinks.gif"/>
+    </powered-by>
+	
+
+   
+	</body>
+</project>
+
+
+<!--
+
+	<footer>
+    		<A href="http://sourceforge.net/projects/crispy">
+      		<IMG src="http://sourceforge.net/sflogo.php?group_id=72748" border="0" alt="sf logo"/>
+    		</A>
+   	</footer>
+
+-->

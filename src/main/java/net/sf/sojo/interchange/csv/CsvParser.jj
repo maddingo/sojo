@@ -1,0 +1,198 @@
+options {
+	LOOKAHEAD=2;
+	FORCE_LA_CHECK=true;
+}
+
+PARSER_BEGIN(CsvParserGenerate)
+
+package net.sf.sojo.interchange.csv.generate;
+
+import java.util.Map;
+import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
+
+public class CsvParserGenerate {
+
+  protected static String delimiter = ",";
+
+  public static void main(String args[]) throws ParseException {
+    try {
+    	CsvParserGenerate parser = new CsvParserGenerate(System.in);
+    	Object ret = new Object();
+    	while (ret != null) {
+    		ret = parser.parse();
+    	}
+    	System.exit (0);
+    } catch (ParseException e) {
+    	e.printStackTrace();
+    }
+  }
+  
+  public static void setInputStream(java.io.InputStream stream) {
+	new CsvParserGenerate(stream);
+  } 
+  
+  public static void setDelimiter (String pvDelimiter) {
+	  delimiter = pvDelimiter;
+  } 
+
+}
+
+PARSER_END(CsvParserGenerate)
+
+/*
+   GRAMMER:
+   -------------
+   
+   file = record *(CRLF record) [CRLF]
+
+   record = field *(COMMA field)
+
+   field = (escaped / non-escaped)
+
+   escaped = DQUOTE *(TEXTDATA / COMMA / CR / LF / 2DQUOTE) DQUOTE
+
+   non-escaped = *TEXTDATA
+*/
+
+SKIP :
+{
+  " "
+| "\t"  
+}
+
+
+
+TOKEN :
+{
+  < COMMA: "," >
+|
+  < CR: "\r" >
+|
+  < LF: "\n" >
+|
+  < DQUOTE: "\"" >
+|
+  < DQUOTE_2X: "\"\"" >
+|
+  < CRLF: "\r\n" >
+|
+
+ 	/* 0x20 - 0x21 | 0x23 - 0x2B  |  0x2D - 0x7E */
+  < TEXTDATA:     ( [" " -  "!"]  | ["#" -  "+"]  | ["-" -  "~"] ) +  >
+  
+ |
+  < TEXTDATA_ESCAPED: <DQUOTE> (<TEXTDATA> | <COMMA> | <CR> | <LF> | <DQUOTE_2X> )* <DQUOTE>  >
+}
+
+List parse() throws ParseException:
+{
+	List result;
+}
+{
+	try {
+		result = file()  {  return result; }						
+  	} catch (ParseException e) {
+  		throw e;
+  	} catch (TokenMgrError te) {
+		throw new ParseException(te.getMessage());
+  	}
+}
+
+List file():
+{
+	List fileList = new ArrayList();
+	List recordList = new ArrayList();		
+}
+{
+	recordList = record()
+	{
+	fileList.add(recordList);
+	}
+ 	(
+ 		<CRLF> recordList = record() 
+		{
+		fileList.add(recordList);
+		} 		
+ 	)*
+ 	
+ 	{
+ 	return fileList;
+ 	}
+}
+
+List record():
+{
+	List fieldList = new ArrayList();
+	String fieldStr = "";
+		fieldStr = field()
+	   	{
+		fieldList.add(fieldStr);
+		}
+		(
+		 	<COMMA> fieldStr = field() 
+			{
+			fieldList.add(fieldStr);
+			}
+		) *
+	{
+	return fieldList;
+	}
+	
+}
+
+
+String field():
+{
+	String field;
+}
+{
+	(
+  	field = escaped()
+  	|
+  	field = nonEscaped()
+  	)
+  
+  	{
+  	return field;
+  	}
+}
+
+String empty():
+{
+	Token t;
+}
+{
+	t =  <COMMA>
+	{
+  		return "";
+  	}
+}
+
+String escaped():
+{
+	Token t;
+}
+{
+	t =  <TEXTDATA_ESCAPED>
+	{
+  		String s = t.image;
+  		s = s.substring(1, (s.length() - 1));
+		s = s.replaceAll("\"\"", "\"");
+  		return s;
+  	}
+}
+
+String nonEscaped():
+{
+	Token t;
+}
+{
+  	t = <TEXTDATA>
+  	{
+  		String s = t.image;
+  		s = s.trim();
+  		return s;
+  	}
+}

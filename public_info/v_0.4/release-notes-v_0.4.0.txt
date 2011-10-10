@@ -1,0 +1,76 @@
+The Open Source project Sojo has announced the next release (version 0.4.0). 
+The intention for this project is a Java framework, that convert JavaBeans in a simplified representation . 
+So it is easy and uniformly to handle and control the access to JavaBeans properties. 
+This framework want to complement POJOs, where Java communicate with "other worlds. Other worlds are interfaces, 
+where object orientation is not supported or is not the best decision.
+
+For example:
+# data interchange (interchange):
+
+    * JSON (JavaScript Object Notation) a lightweight data-interchange format
+    * Object To XML - where is XML-RPC a special case
+    * Comma Separated Values (CSV)
+    * Java serialization, without implements the interface java.io.Serializable (e.g. cluster, cache, remote communication, ...)
+
+# operation of complex Java-Objects-graphs (common / navigation):
+
+    * copy or clone complex object graph (can manage different versions from one object graph (object history))
+    * compare complex object graph
+    * walk over object graph (to traverse)
+    * extend objects to additional information (e.g.: object-versions (number of changes), data changed date or changed user)
+    * easy navigate on the complex object graph (with a navigation language)
+    * mapping from one property to other property (name to name mapping (by naming conflicts) or value to value mapping (to convert values))
+    * making object-values immutable, for testing concurrent access - multi threading)
+
+
+
+In cases, where object orientation and not object orientation must work together, exist the problem of independent mismatched. 
+The SOJO want to do this problem a little bit smaller. 
+
+The main Feature:
+- CSV data interchange (Feature Request: 1639781)
+- Extend Serializer method deserialize:
+  The Serializer get a second deserialize method with an additional parameter:
+  public abstract Object deserialize(Object pvSourceObject, Class pvRootClass);
+  So can deserialize Objects, where in the serialize isen't the class information.		
+  (Feature Request: 1656910)
+- Create ThrowableConverterInterceptor:
+  Can add a ThrowableConverterInterceptor to the Converter.
+  This interceptor transform a Exception to a ThrowableWrapper. 
+  The benefit of this Conversion is, that can wrap a Throwable instance and can do an
+  StackTrace or show the ExceptionMessage without a knowledge of the original
+  ExceptionClass. For example, the server thrown a 'HibernateException' and the client don't know the hibernate library. 
+  In the StackTrace you can see the StackTrace of the server.
+  (Feature Request: 1662346)
+- Add parameter to type by ConverterInterceptor (beforeConvert / afterConvert).
+  This is more flexible to define the to class type.
+  (Feature Request: 1662347)
+- Set desired date format:CURRENT serialized with JSON: {"dob":"Tue Feb 20 10:25:19 EST 2007","id":10}
+  DESIRED serialized form: {"dob":"02/20/2007","id":10}
+  (Feature Request: 1664604)
+- Calculate over all values the hashCode. This is the complement to the ObjectUtil.equals - Method (Feature Request: 1671151)
+- CompareTo method for all objects (JavaBeans too) (Feature Request: 1671946)
+
+
+The main Bug fixes:
+- Inconsistences return types between Xml and Json Serializer: 
+  the return type from XmlRpcSerializer.deserialize is a list that contain a desterilized Object as first element 
+  but this is not the same in JsonSerializer.deserialize , as this method return the desterilized Object directly not in a List
+  (Bug: 1633051).
+- XmlRpcSerializer is not thread safe in version 0.3. In version 0.2 of sojo the XmlRpcSerializer was a thread safe but in 0.3 this isn't true.
+  The XmlRpcSerializer was changed, because so that is uniform to the other Serializer (JsonSerializer for example)
+  (Bug: 1632206).
+- By the org.xml.sax.helpers.DefaultHandler class in the characters-method can be data lose. The reason is to call this
+  callback-method more than one times for more performance from the SAXParser. 
+  This is the case by the xerces implementation (org.apache.xerces.jaxp.SAXParserFactoryImpl). 
+  This can be a promlem by big XML-files.
+  (Bug: 1664621).
+
+
+Homepage:
+
+http://sojo.sourceforge.net
+
+Download: 
+
+http://sourceforge.net/project/showfiles.php?group_id=178713

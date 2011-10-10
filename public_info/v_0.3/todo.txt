@@ -1,0 +1,26 @@
+ToDo:
+- mapping from one object graph to an other
+- makeSimple for Excption type
+- filter:
+	- support for regular expressions by class property filter
+	- null values
+- interchange with YAML (http://yaml.org/)
+- create conversion for Exception
+- create conversion for ResultSet
+- create conversion for Class-Filter (ignore this classes by transformation)
+
+
+Was doing:
+- double call from method makeSimple with the same result
+- filter:
+	- for getClass and UniqueIdGenerator.UNIQUE_ID_PROPERTY
+- remove dependencies to foreigen libraries (commons logging)
+	
+	
+public:
+- http://www.jsurfer.org/
+- http://www.infoq.com/
+
+Articles:
+http://www.theserverside.com/news/thread.tss?thread_id=42955
+http://www.infoq.com/news/2007/01/sojo

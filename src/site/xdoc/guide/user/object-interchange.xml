@@ -1,0 +1,244 @@
+<document>
+
+  <body>
+
+	<section name="Supported interchange formats">				
+		<p>
+		Supported interchange formats are:
+		<ul>
+			<li><a href="#JSON">JSON</a></li>
+			<li><a href="#XML-RPC">XML-RPC</a></li>
+			<li><a href="#JAVA">Java-Object serialization</a> (without implements the interface <i>java.io.Serializable</i>)</li>			
+			<li><a href="#CSV">CSV</a> (Comma Separated Value)</li>						
+		</ul>
+		</p>					
+
+		<subsection name="General supported feature">
+		<p>
+		This showing feature are supported of all interchange implementations:
+		</p>
+		<p>
+		The example show, how can format the output (in this case the date with a <i>SimpleDateFormat</i>:
+		</p>
+		
+<source>
+Car car = new Car("Ferrari");
+Date date = new Date(82800000);
+car.setBuild(date);
+
+AbstractSerializer serializer = new [...]Serializer;
+<b>serializer.getObjectUtil().addFormatterForType(new SimpleDateFormat("dd-MM-yyyy"), Date.class);</b>
+Object str = serializer.serialize(car);
+System.out.println(str);
+// print: {"build":"02-01-1970","name":"Ferrari","class":"test.net.sf.sojo.model.Car"}
+</source>		
+		</subsection>
+
+
+		<a name="JSON"/>		
+		<subsection name="JSON">
+		<p>
+		The easiest way to transform an object to a JSON representation is:
+		</p>							
+<source>
+Serializer serializer = new JsonSerializer();
+String str = "My Test String";
+Object result = serializer.serialize(str);
+System.out.println(result);
+// print: "My Test String"
+
+Object o[] = new Object[] { "text", new Long(1234), Boolean.TRUE }; 
+result = serializer.serialize(o);
+System.out.println(result);
+// print: ["text",1234,true]
+
+
+Car car = new Car();
+car.setName("MyCar");
+car.setDescription("This is really my car.");
+Object result = serializer.serialize(car);
+// print: {"description":"This is really my car.","name":"MyCar","class":"test.net.sf.sojo.model.Car"}
+</source>		
+
+		<p>
+		The way to transform an JSON representation to object is easy as well:
+		</p>							
+<source>
+Serializer serializer = new JsonSerializer(); 
+Object result = serializer.serialize(new Car("MyCar"));
+result = serializer.deserialize(result);
+Car car = (Car) result;
+System.out.println(car.getName());
+// print: MyCar
+</source>		
+
+		</subsection>
+
+
+		<a name="XML-RPC"/>
+		<subsection name="XML-RPC">
+		<p>
+		To transform Java-Objects to a XML-RPC stream (this stream is equivalent to parameter representation from a method call) 
+		is easy by JSON as well. The only change is to replace the <i>JsonSerializer</i> constructor with the <i>XmlRpcSerializer</i>
+		</p>							
+
+<source>
+Serializer serializer = new XmlRpcSerializer();
+String str = "My Test String";
+Object result = serializer.serialize(str);
+System.out.println(result);
+// print: 
+<![CDATA[ 
+<params><param><value><string>My Test String</string></value></param></params>
+]]>
+
+Object o[] = new Object[] { "text", new Long(1234), Boolean.TRUE }; 
+result = serializer.serialize(o);
+System.out.println(result);
+// print: 
+<![CDATA[ 
+<params>
+	<param><value><string>text</string></value></param>
+	<param><value><ex:i8>1234</ex:i8></value></param>
+	<param><value><boolean>1</boolean></value></param>
+</params>
+]]>
+
+Car car = new Car();
+car.setName("MyCar");
+car.setDescription("This is really my car.");
+			
+serializer = new XmlRpcSerializer(); 
+result = serializer.serialize(car);
+System.out.println(result);
+// print: 
+<![CDATA[ 
+<params><param><value><struct>
+	<member><name>description</name><value><string>This is really my car.</string></value></member>
+	<member><name>name</name><value><string>MyCar</string></value></member>
+	<member><name>class</name><value><string>test.net.sf.sojo.model.Car</string></value></member>
+</struct></value></param></params>
+]]>
+</source>		
+
+		<p>
+		A complete XML-RPC method call is:
+		</p>							
+
+<source>
+XmlRpcSerializer serializer = new XmlRpcSerializer(); 
+Object result = serializer.serializeXmlRpcRequest("echo", "Hello SOJO");
+System.out.println(result);
+// print: 
+<![CDATA[ 
+<?xml version='1.0' encoding='UTF-8'?>
+<methodCall><methodName>echo</methodName>
+	<params><param><value><string>Hello SOJO</string></value></param></params>
+</methodCall>
+]]>
+</source>		
+
+		</subsection>
+
+
+
+
+		<a name="JAVA"/>
+		<subsection name="Java-Object serialization">
+		<p>
+		The thing is, that the Java classes must <b>not</b> implement the interface <i>java.io.Serializable</i>:
+		</p>							
+<source>
+Serializer serializer = new ObjectSerializer();
+String str = "My Test String";
+Object result = serializer.serialize(str);
+System.out.println(result);
+</source>		
+
+		<p>
+		Or write the stream in a file:
+		</p>							
+
+<source>
+ObjectSerializer serializer = new ObjectSerializer();
+String str = "My Test String";
+try {
+	serializer.serializeToFile(str, "c:/temp/str.ser");
+} catch (IOException e) {
+	e.printStackTrace();
+}
+</source>		
+
+		<p>
+		Or write the stream in a <i>OutputStream</i>:
+		</p>							
+
+<source>
+ObjectSerializer serializer = new ObjectSerializer();
+String str = "My Test String";
+try {
+	serializer.serializeToOutputStream(str, System.out);
+} catch (IOException e) {
+	e.printStackTrace();
+}
+</source>		
+
+		</subsection>
+		
+
+
+		<a name="CSV"/>
+		<subsection name="CSV (Comma Separated Value)">
+		<p>
+		This section describe the handling of convert Java - objects to a CSV representation.
+		The SOJO implementation of CVS was developed on the base of <a href="http://tools.ietf.org/html/rfc4180">Request for Comments: 4180</a>.
+		</p>							
+		<p>
+		By CSV is one row equivalent with one data set. 
+		This means, that objects with a one to many relation are <b>not supported</b> 
+		(in this case is thrown a <i>net.sf.sojo.interchange.csv.CsvParserException</i>). 
+		CVS is equivalent with one relation by a relational database. 
+		One to many relations needed two tables with a primary to foreign key mapping.
+		</p>							
+		<p>
+		Example of transforming a Java Bean to a CSV-String:
+		</p>
+<source>
+Car car = new Car("My Car");
+car.setDescription("This is my car.");
+Serializer csvSerializer = new CsvSerializer();
+String csvStr = (String) csvSerializer.serialize(car);
+System.out.println(csvStr);
+
+// print: 
+// description,build,properties,name,~unique-id~,class
+// This is my car.,,,My Car,0,test.net.sf.sojo.model.Car
+</source>		
+
+		<p>
+		Example of transforming a Array of Java Beans to a CSV-String:
+		</p>
+<source>
+Car car1 = new Car("BMW");
+car1.setDescription("My first car.");
+Car car2 = new Car("Audi");
+car2.setDescription("My second car.");
+Object o = new Object [] { car1, car2 };
+Serializer csvSerializer = new CsvSerializer();
+String csvStr = (String) csvSerializer.serialize(o);
+System.out.println(csvStr);
+
+// print:
+// description,build,properties,name,~unique-id~,class
+// My first car.,,,BMW,0,test.net.sf.sojo.model.Car
+// My second car.,,,Audi,1,test.net.sf.sojo.model.Car
+</source>		
+
+
+		</subsection>
+
+
+
+	</section>
+  </body>
+</document>

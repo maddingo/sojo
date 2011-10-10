@@ -1,0 +1,244 @@
+<document>
+
+  <body>
+	<section name="Welcome to SOJO">
+
+		<p>
+		Make everything as simple as possible, but not simpler. <i>(Albert Einstein)</i>
+		</p>
+
+		<p>
+		SOJO stands for <b>S</b>implify your <b>O</b>ld <b>J</b>ava <b>O</b>bjects or, in noun form,  <b>S</b>implified <b>O</b>ld <b>J</b>ava <b>O</b>bjects. 
+		</p>
+
+		<p>
+		The intention for this project is a Java framework, that convert <a href="http://java.sun.com/products/javabeans/">JavaBeans</a> 
+		in a simplified representation. So it is easy and uniform to handle and control the access to JavaBeans properties. 
+		</p>		
+
+		<p>
+		The goal of the SOJO project is to provide a library to convert object graphs into a specific structure (manages cycle detection, as well). 
+		The framework provide a "pluggable" basis to integrate different kind of conversions (so even custom formats can be used). 
+		With this infrastructure can solve problems, where POJOs are not supported or not the best decision.
+		</p>			
+
+
+		<subsection name="Requirement">
+		<p>
+		This framework is developed und tested with Java<sup><font size="-2">TM</font></sup> 2 Platform Standard Edition, v 1.4.2.
+		</p>
+		<p>
+		The SOJO framework has <b>no</b> dependencies to external libraries <b>!!!</b>
+		</p>
+		<p>
+		Only for the optional - packages (extensions) are <a href="./dependencies.html">external libraries required</a>.
+		</p>
+
+		</subsection>
+	</section>
+
+				
+	<section name="Are Plain Old Java Objects (POJOs) to complex?">
+		<p>
+		POJOs are very important for the development. With POJOs you can develop object oriented and independent 
+		from often changed technologies.
+		</p>
+			
+		<p>
+		But what is with cases, where Java must communicate with "other worlds"? Other worlds are interfaces,
+		where object orientation is not supported or is not the best decision. 
+		</p>
+
+		<p>
+		This environments are part of the SOJO framework.  
+		</p>
+
+		<subsection name="Supported SOJO functionality">
+			<ul>
+				<li><a href="./guide/user/object-interchange.html">data interchange</a> to easy communication with non-Java processes:
+					<ul>										
+						<li><a href="http://www.json.org/">JSON</a> (JavaScript Object Notation) a lightweight data-interchange format </li>
+						<li>Object To XML - where is <a href="http://www.xmlrpc.com/">XML-RPC</a> a special case </li> 
+						<li>Java serialization, <b>without</b> implements the interface <i>java.io.Serializable</i>
+							(e.g. cluster, cache, remote communication, ...) 
+						</li>								
+						<li>Comma Separated Values (CSV) - <a href="http://tools.ietf.org/html/rfc4180">Request for Comments: 4180</a></li>
+<source>
+Serializer serializer = new <b>Json</b>Serializer(); 
+// <b>XmlRpc</b>Serializer | <b>Csv</b>Serializer | <b>Object</b>Serializer 
+Object result = serializer.serialize(anObject);
+Object anObjectCopy = serializer.deserialize(result);
+</source>		
+
+<source>
+Car car = new Car("my car");
+car.setBuild(new Date());
+car.setDescription("This is my car");
+
+// simple filtering of properties (build, description)
+Serializer serializer = new JsonSerializer(); 
+Object result = serializer.serialize(car, new String[] { "build", "description" });
+Car carAfter = (Car) serializer.deserialize(result);
+
+assertEquals("my car", carAfter.getName());
+assertNull(carAfter.getDescription());
+assertNull(carAfter.getBuild());
+</source>								
+					</ul>								
+				</li>
+																
+				<li>operations with complex Java-Objects-graphs (<a href="./guide/user/object-common.html">common</a> / <a href="./guide/user/object-navigation.html">navigation</a>):
+					<ul>
+						<li>copy or clone complex object graph (for data transfer objects (DTO),
+							can manage different versions from one object graph (object history)) 
+<source>
+Object anObjectCopy = new ObjectUtil().copy(anObject);
+</source>		
+						</li>
+						<li>compare complex object graph 
+<source>
+// for example for the equals method, compare all values
+public boolean equals(Object obj) {
+  return new ObjectUtil().equals(obj, this);
+}
+
+// the complement, the hashCode - method
+public int hashCode() {
+  return new ObjectUtil().hashCode(this);
+}
+</source>
+
+<source>
+// show the first finded different value
+CompareResult result = new ObjectUtil().compare(obj1, obj2);
+
+// show all finded different value
+CompareResult result[] = new ObjectUtil().compareAll(obj1, obj2);
+
+// less, equal, greater (for JavaBeans too)
+int compareTo = new ObjectUtil().compareTo(obj1, obj2);
+</source>		
+						</li>
+						
+						<li>sort lists, arrays, set and maps of objects 
+<source>
+Car cars[] = new Car [] { new Car("Ferrari"), new Car("Audi"), new Car("BMW") } ;
+cars = (Car[]) IterateableUtil.sort(cars);
+assertEquals("Audi", cars[0].getName());
+assertEquals("BMW", cars[1].getName());
+assertEquals("Ferrari", cars[2].getName());
+</source>		
+						</li>
+						
+						<li>easy navigate on the complex object graph (with a navigation language) 
+<source>
+Object result = PathExecuter.getNestedProperty(node, "childs[0].name");
+</source>		
+						</li>
+						
+						<li>Convert objects (respectively object graphs) 
+<source>
+// transform a Exception to a Map, what is usefull by client/server applications, 
+// to transport the value over the network
+ObjectUtil util = new ObjectUtil();
+Map throwableMap = (Map) util.makeSimple(new ConversionException("Test"));
+ConversionException conversionException = (ConversionException) util.makeComplex(throwableMap);
+</source>
+
+<source>
+// or transform to an other Exception, what is usefull by client/server applications,
+// where the client doesn't know the server Exception  (e.g. DaoException/TechnicalException)
+ClientException clientException = (ClientException) util.makeComplex(throwableMap, ClientException.class);
+</source>
+
+<source>
+// transform to a formatted String
+util.addFormatterForType(new SimpleDateFormat("dd-MM-yyyy"), Date.class);
+Object str = util.makeSimple(new Date());
+</source>
+
+<source>
+// transform a String to a Long value
+Converter converter = new Converter();
+converter.addConversion(new Simple2SimpleConversion(String.class, Long.class));
+String s = "57";
+Long result = (Long) converter.convert(s);
+</source>		
+						</li>
+						<li>walk over object graph (to traverse) 
+<source>						
+ObjectGraphWalker walker = new ObjectGraphWalker();
+PathRecordWalkerInterceptor interceptor = new PathRecordWalkerInterceptor();
+walker.addInterceptor(interceptor);
+		
+walker.walk(anObjectGraph);
+Map visitedPathes = interceptor.getAllRecordedPathes();
+</source>
+						</li>						
+					</ul>								
+				</li>			
+			</ul>
+		</subsection>
+			
+		<subsection name="SOJO functionality for the future">
+			
+			<ul>			
+				<li>operations with complex Java-Objects-graphs:
+					<ul>
+						<li>extend objects to additional information (e.g.: object-versions (number of changes), data changed date or changed user) </li>						
+						<li>mapping from one property to other property (name to name mapping (by naming conflicts) or value to value mapping (to convert values)) </li>
+						<li>making object-values immutable, for testing concurrent access - multi threading) </li>						
+					</ul>								
+				</li>			
+				<li>remote acces/communication:
+					<ul>
+						<li>HTTP protocol - request and response are based on String represantation</li>
+						<li>RMI (Java-Object must serializable (marshalling) or deserializable (unmarshalling))</li>
+						<li>WebService or XML RPC - convert Java-Object in special String represantation, in XML</li>
+						<li>create "value objects" or "transfer objects" to sent objects over the network</li>						
+					</ul>					
+				</li>
+				<li>data access:
+					<ul>
+						<li>object/relational persistence respectively object/relational mapping</li>
+						<li>flat files (convert Java-Object-Graph to a flat represantation)</li>
+						<li>property files (e.g. convert Strings to Long, Date, ... by reading a property file and map the value to setter from a Bean)</li>
+						<li>legacy systems</li>
+					</ul>								
+				</li>
+				<li>GUI interface:
+					<ul>
+						<li>transform business models to GUI-models (<i>DataBinder</i>)</li>						
+						<li>every changes on the GUI-model must to notice (integrated <i>PropertyChangeListener</i> or <i>VetoableChangeListener</i>)</li>
+					</ul>								
+					</li>
+				<li>and so on ...</li>															
+			</ul>						
+		</subsection>
+			
+		<p>
+		In cases, where object orientation and not object orientation must work together, exist the problem of independent mismatched. 
+		The SOJO framework want to do this problem a little bit smaller.
+		</p>
+			
+	</section>
+				
+<!--
+	<section name="Getting Started">
+		<p>
+		In this section are showing code snippet, that are characteristic of the SOJO - API.
+		</p>
+		<p>
+		Copy, clone.
+		</p>
+		
+<source>
+ObjectUtil objectUtil = new ObjectUtil();
+Object result = objectUtil(anObject);
+</source>		
+
+	</section>
+-->	
+
+  </body>
+</document>

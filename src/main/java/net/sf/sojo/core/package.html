@@ -1,0 +1,46 @@
+<body>
+In this package are all main/core classes for the SOJO framework.
+
+The possible property types, that are supported by a JavaBean (and SOJO) can be broken into three groups:
+<ul>
+		<li><strong>Simple (Constants.TYPE_SIMPLE):</strong> Simple properties are such as int, long, double (primitive data types) or a simple object 
+		    (such as a <i>java.lang.String, java.lang.Long, java.uilt.Date</i> and so on). The <i>net.sf.sojo.core.reflect.ReflectionHelper</i>
+		    is to be responsible for define classes, which are simple (can get with method <i>isSimpleType</i>). 
+		    With the method <i>addSimpleType</i> can add more types at runtime.
+		</li>
+		<li><strong>Iterateable (Constants.TYPE_ITERATEABLE):</strong> An Iterateable property stores a collection of objects that can be accessed 
+		    by an integer-valued (index, non-negative) or by an iterator. 
+		    Interfaces for this category are <i>java.util.List, java.util.Set</i> or the super interface <i>java.util.Collection</i>.
+			An Iterateable property can be also an array.
+		</li>
+		<li><strong>Map (Constants.TYPE_MAP):</strong>A Map property is a property with a implementation from the java interface <i>java.util.Map</i>.
+		    The elements are composite key-value pairs. You can set and retrieve individual values via a key. 
+		</li>				
+	</ul>
+			
+	The outcome of this categories of JavaBeans-properties are kinds of conversion. The main classes for conversions are
+	the Java interface <i>net.sf.sojo.core.Conversion</i> respectively the abstract implementation <i>net.sf.sojo.core.AbstractConversion</i>.
+	The first extensions are <i>net.sf.sojo.core.SimpleConversion</i> and <i>net.sf.sojo.core.ConversionIterator</i>.
+	The <i>net.sf.sojo.core.ConversionIterator</i> is splitting in <i>net.sf.sojo.core.ComplexConversion</i> and
+	<i>net.sf.sojo.core.IterateableConversion</i>.
+	<br/>
+			
+	For different kind of properties (category) exist different kind of strategies for conversions:
+	<ul>
+		<li><strong>SimpleConversion: </strong>Convert a simple to a simple type. A example is the transformation from String to Long.
+			For this problem you can use the:<i>net.sf.sojo.core.conversion.Simple2SimpleConversion</i>
+		</li>
+		<li><strong>ConversionIterator: </strong>is splitting in sub classes:
+			<ul>
+				<li><strong>IterateableConversion: </strong>This category is equivalent to JavaBean category iterateable. Conversions implementations are:
+					<i>net.sf.sojo.core.conversion.Iterateable2IterateableConversion or net.sf.sojo.core.conversion.IterateableMap2MapConversion
+					or net.sf.sojo.core.conversion.IterateableMap2BeanConversion</i>
+				</li>
+				<li><strong>ComplexConversion: </strong>This category is equivalent to JavaBean category map. Conversions implementations are:
+					<i>net.sf.sojo.core.conversion.ComplexBean2MapConversion</i>
+				</li>					
+			</ul>
+		</li>
+	</ul>
+
+</body>

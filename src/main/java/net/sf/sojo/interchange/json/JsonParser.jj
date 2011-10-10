@@ -1,0 +1,271 @@
+options { 
+	UNICODE_INPUT=true;
+	STATIC=false;
+	DEBUG_PARSER=false;
+	DEBUG_TOKEN_MANAGER=false;
+	DEBUG_LOOKAHEAD=false;
+}
+
+PARSER_BEGIN(JsonParserGenerate)
+
+package net.sf.sojo.interchange.json.generate;
+
+import java.util.Map;
+import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
+import net.sf.sojo.interchange.json.JsonWalkerInterceptor;
+
+public class JsonParserGenerate {
+
+  protected static boolean printValues = false;
+
+  public static void main(String args[]) throws ParseException {
+    try {
+    	JsonParserGenerate parser = new JsonParserGenerate(System.in);
+    	Object ret = new Object();
+    	while (ret != null) {
+    		ret = parser.parse();
+    	}
+    	System.exit (0);
+    } catch (ParseException e) {
+    	e.printStackTrace();
+    }
+  }
+  
+  public static void setInputStream(java.io.InputStream stream) {
+	new JsonParserGenerate(stream);
+  } 
+  
+  public static void setPrintValues (boolean pvPrint) {
+	  printValues = pvPrint;
+  } 
+
+}
+
+PARSER_END(JsonParserGenerate)
+
+SKIP :
+{
+  " "
+| "\t"
+| "\n"
+| "\r"
+}
+
+TOKEN :
+{
+  < TRUE:  "true" >
+| < FALSE: "false" >
+| < NULL:  "null" >
+}
+
+TOKEN :
+{
+ < #EXPONENT: ["e","E"] (["+","-"])? (["0"-"9"])+ >
+| < NUMBER: 
+	(["-"] | ["+"])? 
+	(
+       (["0"-"9"])+ "." (["0"-"9"])* (<EXPONENT>)? (["f","F","d","D"])?
+      | "." (["0"-"9"])+ (<EXPONENT>)? (["f","F","d","D"])?
+      | (["0"-"9"])+ <EXPONENT> (["f","F","d","D"])?
+      | (["0"-"9"])+ (<EXPONENT>)? ["f","F","d","D"]
+      | (["0"-"9"])+ (["l","L"])?
+    )+
+  >
+  
+| 
+
+< STRING:
+	    "\"" (<DOUBLE_STRING_CHARACTERS>)? "\""
+	>
+|
+	< #DOUBLE_STRING_CHARACTERS:
+	    (<DOUBLE_STRING_CHARACTER>)*
+	>
+|
+	< #DOUBLE_STRING_CHARACTER:
+		(~["\"","\\","\u2028","\u2029"])* 
+		|
+		<DOUBLE_SLASH> <ESCAPE_SEQUENCE>
+	>
+|
+    < DOUBLE_SLASH:
+        "\\"
+    > : ESC
+}
+
+<ESC> TOKEN:
+{
+	< ESCAPE_SEQUENCE:
+		<CHARACTER_ESCAPE_SEQUENCE>
+	> : DEFAULT
+|
+	< #CHARACTER_ESCAPE_SEQUENCE:
+		<SINGLE_ESCAPE_CHARACTER> | <NON_ESCAPE_CHARACTER>
+	>
+|
+	< #SINGLE_ESCAPE_CHARACTER:
+	    ["'" , "\"" , "\\" , "b" , "f" , "n" , "r" , "t" , "v"]
+	>
+|
+	< #NON_ESCAPE_CHARACTER:
+		~["\n","\r","\u2028","\u2029"]
+	|
+		~["'" , "\"" , "\\" , "b" , "f" , "n" , "r" , "t" , "v", "x", "u"]
+	|
+		~["0"-"9"]
+	>
+
+}
+
+TOKEN: 
+{ 
+  <EOL: ";" >
+}
+
+Object parse() throws ParseException:
+{
+	Object value;
+}
+{
+	try {
+
+		<EOL> { return null; } 
+		|
+		value = value()  { 
+			if (printValues) {
+				System.out.println("==> RESULT: " + value);
+			}
+			return value; 
+		}						
+	
+  	} catch (ParseException e) {
+  		throw e;
+  	} catch (TokenMgrError te) {
+		throw new ParseException(te.getMessage());
+  	}
+}
+
+
+Object value():
+{
+	List list = null;
+	Map map = null;
+	String string;
+	Token t;
+}
+{
+  string = string()
+  	{
+  		return string;
+  	}
+
+| t = <NUMBER>
+	{
+		if (t.image.indexOf(".") < 0) {
+			return new Long(t.image);
+		} else {
+	  		return new Double(t.image);
+	  	}
+	}
+	
+| map = object() 	
+	{
+  		return map;
+	}
+
+| list = array() 
+	{
+		return list;
+	}
+	
+ 
+| t = <TRUE> 
+	{
+  		return Boolean.TRUE;
+	}
+
+| t = <FALSE>
+	{
+  		return Boolean.FALSE;
+	}
+
+
+| t = <NULL> 
+	{
+  		return null;
+	}
+}
+
+String string():
+{
+	Token t;
+}
+{
+  t = <STRING> 
+  	{
+  		String s = t.image;
+  		// remove quota
+  		s = s.substring(1);
+		s = s.substring(0, (s.length() - 1) );
+		s = JsonWalkerInterceptor.handleControlCharacterBack(s);
+  		return s;
+  	}
+}
+
+Map object():
+{
+	Object value;	
+	String key;
+	Token t;
+	Map map = new HashMap();
+}
+{
+      "{"
+      (
+      key = string() ":" value = value() 
+      	{
+      		map.put(key, value);
+      	}
+      
+      ( "," key = string() ":" value = value()
+       	{
+      		map.put(key, value);
+      	}
+      
+      )*
+      )?
+      "}"
+      
+      {
+      	return map;
+      }
+      
+}
+
+List array():
+{
+	Object value;	
+	List list = new ArrayList();
+}
+{
+      "["
+      (
+      value = value() 
+      	{
+	      	list.add(value);
+		}
+      
+      ( ","  value = value()
+      	{
+      		list.add(value);
+		}
+	   )*
+	   )?
+      "]"     
+      
+      {
+      	return list;
+      }
+}

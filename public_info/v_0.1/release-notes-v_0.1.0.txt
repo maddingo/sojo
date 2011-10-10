@@ -1,0 +1,64 @@
+Are Plain Old Java Objects (POJOs) to complex? 
+
+POJOs are very important for the development. With POJOs you can develop object orientated and independent from often changed technologies. 
+
+But what is with cases, where Java must communicate with "other worlds". Other worlds are interfaces, 
+where object orientation is not supported or is the best decision. For example by: 
+<ul>
+<li> operation of complex Java-Objects-graphs: 
+<ul>
+   <li> copy or clone complex object graph (can manage different version (object history) from one object graph) 
+   <li> compare complex object graph 
+   <li> extend objects to additional information (e.g.: object-versions (number of changes), change date or user) 
+   <li> easy navigate on the complex object graph 
+   <li> serialize complex object graph without implementation from the interface java.io.Serializable 
+   <li> making object-values immutable, for testing concurrent access - multi threading) 
+</ul>
+<li> remote access/communication: 
+<ul>
+   <li> HTTP protocol - request and response are based on String representation
+   <li> RMI (Java-Object must serializable (marshalling) or deserializable (unmarshalling)) 
+   <li> WebService or XML RPC - convert Java-Object in special String representation, in XML 
+   <li> create value object/transfer object to transport over the network 
+</ul>
+<li> data access: 
+<ul>
+   <li> object/relational persistence respectively object/relational mapping 
+   <li> flat files (convert Java-Object-Graph to a flat representation) 
+   <li> property files (e.g. convert Strings to Long, Date, ... by reading a property file and map the value to setter from a Bean) 
+   <li> legacy systems 
+</ul>
+<li> GUI interface: 
+<ul>
+   <li> transform business models to GUI-models (DataBinder) 
+   <li> every changes on the GUI-model must to notice (integrated PropertyChangeListener or VetoableChangeListener) 
+</ul>
+<li> and so on ... 
+</ul>
+
+In cases, where object orientation and not object orientation must work together, exist the problem of independent mismatched. The SOJO want to do this problem a little bit smaller. 
+
+This project is follow someone's example from Commons BeanUtils. The main different to this frameworks is, that SOJO can convert complex Java-Object graphs (with cycle detection) to a desired structure. The aim from this framework is, to provide a "pluggable" basis to integrate different kind of conversions (also your own implementations). With this infrastructure can solve problems, where POJOs are not supported or are not the best decision. 
+
+
+
+
+Feature for the first version 0.1.0:
+
+- serialize/deserialize complex object graph 
+- easy navigate on the complex object graph 
+- compare complex object graph 
+- copy or clone complex object graph 
+- many default conversions, for transformation one structure to other
+
+
+Bugs:
+
+
+Homepage:
+
+http://sojo.sourceforge.net
+
+Download: 
+
+http://sourceforge.net/project/showfiles.php?group_id=178713
