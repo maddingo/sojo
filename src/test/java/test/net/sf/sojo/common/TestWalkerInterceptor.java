@@ -4,10 +4,10 @@ import net.sf.sojo.common.WalkerInterceptor;
 
 public class TestWalkerInterceptor implements WalkerInterceptor {
 	
-	private Object whenThisObjectThanCanelWalk = null;
+	private Object whenThisObjectThanCancelWalk = null;
 	
 	public TestWalkerInterceptor(Object pvWhenThisObjectThanCanelWalk) {
-		whenThisObjectThanCanelWalk = pvWhenThisObjectThanCanelWalk;
+		whenThisObjectThanCancelWalk = pvWhenThisObjectThanCanelWalk;
 	}
 
 	public void startWalk(Object pvStartObject) { }
@@ -15,7 +15,7 @@ public class TestWalkerInterceptor implements WalkerInterceptor {
 	public void endWalk() { }
 
 	public boolean visitElement(Object pvKey, int pvIndex, Object pvValue, int pvType, String pvPath, int pvNumberOfRecursion) {
-		if (whenThisObjectThanCanelWalk != null && whenThisObjectThanCanelWalk.equals(pvValue)) {
+		if (whenThisObjectThanCancelWalk != null && whenThisObjectThanCancelWalk.equals(pvValue)) {
 			return true;
 		} else {
 			return false;
@@ -28,6 +28,6 @@ public class TestWalkerInterceptor implements WalkerInterceptor {
 
 
 	public Object getWhenThisObjectThanCanelWalk() {
-		return whenThisObjectThanCanelWalk;
+		return whenThisObjectThanCancelWalk;
 	}
 }

@@ -93,17 +93,20 @@ public class ClassPropertyFilter {
 	}
 
 	public boolean isKnownProperty(String pvProperty) {
-		for (int i=0; i<propertyList.size(); i++) {
-			if (propertyList.get(i).equals(pvProperty)) {
-				return true;
-			} 
-			else {
-				boolean b = Pattern.matches((String) propertyList.get(i), pvProperty);
-				if (b == true) {
-					return true;
-				}
-			}
-		}
+	  if (pvProperty != null) {
+	    
+  		for (int i=0; i<propertyList.size(); i++) {
+  			if (propertyList.get(i).equals(pvProperty)) {
+  				return true;
+  			} 
+  			else {
+  				boolean b = Pattern.matches((String) propertyList.get(i), pvProperty);
+  				if (b == true) {
+  					return true;
+  				}
+  			}
+  		}
+	  }
 		return false;		
 	}
 	
