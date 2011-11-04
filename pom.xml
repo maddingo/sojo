@@ -11,6 +11,7 @@
 
   <scm>
     <connection>scm:git:http://github.com/maddingo/sojo</connection>
+    <developerConnection>git@github.com:maddingo/sojo.git</developerConnection>
   </scm>
   
   <dependencies>
