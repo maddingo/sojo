@@ -3,7 +3,7 @@
   <groupId>net.sf.sojo</groupId>
   <artifactId>sojo</artifactId>
   <packaging>jar</packaging>
-  <version>1.0.3</version>
+  <version>1.0.4-SNAPSHOT</version>
   <name>SOJO</name>
   <url>http://sojo.sourceforge.net</url>
 
