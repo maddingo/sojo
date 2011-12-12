@@ -1,4 +1,4 @@
-SOJO - Simple old Java Objects
+SOJO - Simple Old Java Objects
 ==============================
 
 This repository was copied from revision 257 of the SOJO subversion repository trunk 

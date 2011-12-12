@@ -126,6 +126,8 @@ List record():
 {
 	List fieldList = new ArrayList();
 	String fieldStr = "";
+}
+{
 		fieldStr = field()
 	   	{
 		fieldList.add(fieldStr);
