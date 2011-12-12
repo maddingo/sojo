@@ -24,12 +24,9 @@ package net.sf.sojo.core;
  */
 public interface ConverterInterceptor {
 	
-	public Object beforeConvert(final Object pvConvertObject, final Class pvToType);
+	public Object beforeConvert(final Object pvConvertObject, final Class<?> pvToType);
 	
-	public Object afterConvert(final Object pvResult, final Class pvToType);
+	public Object afterConvert(final Object pvResult, final Class<?> pvToType);
 	
 	public void onError(Exception pvException);
-		
-
-
 }

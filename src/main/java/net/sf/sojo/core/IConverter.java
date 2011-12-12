@@ -25,6 +25,6 @@ public interface IConverter {
 
 	public Object convert(Object pvObject);
 	
-	public Object convert(Object pvObject, Class pvToType);
+	public Object convert(Object pvObject, Class<?> pvToType);
 	
 }

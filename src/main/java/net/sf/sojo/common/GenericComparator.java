@@ -24,7 +24,7 @@ import java.util.Comparator;
  * @author linke
  *
  */
-public final class GenericComparator implements Comparator {
+public final class GenericComparator implements Comparator<Object> {
 
 	private ObjectUtil objectUtil = new ObjectUtil();
 	/**

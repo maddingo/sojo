@@ -22,14 +22,14 @@ import net.sf.sojo.core.Constants;
 import net.sf.sojo.core.UniqueIdGenerator;
 
 /**
- * This implementation record all pathes of a object graph.
+ * This implementation record all paths of a object graph.
  * 
  * @author linke
  *
  */
 public class PathRecordWalkerInterceptor implements WalkerInterceptor {
 
-	private Map pathes = new TreeMap();
+	private Map<String,Object> paths = new TreeMap<String, Object>();
 	private boolean filterUniqueIdProperty = false;
 	private boolean onlySimpleProperties = false;
 	
@@ -41,7 +41,7 @@ public class PathRecordWalkerInterceptor implements WalkerInterceptor {
 	public void setOnlySimpleProperties(boolean pvOnlySimpleProperties) { onlySimpleProperties = pvOnlySimpleProperties; }
 	public boolean getOnlySimpleProperties() { return onlySimpleProperties; }
 			
-	public boolean addToPathes(int pvType, String pvPath) {
+	public boolean addToPaths(int pvType, String pvPath) {
 		boolean lvReturn = true;
 		
 		if (getFilterUniqueIdProperty() && pvPath.indexOf(UniqueIdGenerator.UNIQUE_ID_PROPERTY) >= 0) {
@@ -56,8 +56,8 @@ public class PathRecordWalkerInterceptor implements WalkerInterceptor {
 	
 	public boolean visitElement(Object pvKey, int pvIndex, Object pvValue, int pvType, String pvPath, int pvNumberOfRecursion) {
 
-		if (addToPathes(pvType, pvPath)) {
-			Object o = pathes.put(pvPath, pvValue);
+		if (addToPaths(pvType, pvPath)) {
+			Object o = paths.put(pvPath, pvValue);
 			if (o != null) {
 				throw new IllegalArgumentException("Path is not unique: " + pvPath + " - " + pvValue);
 			}
@@ -67,14 +67,14 @@ public class PathRecordWalkerInterceptor implements WalkerInterceptor {
 	}
 	
 	
-	public Map getAllRecordedPathes() {
-		return pathes;
+	public Map<String,Object> getAllRecordedPaths() {
+		return paths;
 	}
 
 	public void endWalk() {  }
 
 	public void startWalk(Object pvStartObject) {
-		pathes.clear();
+		paths.clear();
 	}
 
 	public void visitIterateableElement(Object pvValue, int pvType, String pvPath, int pvBeginEnd) {}

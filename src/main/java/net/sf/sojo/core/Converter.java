@@ -116,8 +116,14 @@ public final class Converter implements IConverter {
 	 * 
 	 * @param pvClassPropertyFilterHandler
 	 */
-	public void setClassPropertyFilterHandler(ClassPropertyFilterHandler pvClassPropertyFilterHandler) { classPropertyFilterHandler = pvClassPropertyFilterHandler; }
-	public ClassPropertyFilterHandler getClassPropertyFilterHandler() { return classPropertyFilterHandler; }
+	public void setClassPropertyFilterHandler(ClassPropertyFilterHandler pvClassPropertyFilterHandler) { 
+	  classPropertyFilterHandler = pvClassPropertyFilterHandler; 
+	}
+	
+	public ClassPropertyFilterHandler getClassPropertyFilterHandler() { 
+	  return classPropertyFilterHandler; 
+	}
+	
 
 	/**
 	 * Convert one object (by object graph, the root object) to another object.
@@ -128,6 +134,7 @@ public final class Converter implements IConverter {
 	 * @return The (converted) target object.
 	 * 
 	 */
+	@Override
 	public Object convert(final Object pvObject) {
 		return convert(pvObject, null);
 	}
@@ -139,7 +146,8 @@ public final class Converter implements IConverter {
 	 * @param pvToType Type from target object, if for this type no Conversion ist register.
 	 * @return The (converted) target object. 
 	 */
-	public Object convert(final Object pvObject, final Class pvToType) {
+	@Override
+	public Object convert(final Object pvObject, final Class<?> pvToType) {
 		Object lvResult = pvObject;
 		lvResult = interceptorHandler.fireBeforeConvert(lvResult, pvToType);
 		try {
@@ -160,7 +168,7 @@ public final class Converter implements IConverter {
 		return lvResult;
 	}
 	
-	protected Object convertInternal(final Object pvObject, final Class pvToType) {
+	protected Object convertInternal(final Object pvObject, final Class<?> pvToType) {
 		Object lvReturn = pvObject;
 		
 		Conversion lvConversion = conversionHandler.getConversion(lvReturn, pvToType);
@@ -177,8 +185,8 @@ public final class Converter implements IConverter {
 						SimpleConversion lvSimpleConversion = (SimpleConversion) lvConversion;
 						lvReturn = lvSimpleConversion.convert(lvReturn, pvToType);
 					}					
-					else if (lvConversion instanceof IterateableConversion) {
-						IterateableConversion lvIterateableConversion = (IterateableConversion) lvConversion;
+					else if (lvConversion instanceof IterableConversion) {
+						IterableConversion lvIterateableConversion = (IterableConversion) lvConversion;
 						lvIterateableConversion.setClassPropertyFilterHandler(classPropertyFilterHandler);
 						lvReturn = lvIterateableConversion.convert(lvReturn, pvToType, new InternalRecursiveConverterExtension(this));
 					}
@@ -229,7 +237,8 @@ public final class Converter implements IConverter {
 		public Object convert(Object pvObject) {
 			return convert(pvObject, null);
 		}
-		public Object convert(final Object pvObject, final Class pvToType) {
+		
+		public Object convert(final Object pvObject, final Class<?> pvToType) {
 			Object lvReturn = null;
 			if (ReflectionHelper.isSimpleType(pvObject)) {
 				lvReturn = converter.convertInternal(pvObject, pvToType);
@@ -248,15 +257,12 @@ public final class Converter implements IConverter {
 			return converter.uniqueIdGenerator.getUniqueId(pvObject);
 		}
 
-		public Object addObject(String pvUniqueId, Object pvObject) {
-			return converter.uniqueIdGenerator.addObject(pvUniqueId, pvObject);
+		public void addObject(String pvUniqueId, Object pvObject) {
+			converter.uniqueIdGenerator.addObject(pvUniqueId, pvObject);
 		}
 
 		public Object getObjectByUniqueId(String pvUniqueId) {
 			return converter.uniqueIdGenerator.getObjectByUniqueId(pvUniqueId);
 		}
-
-
 	}
-
 }

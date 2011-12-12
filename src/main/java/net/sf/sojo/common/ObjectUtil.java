@@ -18,10 +18,8 @@ package net.sf.sojo.common;
 import java.net.URL;
 import java.text.Format;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import net.sf.sojo.core.Conversion;
 import net.sf.sojo.core.ConversionHandler;
@@ -82,14 +80,14 @@ public final class ObjectUtil {
 		converter.addConverterInterceptor(throwableConverterInterceptor);
 	}
 	
-	public void addFormatterForType (Format pvFormat, Class pvType) {
+	public void addFormatterForType (Format pvFormat, Class<?> pvType) {
 		simpleFormatConversion.addFormatter(pvType, pvFormat);
 		if (getConverter().getConversionHandler().containsConversion(simpleFormatConversion) == false) {
 			getConverter().addConversion(simpleFormatConversion);
 		}
 	}
 	
-	public void removeFormatterByType(Class pvType) {
+	public void removeFormatterByType(Class<?> pvType) {
 		simpleFormatConversion.removeFormatterByType(pvType);
 		if (simpleFormatConversion.getFormatterSize() == 0) {
 			getConverter().removeConversion(simpleFormatConversion);
@@ -187,7 +185,7 @@ public final class ObjectUtil {
 		return makeComplex(pvRootObject, null);
 	}
 
-	public Object makeComplex(final Object pvRootObject, final Class pvRootClass) {
+	public Object makeComplex(final Object pvRootObject, final Class<?> pvRootClass) {
 		simpleKeyMapperInterceptor.setMakeSimple(false);
 		converter.addConversion(map2BeanConversion);
 		Object lvComplex = converter.convert(pvRootObject, pvRootClass);
@@ -222,12 +220,9 @@ public final class ObjectUtil {
 		lvInterceptor.setFilterUniqueIdProperty(true);
 		ogw.addInterceptor(lvInterceptor);
 		ogw.walk(pvObject);
-		Map lvAllRecPathes = lvInterceptor.getAllRecordedPathes();
-		Iterator it = lvAllRecPathes.values().iterator();
-		while (it.hasNext()) {
-			Object lvValue = it.next();
-			lvHashCode = lvHashCode * 37 + lvValue.hashCode();
-		}
+		for (Object entry : lvInterceptor.getAllRecordedPaths().values()) {
+      lvHashCode = lvHashCode * 37 + entry.hashCode();
+    }
 		return new Long(lvHashCode).intValue();
 	}
 		
@@ -318,7 +313,7 @@ public final class ObjectUtil {
 			lvWalker1.addInterceptor(lvInterceptor1);
 			
 			lvWalker1.walk(pvObject1);
-			Map lvPathes1 = lvInterceptor1.getAllRecordedPathes();
+			Map<?,?> lvPathes1 = lvInterceptor1.getAllRecordedPaths();
 			
 			ObjectGraphWalker lvWalker2 = new ObjectGraphWalker(this.getClassPropertyFilterHandler());
 			PathRecordWalkerInterceptor lvInterceptor2 = new PathRecordWalkerInterceptor();
@@ -327,10 +322,10 @@ public final class ObjectUtil {
 			lvWalker2.addInterceptor(lvInterceptor2);
 			
 			lvWalker2.walk(pvObject2);
-			Map lvPathes2 = lvInterceptor2.getAllRecordedPathes();
+			Map<?,?> lvPathes2 = lvInterceptor2.getAllRecordedPaths();
 			
 
-			List lvCompareResultsList = new ArrayList();
+			List<CompareResult> lvCompareResultsList = new ArrayList<CompareResult>();
 			compareTwoMaps(lvPathes1, lvPathes2, pvBreakByFindDifferents, lvCompareResultsList);
 			// reverse order of objects (car1, car2 --> car2, car1)
 			if ( ! (lvCompareResultsList.size() > 0 && pvBreakByFindDifferents == true) && 
@@ -342,20 +337,18 @@ public final class ObjectUtil {
 			if (lvCompareResultsList.size() > 0) {
 				lvResult = (CompareResult[]) lvCompareResultsList.toArray(new CompareResult[lvCompareResultsList.size()]);
 			}
-			
 		} 
 		
 		return lvResult;
 	}
 	
 	
-	private static void compareTwoMaps(Map pvMap1, Map pvMap2, boolean pvBreakByFindDifferents, List pvCompareResultsList) {
-		Iterator it1 = pvMap1.entrySet().iterator();
+	private static void compareTwoMaps(Map<?,?> pvMap1, Map<?,?> pvMap2, boolean pvBreakByFindDifferents, List<CompareResult> pvCompareResultsList) {
+		
 		int lvNumberOfRecursion = 0;
-		while (it1.hasNext()) {
+		for (Map.Entry<?, ?> lvEntry1 : pvMap1.entrySet()) {
 			lvNumberOfRecursion++;
 			
-			Map.Entry lvEntry1 = (Entry) it1.next();
 			String lvPath1 = (String) lvEntry1.getKey();
 			Object lvValue2 = pvMap2.get(lvPath1);
 			if ( ! (lvValue2 != null && lvValue2.equals(lvEntry1.getValue())) ) {
@@ -381,16 +374,12 @@ public final class ObjectUtil {
 		}
 	}
 		
-	private static boolean containsListSearchPath(List pvCompareResultsList, String pvSearchPath) {
-		Iterator it = pvCompareResultsList.iterator();
-		while (it.hasNext()) {
-			CompareResult lvCompareResult = (CompareResult) it.next();
+	private static boolean containsListSearchPath(List<CompareResult> pvCompareResultsList, String pvSearchPath) {
+	  for (CompareResult lvCompareResult : pvCompareResultsList) {
 			if (lvCompareResult.differentPath.equals(pvSearchPath)) {
 				return true;
 			}
 		}
 		return false;
 	}
-	
-
 }

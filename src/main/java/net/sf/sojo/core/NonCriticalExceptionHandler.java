@@ -45,19 +45,19 @@ public class NonCriticalExceptionHandler {
 		return nonCriticalExceptionHandler;
 	}
 	
-	public final static void handleException(Class pvThrownClasses, Exception pvException, String pvMessage) {
+	public final static void handleException(Class<?> pvThrownClasses, Exception pvException, String pvMessage) {
 		nonCriticalExceptionHandler.handleExceptionInternal(pvThrownClasses, pvException, pvMessage);
 	}
 	
-	public final static void handleException(Class pvThrownClasses, String pvMessage) {
+	public final static void handleException(Class<?> pvThrownClasses, String pvMessage) {
 		nonCriticalExceptionHandler.handleExceptionInternal(pvThrownClasses, pvMessage);
 	}
 
-	protected void handleExceptionInternal(Class pvThrownClasses, String pvMessage) { 
+	protected void handleExceptionInternal(Class<?> pvThrownClasses, String pvMessage) { 
 		handleExceptionInternal(pvThrownClasses, null, pvMessage);
 	}
 
-	protected void handleExceptionInternal(Class pvThrownClasses, Exception pvException, String pvMessage) { 
+	protected void handleExceptionInternal(Class<?> pvThrownClasses, Exception pvException, String pvMessage) { 
 		System.out.println("MESSAGE: " + pvMessage + " -> from class: " + pvThrownClasses);
 		if (pvException != null) {
 			pvException.printStackTrace(System.out);

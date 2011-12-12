@@ -22,7 +22,7 @@ import java.util.Map.Entry;
 
 import net.sf.sojo.core.IConverter;
 import net.sf.sojo.core.IConverterExtension;
-import net.sf.sojo.core.IterateableConversion;
+import net.sf.sojo.core.IterableConversion;
 import net.sf.sojo.core.reflect.ReflectionHelper;
 
 /**
@@ -31,7 +31,7 @@ import net.sf.sojo.core.reflect.ReflectionHelper;
  * @author linke
  *
  */
-public class IterateableMap2MapConversion extends IterateableConversion {
+public class IterateableMap2MapConversion extends IterableConversion {
 
 
 	public static final Class DEFAULT_MAP_TYPE = HashMap.class;
@@ -77,7 +77,7 @@ public class IterateableMap2MapConversion extends IterateableConversion {
 	public Object convert(final Object pvObject, final Class pvToType, IConverterExtension pvConverter) {
 		Class lvToType = ( ( pvToType == null || pvToType.isInterface() ) ? newIteratableType : pvToType);
 		final Map lvOldMap = (Map) pvObject;
-		final Map lvNewMap = (Map) ReflectionHelper.createNewIteratableInstance(lvToType, lvOldMap.size());
+		final Map lvNewMap = (Map) ReflectionHelper.createNewIterableInstance(lvToType, lvOldMap.size());
 		Iterator iter = lvOldMap.entrySet().iterator();
 		return super.iterate(pvObject, lvNewMap, iter, pvConverter);
 	}

@@ -24,15 +24,15 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 /**
- * To add all iterateable classes, how array, list, set or map and provide
+ * To add all iterable classes, how array, list, set or map and provide
  * functions on this classes (for example: sort).
  * 
  * @author linke
  *
  */
-public class IterateableUtil {
+public class IterableUtil {
 	
-	public static List sort(List pvList) {
+	public static List<?> sort(List<?> pvList) {
 		Collections.sort(pvList, new GenericComparator());
 		return pvList;
 	}
@@ -42,17 +42,15 @@ public class IterateableUtil {
 		return pvObjArray;
 	}
 	
-	public static Set sort(Set pvSet) {
-		TreeSet lvTreeSet = new TreeSet(new GenericComparator(true));
+	public static Set<Object> sort(Set<Object> pvSet) {
+		TreeSet<Object> lvTreeSet = new TreeSet<Object>(new GenericComparator(true));
 		lvTreeSet.addAll(pvSet);
 		return lvTreeSet;
 	}
 
-	public static Map sort(Map pvMap) {
-		TreeMap lvTreeMap = new TreeMap(new GenericComparator());
+	public static Map<Object, Object> sort(Map<?,?> pvMap) {
+		TreeMap<Object, Object> lvTreeMap = new TreeMap<Object, Object>(new GenericComparator());
 		lvTreeMap.putAll(pvMap);
 		return lvTreeMap;
 	}
-
-
 }

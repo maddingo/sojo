@@ -397,7 +397,7 @@ public class ReflectionHelperTest extends TestCase {
 	
 	public void testCreateNewIteratableInstance() throws Exception {
 		try {
-			ReflectionHelper.createNewIteratableInstance(Long.class, 0);
+			ReflectionHelper.createNewIterableInstance(Long.class, 0);
 			fail("Long is a invalid Class");
 		} catch (IllegalArgumentException e) {
 			assertNotNull(e);

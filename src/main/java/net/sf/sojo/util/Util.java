@@ -45,7 +45,7 @@ public final class Util {
 	public static final String DEFAULT_KEY_WORD_CLASS = "class";
 	
 	private static String keyWordClass = DEFAULT_KEY_WORD_CLASS;
-	private final static List dateFormatList = new ArrayList();
+	private final static List<DateFormat> dateFormatList = new ArrayList<DateFormat>();
 	
 	static {
 		addDateFormat2List(new SimpleDateFormat("EEE MMM dd HH:mm:ss 'CEST' yyyy", Locale.ENGLISH));
@@ -86,7 +86,7 @@ public final class Util {
 	public static boolean initJdkLogger (InputStream pvInputStream) {
 		try {
 			LogManager.getLogManager().readConfiguration(pvInputStream);
-			Logger logger = Logger.global;
+			Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME); 
 			LogManager.getLogManager().addLogger(logger);
 			logger.finest("Jdk14Logger initialisiert ...");
 			return true;
@@ -174,7 +174,7 @@ public final class Util {
 
 		
 		// 2. Versuch, mit allen bekannten Timestamp-Formaten		 
-		Iterator lvIterator = dateFormatList.iterator();
+		Iterator<?> lvIterator = dateFormatList.iterator();
 		while (lvIterator.hasNext()) {
 			DateFormat df = (DateFormat) lvIterator.next();
 			try {
@@ -198,13 +198,13 @@ public final class Util {
      * @param pvListObj
      * @return Class, that are in the Array or Collection
      */
-    public static Class getArrayType (Object pvListObj) {
-    	Class lvType = Object.class;
+    public static Class<?> getArrayType (Object pvListObj) {
+    	Class<?> lvType = Object.class;
     	if (pvListObj == null) { return lvType; }
     	if (pvListObj.getClass().isArray()) {
     		Object o[] = (Object[]) pvListObj;
     		if (o.length > 0) {
-	    		Class lvClass = o[0].getClass(); 
+	    		Class<?> lvClass = o[0].getClass(); 
 	    		
 	    		// !!!!! Specialfall ?????
 	    		if(Map.class.isAssignableFrom(lvClass)) {
@@ -222,10 +222,10 @@ public final class Util {
     		}
     	}
     	else if (pvListObj instanceof Collection) {
-    		Collection coll = (Collection) pvListObj;
+    		Collection<?> coll = (Collection<?>) pvListObj;
     		if (coll.size() > 0) {
-    			Class lvClass = coll.iterator().next().getClass();
-    			Iterator it = coll.iterator();
+    			Class<?> lvClass = coll.iterator().next().getClass();
+    			Iterator<?> it = coll.iterator();
     			while (it.hasNext()) {
 					if (!lvClass.equals(it.next().getClass())) {
 						return lvType;
@@ -256,19 +256,16 @@ public final class Util {
 		return lvReturn;
 	}
 	
-	public static Map filterMapByKeys (Map pvSearchMap, String[] pvList) {
+	public static Map<String, Object> filterMapByKeys (Map<String, Object> pvSearchMap, String[] pvList) {
 		if (pvList == null || pvList.length == 0) {
 			return pvSearchMap;
 		} else {
-			Map lvReturnMap = new TreeMap();
-			Iterator it = pvSearchMap.entrySet().iterator();
-			while (it.hasNext()) {
-				 Map.Entry lvEntry = (Entry) it.next();
-				 String lvKey = (String) lvEntry.getKey();
-				if (isStringInArray(pvList, lvKey)) {
-					lvReturnMap.put(lvKey, lvEntry.getValue());
-				}
-			}
+			Map<String,Object> lvReturnMap = new TreeMap<String, Object>();
+			for (Entry<String, Object> entry : pvSearchMap.entrySet()) {
+        if (isStringInArray(pvList, entry.getKey())) {
+          lvReturnMap.put(entry.getKey(), entry.getValue());
+        }
+      }
 			return lvReturnMap;
 		}
 	}

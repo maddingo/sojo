@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.Set;
 
 import junit.framework.TestCase;
-import net.sf.sojo.common.IterateableUtil;
+import net.sf.sojo.common.IterableUtil;
 import test.net.sf.sojo.model.Car;
 import test.net.sf.sojo.model.Node;
 import test.net.sf.sojo.model.Primitive;
@@ -39,7 +39,7 @@ public class IterateableUtilTest extends TestCase {
 		lvList.add("Audi");
 		lvList.add("Ferrari");
 
-		lvList = IterateableUtil.sort(lvList);
+		lvList = IterableUtil.sort(lvList);
 		assertEquals("Audi", lvList.get(0));
 		assertEquals("BMW", lvList.get(1));
 		assertEquals("Ferrari", lvList.get(2));
@@ -52,7 +52,7 @@ public class IterateableUtilTest extends TestCase {
 		lvList.add(new Car("Audi"));
 		lvList.add(new Car("Ferrari"));
 
-		lvList = IterateableUtil.sort(lvList);
+		lvList = IterableUtil.sort(lvList);
 		assertEquals("Audi", ((Car) lvList.get(0)).getName());
 		assertEquals("BMW", ((Car) lvList.get(1)).getName());
 		assertEquals("Ferrari", ((Car) lvList.get(2)).getName());
@@ -71,7 +71,7 @@ public class IterateableUtilTest extends TestCase {
 		lvList.add(p2);
 		lvList.add(p3);
 
-		lvList = IterateableUtil.sort(lvList);
+		lvList = IterableUtil.sort(lvList);
 		assertEquals(1, ((Primitive) lvList.get(0)).getLongValue());
 		assertEquals(3, ((Primitive) lvList.get(1)).getLongValue());
 		assertEquals(5, ((Primitive) lvList.get(2)).getLongValue());
@@ -80,7 +80,7 @@ public class IterateableUtilTest extends TestCase {
 	public void testSortBigDecimalArray() throws Exception {
 		Object lvObjArray[] = new Object [] { new BigDecimal("47.11"),  new BigDecimal("0.07"), new BigDecimal("08.15") } ;
 
-		lvObjArray = IterateableUtil.sort(lvObjArray);
+		lvObjArray = IterableUtil.sort(lvObjArray);
 		assertEquals(new BigDecimal("0.07"), lvObjArray[0]);
 		assertEquals(new BigDecimal("8.15"), lvObjArray[1]);
 		assertEquals(new BigDecimal("47.11"), lvObjArray[2]);
@@ -89,7 +89,7 @@ public class IterateableUtilTest extends TestCase {
 	public void testSortBeanArray() throws Exception {
 		Car cars[] = new Car [] { new Car("Ferrari"), new Car("Audi"), new Car("BMW") } ;
 
-		cars = (Car[]) IterateableUtil.sort(cars);
+		cars = (Car[]) IterableUtil.sort(cars);
 		assertEquals("Audi", cars[0].getName());
 		assertEquals("BMW", cars[1].getName());
 		assertEquals("Ferrari", cars[2].getName());
@@ -105,7 +105,7 @@ public class IterateableUtilTest extends TestCase {
 
 		Object lvObjArray[] = new Object [] { p1, p2, p3 } ;
 
-		lvObjArray = IterateableUtil.sort(lvObjArray);
+		lvObjArray = IterableUtil.sort(lvObjArray);
 		assertEquals(1, ((Primitive) lvObjArray[0]).getLongValue());
 		assertEquals(3, ((Primitive) lvObjArray[1]).getLongValue());
 		assertEquals(5, ((Primitive) lvObjArray[2]).getLongValue());
@@ -117,7 +117,7 @@ public class IterateableUtilTest extends TestCase {
 		lvSet.add(new Car("Audi"));
 		lvSet.add(new Car("Ferrari"));
 
-		lvSet = IterateableUtil.sort(lvSet);
+		lvSet = IterableUtil.sort(lvSet);
 		Iterator it = lvSet.iterator();
 		assertEquals("Audi", ((Car) it.next()).getName());
 		assertEquals("BMW", ((Car) it.next()).getName());
@@ -130,7 +130,7 @@ public class IterateableUtilTest extends TestCase {
 		lvMap.put(new Car("Audi"), "Dummy2");
 		lvMap.put(new Car("Ferrari"), "Dummy3");
 
-		lvMap = IterateableUtil.sort(lvMap);
+		lvMap = IterableUtil.sort(lvMap);
 		Iterator it = lvMap.keySet().iterator();
 		assertEquals("Audi", ((Car) it.next()).getName());
 		assertEquals("BMW", ((Car) it.next()).getName());
@@ -154,7 +154,7 @@ public class IterateableUtilTest extends TestCase {
 
 		assertEquals(3, lvSet.size());
 
-		Set lvSetAfter = IterateableUtil.sort(lvSet);
+		Set lvSetAfter = IterableUtil.sort(lvSet);
 		assertEquals(3, lvSetAfter.size());
 	}
 

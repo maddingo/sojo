@@ -102,7 +102,8 @@ public class UtilTest extends TestCase {
 	}
 	
 	
-	public void testArrayType_Array() throws Exception {
+	@SuppressWarnings("rawtypes")
+  public void testArrayType_Array() throws Exception {
 		Class lvType = Util.getArrayType(null);
 		assertEquals(lvType, Object.class);
 		lvType = Util.getArrayType(new String[0]);
@@ -116,7 +117,7 @@ public class UtilTest extends TestCase {
 		lvType = Util.getArrayType(new Object[] {new Long(1), "c"});
 		assertEquals(lvType, Object.class);		
 		
-		Vector v = new Vector();
+		Vector<Object> v = new Vector<Object>();
 		lvType = Util.getArrayType(v);
 		assertEquals(lvType, Object.class);
 		
@@ -124,18 +125,19 @@ public class UtilTest extends TestCase {
 		lvType = Util.getArrayType(v);
 		assertEquals(lvType, String.class);
 		
-		Map lvMap = new HashMap();
+		Map<?,?> lvMap = new HashMap<Object, Object>();
 		lvType = Util.getArrayType(lvMap);
 		assertEquals(lvType, Object.class);
 	}
 	
-	public void testArrayType_Collection() throws Exception {
-		Vector v = new Vector();
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+  public void testArrayType_Collection() throws Exception {
+		Vector v = new Vector<Object>();
 		v.add("a");
 		v.add("b");
-		Class lvType = Util.getArrayType(v);
+		Class<?> lvType = Util.getArrayType(v);
 		assertEquals(lvType, String.class);			
-		v = new Vector();
+		v = new Vector<Long>();
 		v.add(new Long (1));
 		v.add(new Long (2));
 		lvType = Util.getArrayType(v);
@@ -147,6 +149,7 @@ public class UtilTest extends TestCase {
 		assertEquals(lvType, Object.class);
 	}
 	
+  @SuppressWarnings({ "rawtypes", "unchecked" })
 	public void testArrayType_Map() throws Exception {
 		Map lvMap = new HashMap();
 		lvMap.put("a", "a");
@@ -188,7 +191,8 @@ public class UtilTest extends TestCase {
 		assertFalse(lvResult);
 	}
 	
-	public void testname() throws Exception {
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+  public void testname() throws Exception {
 		Map lvMap = new HashMap();
 		lvMap.put("k1", "v1");
 		lvMap.put("k2", "v2");

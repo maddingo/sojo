@@ -26,14 +26,14 @@ import net.sf.sojo.core.reflect.ReflectionHelper;
  */
 public abstract class SimpleConversion extends AbstractConversion {
 
-	protected Class fromType = null;
-	protected Class toType = null;
+	protected Class<?> fromType = null;
+	protected Class<?> toType = null;
 	
-	public SimpleConversion(Class pvFromType) {
+	public SimpleConversion(Class<?> pvFromType) {
 		this(pvFromType, pvFromType);
 	}
 
-	public SimpleConversion (Class pvFromType, Class pvToType) {
+	public SimpleConversion (Class<?> pvFromType, Class<?> pvToType) {
 		if (ReflectionHelper.isSimpleType(pvFromType) == false || ReflectionHelper.isSimpleType(pvToType) == false) {
 			throw new IllegalArgumentException("The classes: " + pvFromType + " and " + pvToType + " must be a simple type.");
 		}
@@ -41,7 +41,7 @@ public abstract class SimpleConversion extends AbstractConversion {
 		toType = pvToType;
 	}
 	
-	public boolean isFromTypeAndToTypeDifferent(Class pvFromtype, Class pvToType) {
+	public boolean isFromTypeAndToTypeDifferent(Class<?> pvFromtype, Class<?> pvToType) {
 		boolean lvIsFromTypeAndToTypeDifferent = false;
 		if (fromType.equals(toType) == false) {
 			lvIsFromTypeAndToTypeDifferent = true;
@@ -49,8 +49,13 @@ public abstract class SimpleConversion extends AbstractConversion {
 		return lvIsFromTypeAndToTypeDifferent;
 	}
 	
-	public Class getFromType() { return fromType; }
-	public Class getToType() { return toType; }
+	public Class<?> getFromType() { 
+	  return fromType; 
+	}
+	
+	public Class<?> getToType() { 
+	  return toType; 
+	}
 
 	public boolean isAssignableFrom(Object pvObject) {
 		if (pvObject == null) { 
@@ -62,10 +67,10 @@ public abstract class SimpleConversion extends AbstractConversion {
 		return false;
 	}
 	
-	public boolean isAssignableTo(final Class pvToType) {
+	public boolean isAssignableTo(final Class<?> pvToType) {
 		return ReflectionHelper.isSimpleType(pvToType);
 	}
 	
-	public abstract Object convert(final Object pvObject, final Class pvToType);
+	public abstract Object convert(final Object pvObject, final Class<?> pvToType);
 
 }

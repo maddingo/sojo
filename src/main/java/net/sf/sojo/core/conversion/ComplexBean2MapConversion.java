@@ -19,7 +19,6 @@ import java.lang.reflect.AccessibleObject;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import net.sf.sojo.core.ComplexConversion;
 import net.sf.sojo.core.IConverter;
@@ -40,13 +39,13 @@ import net.sf.sojo.util.Util;
  */
 public class ComplexBean2MapConversion extends ComplexConversion {
 
-	public static final Class DEFAULT_MAP_TYPE = HashMap.class;
+	public static final Class<?> DEFAULT_MAP_TYPE = HashMap.class;
 	
-	private Class newBeanConversionType = null;
+	private Class<?> newBeanConversionType = null;
 	
 	public ComplexBean2MapConversion() { this(null);}
 	
-	public ComplexBean2MapConversion(Class pvBeanType) {
+	public ComplexBean2MapConversion(Class<?> pvBeanType) {
 		newBeanConversionType = pvBeanType;
 		if (newBeanConversionType == null) {
 			newBeanConversionType = DEFAULT_MAP_TYPE;
@@ -64,39 +63,40 @@ public class ComplexBean2MapConversion extends ComplexConversion {
 		return ReflectionHelper.isComplexType(pvObject);
 	}
 	
-	public boolean isAssignableTo(final Class pvToType) {
+	public boolean isAssignableTo(final Class<?> pvToType) {
 		return ReflectionHelper.isMapType(pvToType);
 	}
 
 	
-	public Object convert(final Object pvObject, final Class pvToType, final IConverterExtension pvConverter) {
-		Map lvBeanMap = null;
+  @SuppressWarnings("unchecked")
+  public Object convert(final Object pvObject, final Class<?> pvToType, final IConverterExtension pvConverter) {
+		Map<Object,Object> lvBeanMap = null;
 		try {
-			Class lvToType = ( ( pvToType == null || pvToType.isInterface() ) ? newBeanConversionType : pvToType);
+			Class<?> lvToType = ( ( pvToType == null || pvToType.isInterface() ) ? newBeanConversionType : pvToType);
 			
-			Map lvGetterMap = ReflectionPropertyHelper.getAllGetterProperties(pvObject.getClass(), null);
-			lvBeanMap = (Map) ReflectionHelper.createNewIteratableInstance(lvToType, lvGetterMap.size()); 
+			Map<?,?> lvGetterMap = ReflectionPropertyHelper.getAllGetterProperties(pvObject.getClass(), null);
+			lvBeanMap = (Map<Object, Object>) ReflectionHelper.createNewIterableInstance(lvToType, lvGetterMap.size()); 
 
-			// filter for synthetik key unique id, this is a specific case
+			// filter for synthetic key unique id, this is a specific case
 			if (ClassPropertyFilterHelper.isPropertyToFiltering(classPropertyFilterHandler, pvObject.getClass(), UniqueIdGenerator.UNIQUE_ID_PROPERTY)  == false) {
 				String lvUniqueId = pvConverter.getUniqueId(pvObject);
 				lvBeanMap.put(UniqueIdGenerator.UNIQUE_ID_PROPERTY, lvUniqueId);				
 			}
 			
 
-			Iterator it = lvGetterMap.entrySet().iterator();
-        	lvBeanMap = (Map) super.iterate(pvObject, lvBeanMap, it, pvConverter);
+			Iterator<?> it = lvGetterMap.entrySet().iterator();
+     	lvBeanMap = (Map<Object,Object>) super.iterate(pvObject, lvBeanMap, it, pvConverter);
 		} catch (Exception e) {
 			if (NonCriticalExceptionHandler.isNonCriticalExceptionHandlerEnabled()) {
 				NonCriticalExceptionHandler.handleException(ComplexBean2MapConversion.class, e, "Problem by conver bean to map: " + e);
 			}
 		} 
 		return lvBeanMap;
-
 	}
 
 	protected Object[] doTransformIteratorObject2KeyValuePair(Object pvIteratorObject) {
-		Map.Entry lvMapEntry = (Entry) pvIteratorObject;
+		@SuppressWarnings("unchecked")
+    Map.Entry<Object,Object> lvMapEntry = (Map.Entry<Object, Object>) pvIteratorObject;
 		Object lvKey = lvMapEntry.getKey();
 		Object lvValue = lvMapEntry.getValue();
 		return new Object[] { lvKey, lvValue };
@@ -125,11 +125,12 @@ public class ComplexBean2MapConversion extends ComplexConversion {
 	}
 	
 
-	protected void doAddObject(Object pvSourceObject, Object pvNewTargetObject, Object pvKey, Object pvValue, int pvIteratorPosition) {
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+  protected void doAddObject(Object pvSourceObject, Object pvNewTargetObject, Object pvKey, Object pvValue, int pvIteratorPosition) {
 		Map lvBeanMap = (Map) pvNewTargetObject;
 		String propName = (String) pvKey;
 		
-		if (Util.getKeyWordClass().equals(propName) == false)  {
+		if (!Util.getKeyWordClass().equals(propName))  {
 			try {
 			lvBeanMap.put(propName, pvValue);
 			} catch (NullPointerException e) {
@@ -137,12 +138,9 @@ public class ComplexBean2MapConversion extends ComplexConversion {
 					NonCriticalExceptionHandler.handleException(ComplexBean2MapConversion.class, e, "Try to add a null-value to Map: " + lvBeanMap.getClass().getName());
 				}
 			}
-        } else  {
-        	// fuer das unmarshalling
-        	lvBeanMap.put(Util.getKeyWordClass(), pvSourceObject.getClass().getName()); 
-        }
-
+    } else  {
+      //for unmarshalling
+      lvBeanMap.put(Util.getKeyWordClass(), pvSourceObject.getClass().getName()); 
+    }
 	}
-
-
 }

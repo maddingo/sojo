@@ -16,23 +16,23 @@
 package net.sf.sojo.core;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
- * Hanlde all register <code>ConverterInterceptor</code>.
+ * Handle all register <code>ConverterInterceptor</code>.
  * 
  * @author Linke
  *
  */
 public class ConverterInterceptorHandler {
 
-	private List interceptors = new ArrayList();
+	private List<ConverterInterceptor> interceptors = new ArrayList<ConverterInterceptor>();
 	
 	public void addConverterInterceptor(ConverterInterceptor pvConverterInterceptor) {
 		if (pvConverterInterceptor == null) {
 			throw new IllegalArgumentException("The ConverterInterceptor must be different from null");
 		}
+		// TODO should the interceptors be a Set?
 		interceptors.remove(pvConverterInterceptor);
 		interceptors.add(pvConverterInterceptor);
 	}
@@ -50,35 +50,31 @@ public class ConverterInterceptorHandler {
 	public void clear() { interceptors.clear(); }
 
 	
-	public Object fireBeforeConvert(final Object pvConvertObject, final Class pvToType) {
+	public Object fireBeforeConvert(final Object pvConvertObject, final Class<?> pvToType) {
 		Object lvReturn = pvConvertObject;
-		for (Iterator iter = interceptors.iterator(); iter.hasNext();) {
-			ConverterInterceptor lvInterceptor = (ConverterInterceptor) iter.next();
+		for (ConverterInterceptor lvInterceptor : interceptors) {
 			lvReturn = lvInterceptor.beforeConvert(pvConvertObject, pvToType);
 		}
 		return lvReturn;
 	}
 	
-	public Object fireAfterConvert(final Object pvResult, final Class pvToType) {
-		Object lvReturn = pvResult;
-		for (Iterator iter = interceptors.iterator(); iter.hasNext();) {
-			ConverterInterceptor lvInterceptor = (ConverterInterceptor) iter.next();
+	public Object fireAfterConvert(final Object pvResult, final Class<?> pvToType) {
+		Object lvReturn = null;
+    for (ConverterInterceptor lvInterceptor : interceptors) {
 			lvReturn = lvInterceptor.afterConvert(pvResult, pvToType);
 		}		
 		return lvReturn;
 	}
 	
 	public void fireOnError(final Exception pvException) {
-		for (Iterator iter = interceptors.iterator(); iter.hasNext();) {
-			ConverterInterceptor lvInterceptor = (ConverterInterceptor) iter.next();
+	  for (ConverterInterceptor lvInterceptor : interceptors) {
 			lvInterceptor.onError(pvException);
 		}
 	}
 
 	
 	public void fireBeforeConvertRecursion(final ConversionContext pvContext) {
-		for (Iterator iter = interceptors.iterator(); iter.hasNext();) {
-			Object o = iter.next();
+	  for (ConverterInterceptor o : interceptors) {
 			if (o instanceof ConverterInterceptorRecursive) {
 				ConverterInterceptorRecursive lvInterceptor = (ConverterInterceptorRecursive) o;
 				lvInterceptor.beforeConvertRecursion(pvContext);
@@ -87,13 +83,11 @@ public class ConverterInterceptorHandler {
 	}
 	
 	public void fireAfterConvertRecursion(final ConversionContext pvContext) {
-		for (Iterator iter = interceptors.iterator(); iter.hasNext();) {
-			Object o = iter.next();
+    for (ConverterInterceptor o : interceptors) {
 			if (o instanceof ConverterInterceptorRecursive) {
 				ConverterInterceptorRecursive lvInterceptor = (ConverterInterceptorRecursive) o;
 				lvInterceptor.afterConvertRecursion(pvContext);
 			}
 		}		
 	}
-
 }

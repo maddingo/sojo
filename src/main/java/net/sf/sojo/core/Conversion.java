@@ -42,7 +42,7 @@ public interface Conversion {
 	 * @param pvToType The type (target type) to wanted the value convert.
 	 * @return <code>TRUE</code> if the pvObject is assignable to the <code>Conversion</code> implementation.
 	 */
-	public boolean isAssignableTo(final Class pvToType);
+	public boolean isAssignableTo(final Class<?> pvToType);
 
 	/**
 	 * On every <code>Conversion</code> can you register <code>ConverterInterceptor</code> to get information

@@ -24,15 +24,11 @@ package net.sf.sojo.core;
 public abstract class AbstractConversion implements Conversion {
 
 	private ConverterInterceptorHandler interceptorHandler = new ConverterInterceptorHandler();
-	
+
 	public ConverterInterceptorHandler getConverterInterceptorHandler() {
 		return interceptorHandler;
 	}
 	public void setConverterInterceptorHandler(ConverterInterceptorHandler pvInterceptorHandler) {
 		interceptorHandler = pvInterceptorHandler;
 	}
-
-	public abstract boolean isAssignableFrom(Object pvObject);
-	
-	public abstract boolean isAssignableTo(final Class pvToType);
 }

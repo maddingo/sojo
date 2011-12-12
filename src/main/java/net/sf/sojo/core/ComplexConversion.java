@@ -30,6 +30,6 @@ public abstract class ComplexConversion extends ConversionIterator {
 	 * @param pvConverterExtension Get UniqueId for a Object.
 	 * @return The result of converting.
 	 */
-	public abstract Object convert(final Object pvObject, final Class pvToType, final IConverterExtension pvConverterExtension);
+	public abstract Object convert(final Object pvObject, final Class<?> pvToType, final IConverterExtension pvConverterExtension);
 	
 }

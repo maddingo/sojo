@@ -58,7 +58,7 @@ public class ObjectGraphWalkerTest extends TestCase {
 		
 		String s = "Test-String";
 		lvWalker.walk(s);
-		Map lvPathes = lvInterceptor.getAllRecordedPathes();
+		Map lvPathes = lvInterceptor.getAllRecordedPaths();
 		String lvSearchPath = lvPathes.keySet().iterator().next().toString();
 		assertEquals(0, lvSearchPath.length());
 		Object lvResult = PathExecuter.getNestedProperty(s, lvSearchPath);
@@ -72,7 +72,7 @@ public class ObjectGraphWalkerTest extends TestCase {
 		
 		Integer i = new Integer(4711);
 		lvWalker.walk(i);
-		Map lvPathes = lvInterceptor.getAllRecordedPathes();
+		Map lvPathes = lvInterceptor.getAllRecordedPaths();
 		String lvSearchPath = lvPathes.keySet().iterator().next().toString();
 		assertEquals(0, lvSearchPath.length());
 		Object lvResult = PathExecuter.getNestedProperty(i, lvSearchPath);
@@ -86,7 +86,7 @@ public class ObjectGraphWalkerTest extends TestCase {
 		
 		Double d = new Double(0.07);
 		lvWalker.walk(d);
-		Map lvPathes = lvInterceptor.getAllRecordedPathes();
+		Map lvPathes = lvInterceptor.getAllRecordedPaths();
 		String lvSearchPath = lvPathes.keySet().iterator().next().toString();
 		assertEquals(0, lvSearchPath.length());
 		Object lvResult = PathExecuter.getNestedProperty(d, lvSearchPath);
@@ -100,7 +100,7 @@ public class ObjectGraphWalkerTest extends TestCase {
 		
 		Date lvDate = new Date();
 		lvWalker.walk(lvDate);
-		Map lvPathes = lvInterceptor.getAllRecordedPathes();
+		Map lvPathes = lvInterceptor.getAllRecordedPaths();
 		String lvSearchPath = lvPathes.keySet().iterator().next().toString();
 		assertEquals(0, lvSearchPath.length());
 		Object lvResult = PathExecuter.getNestedProperty(lvDate, lvSearchPath);
@@ -113,7 +113,7 @@ public class ObjectGraphWalkerTest extends TestCase {
 		lvWalker.addInterceptor(lvInterceptor);
 		
 		lvWalker.walk(null);
-		Map lvPathes = lvInterceptor.getAllRecordedPathes();
+		Map lvPathes = lvInterceptor.getAllRecordedPaths();
 		String lvSearchPath = lvPathes.keySet().iterator().next().toString();
 		assertEquals(0, lvSearchPath.length());
 		Object lvResult = PathExecuter.getNestedProperty(null, lvSearchPath);
@@ -153,7 +153,7 @@ public class ObjectGraphWalkerTest extends TestCase {
 		lvPathValue = PathExecuter.getNestedProperty(lvList, "[]");
 		assertEquals(lvList, lvPathValue);
 		
-		assertEquals(3, lvInterceptor.getAllRecordedPathes().size());
+		assertEquals(3, lvInterceptor.getAllRecordedPaths().size());
 	}
 
 	public void testWalkObjectArray() throws Exception {
@@ -165,7 +165,7 @@ public class ObjectGraphWalkerTest extends TestCase {
 		Object o[] = new Object[] { "aaa", new Integer(7), lvDate};
 		lvWalker.walk(o);
 		
-		assertEquals(4, lvInterceptor.getAllRecordedPathes().size());
+		assertEquals(4, lvInterceptor.getAllRecordedPaths().size());
 		
 		Object lvPathValue = PathExecuter.getNestedProperty(o, "[0]");
 		assertEquals("aaa", lvPathValue);
@@ -188,7 +188,7 @@ public class ObjectGraphWalkerTest extends TestCase {
 		String s[] = new String[] { "aaa", "bbb", "ccc"};
 		lvWalker.walk(s);
 		
-		assertEquals(4, lvInterceptor.getAllRecordedPathes().size());
+		assertEquals(4, lvInterceptor.getAllRecordedPaths().size());
 		
 		Object lvPathValue = PathExecuter.getNestedProperty(s, "[0]");
 		assertEquals("aaa", lvPathValue);
@@ -211,7 +211,7 @@ public class ObjectGraphWalkerTest extends TestCase {
 		Map lvMap = new HashMap();
 		lvWalker.walk(lvMap);
 
-		assertEquals(1, lvInterceptor.getAllRecordedPathes().size());
+		assertEquals(1, lvInterceptor.getAllRecordedPaths().size());
 		
 		Object lvPathValue = PathExecuter.getNestedProperty(lvMap, "()");
 		assertEquals(new Hashtable(), lvPathValue);
@@ -226,7 +226,7 @@ public class ObjectGraphWalkerTest extends TestCase {
 		lvMap.put("empty", new ArrayList());
 		lvWalker.walk(lvMap);
 
-		assertEquals(2, lvInterceptor.getAllRecordedPathes().size());
+		assertEquals(2, lvInterceptor.getAllRecordedPaths().size());
 		
 		Object lvPathValue = PathExecuter.getNestedProperty(lvMap, "(empty)");
 		assertEquals(new ArrayList(), lvPathValue);
@@ -241,7 +241,7 @@ public class ObjectGraphWalkerTest extends TestCase {
 		lvList.add(new HashMap());
 		lvWalker.walk(lvList);
 
-		assertEquals(2, lvInterceptor.getAllRecordedPathes().size());
+		assertEquals(2, lvInterceptor.getAllRecordedPaths().size());
 		
 		Object lvPathValue = PathExecuter.getNestedProperty(lvList, "[0]");
 		assertEquals(new HashMap(), lvPathValue);
@@ -259,7 +259,7 @@ public class ObjectGraphWalkerTest extends TestCase {
 		lvMap.put("key2", "val2");
 		lvWalker.walk(lvMap);
 
-		assertEquals(3, lvInterceptor.getAllRecordedPathes().size());
+		assertEquals(3, lvInterceptor.getAllRecordedPaths().size());
 		
 		Object lvPathValue = PathExecuter.getNestedProperty(lvMap, "(key1)");
 		assertEquals("val1", lvPathValue);
@@ -285,7 +285,7 @@ public class ObjectGraphWalkerTest extends TestCase {
 		lvMap.put("list", lvList);
 		lvWalker.walk(lvMap);
 		
-		assertEquals(6, lvInterceptor.getAllRecordedPathes().size());
+		assertEquals(6, lvInterceptor.getAllRecordedPaths().size());
 		
 		Object lvPathValue = PathExecuter.getNestedProperty(lvMap, "(key1)");
 		assertEquals("val1", lvPathValue);
@@ -320,7 +320,7 @@ public class ObjectGraphWalkerTest extends TestCase {
 		lvList.add(lvMap);
 		lvWalker.walk(lvList);
 		
-		assertEquals(6, lvInterceptor.getAllRecordedPathes().size());
+		assertEquals(6, lvInterceptor.getAllRecordedPaths().size());
 		
 		Object lvPathValue = PathExecuter.getNestedProperty(lvList, "[]");
 		assertEquals(lvList, lvPathValue);
@@ -354,7 +354,7 @@ public class ObjectGraphWalkerTest extends TestCase {
 		lvWalker.addInterceptor(lvInterceptor);
 		
 		lvWalker.walk(lvNode);
-		Map lvPathes = lvInterceptor.getAllRecordedPathes();
+		Map lvPathes = lvInterceptor.getAllRecordedPaths();
 		
 		assertNotNull(lvPathes.get("childs[]"));
 		assertNotNull(lvPathes.get("namedChilds()"));
@@ -397,7 +397,7 @@ public class ObjectGraphWalkerTest extends TestCase {
 		lvWalker.addInterceptor(lvInterceptor);
 		
 		lvWalker.walk(lvNode);
-		Map lvPathes = lvInterceptor.getAllRecordedPathes();
+		Map lvPathes = lvInterceptor.getAllRecordedPaths();
 		Map lvNodeMap = (Map) new ObjectUtil().makeSimple(new Node());
 		lvNodeMap.remove(UniqueIdGenerator.UNIQUE_ID_PROPERTY);
 		assertEquals(lvPathes.size(), lvNodeMap.size());
@@ -416,7 +416,7 @@ public class ObjectGraphWalkerTest extends TestCase {
 		lvWalker.addInterceptor(lvInterceptor);
 		
 		lvWalker.walk(lvCustomer);
-		Map lvPathes = lvInterceptor.getAllRecordedPathes();
+		Map lvPathes = lvInterceptor.getAllRecordedPaths();
 		Map lvCustomerMap = (Map) new ObjectUtil().makeSimple(new Customer());
 		lvCustomerMap.remove(UniqueIdGenerator.UNIQUE_ID_PROPERTY);
 		assertEquals(lvPathes.size() + 3, lvCustomerMap.size());
@@ -436,7 +436,7 @@ public class ObjectGraphWalkerTest extends TestCase {
 		lvWalker.addInterceptor(lvInterceptor);
 		
 		lvWalker.walk(lvList);
-		Map lvPathes = lvInterceptor.getAllRecordedPathes();
+		Map lvPathes = lvInterceptor.getAllRecordedPaths();
 
 		Map lvNodeMap = (Map) new ObjectUtil().makeSimple(new Node());
 		lvNodeMap.remove(UniqueIdGenerator.UNIQUE_ID_PROPERTY);
@@ -479,7 +479,7 @@ public class ObjectGraphWalkerTest extends TestCase {
 		lvWalker.addInterceptor(lvInterceptor);
 		
 		lvWalker.walk(lvNode);
-		Map lvPathes = lvInterceptor.getAllRecordedPathes();
+		Map lvPathes = lvInterceptor.getAllRecordedPaths();
 
 		String lvPath = "name";
 		assertEquals("Test-Node", lvPathes.get(lvPath));
@@ -520,7 +520,7 @@ public class ObjectGraphWalkerTest extends TestCase {
 		lvWalker.addInterceptor(lvInterceptor);
 		
 		lvWalker.walk(lvNode);
-		Map lvPathes = lvInterceptor.getAllRecordedPathes();
+		Map lvPathes = lvInterceptor.getAllRecordedPaths();
 
 		String lvPath = "name";
 		assertEquals("Test-Node", lvPathes.get(lvPath));
@@ -599,7 +599,7 @@ public class ObjectGraphWalkerTest extends TestCase {
 		lvCustomer.getAddresses().add(a2);
 		
 		lvWalker.walk(lvCustomer);
-		Map lvPathes = lvInterceptor.getAllRecordedPathes();
+		Map lvPathes = lvInterceptor.getAllRecordedPaths();
 
 		String lvPath = "firstName";
 		assertNotNull(lvPathes.get(lvPath));
@@ -675,7 +675,7 @@ public class ObjectGraphWalkerTest extends TestCase {
 		lvCustomer.setPartner(new Customer[0]);
 
 		lvWalker.walk(lvCustomer);
-		Map lvPathes = lvInterceptor.getAllRecordedPathes();
+		Map lvPathes = lvInterceptor.getAllRecordedPaths();
 
 		String lvPath = "lastName";
 		assertNotNull(lvPathes.get(lvPath));
@@ -709,7 +709,7 @@ public class ObjectGraphWalkerTest extends TestCase {
 		lvCustomer.setPartner(new Object[] { new Hashtable() });
 
 		lvWalker.walk(lvCustomer);
-		Map lvPathes = lvInterceptor.getAllRecordedPathes();
+		Map lvPathes = lvInterceptor.getAllRecordedPaths();
 
 		String lvPath = "partner[0].()";
 		assertNotNull(lvPathes.get(lvPath));
@@ -730,7 +730,7 @@ public class ObjectGraphWalkerTest extends TestCase {
 		lvCar.getProperties().put("self", lvCar);
 		
 		lvWalker.walk(lvCar);
-		Map lvPathes = lvInterceptor.getAllRecordedPathes();
+		Map lvPathes = lvInterceptor.getAllRecordedPaths();
 
 		String lvPath = "name";
 		assertNotNull(lvPathes.get(lvPath));

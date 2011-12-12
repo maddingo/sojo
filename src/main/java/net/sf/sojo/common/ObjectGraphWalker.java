@@ -20,6 +20,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import net.sf.sojo.core.Constants;
 import net.sf.sojo.core.conversion.ComplexBean2MapConversion;
@@ -36,7 +37,7 @@ import net.sf.sojo.util.ArrayIterator;
  */
 public class ObjectGraphWalker {
 
-	private List interceptorList = new ArrayList();
+	private List<WalkerInterceptor> interceptorList = new ArrayList<WalkerInterceptor>();
 	private ObjectUtil objectUtil = new ObjectUtil(false);
 	private int numberOfRecursion = 0;
 	private boolean ignoreNullValues = true;
@@ -121,7 +122,8 @@ public class ObjectGraphWalker {
 		return lvPath; 
 	}
 	
-	private void walkInternal(Object pvKey, int pvIndex, Object pvValue, String pvPath) {
+	@SuppressWarnings("unchecked")
+  private void walkInternal(Object pvKey, int pvIndex, Object pvValue, String pvPath) {
 		numberOfRecursion++;
 
 		if (pvValue == null) {
@@ -132,7 +134,8 @@ public class ObjectGraphWalker {
 			
 		// --- Map ---
 		else if (ReflectionHelper.isMapType(pvValue)) {
-			Map lvMap = (Map) pvValue;
+			@SuppressWarnings("rawtypes")
+      Map lvMap = (Map) pvValue;
 			boolean lvCancel = fireVisitElementEvent(pvKey, pvIndex, pvValue, Constants.TYPE_MAP, pvPath + "()", numberOfRecursion);
 			if (ReflectionHelper.isComplexMapType(pvValue)) {
 				if (pvPath.length() > 0 && pvPath.endsWith(".") == false) { pvPath = pvPath + "."; }
@@ -142,8 +145,8 @@ public class ObjectGraphWalker {
 			}
 		}
 			
-		// --- Iterateable ---
-		else if (ReflectionHelper.isIterateableType(pvValue)) {
+		// --- Iteraable ---
+		else if (ReflectionHelper.isIterableType(pvValue)) {
 			boolean lvCancel =  fireVisitElementEvent(pvKey, pvIndex, pvValue, Constants.TYPE_ITERATEABLE, pvPath + "[]", numberOfRecursion);
 			iteratorWalker(pvValue, pvPath, lvCancel);
 		}
@@ -160,11 +163,12 @@ public class ObjectGraphWalker {
 		if (pvCancel == false) {
 			int lvIndex = Constants.INVALID_INDEX;
 			
-			Iterator lvIterator = null;
+			Iterator<Object> lvIterator = null;
 			if (pvValue.getClass().isArray()) {
 				lvIterator = new ArrayIterator(pvValue);
 			} else {
-				Collection lvCollection = (Collection) pvValue;
+				@SuppressWarnings("unchecked")
+        Collection<Object> lvCollection = (Collection<Object>) pvValue;
 				lvIterator = lvCollection.iterator();
 			}
 			
@@ -181,29 +185,22 @@ public class ObjectGraphWalker {
 		}
 	}
 	
-	private void mapWalker(Map pvMap, String pvPath, boolean pvWithBrackets, boolean pvCancel) {
+	private void mapWalker(Map<Object, Object> pvMap, String pvPath, boolean pvWithBrackets, boolean pvCancel) {
 		if (pvCancel == false) {
 			fireVisitIterateableElement(pvMap, Constants.TYPE_MAP, pvPath, Constants.ITERATOR_BEGIN);
-			Iterator lvIterator = pvMap.entrySet().iterator();
-			while (lvIterator.hasNext()) {
-				Map.Entry lvEntry = (Map.Entry) lvIterator.next();
-				Object lvKey = lvEntry.getKey();
-				Object lvValue = lvEntry.getValue();
-				StringBuffer sb = new StringBuffer(pvPath);
-				if (pvWithBrackets) {
-					sb.append("(").append(lvKey).append(")");
-					sb.append(".");
-				} else {
-					sb.append(lvKey);
-				}
-				
-				//fireVisitElementEvent(lvKey, Constants.INVALID_INDEX, lvValue, Constants.TYPE_MAP, pvPath + "()", numberOfRecursion);
-				
-				walkInternal(lvKey, Constants.INVALID_INDEX, lvValue, sb.toString());
-			}
+			for (Entry<Object, Object> iterableElement : pvMap.entrySet()) {
+			  Object lvKey = iterableElement.getKey();
+        StringBuffer sb = new StringBuffer(pvPath);
+        if (pvWithBrackets) {
+          sb.append("(").append(lvKey).append(")");
+          sb.append(".");
+        } else {
+          sb.append(lvKey);
+        }
+        //fireVisitElementEvent(lvKey, Constants.INVALID_INDEX, lvValue, Constants.TYPE_MAP, pvPath + "()", numberOfRecursion);
+        walkInternal(lvKey, Constants.INVALID_INDEX, iterableElement.getValue(), sb.toString());
+      }
 			fireVisitIterateableElement(pvMap, Constants.TYPE_MAP, pvPath, Constants.ITERATOR_END);
 		}
 	}
-
-
 }

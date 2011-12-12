@@ -16,7 +16,6 @@
 package net.sf.sojo.core;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 
@@ -29,14 +28,14 @@ import java.util.List;
  */
 public final class ConversionHandler {
 
-	private final List conversions = new ArrayList();
-	
+	private final List<Conversion> conversions = new ArrayList<Conversion>();
 	
 	public void addConversion(final Conversion pvConversion) {
 		if (pvConversion == null) {
 			throw new IllegalArgumentException("The Conversion must be different from null");
 		}
-		if (containsConversion(pvConversion) == false) {
+		// TODO should the conversions be a Set?
+		if (!containsConversion(pvConversion)) {
 			conversions.add(pvConversion);
 		}
 	}
@@ -66,9 +65,8 @@ public final class ConversionHandler {
 
 	
 
-	public Conversion getConversion(final Object pvObject, final Class pvToType) {
-		for (final Iterator it = conversions.iterator(); it.hasNext();) {
-			final Conversion lvConversion = (Conversion) it.next();
+	public Conversion getConversion(final Object pvObject, final Class<?> pvToType) {
+	  for (Conversion lvConversion : conversions) {
 			if (pvToType == null) {
 				if (lvConversion.isAssignableFrom(pvObject)) {
 					return lvConversion;
@@ -79,41 +77,29 @@ public final class ConversionHandler {
 				}
 			}
 		}
-		
 		return null;
 	}
 		
 	public Conversion getConversionByPosition(final int pvPosition) {
-		return (Conversion) conversions.get(pvPosition);
+		return conversions.get(pvPosition);
 	}
 	
-	public int size() { return conversions.size(); }
-	public void clear() { conversions.clear(); }
+	public int size() { 
+	  return conversions.size(); 
+	}
+	
+	public void clear() { 
+	  conversions.clear(); 
+	}
 
 	public Conversion removeConversion(final Conversion pvConversion) {
-		Conversion lvReturnConversion = null;
-		Conversion lvConversion = null;
-		for (int i=0; i<conversions.size(); i++) {
-			lvConversion = (Conversion) conversions.get(i);
-			if (lvConversion.equals(pvConversion)) {
-				lvReturnConversion = lvConversion;
-				conversions.remove(i);
-			}
+		if (conversions.remove(pvConversion)) {
+		  return pvConversion;
 		}
-		
-		return lvReturnConversion;
+		return null;
 	}
 	
 	public boolean containsConversion(Conversion pvConversion) {
-		boolean lvContaiins = false;
-		Conversion lvConversion = null;
-		for (int i=0; i<conversions.size(); i++) {
-			lvConversion = (Conversion) conversions.get(i);
-			if (lvConversion.equals(pvConversion)) {
-				lvContaiins = true;
-				break;
-			}
-		}
-		return lvContaiins;
+	  return conversions.contains(pvConversion);
 	}
 }

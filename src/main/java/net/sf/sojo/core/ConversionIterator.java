@@ -42,7 +42,7 @@ public abstract class ConversionIterator extends AbstractConversion {
 	public void setWithCycleDetection(boolean pvWithCycleDetection) { withCycleDetection = pvWithCycleDetection; }
 
 	/**
-	 * Handle filter fro class properties.
+	 * Handle filter for class properties.
 	 * 
 	 * @param pvClassPropertyFilterHandler
 	 */
@@ -97,7 +97,7 @@ public abstract class ConversionIterator extends AbstractConversion {
 	 * @param pvConverter Instance of Converter, for reursive execution.
 	 * @return The new Collection, Array or Map, where all object (from iterator) has added.
 	 */
-	protected final Object iterate(final Object pvSourceObject, final Object pvNewTargetObject, final Iterator pvIterator, final IConverterExtension pvConverter) {
+	protected final Object iterate(final Object pvSourceObject, final Object pvNewTargetObject, final Iterator<?> pvIterator, final IConverterExtension pvConverter) {
 		int pos = 0;
 		
 		// cycle detection for Collections
@@ -105,7 +105,7 @@ public abstract class ConversionIterator extends AbstractConversion {
 			throw new ConversionException("Detec cycle in Collection.");
 		}
 
-		Iterator iter = pvIterator;
+		Iterator<?> iter = pvIterator;
 		while (iter.hasNext()) {
 			Object lvIteratorObject = iter.next();
 			Object lvKeyValue[] = doTransformIteratorObject2KeyValuePair(lvIteratorObject);

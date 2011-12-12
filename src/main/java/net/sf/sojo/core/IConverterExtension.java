@@ -26,7 +26,7 @@ public interface IConverterExtension extends IConverter {
 
 	public String getUniqueId(Object pvObject);
 	
-	public Object addObject(String pvUniqueId, Object pvObject);
+	public void addObject(String pvUniqueId, Object pvObject);
 	
 	public Object getObjectByUniqueId (String pvUniqueId);
 }

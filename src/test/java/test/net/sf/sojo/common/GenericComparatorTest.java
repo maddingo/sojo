@@ -20,7 +20,7 @@ import java.util.Set;
 
 import test.net.sf.sojo.model.Node;
 import net.sf.sojo.common.GenericComparator;
-import net.sf.sojo.common.IterateableUtil;
+import net.sf.sojo.common.IterableUtil;
 import junit.framework.TestCase;
 
 public class GenericComparatorTest extends TestCase {
@@ -153,7 +153,7 @@ public class GenericComparatorTest extends TestCase {
 		
 		assertEquals(3, lvSet.size());
 		
-		Set lvSetAfter = IterateableUtil.sort(lvSet);
+		Set lvSetAfter = IterableUtil.sort(lvSet);
 		assertEquals(3, lvSetAfter.size());
 	}
 

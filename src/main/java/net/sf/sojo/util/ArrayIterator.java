@@ -26,7 +26,7 @@ import java.util.NoSuchElementException;
  * @author linke
  *
  */
-public class ArrayIterator implements Iterator {
+public class ArrayIterator implements Iterator<Object> {
 
 	private Object arrayObject = null;
 	private int pos = 0;

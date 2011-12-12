@@ -54,11 +54,12 @@ public class CompareResult {
 	 * 
 	 * @return If precondition is <code>true</code> is the value the compare result, else 0.
 	 */
-	public int getCompareToValue() {
+	@SuppressWarnings("unchecked")
+  public int getCompareToValue() {
 		if ((differentValue1 != null && differentValue2 != null) 
 			&& (differentValue1 instanceof Comparable && differentValue2 instanceof Comparable)) 
 		{
-				return ((Comparable) differentValue1).compareTo(differentValue2);
+				return ((Comparable<Object>) differentValue1).compareTo(differentValue2);
 			
 		}
 		return 0;

@@ -21,11 +21,11 @@ package net.sf.sojo.core;
  * @author Linke
  *
  */
-public abstract class IterateableConversion extends ConversionIterator {
+public abstract class IterableConversion extends ConversionIterator {
 
-	protected Class newIteratableType = null;
+	protected Class<?> newIteratableType = null;
 	
 		
-	public abstract Object convert(Object pvObject, Class pvToType, IConverterExtension pvConverter);
+	public abstract Object convert(Object pvObject, Class<?> pvToType, IConverterExtension pvConverter);
 
 }
