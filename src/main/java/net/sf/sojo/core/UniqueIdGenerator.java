@@ -17,9 +17,7 @@ package net.sf.sojo.core;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
 
 /**
  * If the converter find a repeated (known) object (by cycles in a object graph), than exchange

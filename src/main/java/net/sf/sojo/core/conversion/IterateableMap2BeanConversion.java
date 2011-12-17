@@ -35,10 +35,11 @@ import net.sf.sojo.core.reflect.ReflectionPropertyHelper;
  */
 public class IterateableMap2BeanConversion extends IterateableMap2MapConversion {
 
-	private Class toType = null;
+	private Class<?> toType = null;
 	
 	public IterateableMap2BeanConversion() { }
 
+	@Override
 	public boolean isAssignableFrom(Object pvObject) {
 		boolean lvReturn = false;
 		if (pvObject != null && toType != null) {
@@ -52,15 +53,15 @@ public class IterateableMap2BeanConversion extends IterateableMap2MapConversion 
 		return lvReturn;
 	}
 	
-	public boolean isAssignableTo(final Class pvToType) {
+	@Override
+	public boolean isAssignableTo(final Class<?> pvToType) {
 		toType = pvToType;
 		return ReflectionHelper.isComplexMapType(pvToType);
 	}
-
 	
-	
-	public Object convert(final Object pvObject, final Class pvToType, IConverterExtension pvConverter) {
-		final Map lvOldMap = (Map) pvObject;
+	@Override
+	public Object convert(final Object pvObject, final Class<?> pvToType, IConverterExtension pvConverter) {
+		final Map<?,?> lvOldMap = (Map<?,?>) pvObject;
 		Object beanObject = null;
 		try {
 			beanObject = ReflectionHelper.createBeanFromMap(lvOldMap, pvToType);

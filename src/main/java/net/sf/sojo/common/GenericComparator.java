@@ -38,6 +38,7 @@ public final class GenericComparator implements Comparator<Object> {
 		getUnEqualsByEquals = pvGetUnEqualsByEquals;
 	}
 	
+	@Override
 	public int compare(Object pvObject1, Object pvObject2) {
 		int lvResult = objectUtil.compareTo(pvObject1, pvObject2);
 		if (lvResult == 0 && getUnEqualsByEquals) {

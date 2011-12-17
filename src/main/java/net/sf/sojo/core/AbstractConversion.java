@@ -25,6 +25,7 @@ public abstract class AbstractConversion implements Conversion {
 
 	private ConverterInterceptorHandler interceptorHandler = new ConverterInterceptorHandler();
 
+	@Override
 	public ConverterInterceptorHandler getConverterInterceptorHandler() {
 		return interceptorHandler;
 	}

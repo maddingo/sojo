@@ -54,6 +54,7 @@ public class PathRecordWalkerInterceptor implements WalkerInterceptor {
 		return lvReturn;
 	}
 	
+	@Override
 	public boolean visitElement(Object pvKey, int pvIndex, Object pvValue, int pvType, String pvPath, int pvNumberOfRecursion) {
 
 		if (addToPaths(pvType, pvPath)) {
@@ -71,12 +72,16 @@ public class PathRecordWalkerInterceptor implements WalkerInterceptor {
 		return paths;
 	}
 
+	@Override
 	public void endWalk() {  }
 
+	@Override
 	public void startWalk(Object pvStartObject) {
 		paths.clear();
 	}
 
-	public void visitIterateableElement(Object pvValue, int pvType, String pvPath, int pvBeginEnd) {}
+	@Override
+	public void visitIterateableElement(Object pvValue, int pvType, String pvPath, int pvBeginEnd) {
+	}
 
 }

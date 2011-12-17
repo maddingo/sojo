@@ -55,7 +55,7 @@ public class CompareResult {
 	 * @return If precondition is <code>true</code> is the value the compare result, else 0.
 	 */
 	@SuppressWarnings("unchecked")
-  public int getCompareToValue() {
+	public int getCompareToValue() {
 		if ((differentValue1 != null && differentValue2 != null) 
 			&& (differentValue1 instanceof Comparable && differentValue2 instanceof Comparable)) 
 		{
@@ -64,7 +64,8 @@ public class CompareResult {
 		}
 		return 0;
 	}
-
+	
+	@Override
 	public String toString() {
 		return "Path: " + differentPath + ": " + differentValue1 + " <--> " + differentValue2;
 	}

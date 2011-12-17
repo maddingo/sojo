@@ -57,19 +57,21 @@ public class ComplexBean2MapConversion extends ComplexConversion {
 			throw new IllegalArgumentException("The class: " + newBeanConversionType + " mus be a implementation and not a interface.");
 		}
 	}
-	
 
+	@Override
 	public final boolean isAssignableFrom(Object pvObject) {
 		return ReflectionHelper.isComplexType(pvObject);
 	}
 	
+	@Override
 	public boolean isAssignableTo(final Class<?> pvToType) {
 		return ReflectionHelper.isMapType(pvToType);
 	}
 
 	
-  @SuppressWarnings("unchecked")
-  public Object convert(final Object pvObject, final Class<?> pvToType, final IConverterExtension pvConverter) {
+	@Override
+	@SuppressWarnings("unchecked")
+	public Object convert(final Object pvObject, final Class<?> pvToType, final IConverterExtension pvConverter) {
 		Map<Object,Object> lvBeanMap = null;
 		try {
 			Class<?> lvToType = ( ( pvToType == null || pvToType.isInterface() ) ? newBeanConversionType : pvToType);
@@ -94,6 +96,7 @@ public class ComplexBean2MapConversion extends ComplexConversion {
 		return lvBeanMap;
 	}
 
+	@Override
 	protected Object[] doTransformIteratorObject2KeyValuePair(Object pvIteratorObject) {
 		@SuppressWarnings("unchecked")
     Map.Entry<Object,Object> lvMapEntry = (Map.Entry<Object, Object>) pvIteratorObject;
@@ -102,6 +105,7 @@ public class ComplexBean2MapConversion extends ComplexConversion {
 		return new Object[] { lvKey, lvValue };
 	}
 
+	@Override
 	protected Object[] doConvert(Object pvSourceObject, final Object pvNewTargetObject, Object pvKey, Object pvValue, IConverter pvConverter) {
 		String propName = (String) pvKey;
 		Object lvNewValue = null;
@@ -123,10 +127,10 @@ public class ComplexBean2MapConversion extends ComplexConversion {
 		return new Object [] { pvKey, lvNewValue };
 
 	}
-	
 
+	@Override
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-  protected void doAddObject(Object pvSourceObject, Object pvNewTargetObject, Object pvKey, Object pvValue, int pvIteratorPosition) {
+	protected void doAddObject(Object pvSourceObject, Object pvNewTargetObject, Object pvKey, Object pvValue, int pvIteratorPosition) {
 		Map lvBeanMap = (Map) pvNewTargetObject;
 		String propName = (String) pvKey;
 		

@@ -63,35 +63,38 @@ public class Iterateable2IterateableConversion extends IterableConversion {
 		}		
 	}
 
+	@Override
 	public final boolean isAssignableFrom(Object pvObject) {
 		return ReflectionHelper.isIterableType(pvObject);
 	}
 	
-	public boolean isAssignableTo(final Class pvToType) {
+	@Override
+	public boolean isAssignableTo(final Class<?> pvToType) {
 		return ReflectionHelper.isIterateableType(pvToType);
 	}
 
 	
-	public Object convert(final Object pvObject, final Class pvToType, final IConverterExtension pvConverter) {
-		Iterator it = null; 
+	@Override
+	public Object convert(final Object pvObject, final Class<?> pvToType, final IConverterExtension pvConverter) {
+		Iterator<?> it = null; 
 		int size = 0;
 
 		if (pvObject.getClass().isArray()) {
 			it = new ArrayIterator(pvObject);
 			size = ((ArrayIterator) it).getLength();
 		} else {
-			Collection lvOldList = (Collection) pvObject;
+			Collection<?> lvOldList = (Collection<?>) pvObject;
 			size = lvOldList.size();
 			it = lvOldList.iterator();
 		}
 		
-		// entweder Array, Set oder List
+		// either Array, Set or List
 		Object lvNewTargetType = null;
 		// Array
 		if (pvToType != null && pvToType.isArray()) {
 			int lvSize = 0;
 			if (pvObject instanceof Collection) {
-				Collection lvOldList = (Collection) pvObject;
+				Collection<?> lvOldList = (Collection<?>) pvObject;
 				lvSize = lvOldList.size();
 			} else {
 				Object lvObjectArray[] = (Object[]) pvObject;
@@ -99,7 +102,7 @@ public class Iterateable2IterateableConversion extends IterableConversion {
 			}
 			lvNewTargetType = Array.newInstance(pvToType.getComponentType(), lvSize);
 		} else {
-			Class lvToType = ( ( pvToType == null || pvToType.isInterface() ) ? newIteratableType : pvToType);
+			Class<?> lvToType = ( ( pvToType == null || pvToType.isInterface() ) ? newIteratableType : pvToType);
 			// Set
 			if (pvToType != null && pvToType.isAssignableFrom(Set.class)  && ( ! lvToType.isAssignableFrom(Set.class) ) && pvObject instanceof Collection) {				
 				lvNewTargetType = ReflectionHelper.createNewIterableInstance(HashSet.class, size);
@@ -114,25 +117,29 @@ public class Iterateable2IterateableConversion extends IterableConversion {
 
 	
 
+	@Override
 	protected Object[] doTransformIteratorObject2KeyValuePair(Object pvIteratorObject) {
 		return new Object [] { null, pvIteratorObject};
 	}
 
+	@Override
 	protected Object[] doConvert(Object pvSourceObject, final Object pvNewTargetObject, Object pvKey, Object pvValue, IConverter pvConverter) {
 		Object lvValueAfterConvert = pvConverter.convert(pvValue);
 		return new Object [] { null, lvValueAfterConvert };
 	}
 
+	@Override
 	protected void doAddObject(Object pvSourceObject, Object pvNewTargetObject, Object pvKey, Object pvValue, int pvIteratorPosition) {
 		if (pvNewTargetObject.getClass().isArray() == false) {
-			Collection lvCollection = (Collection) pvNewTargetObject;
+			@SuppressWarnings("unchecked")
+			Collection<Object> lvCollection = (Collection<Object>) pvNewTargetObject;
 			lvCollection.add(pvValue);
 		} else {
 			
 			// transform value, is this a good idea?
 			// pvValue.getClass != clazz
 			try {
-				Class clazz = pvNewTargetObject.getClass().getComponentType();
+				Class<?> clazz = pvNewTargetObject.getClass().getComponentType();
 				if (pvValue != null && pvValue.getClass().equals(clazz) == false) {
 					pvValue = ReflectionHelper.createNewSimpleObject(clazz, pvValue);
 				}

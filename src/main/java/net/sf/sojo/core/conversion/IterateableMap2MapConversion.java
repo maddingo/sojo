@@ -18,7 +18,6 @@ package net.sf.sojo.core.conversion;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import net.sf.sojo.core.IConverter;
 import net.sf.sojo.core.IConverterExtension;
@@ -34,15 +33,15 @@ import net.sf.sojo.core.reflect.ReflectionHelper;
 public class IterateableMap2MapConversion extends IterableConversion {
 
 
-	public static final Class DEFAULT_MAP_TYPE = HashMap.class;
+	public static final Class<?> DEFAULT_MAP_TYPE = HashMap.class;
 	
 	public IterateableMap2MapConversion () {
 		this(null, false);
 	}
-	public IterateableMap2MapConversion (Class pvNewIteratableType) {
+	public IterateableMap2MapConversion (Class<?> pvNewIteratableType) {
 		this(pvNewIteratableType, false);
 	}
-	public IterateableMap2MapConversion (Class pvNewIteratableType, boolean pvIgnoreNullValues) {
+	public IterateableMap2MapConversion (Class<?> pvNewIteratableType, boolean pvIgnoreNullValues) {
 		newIteratableType = pvNewIteratableType;
 		if (newIteratableType == null) {
 			newIteratableType = DEFAULT_MAP_TYPE;
@@ -51,7 +50,7 @@ public class IterateableMap2MapConversion extends IterableConversion {
 		setIgnoreNullValues(pvIgnoreNullValues);
 	}
 	
-	private void validateTargetIteratableType(Class pvIteratableType) {
+	private void validateTargetIteratableType(Class<?> pvIteratableType) {
 		if (Map.class.isAssignableFrom(pvIteratableType) == false) {
 			throw new IllegalArgumentException("The class: " + pvIteratableType + " must be implements the java.util.Map interface.");
 		}
@@ -60,7 +59,7 @@ public class IterateableMap2MapConversion extends IterableConversion {
 		}		
 	}
 
-
+	@Override
 	public boolean isAssignableFrom(Object pvObject) {
 		boolean lvReturn = false;
 		if (ReflectionHelper.isMapType(pvObject) == true && ReflectionHelper.isComplexMapType(pvObject) == false) {
@@ -69,36 +68,39 @@ public class IterateableMap2MapConversion extends IterableConversion {
 		return lvReturn;
 	}
 	
-	public boolean isAssignableTo(final Class pvToType) {
+	@Override
+	public boolean isAssignableTo(final Class<?> pvToType) {
 		return ReflectionHelper.isMapType(pvToType);
 	}
 
-	
-	public Object convert(final Object pvObject, final Class pvToType, IConverterExtension pvConverter) {
-		Class lvToType = ( ( pvToType == null || pvToType.isInterface() ) ? newIteratableType : pvToType);
-		final Map lvOldMap = (Map) pvObject;
-		final Map lvNewMap = (Map) ReflectionHelper.createNewIterableInstance(lvToType, lvOldMap.size());
-		Iterator iter = lvOldMap.entrySet().iterator();
+	@Override
+	public Object convert(final Object pvObject, final Class<?> pvToType, IConverterExtension pvConverter) {
+		Class<?> lvToType = ( ( pvToType == null || pvToType.isInterface() ) ? newIteratableType : pvToType);
+		final Map<?,?> lvOldMap = (Map<?,?>) pvObject;
+		final Map<?,?> lvNewMap = (Map<?,?>) ReflectionHelper.createNewIterableInstance(lvToType, lvOldMap.size());
+		Iterator<?> iter = lvOldMap.entrySet().iterator();
 		return super.iterate(pvObject, lvNewMap, iter, pvConverter);
 	}
 
-	
-	
+	@Override
 	protected Object[] doTransformIteratorObject2KeyValuePair(Object pvIteratorObject) {
-		Map.Entry lvMapEntry = (Entry) pvIteratorObject;
+		Map.Entry<?,?> lvMapEntry = (Map.Entry<?, ?>) pvIteratorObject;
 		Object lvKey = lvMapEntry.getKey();
 		Object lvValue = lvMapEntry.getValue();
 		return new Object[] { lvKey, lvValue };
 	}
 
+	@Override
 	protected Object[] doConvert(Object pvSourceObject, final Object pvNewTargetObject, Object pvKey, Object pvValue, IConverter pvConverter) {
 		Object lvKey = pvConverter.convert(pvKey);
 		Object lvValue = pvConverter.convert(pvValue);
 		return new Object[] { lvKey, lvValue };
 	}
 
+	@Override
 	protected void doAddObject (Object pvSourceObject, Object pvNewTargetObject, Object pvKey, Object pvValue, int pvIteratorPosition) {
-		Map lvNewMap = (Map) pvNewTargetObject;
+		@SuppressWarnings("unchecked")
+		Map<Object,Object> lvNewMap = (Map<Object,Object>) pvNewTargetObject;
 		lvNewMap.put(pvKey, pvValue);
 	}
 

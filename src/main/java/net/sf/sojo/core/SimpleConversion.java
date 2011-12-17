@@ -57,6 +57,7 @@ public abstract class SimpleConversion extends AbstractConversion {
 	  return toType; 
 	}
 
+	@Override
 	public boolean isAssignableFrom(Object pvObject) {
 		if (pvObject == null) { 
 			return false;
@@ -67,6 +68,7 @@ public abstract class SimpleConversion extends AbstractConversion {
 		return false;
 	}
 	
+	@Override
 	public boolean isAssignableTo(final Class<?> pvToType) {
 		return ReflectionHelper.isSimpleType(pvToType);
 	}
