@@ -76,22 +76,22 @@ public class IterateableMap2BeanConversion extends IterateableMap2MapConversion 
 		String lvFilter[] = (String[]) lvOldMap.keySet().toArray(new String[0]);
 		
 		
-		Map lvSetterMap = ReflectionPropertyHelper.getAllSetterProperties(beanObject.getClass(), lvFilter);
-		Iterator iter = lvSetterMap.entrySet().iterator();
+		Map<?,?> lvSetterMap = ReflectionPropertyHelper.getAllSetterProperties(beanObject.getClass(), lvFilter);
+		Iterator<?> iter = lvSetterMap.entrySet().iterator();
 		Object lvReturn = super.iterate(pvObject, beanObject, iter, pvConverter);
 		return lvReturn;
 	}
 
-
+	@Override
 	protected Object[] doConvert(Object pvSourceObject, Object pvNewTargetObject, Object pvKey, Object pvValue, IConverter pvConverter) {
 		
 		Object lvReturnValue = null;
 
 		AccessibleObject lvAccessibleObject = (AccessibleObject) pvValue;
 		Property lvProperty = new Property(lvAccessibleObject);
-		Class lvParamType = lvProperty.getParameterType();
+		Class<?> lvParamType = lvProperty.getParameterType();
 
-		Map lvMap = (Map) pvSourceObject;
+		Map<?,?> lvMap = (Map<?,?>) pvSourceObject;
 		Object lvValue = lvMap.get(pvKey);
 		if (lvValue != null && lvValue.toString().startsWith(UniqueIdGenerator.UNIQUE_ID_PROPERTY)) {
 			String lvKey = lvValue.toString().substring(UniqueIdGenerator.UNIQUE_ID_PROPERTY.length());
@@ -102,8 +102,8 @@ public class IterateableMap2BeanConversion extends IterateableMap2MapConversion 
 
 		try {
 			if (lvReturnValue != null)  {
-				Class lvClass = ReflectionHelper.mapFromSimpeToWrapper(lvReturnValue.getClass());
-				Class lvParamClass = ReflectionHelper.mapFromSimpeToWrapper(lvParamType);
+				Class<?> lvClass = ReflectionHelper.mapFromSimpeToWrapper(lvReturnValue.getClass());
+				Class<?> lvParamClass = ReflectionHelper.mapFromSimpeToWrapper(lvParamType);
 				
 				// method-param-type and param-value are incompatible, try to recover the situation
 				if ( ! lvParamClass.isAssignableFrom(lvClass) ) {
@@ -128,6 +128,7 @@ public class IterateableMap2BeanConversion extends IterateableMap2MapConversion 
 		return new Object[] { pvKey, lvReturnValue };
 	}
 
+	@Override
 	protected void doAddObject (Object pvSourceObject, Object pvNewTargetObject, Object pvKey, Object pvValue, int pvIteratorPosition) {
 		// do nothing, overwrite the super method
 	}

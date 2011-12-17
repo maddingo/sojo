@@ -35,15 +35,13 @@ import net.sf.sojo.core.SimpleConversion;
  */
 public class SimpleFormatConversion extends SimpleConversion {
 
-	private Map formatter = new HashMap();
-
+	private Map<Class<?>,Format> formatter = new HashMap<Class<?>,Format>();
 	
 	public SimpleFormatConversion() {
 		super(String.class);
 	}
 
-	
-	public void addFormatter(Class pvType, Format pvFormat) {
+	public void addFormatter(Class<?> pvType, Format pvFormat) {
 		formatter.put(pvType, pvFormat);
 	}
 	
@@ -51,10 +49,11 @@ public class SimpleFormatConversion extends SimpleConversion {
 		return formatter.size();
 	}
 	
-	public void removeFormatterByType(Class pvType) {
+	public void removeFormatterByType(Class<?> pvType) {
 		formatter.remove(pvType);
 	}
 
+	@Override
 	public boolean isAssignableFrom(Object pvObject) {
 		if (pvObject == null) { 
 			return false;
@@ -65,17 +64,19 @@ public class SimpleFormatConversion extends SimpleConversion {
 		return formatter.containsKey(pvObject.getClass());
 	}
 	
-	public boolean isAssignableTo(final Class pvToType) {
+	@Override
+	public boolean isAssignableTo(final Class<?> pvToType) {
 		return formatter.containsKey(pvToType);
 	}
 
-	public Object convert(Object pvObject, Class pvToType) {
+	@Override
+	public Object convert(Object pvObject, Class<?> pvToType) {
 		Object lvReturn = pvObject;
-		Class lvClass = lvReturn.getClass();
+		Class<?> lvClass = lvReturn.getClass();
 		Format lvFormat = null;
 		if (lvClass.equals(String.class) && pvToType != null) {
 			try {
-				lvFormat = (Format) formatter.get(pvToType);
+				lvFormat = formatter.get(pvToType);
 				if (lvFormat != null) {
 					lvReturn = lvFormat.parseObject(lvReturn.toString());
 				} 
@@ -83,7 +84,7 @@ public class SimpleFormatConversion extends SimpleConversion {
 				throw new ConversionException("Can't convert value: " + lvReturn + " to: " + pvToType.getName());
 			}
 		} else {
-			lvFormat = (Format) formatter.get(lvClass);
+			lvFormat = formatter.get(lvClass);
 			if (lvFormat != null) {
 				lvReturn = lvFormat.format(lvReturn);
 			}

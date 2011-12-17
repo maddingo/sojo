@@ -26,7 +26,7 @@ import net.sf.sojo.core.SimpleConversion;
 public class NullConversion extends SimpleConversion {
 
 	private Object nullReplaceObject = null;
-	private Class fromType = null;	
+	private Class<?> fromType = null;	
 	
 	public NullConversion(Object pvNullReplaceObject) {
 		super(String.class, String.class);
@@ -34,12 +34,16 @@ public class NullConversion extends SimpleConversion {
 		toType = fromType;
 		setNullReplaceObject(pvNullReplaceObject);
 	}
-	
 
+	public Object getNullReplaceObject() { 
+		return nullReplaceObject; 
+	}
 	
-	public Object getNullReplaceObject() { return nullReplaceObject; }
-	public final void setNullReplaceObject(Object pvNullReplaceObject) { nullReplaceObject = pvNullReplaceObject; }
+	public final void setNullReplaceObject(Object pvNullReplaceObject) { 
+		nullReplaceObject = pvNullReplaceObject; 
+	}
 	
+	@Override
 	public boolean isAssignableFrom(Object pvObject) {
 		if (pvObject == null) {
 			return true;
@@ -49,12 +53,15 @@ public class NullConversion extends SimpleConversion {
 			return false;
 		}
 	}
-	public boolean isAssignableTo(final Class pvToType) {
+	
+	@Override
+	public boolean isAssignableTo(final Class<?> pvToType) {
 		boolean b = fromType.isAssignableFrom(pvToType);
 		return b;
 	}
 	
-	public Object convert(final Object pvObject, final Class pvToType) {
+	@Override
+	public Object convert(final Object pvObject, final Class<?> pvToType) {
 		if (pvObject == null) {
 			return getNullReplaceObject();
 		} else {
@@ -62,5 +69,4 @@ public class NullConversion extends SimpleConversion {
 			return null;
 		}
 	}
-
 }

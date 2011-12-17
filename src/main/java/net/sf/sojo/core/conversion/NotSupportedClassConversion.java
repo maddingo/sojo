@@ -26,13 +26,13 @@ import net.sf.sojo.core.SimpleConversion;
  */
 public class NotSupportedClassConversion extends SimpleConversion {
 
-	protected Class notSupportedClassArray[] = null;
+	protected Class<?> notSupportedClassArray[] = null;
 		
 	public NotSupportedClassConversion() {
 		this(null);
 	}
 	
-	public NotSupportedClassConversion(Class pvNotSupportedClassArray[]) {
+	public NotSupportedClassConversion(Class<?> pvNotSupportedClassArray[]) {
 		super(String.class);
 		if (pvNotSupportedClassArray != null) {
 			notSupportedClassArray = pvNotSupportedClassArray;
@@ -40,9 +40,8 @@ public class NotSupportedClassConversion extends SimpleConversion {
 			notSupportedClassArray = new Class[0];
 		}
 	}
-
-
 	
+	@Override
 	public boolean isAssignableFrom(final Object pvObject) {
 		if (pvObject == null) {
 			return isAssignableTo(null);
@@ -51,7 +50,8 @@ public class NotSupportedClassConversion extends SimpleConversion {
 		}
 	}
 	
-	public boolean isAssignableTo(final Class pvToType) {
+	@Override
+	public boolean isAssignableTo(final Class<?> pvToType) {
 		for (int i=0; i<notSupportedClassArray.length; i++) {
 			if (notSupportedClassArray[i] == null && pvToType == null) {
 				return true;
@@ -63,7 +63,8 @@ public class NotSupportedClassConversion extends SimpleConversion {
 	}
 
 	
-	public Object convert(Object pvObject, Class pvToType) {
+	@Override
+	public Object convert(Object pvObject, Class<?> pvToType) {
 		throw new ConversionException("Not supported Conversion for Object: " + pvObject + " (" + pvToType + ").");
 	}
 

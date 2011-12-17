@@ -30,17 +30,15 @@ import net.sf.sojo.core.reflect.ReflectionHelper;
  */
 public class Simple2SimpleConversion extends SimpleConversion {
 	
-	public Simple2SimpleConversion(Class pvFromType) {
+	public Simple2SimpleConversion(Class<?> pvFromType) {
 		super(ReflectionHelper.mapFromSimpeToWrapper(pvFromType));
 	}
 
-	public Simple2SimpleConversion(Class pvFromType, Class pvToType) {
+	public Simple2SimpleConversion(Class<?> pvFromType, Class<?> pvToType) {
 		super(ReflectionHelper.mapFromSimpeToWrapper(pvFromType), ReflectionHelper.mapFromSimpeToWrapper(pvToType));
 	}
 
-
-
-	private Object createNewSimpleObject(final Object pvObject, Class pvType) {
+	private Object createNewSimpleObject(final Object pvObject, Class<?> pvType) {
 		Object lvParam = pvObject;
 		
         if (pvObject.getClass().equals(java.sql.Date.class) ||
@@ -59,10 +57,9 @@ public class Simple2SimpleConversion extends SimpleConversion {
 		return lvNewObject;
 	}
 
-
-
-	public Object convert(final Object pvObject, final Class pvToType) {
-		Class lvToType = (pvToType == null ? toType : pvToType);
+	@Override
+	public Object convert(final Object pvObject, final Class<?> pvToType) {
+		Class<?> lvToType = (pvToType == null ? toType : pvToType);
 		Object lvReturn = pvObject;
 		if (isFromTypeAndToTypeDifferent(pvObject.getClass(), lvToType)) {
 			lvReturn = createNewSimpleObject(pvObject, lvToType);
