@@ -28,7 +28,8 @@ import net.sf.sojo.util.ThrowableWrapper;
  */
 public class ThrowableConverterInterceptor implements ConverterInterceptor {
 
-	public Object beforeConvert(final Object pvConvertObject, final Class pvToType) {
+	@Override
+	public Object beforeConvert(final Object pvConvertObject, final Class<?> pvToType) {
 		if (pvConvertObject instanceof Throwable) {
 			return new ThrowableWrapper ((Throwable) pvConvertObject);
 		} else {
@@ -36,7 +37,8 @@ public class ThrowableConverterInterceptor implements ConverterInterceptor {
 		}
 	}
 
-	public Object afterConvert(final Object pvResult, final Class pvToType) {
+	@Override
+	public Object afterConvert(final Object pvResult, final Class<?> pvToType) {
 		if (pvResult instanceof ThrowableWrapper) {
 			return ReflectionHelper.createThrowable((ThrowableWrapper) pvResult, pvToType);
 		} else {
@@ -44,9 +46,8 @@ public class ThrowableConverterInterceptor implements ConverterInterceptor {
 		}
 	}
 
-
+	@Override
 	public void onError(Exception pvException) {
 		// do nothing
 	}
-
 }

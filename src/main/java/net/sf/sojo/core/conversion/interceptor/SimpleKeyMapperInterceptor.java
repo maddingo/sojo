@@ -18,11 +18,9 @@ package net.sf.sojo.core.conversion.interceptor;
 import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.Hashtable;
-import java.util.Iterator;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.Map.Entry;
 
 import net.sf.sojo.core.ConversionContext;
 import net.sf.sojo.core.ConversionException;
@@ -41,46 +39,46 @@ public class SimpleKeyMapperInterceptor implements ConverterInterceptorRecursive
 	public static final String DELIMITER = "~_-_~";	
 	
 	private boolean makeSimple = false;
-	private Map keyMapper = new TreeMap(new SimpleKeyComparator());
 	
-	public SimpleKeyMapperInterceptor() {	}
+	public SimpleKeyMapperInterceptor() {	
+	}
 
 	public SimpleKeyMapperInterceptor(boolean pvMakeSimple) {
 		setMakeSimple(pvMakeSimple);
 	}
 	
-	public void setMakeSimple(boolean pvMakeSimple) { makeSimple = pvMakeSimple; }
-	public boolean getMakeSimple() { return makeSimple;  }
-
+	public void setMakeSimple(boolean pvMakeSimple) { 
+		makeSimple = pvMakeSimple; 
+	}
 	
+	public boolean getMakeSimple() { 
+		return makeSimple;  
+	}
+	
+	@Override
 	public void beforeConvertRecursion(ConversionContext pvContext) {
 		if (getMakeSimple() == true) {
 			toSimple(pvContext);
 		} 
 	}
-
 		
-	public Object beforeConvert(final Object pvConvertObject, final Class pvToType) {
+	@Override
+	public Object beforeConvert(final Object pvConvertObject, final Class<?> pvToType) {
 		Object lvReturn = null;
 		if (getMakeSimple() == false) {
-			Map lvMap = (Map) pvConvertObject;
+			@SuppressWarnings("unchecked")
+			Map<Object,Object> lvMap = (Map<Object,Object>) pvConvertObject;
 			
-			Map lvOrderedMap = map2SortedMap(lvMap);
-            Iterator it = lvOrderedMap.entrySet().iterator();
-            Hashtable lvHashtable = new Hashtable(lvMap.size());
-            while (it.hasNext()) {
-            	Map.Entry lvMapEntry = (Entry) it.next();
-            	SimpleKeyComparator lvKeyComparator = (SimpleKeyComparator) lvMapEntry.getKey();
-            	Object lvKey = lvKeyComparator.getKey();
-            	Object lvValue = lvMapEntry.getValue();
-            	lvHashtable.put(lvKey, lvValue);
-            }
+			Map<Object, Object> lvHashtable = new HashMap<Object, Object>(lvMap.size());
+			Map<SimpleKeyComparator, Object> lvOrderedMap = map2SortedMap(lvMap);
+			for (Map.Entry<SimpleKeyComparator, Object> entry : lvOrderedMap.entrySet()) {
+				lvHashtable.put(entry.getKey().getKey(), entry.getValue());
+			}
 			lvReturn = lvHashtable;
 		} else {
 			lvReturn = pvConvertObject;
 		}
 		
-		keyMapper.clear();
 		return lvReturn;
 	}
 
@@ -124,7 +122,7 @@ public class SimpleKeyMapperInterceptor implements ConverterInterceptorRecursive
 		if (lvKeyArray.length == 3) {
 			String lvKeyClass = lvKeyArray[2];
 			try {
-				Class clazz = ReflectionHelper.forName(lvKeyClass);
+				Class<?> clazz = ReflectionHelper.forName(lvKeyClass);
 				lvKey = ReflectionHelper.createNewSimpleObject(clazz, lvKeyValue);				
 			} catch (Exception e) {
 				throw new ConversionException("Can't create a new instance of class: " + lvKeyClass + " with value: " + lvKeyValue);
@@ -135,53 +133,58 @@ public class SimpleKeyMapperInterceptor implements ConverterInterceptorRecursive
 		return new SimpleKeyComparator(lvPos, lvKey);
 	}
 	
-	protected Map map2SortedMap (Map pvMap) {
-		Iterator it = pvMap.entrySet().iterator();
-		TreeMap lvTreeMap = new TreeMap(new SimpleKeyComparator());
-		while (it.hasNext()) {
-			Map.Entry lvEntry = (Entry) it.next();
-			Object lvKey = lvEntry.getKey();
-			Object lvValue = lvEntry.getValue();
-			SimpleKeyComparator skm = toComplex(lvKey);
-			lvTreeMap.put(skm, lvValue);
+	protected Map<SimpleKeyComparator, Object> map2SortedMap (Map<?,?> pvMap) {
+		Map<SimpleKeyComparator, Object> lvTreeMap = new TreeMap<SimpleKeyComparator, Object>(new SimpleKeyComparator());
+		for (Map.Entry<?,?> entry : pvMap.entrySet()) {
+			SimpleKeyComparator skc = toComplex(entry.getKey());
+			lvTreeMap.put(skc, entry.getValue());
 		}
 		return lvTreeMap;
 	}
 	
+	@Override
+	public void afterConvertRecursion(ConversionContext pvContext) { 
+	}
+	
+	@Override
+	public Object afterConvert(final Object pvResult, final Class<?> pvToType) { 
+		return pvResult; 
+	}
+	
+	@Override
+	public void onError(Exception pvException) {}
 
-	
-	public void afterConvertRecursion(ConversionContext pvContext) { }
-	public Object afterConvert(final Object pvResult, final Class pvToType) { return pvResult; }
-	public void onError(Exception pvException) { }
+	private static class SimpleKeyComparator implements Comparator<SimpleKeyComparator>, Serializable {
 
-	
-	
-	
-	private static class SimpleKeyComparator implements Comparator, Serializable {
-
-		private static final long serialVersionUID = 2873440526210140656L;
+		private static final long serialVersionUID = 7181951816535396688L;
 		
 		private int pos = -1;
-		private Object key = null;
+		private Object key;
 		
 		public SimpleKeyComparator() { 
-			
 		}
+		
 		public SimpleKeyComparator(int pvPos, Object pvKey) { 
 			pos = pvPos; 
 			key = pvKey;
 		}
 
-		public int getPos() { return pos; }
-		public Object getKey() { return key; }
+		public int getPos() { 
+			return pos; 
+		}
 		
-		public int compare(Object pvO1, Object pvO2) {
-			SimpleKeyComparator skm1 = (SimpleKeyComparator) pvO1;
-			SimpleKeyComparator skm2 = (SimpleKeyComparator) pvO2;
-			if (skm1.getPos() > skm2.getPos()) {
+		public Object getKey() { 
+			return key; 
+		}
+		
+		@Override
+		public int compare(SimpleKeyComparator pvO1, SimpleKeyComparator pvO2) {
+			int res = pvO1.getPos() - pvO2.getPos();
+			if (res > 0) {
 				return -1;
-			}
-			else {
+			} else if (res == 0) {
+				return 0;
+			} else {
 				return 1;
 			}
 		}
