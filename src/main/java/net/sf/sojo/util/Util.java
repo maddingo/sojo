@@ -152,7 +152,7 @@ public final class Util {
 		
 		// 0. Versuch, Datums-String ist eine ganze Zahl
 		try {
-			date = new Date(new Long(pvDateString).longValue());
+			date = new Date(Long.parseLong(pvDateString));
 			return date;
 		} catch (Exception e) {
 			if (NonCriticalExceptionHandler.isNonCriticalExceptionHandlerEnabled()) {
@@ -173,10 +173,8 @@ public final class Util {
 		}
 
 		
-		// 2. Versuch, mit allen bekannten Timestamp-Formaten		 
-		Iterator<?> lvIterator = dateFormatList.iterator();
-		while (lvIterator.hasNext()) {
-			DateFormat df = (DateFormat) lvIterator.next();
+		// 2. Versuch, mit allen bekannten Timestamp-Formaten
+		for (DateFormat df : dateFormatList) {
 			try {
 				date = df.parse(pvDateString); 
 				return date;
@@ -247,13 +245,12 @@ public final class Util {
 	}
 
 	public static boolean isStringInArray (String[] pvList, String pvSearchString) {
-		boolean lvReturn = false;
-		for (int i = 0; i < pvList.length; i++) {
-			if (pvList[i].equals(pvSearchString)) {
+		for (String pvi : pvList) {
+			if (pvi.equals(pvSearchString)) {
 				return true;
 			}
 		}
-		return lvReturn;
+		return false;
 	}
 	
 	public static Map<String, Object> filterMapByKeys (Map<String, Object> pvSearchMap, String[] pvList) {
@@ -262,12 +259,13 @@ public final class Util {
 		} else {
 			Map<String,Object> lvReturnMap = new TreeMap<String, Object>();
 			for (Entry<String, Object> entry : pvSearchMap.entrySet()) {
-        if (isStringInArray(pvList, entry.getKey())) {
-          lvReturnMap.put(entry.getKey(), entry.getValue());
-        }
-      }
+				
+		        if (isStringInArray(pvList, entry.getKey())) {
+		        	lvReturnMap.put(entry.getKey(), entry.getValue());
+		        }
+		     
+		    }
 			return lvReturnMap;
 		}
 	}
-
 }
