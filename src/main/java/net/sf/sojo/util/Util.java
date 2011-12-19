@@ -95,16 +95,6 @@ public final class Util {
 		}		
 		return false;
 	}
-	
-	public static String createNumberOfBlank(int pvNumberOfBlank, int pvMultiplier ) {
-		StringBuffer sb =  new StringBuffer();
-		for (int i=0; i<pvNumberOfBlank; i++) {
-			for (int j=0; j<pvMultiplier; j++) {
-				sb.append(" ");
-			}
-		}
-		return sb.toString();
-	}
 
 	/**
 	 * Fill the milliseconds by a timestamp with zeros.
