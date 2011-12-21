@@ -21,16 +21,17 @@ import java.security.AccessController;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Hashtable;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import net.sf.sojo.core.NonCriticalExceptionHandler;
 import net.sf.sojo.util.Util;
 
 /**
- * Find all methods of the search classes (go upward in the class hierachy, how to the <code>java.lang.Object</code>).
+ * Find all methods of the search classes (go upward in the class hierarchy, like to the {@code java.lang.Object}).
  * 
  * @author linke
  *
@@ -52,19 +53,19 @@ public final class ReflectionMethodHelper {
 	
 	/**
 	 * Find all getter-method from a Class.
-	 * @param pvClass Class to analyse.
+	 * @param pvClass Class to analyze.
 	 * @return Map all getter-Method (key=property name, value=method).
 	 */
-	public static Map getAllGetterMethod(Class pvClass) {
+	public static Map<Object, Object> getAllGetterMethod(Class<?> pvClass) {
 		return getAllGetterAndSetterMethod(pvClass, GET_METHOD);
 	}
 	
 	/**
 	 * Find all setter-method from a Class.
-	 * @param pvClass Class to analyse.
+	 * @param pvClass Class to analyze.
 	 * @return Map all setter-Method (key=property name, value=method).
 	 */
-	public static Map getAllSetterMethod(Class pvClass) {
+	public static Map<Object, Object> getAllSetterMethod(Class<?> pvClass) {
 		return getAllGetterAndSetterMethod(pvClass, SET_METHOD);
 	}
 
@@ -73,9 +74,9 @@ public final class ReflectionMethodHelper {
 	 * Remove all getter-method where no setter-method exist. 
 	 * If more setter-method as getter-method, they wasn't removed.
 	 */
-	public static Map getAllNotEqualsGetterAndSetterAndRemoveThisProperties(Map pvGetterMap, Map pvSetterMap) {
-		Map lvMap = new TreeMap();
-		Iterator it = new ArrayList(pvGetterMap.keySet()).iterator();
+	public static Map<Object, Object> getAllNotEqualsGetterAndSetterAndRemoveThisProperties(Map<Object, Object> pvGetterMap, Map<Object, Object> pvSetterMap) {
+		Map<Object, Object> lvMap = new TreeMap<Object, Object>();
+		Iterator<Object> it = new ArrayList<Object>(pvGetterMap.keySet()).iterator();
 		lvMap.put(Util.getKeyWordClass(), pvGetterMap.get(Util.getKeyWordClass()));
 		while (it.hasNext()) {
 			Object lvGetterProp = it.next();
@@ -91,11 +92,11 @@ public final class ReflectionMethodHelper {
 	 * @param pvClass Class to anaylse.
 	 * @return Map from getter-method (key=property name, value=method).
 	 */
-	public static Map getAllGetterMethodWithCache(Class pvClass, String pvFilter[]) {
-		Map lvGetterMap = classPropertiesCacheGetter.getClassPropertiesMapByClass(pvClass);
+	public static Map<Object, Object> getAllGetterMethodWithCache(Class<?> pvClass, String pvFilter[]) {
+		Map<Object, Object> lvGetterMap = classPropertiesCacheGetter.getClassPropertiesMapByClass(pvClass);
 		if (lvGetterMap == null) {
 			lvGetterMap = getAllGetterMethod(pvClass);
-			Map lvSetterMap = getAllSetterMethodWithCache(pvClass, pvFilter);
+			Map<Object, Object> lvSetterMap = getAllSetterMethodWithCache(pvClass, pvFilter);
 			lvGetterMap = getAllNotEqualsGetterAndSetterAndRemoveThisProperties (lvGetterMap, lvSetterMap);
 			classPropertiesCacheGetter.addClassPropertiesMap(pvClass, lvGetterMap);
 		}
@@ -107,8 +108,8 @@ public final class ReflectionMethodHelper {
 	 * @param pvClass Class to analyse.
 	 * @return Map all setter-Method (key=property name, value=method).
 	 */
-	public static Map getAllSetterMethodWithCache(Class pvClass, String pvFilter[]) {
-		Map lvMap = classPropertiesCacheSetter.getClassPropertiesMapByClass(pvClass);
+	public static Map<Object, Object> getAllSetterMethodWithCache(Class<?> pvClass, String pvFilter[]) {
+		Map<Object, Object> lvMap = classPropertiesCacheSetter.getClassPropertiesMapByClass(pvClass);
 		if (lvMap == null) {
 			lvMap = getAllSetterMethod(pvClass);
 			classPropertiesCacheSetter.addClassPropertiesMap(pvClass, lvMap);
@@ -121,19 +122,19 @@ public final class ReflectionMethodHelper {
 	/**
 	 * Get all set/get methods from a Class. With methods from all super classes.
 	 * @param pvClass Analyse Class.
-	 * @return All finded methods.
+	 * @return All methods found.
 	 */
-	public static Method[] getAllMethodsByClass (Class pvClass) {
-		return (Method[]) getAllMethodsByClassIntern(pvClass, new Hashtable()).toArray(new Method [0]);
+	public static Method[] getAllMethodsByClass (Class<?> pvClass) {
+		return getAllMethodsByClassIntern(pvClass, new HashSet<Method>()).toArray(new Method [0]);
 	}
 
 	/**
-	 * Recursive search alle method from the Class in the Class Hierarchy to Object.class.
+	 * Recursive search all method from the Class in the Class Hierarchy to Object.class.
 	 * @param pvClass Search class.
-	 * @param pvMethodsMap Method map (key=property name, value=method).
-	 * @return All finded methods.
+	 * @param pvMethodsMap Set of Methods.
+	 * @return All methods found.
 	 */
-	private static Collection getAllMethodsByClassIntern (Class pvClass, Map pvMethodsMap) {
+	private static Collection<Method> getAllMethodsByClassIntern (Class<?> pvClass, Set<Method> pvMethodsMap) {
 		putAllMethodsIntern( pvClass.getMethods(), pvMethodsMap) ;		
 		putAllMethodsIntern( pvClass.getDeclaredMethods(), pvMethodsMap);
 		
@@ -141,14 +142,14 @@ public final class ReflectionMethodHelper {
 			getAllMethodsByClassIntern(pvClass.getSuperclass(), pvMethodsMap);
 		}
 		
-		return pvMethodsMap.values();
+		return pvMethodsMap;
 	}
 	
-	private static void putAllMethodsIntern (Method pvAllMethods[], Map pvMethodsMap) {
+	private static void putAllMethodsIntern (Method pvAllMethods[], Set<Method> pvMethodsMap) {
 		for (int i = 0; i < pvAllMethods.length; i++) {
 			String lvMethodName = pvAllMethods[i].getName();
 			if (lvMethodName.startsWith("set") || lvMethodName.startsWith("get") || lvMethodName.startsWith("is")) {
-				pvMethodsMap.put(pvAllMethods[i], pvAllMethods[i]);
+				pvMethodsMap.add(pvAllMethods[i]);
 			}
 		}		
 	}
@@ -161,9 +162,9 @@ public final class ReflectionMethodHelper {
 	 * @param pvMethodType get or set
 	 * @return Method map (key=property name, value=method).
 	 */
-	public static Map getAllGetterAndSetterMethod(Class pvClass, int pvMethodType) {
+	public static Map<Object, Object> getAllGetterAndSetterMethod(Class<?> pvClass, int pvMethodType) {
 		Method lvAllMethods[] = getAllMethodsByClass(pvClass);
-		Map lvGetterOrSetter = new TreeMap();
+		Map<Object, Object> lvGetterOrSetter = new TreeMap<Object, Object>();
         for (int i = 0; i < lvAllMethods.length; i++) {
         	Method lvMethod = null;
         	String lvPropName = lvAllMethods[i].getName();
@@ -215,7 +216,7 @@ public final class ReflectionMethodHelper {
         return Collections.unmodifiableMap(lvGetterOrSetter);
 	}
 	
-	public static boolean isMethodSetterAndGetterCompliant (Class pvClass) {
+	public static boolean isMethodSetterAndGetterCompliant(Class<?> pvClass) {
 		boolean lvReturn = false;
 		
 		if (ReflectionHelper.isSimpleType(pvClass)) {
@@ -233,7 +234,7 @@ public final class ReflectionMethodHelper {
 
 		// find bean with constructor with out parameter 
 		else if (pvClass.getConstructors().length > 0) {
-			Constructor lvConstructor[] = pvClass.getConstructors();
+			Constructor<?> lvConstructor[] = pvClass.getConstructors();
 			for (int i = 0; i < lvConstructor.length; i++) {
 				if (lvConstructor[i].getParameterTypes().length == 0) {
 					lvReturn = true;
@@ -241,7 +242,6 @@ public final class ReflectionMethodHelper {
 				}
 			}
 		}
-
 		return lvReturn;
 	}
 

@@ -15,7 +15,7 @@
  */	
 package net.sf.sojo.core.reflect;
 
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -27,23 +27,23 @@ import java.util.Map;
 public class ClassPropertiesCache {
 
 	
-	private Map classPropertiesMap = new Hashtable();
+	private Map<Object, Object> classPropertiesMap = new HashMap<Object, Object>();
 	
 	public void clear() {
 		classPropertiesMap.clear();
 	}
 	
 	/**
-	 * Add to a Class a <code>Map</code>, where the key is e.g. the method- pr field-name and the value is the method or the field.
+	 * Add to a Class a <code>Map</code>, where the key is e.g. the method- per field-name and the value is the method or the field.
 	 * 
 	 * @param pvClass The class, to there is save the information.
 	 * @param pvClassProperteiesMap Map, with key the property-name and the value contains the method or field object.
 	 */
-	public void addClassPropertiesMap (Class pvClass, Map pvClassProperteiesMap) {
+	public void addClassPropertiesMap (Class<?> pvClass, Map pvClassProperteiesMap) {
 		classPropertiesMap.put(pvClass, pvClassProperteiesMap);
 	}
 
-	public void removePropertiesByClass (Class pvClass) {
+	public void removePropertiesByClass (Class<?> pvClass) {
 		classPropertiesMap.remove(pvClass);
 	}
 
@@ -52,11 +52,12 @@ public class ClassPropertiesCache {
 	 * @param pvClass The class where the information are saved.
 	 * @return The Map with reflection informations.
 	 */
-	public Map getClassPropertiesMapByClass (Class pvClass) {
-		return (Map) classPropertiesMap.get(pvClass);
+	@SuppressWarnings("unchecked")
+	public Map<Object, Object> getClassPropertiesMapByClass (Class<?> pvClass) {
+		return (Map<Object, Object>) classPropertiesMap.get(pvClass);
 	}
 	
-	public boolean containsClass(Class pvClass) {
+	public boolean containsClass(Class<?> pvClass) {
 		return classPropertiesMap.containsKey(pvClass);
 	}
 	
@@ -67,5 +68,4 @@ public class ClassPropertiesCache {
 	public int size() {
 		return classPropertiesMap.size();
 	}
-
 }

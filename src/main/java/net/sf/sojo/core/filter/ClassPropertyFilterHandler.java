@@ -23,5 +23,5 @@ package net.sf.sojo.core.filter;
  */
 public interface ClassPropertyFilterHandler {
 
-	public ClassPropertyFilter getClassPropertyFilterByClass(Class pvClass);
+	public ClassPropertyFilter getClassPropertyFilterByClass(Class<?> pvClass);
 }

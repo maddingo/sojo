@@ -25,7 +25,7 @@ import java.security.PrivilegedAction;
  * @author linke
  *
  */
-public class AccessiblePrivilegedAction implements PrivilegedAction {
+public class AccessiblePrivilegedAction implements PrivilegedAction<Object> {
  
 	private final AccessibleObject accessibleObject;
 	

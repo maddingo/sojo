@@ -25,7 +25,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -256,14 +255,14 @@ public final class Util {
 		return false;
 	}
 	
-	public static Map<String, Object> filterMapByKeys (Map<String, Object> pvSearchMap, String[] pvList) {
+	public static Map<Object, Object> filterMapByKeys (Map<Object, Object> pvSearchMap, String[] pvList) {
 		if (pvList == null || pvList.length == 0) {
 			return pvSearchMap;
 		} else {
-			Map<String,Object> lvReturnMap = new TreeMap<String, Object>();
-			for (Entry<String, Object> entry : pvSearchMap.entrySet()) {
+			Map<Object,Object> lvReturnMap = new TreeMap<Object, Object>();
+			for (Entry<Object, Object> entry : pvSearchMap.entrySet()) {
 				
-		        if (isStringInArray(pvList, entry.getKey())) {
+		        if (isStringInArray(pvList, (String) entry.getKey())) {
 		        	lvReturnMap.put(entry.getKey(), entry.getValue());
 		        }
 		     

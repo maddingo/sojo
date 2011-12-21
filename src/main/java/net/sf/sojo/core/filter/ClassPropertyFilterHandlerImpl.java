@@ -16,7 +16,6 @@
 package net.sf.sojo.core.filter;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 
@@ -28,61 +27,58 @@ import java.util.Map;
  */
 public class ClassPropertyFilterHandlerImpl implements ClassPropertyFilterHandler {
 	
-	private Map classPropertyFilterMap = new HashMap();
+	private Map<Class<?>, ClassPropertyFilter> classPropertyFilterMap = new HashMap<Class<?>, ClassPropertyFilter>();
 	private boolean withAssignableFilterClasses = true;
 	
 	public ClassPropertyFilterHandlerImpl() { }
 	public ClassPropertyFilterHandlerImpl(ClassPropertyFilter pvFilter) { 
 		addClassPropertyFilter(pvFilter);
 	}
-	public ClassPropertyFilterHandlerImpl(Class pvClassPropertyFilterClasses[]) {
+	
+	public ClassPropertyFilterHandlerImpl(Class<?> pvClassPropertyFilterClasses[]) {
 		addClassPropertyFilterByFilterClasses(pvClassPropertyFilterClasses);
 	}
 
 	public void setWithAssignableFilterClasses(boolean pvWithAssignableFilterClasses) {
 		withAssignableFilterClasses = pvWithAssignableFilterClasses;
 	}
+	
 	public boolean getWithAssignableFilterClasses() {
 		return withAssignableFilterClasses;
 	}
 	
-	public void addClassPropertyFilterByFilterClasses(Class pvClassPropertyFilterClasses[]) {
+	public void addClassPropertyFilterByFilterClasses(Class<?> pvClassPropertyFilterClasses[]) {
 		if (pvClassPropertyFilterClasses != null) {
-			for (int i = 0; i < pvClassPropertyFilterClasses.length; i++) {
-				ClassPropertyFilter lvFilter = ClassPropertyFilterHelper.createClassPropertyFilterByClass(pvClassPropertyFilterClasses[i]);
+			for (Class<?> cls : pvClassPropertyFilterClasses) {
+				ClassPropertyFilter lvFilter = ClassPropertyFilterHelper.createClassPropertyFilterByClass(cls);
 				addClassPropertyFilter(lvFilter);
 			}
 		}
-		
 	}
 	
 	public void addClassPropertyFilter(ClassPropertyFilter pvClassPropertyFilter) {
 		classPropertyFilterMap.put(pvClassPropertyFilter.getFilterClass(), pvClassPropertyFilter);
 	}
 
-	public void removeClassPropertyFilterByClassName(Class pvFilterClass) {
+	public void removeClassPropertyFilterByClassName(Class<?> pvFilterClass) {
 		classPropertyFilterMap.remove(pvFilterClass);
 	}
 
-	public ClassPropertyFilter getClassPropertyFilterByClass(Class pvFilterClass) {
+	public ClassPropertyFilter getClassPropertyFilterByClass(Class<?> pvFilterClass) {
 		if (withAssignableFilterClasses) {
-			Iterator it = classPropertyFilterMap.entrySet().iterator();
-			while (it.hasNext()) {
-				Map.Entry lvEntry = (Map.Entry) it.next();
-				Class lvClass = (Class) lvEntry.getKey();
+			for (Map.Entry<Class<?>, ClassPropertyFilter> lvEntry : classPropertyFilterMap.entrySet()) {
+				Class<?> lvClass = lvEntry.getKey();
 				if (lvClass.isAssignableFrom(pvFilterClass)) {
-					return (ClassPropertyFilter) lvEntry.getValue();
+					return lvEntry.getValue();
 				}
 			}
 			return null;
 		} else {
-			return (ClassPropertyFilter) classPropertyFilterMap.get(pvFilterClass);
+			return classPropertyFilterMap.get(pvFilterClass);
 		}
 	}
-	
 	
 	public int getClassPropertyFilterSize() {
 		return classPropertyFilterMap.size();
 	}
-
 }

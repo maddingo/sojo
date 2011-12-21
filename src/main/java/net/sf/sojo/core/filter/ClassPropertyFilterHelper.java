@@ -15,7 +15,6 @@
  */
 package net.sf.sojo.core.filter;
 
-import java.util.Iterator;
 import java.util.Map;
 
 import net.sf.sojo.core.reflect.ReflectionMethodHelper;
@@ -30,12 +29,12 @@ public class ClassPropertyFilterHelper {
 	/**
 	 * Check a property from a class by a handler.
 	 * 
-	 * @param pvClassPropertyFilterHandler The handler impelementation.
+	 * @param pvClassPropertyFilterHandler The handler implementation.
 	 * @param pvClassForFindFilter The class for the filter.
 	 * @param pvKey The to filtering property.
 	 * @return <code>true</code>, if the property from the class is known by the handler, else <code>false</code>.
 	 */
-	public static boolean isPropertyToFiltering (ClassPropertyFilterHandler pvClassPropertyFilterHandler, Class pvClassForFindFilter, Object pvKey) {
+	public static boolean isPropertyToFiltering (ClassPropertyFilterHandler pvClassPropertyFilterHandler, Class<?> pvClassForFindFilter, Object pvKey) {
 		boolean lvAddProperty = false;
 		if (pvClassPropertyFilterHandler != null) {
 			ClassPropertyFilter lvClassPropertyFilter = pvClassPropertyFilterHandler.getClassPropertyFilterByClass(pvClassForFindFilter);
@@ -48,18 +47,17 @@ public class ClassPropertyFilterHelper {
 	}
 
 	/**
-	 * Create a <code>ClassPropertyFilder</code> by analyse (per reflection) the parameter class.
+	 * Create a <code>ClassPropertyFilder</code> by analyze (per reflection) the parameter class.
 	 * All properties are filtered (transient).
-	 * @param pvClass To analyse class.
+	 * @param pvClass To analyze class.
 	 * @return The <code>ClassPropertyFilter</code>.
 	 */
-	public static ClassPropertyFilter createClassPropertyFilterByClass(Class pvClass) {
+	public static ClassPropertyFilter createClassPropertyFilterByClass(Class<?> pvClass) {
 		ClassPropertyFilter lvClassPropertyFilter = new ClassPropertyFilter(pvClass);
-		Map lvProperties = ReflectionMethodHelper.getAllGetterMethodWithCache(pvClass,null);
-		Iterator it = lvProperties.keySet().iterator();
-		while (it.hasNext()) {
-			String lvProperty = (String) it.next();
-			lvClassPropertyFilter.addProperty(lvProperty);
+		Map<Object, Object> lvProperties = ReflectionMethodHelper.getAllGetterMethodWithCache(pvClass,null);
+		
+		for (Object key : lvProperties.keySet()) {
+			lvClassPropertyFilter.addProperty((String) key);
 		}
 		return lvClassPropertyFilter;
 	}
@@ -75,8 +73,8 @@ public class ClassPropertyFilterHelper {
 		String lvReturn = null;
 		if (pvClassPropertyFilter != null) {
 			try {
-				Class lvClass = pvClassPropertyFilter.getFilterClass();
-				Map lvProperties = ReflectionMethodHelper.getAllGetterMethodWithCache(lvClass, null);
+				Class<?> lvClass = pvClassPropertyFilter.getFilterClass();
+				Map<Object, Object> lvProperties = ReflectionMethodHelper.getAllGetterMethodWithCache(lvClass, null);
 				Object lvAllProperties[] =  pvClassPropertyFilter.getAllProperties();
 				for (int i = 0; i < lvAllProperties.length; i++) {
 					if (lvProperties.containsKey(lvAllProperties[i]) == false) {

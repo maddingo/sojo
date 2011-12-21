@@ -32,54 +32,54 @@ public final class ReflectionFieldHelper {
 
 	private static final ClassPropertiesCache classFieldCache = new ClassPropertiesCache();
 	
-	public static Field[] getAllFieldsByClass (Class pvClass) {
-		Map lvFieldMap = getAllFieldMapsByClassIntern(pvClass, null);
+	public static Field[] getAllFieldsByClass (Class<?> pvClass) {
+		Map<Object, Object> lvFieldMap = getAllFieldMapsByClassIntern(pvClass, null);
 		return (Field[]) lvFieldMap.values().toArray(new Field [lvFieldMap.size()]);
 	}
 
-	public static Map getAllGetFieldMapsByClass (Class pvClass, String pvFilter[]) {
-		Map lvFieldMap = new TreeMap(getAllFieldMapsByClassIntern (pvClass, pvFilter));
+	public static Map<Object, Object> getAllGetFieldMapsByClass (Class<?> pvClass, String pvFilter[]) {
+		Map<Object, Object> lvFieldMap = new TreeMap<Object, Object>(getAllFieldMapsByClassIntern (pvClass, pvFilter));
 		lvFieldMap.put(Util.getKeyWordClass(), pvClass.getName());
 		return Collections.unmodifiableMap(lvFieldMap);
 	}
 
-	public static Map getAllSetFieldMapsByClass (Class pvClass, String pvFilter[]) {
-		Map lvFieldMap = getAllFieldMapsByClassIntern (pvClass, pvFilter);
+	public static Map<Object, Object> getAllSetFieldMapsByClass (Class<?> pvClass, String pvFilter[]) {
+		Map<?, ?> lvFieldMap = getAllFieldMapsByClassIntern (pvClass, pvFilter);
 		return Collections.unmodifiableMap(lvFieldMap);
 	}
 	
-	private static Map getAllFieldMapsByClassIntern (Class pvClass, String pvFilter[]) {
-		Map lvFieldMap = classFieldCache.getClassPropertiesMapByClass(pvClass);
+	private static Map<Object, Object> getAllFieldMapsByClassIntern (Class<?> pvClass, String pvFilter[]) {
+		Map<Object, Object> lvFieldMap = classFieldCache.getClassPropertiesMapByClass(pvClass);
 		if (lvFieldMap == null) {
-			lvFieldMap = getAllFieldsByClassIntern(pvClass, new TreeMap());
+			lvFieldMap = getAllFieldsByClassIntern(pvClass, new TreeMap<Object, Object>());
 		}
 		lvFieldMap = Util.filterMapByKeys(lvFieldMap, pvFilter);
 		return lvFieldMap;		
 	}
 	
-	public static void addAllFields2MapByClass (Class pvClass, String pvFilter[]) {
+	public static void addAllFields2MapByClass (Class<?> pvClass, String pvFilter[]) {
 		if (classFieldCache.containsClass(pvClass) == false) {
-			Map lvFieldMap = getAllSetFieldMapsByClass(pvClass, pvFilter);
+			Map<Object, Object> lvFieldMap = getAllSetFieldMapsByClass(pvClass, pvFilter);
 			classFieldCache.addClassPropertiesMap(pvClass, lvFieldMap);
 		} 
 	}
 	
-	public static void removePropertiesByClass (Class pvClass) {
+	public static void removePropertiesByClass (Class<?> pvClass) {
 		classFieldCache.removePropertiesByClass(pvClass);
 	}
 	
-	public static boolean containsClass(Class pvClass) {
+	public static boolean containsClass(Class<?> pvClass) {
 		return classFieldCache.containsClass(pvClass);
 	}
 	
 
 	/**
-	 * Recursive search alle method from the Class in the Class Hierarchy to Object.class.
+	 * Recursive search all methods from the Class in the Class Hierarchy to Object class.
 	 * @param pvClass Search class.
 	 * @param pvFieldsMap Method map (key=property name, value=method).
-	 * @return All finded fields.
+	 * @return All fields found.
 	 */
-	private static Map getAllFieldsByClassIntern (Class pvClass, Map pvFieldsMap) {
+	private static Map<Object, Object> getAllFieldsByClassIntern (Class<?> pvClass, Map<Object, Object> pvFieldsMap) {
 		putAllFieldsIntern( pvClass.getFields(), pvFieldsMap) ;		
 		putAllFieldsIntern( pvClass.getDeclaredFields(), pvFieldsMap);
 		
@@ -89,10 +89,9 @@ public final class ReflectionFieldHelper {
 		return pvFieldsMap;
 	}
 	
-	private static void putAllFieldsIntern (Field pvAllFields[], Map pvFieldsMap) {
-		for (int i = 0; i < pvAllFields.length; i++) {
-			pvFieldsMap.put(pvAllFields[i].getName(), pvAllFields[i]);
-		}		
+	private static void putAllFieldsIntern (Field pvAllFields[], Map<Object, Object> pvFieldsMap) {
+		for (Field field : pvAllFields) {
+			pvFieldsMap.put(field.getName(), field);
+		}
 	}
-
 }

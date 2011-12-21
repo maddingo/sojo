@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
 import net.sf.sojo.util.Util;
 
 /**
- * This class descripe, which properties are to ignore by convert class to a new representation. 
+ * This class describe, which properties are to ignore by convert class to a new representation. 
  * The properties, which are added to this filter are transient by
  * call a serialize method by the <code>net.sf.sojo.interchange.Serializer</code>. 
  * 
@@ -34,59 +34,64 @@ import net.sf.sojo.util.Util;
 public class ClassPropertyFilter {
 
 	
-	private Class filterClass = null;
-	private List propertyList = new ArrayList();
+	private Class<?> filterClass = null;
+	private List<String> propertyList = new ArrayList<String>();
 	private boolean support4AddClassProperty = false;
 	
 	public ClassPropertyFilter() { }
 	
-	public ClassPropertyFilter(Class pvClass) {
+	public ClassPropertyFilter(Class<?> pvClass) {
 		setFilterClass(pvClass);
 	}
 	
 	
-	public ClassPropertyFilter(Class pvClass, String pvProperties[]) {
+	public ClassPropertyFilter(Class<?> pvClass, String pvProperties[]) {
 		setFilterClass(pvClass);
 		addProperties(pvProperties);
 	}
 
 
-	public Class getFilterClass() { return filterClass; }
-	private void setFilterClass(Class pvClass) { this.filterClass = pvClass; }
+	public Class<?> getFilterClass() { 
+		return filterClass; 
+	}
 	
-	public void setSupport4AddClassProperty(boolean pvSupport4AddClassProperty) { support4AddClassProperty = pvSupport4AddClassProperty; }
-	public boolean getSupport4AddClassProperty() { return support4AddClassProperty; }
+	private void setFilterClass(Class<?> pvClass) { 
+		this.filterClass = pvClass; 
+	}
 	
+	public void setSupport4AddClassProperty(boolean pvSupport4AddClassProperty) { 
+		support4AddClassProperty = pvSupport4AddClassProperty; 
+	}
+	
+	public boolean getSupport4AddClassProperty() { 
+		return support4AddClassProperty; 
+	}
 	
 	public ClassPropertyFilter addProperties(String pvProperties[]) {
 		if (pvProperties != null) {
-			for (int i = 0; i < pvProperties.length; i++) {
-				addProperty(pvProperties[i]);
+			for (String prop : pvProperties) {
+				addProperty(prop);
 			}
 		}
 		return this;
 	}
 
 	public ClassPropertyFilter addProperty(String pvProperty) {
-		if (Util.getKeyWordClass().equals(pvProperty) == false || getSupport4AddClassProperty()) {
+		if (!Util.getKeyWordClass().equals(pvProperty) || getSupport4AddClassProperty()) {
 			propertyList.add(pvProperty);
 		}
 		return this;
 	}
 	
 	public ClassPropertyFilter removeProperty(String pvProperty) {
-		for (int i=0; i<propertyList.size(); i++) {
-			if (propertyList.get(i).equals(pvProperty)) {
-				propertyList.remove(i);
-			}
-		}
+		propertyList.remove(pvProperty);
 		return this;
 	}
 	
 	public ClassPropertyFilter removeProperties(String pvProperty[]) {
 		if (pvProperty != null) {
-			for (int i = 0; i < pvProperty.length; i++) {
-				removeProperty(pvProperty[i]);
+			for (String prop : pvProperty) {
+				removeProperty(prop);
 			}
 		}
 		return this;
@@ -95,19 +100,16 @@ public class ClassPropertyFilter {
 	public boolean isKnownProperty(String pvProperty) {
 	  if (pvProperty != null) {
 	    
-  		for (int i=0; i<propertyList.size(); i++) {
-  			if (propertyList.get(i).equals(pvProperty)) {
+		for (String prop : propertyList) {
+			
+  			if (prop.equals(pvProperty)) {
   				return true;
-  			} 
-  			else {
-  				boolean b = Pattern.matches((String) propertyList.get(i), pvProperty);
-  				if (b == true) {
-  					return true;
-  				}
+  			} else if (Pattern.matches(prop, pvProperty)) {
+				return true;
   			}
   		}
 	  }
-		return false;		
+	  return false;		
 	}
 	
 	public int getPropertySize() {
@@ -115,7 +117,6 @@ public class ClassPropertyFilter {
 	}
 	
 	public String[] getAllProperties() {
-		return (String[]) propertyList.toArray(new String [propertyList.size()]);
+		return propertyList.toArray(new String [propertyList.size()]);
 	}
-
 }
