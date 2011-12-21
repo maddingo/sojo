@@ -16,10 +16,17 @@
 package test.net.sf.sojo.util;
 
 import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.Vector;
 
 import junit.framework.TestCase;
@@ -47,7 +54,7 @@ public class UtilTest extends TestCase {
 			fail("Date euqals String: 'False Date' is illegal argument");
 		} catch (Exception e) {
 			assertTrue(true); 
-		}		
+		}	
 	}
 	
 	public void testString2Date2() throws Exception {
@@ -57,26 +64,83 @@ public class UtilTest extends TestCase {
 	}
 
 	public void testString2SqlDate() throws Exception {
-		java.sql.Date lvDate = new java.sql.Date(980809200000l);
-		Date lvDate2 = Util.string2Date(lvDate.toString());
-		assertEquals(lvDate2, lvDate);
+		String formatString = "yyyy-mm-dd";
+		Util.registerDateFormat(formatString);
+		try {
+			long milliseconds = 980809200000l;
+			
+			java.sql.Date lvDate = new java.sql.Date(milliseconds);
+			Date lvDate2 = Util.string2Date(lvDate.toString());
+			
+			Calendar cal = Calendar.getInstance();
+			cal.setTimeInMillis(milliseconds);
+	
+			Calendar cal2 = Calendar.getInstance();
+			cal2.setTime(lvDate2);
+			
+			assertEquals(cal.get(Calendar.YEAR), cal2.get(Calendar.YEAR));
+			assertEquals(cal.get(Calendar.MONTH), cal2.get(Calendar.MONTH));
+			assertEquals(cal.get(Calendar.DAY_OF_MONTH), cal2.get(Calendar.DAY_OF_MONTH));
+		} finally {
+			Util.unregisterDateFormat(formatString);
+		}
+		
 	}
 
 	public void testString2Timpstamp() throws Exception {
-		long lvTime = new Date().getTime();
-		Timestamp lvTimestamp = new Timestamp(lvTime);
-		Date lvDate2 = Util.string2Date(lvTimestamp.toString());
-		assertEquals(lvDate2.getTime(), lvTime);
+	  
+	  Map<String, DateFormat> oldFormats = new HashMap<String, DateFormat>();
+	  Util.clearDateFormats(oldFormats);
+	  
+	  String formatString = "yyyy-MM-dd' 'HH:mm:ss.SSS";
+    Util.registerDateFormat(formatString);
+		try {
+			long lvTime = new Date().getTime();
+			Timestamp lvTimestamp = new Timestamp(lvTime);
+			Date lvDate2 = Util.string2Date(lvTimestamp.toString());
+			
+			assertEquals(lvTimestamp.getTime(), lvDate2.getTime());
+		} finally {
+		  Util.setDateFormats(oldFormats);
+		}
 	}
 
 	public void testString2Timpstamp2() throws Exception {
-		long lvTime = 1175188856390l;
-		Timestamp lvTimestamp = new Timestamp(lvTime);
-		Date lvDate2 = Util.string2Date(lvTimestamp.toString());
-		assertEquals(lvDate2.getTime(), lvTime);
+	  
+		long lvTime = 1175188856390L;
+			Timestamp lvTimestamp = new Timestamp(lvTime);
+			Date lvDate2 = Util.string2Date(lvTimestamp.toString());
+			assertEquals(lvTime, lvDate2.getTime());
 	}
-
-		
+	
+	/** 
+	 * This test is just to demostracte that timestamp formatted strings 
+	 * with 2 digits in the fractional seconds are not parsed correctly.
+	 * If this test fails, it means the bug was fixed and we can remove the
+	 * special timestamp pass (2nd pass in {@link Util#string2Date(String)}.
+	 * 
+	 * @throws Exception
+	 */
+	public void testTimestamp3() throws Exception {
+	  
+	  // none of these formats work
+	  List<SimpleDateFormat> formatList = Arrays.asList(
+	    new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss.S")
+      , new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss.SS")
+      , new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss.SSS")
+      , new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss.SSSS")
+      , new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss.SSSSS")
+	  );
+	  for (SimpleDateFormat df : formatList) {
+  	  // 3 digits work fine
+  	  Date date = df.parse("2007-03-29 19:20:56.390");
+  	  assertEquals(1175188856390L, date.getTime());
+  	  
+  	  // 2 digits fail, notice the last 3 digts 039 vs. 390
+  	  date = df.parse("2007-03-29 19:20:56.39");
+      assertEquals(1175188856039L, date.getTime());
+		}
+	}
 	
 	/** Tue Mar 01 20:23:55 CET 2005 - 1109705105302 */
 	public void testString2DateCET() throws Exception {
@@ -92,9 +156,8 @@ public class UtilTest extends TestCase {
 		assertEquals(d2.toString(), d.toString());
 	}
 	
-	
 	@SuppressWarnings("rawtypes")
-  public void testArrayType_Array() throws Exception {
+	public void testArrayType_Array() throws Exception {
 		Class lvType = Util.getArrayType(null);
 		assertEquals(lvType, Object.class);
 		lvType = Util.getArrayType(new String[0]);
@@ -122,7 +185,7 @@ public class UtilTest extends TestCase {
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-  public void testArrayType_Collection() throws Exception {
+	public void testArrayType_Collection() throws Exception {
 		Vector v = new Vector<Object>();
 		v.add("a");
 		v.add("b");
@@ -140,7 +203,7 @@ public class UtilTest extends TestCase {
 		assertEquals(lvType, Object.class);
 	}
 	
-  @SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void testArrayType_Map() throws Exception {
 		Map lvMap = new HashMap();
 		lvMap.put("a", "a");
@@ -183,7 +246,7 @@ public class UtilTest extends TestCase {
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-  public void testname() throws Exception {
+	public void testname() throws Exception {
 		Map lvMap = new HashMap();
 		lvMap.put("k1", "v1");
 		lvMap.put("k2", "v2");
@@ -207,50 +270,31 @@ public class UtilTest extends TestCase {
 		assertEquals(lvMap, lvResultMap);
 	}
 	
-	public void testFillMillisecondsWithZero() throws Exception {
-		assertNull(Util.fillMillisecondsWithZero(null));
-
-		String lvTimestampStr = "";
-		assertEquals(lvTimestampStr, Util.fillMillisecondsWithZero(lvTimestampStr));
-
-		lvTimestampStr = "2007-01-03 12:02:01";
-		assertEquals(lvTimestampStr, Util.fillMillisecondsWithZero(lvTimestampStr));
-		
-		lvTimestampStr = "2007-01-03 12:02:01.123";
-		assertEquals(lvTimestampStr, Util.fillMillisecondsWithZero(lvTimestampStr));
-
-		lvTimestampStr = "2007-01-03 12:02:01.12";
-		assertEquals(lvTimestampStr + "0", Util.fillMillisecondsWithZero(lvTimestampStr));
-
-		lvTimestampStr = "2007-01-03 12:02:01.1";
-		assertEquals(lvTimestampStr + "00", Util.fillMillisecondsWithZero(lvTimestampStr));
-
-		lvTimestampStr = "2007-01-03 12:02:01.";
-		assertEquals(lvTimestampStr + "000", Util.fillMillisecondsWithZero(lvTimestampStr));
-	}
-	
 	public void testUSformatFail() throws Exception {
 		try {
-			Util.string2Date("Sat Oct 01 20:25:34 EDT 2005");
+			Date dt = Util.string2Date("Sat Oct 01 20:25:34 ABC 2005");
+			assertNotNull(dt);
 			fail("Must thrown exception by bad date format!");
 		} catch (Exception e) {
 			assertNotNull(e);
 		}
 	}
 
+	/**
+	 * For this to work properly, we have to choose a date without DST. Because it is not given that the JVM implementation supports historical DST data. 
+	 */
 	public void testUSformatOk() throws Exception {
-		SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss 'EDT' yyyy");
-		try {
-			Util.addDateFormat2List(dateFormat);
-			Date lvDate = Util.string2Date("Sat Oct 01 20:25:34 EDT 2005");
-			assertNotNull(lvDate);
-			assertEquals(lvDate.getTime(), 1128191134000l);
-		} catch (Exception e) {
-			assertNotNull(e);
-		}
-		finally {
-			Util.removeDateFormat2List(dateFormat);
-		}
+
+		Date lvDate = Util.string2Date("Sat Dec 01 20:25:34 PST 2005");
+		assertNotNull(lvDate);
+		
+		TimeZone tz = TimeZone.getTimeZone("PST");
+    Calendar cal = Calendar.getInstance(tz);
+		
+		cal.set(2005, Calendar.DECEMBER, 1, 20, 25, 34);
+		cal.set(Calendar.MILLISECOND, 0);
+
+		assertEquals(cal.getTime().getTime(), lvDate.getTime());
 	}
 
 	public void testKeyWordClass() throws Exception {

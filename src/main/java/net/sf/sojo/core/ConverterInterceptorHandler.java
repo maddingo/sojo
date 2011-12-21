@@ -59,7 +59,7 @@ public class ConverterInterceptorHandler {
 	}
 	
 	public Object fireAfterConvert(final Object pvResult, final Class<?> pvToType) {
-		Object lvReturn = null;
+		Object lvReturn = pvResult;
     for (ConverterInterceptor lvInterceptor : interceptors) {
 			lvReturn = lvInterceptor.afterConvert(pvResult, pvToType);
 		}		

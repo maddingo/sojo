@@ -16,18 +16,20 @@
 package net.sf.sojo.util;
 
 import java.io.InputStream;
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
@@ -35,7 +37,7 @@ import net.sf.sojo.core.NonCriticalExceptionHandler;
 import net.sf.sojo.core.reflect.ReflectionMethodHelper;
 
 /**
- * Helper/Util - class. This are functions, which can't clear assigned ;-)
+ * Helper/Util - class. This are functions, which can't be assigned, clearly ;-)
  * 
  * @author linke
  *
@@ -45,25 +47,62 @@ public final class Util {
 	public static final String DEFAULT_KEY_WORD_CLASS = "class";
 	
 	private static String keyWordClass = DEFAULT_KEY_WORD_CLASS;
-	private final static List<DateFormat> dateFormatList = new ArrayList<DateFormat>();
+	private final static Map<String, DateFormat> dateFormats = new HashMap<String, DateFormat>();
 	
 	static {
-		addDateFormat2List(new SimpleDateFormat("EEE MMM dd HH:mm:ss 'CEST' yyyy", Locale.ENGLISH));
-		addDateFormat2List(new SimpleDateFormat("EEE MMM dd HH:mm:ss 'CET' yyyy", Locale.ENGLISH));
-		addDateFormat2List(new SimpleDateFormat("yyyy-MM-dd"));
-		addDateFormat2List(DateFormat.getDateInstance(DateFormat.MEDIUM));
+		registerDateFormat("EEE MMM dd HH:mm:ss z yyyy"); // java.util.Date.toString() format
+		registerDateFormat("yyyy-MM-dd"); // SQL date format
 	}
 	
-	public static void addDateFormat2List(DateFormat pvDateFormat) {
-		dateFormatList.add(pvDateFormat);
+	public static DateFormat registerDateFormat(String key, DateFormat pvDateFormat) {
+		return dateFormats.put(key, pvDateFormat);
 	}
 
-	public static void removeDateFormat2List(DateFormat pvDateFormat) {
-		dateFormatList.remove(pvDateFormat);
+	/**
+	 * Add the format string as {@link SimpleDateFormat} using English as locale. 
+	 * The format can be removed by the format string.
+	 * If you need a different locale use {@link #registerDateFormat(String, DateFormat)}.
+	 * @param format {@link SimpleDateFormat#SimpleDateFormat(String)}
+	 */
+	public static DateFormat registerDateFormat(String format) {
+		return registerDateFormat(format, new SimpleDateFormat(format, Locale.ENGLISH));
 	}
-
 	
-	protected Util() {}
+	public static void unregisterDateFormat(String key) {
+	  synchronized(dateFormats) {
+		dateFormats.remove(key);
+	}
+	}
+	
+	public static void setDateFormats(Map<String, DateFormat> map) {
+	  synchronized(dateFormats) {
+  	  dateFormats.clear();
+  	  dateFormats.putAll(map);
+	  }
+	}
+
+	private static Collection<DateFormat> getDateFormats() {
+	  synchronized(dateFormats) {
+	    return Collections.unmodifiableCollection(dateFormats.values());
+	  }
+	}
+
+	/**
+	 * Removes all registered {@link DateFormat DateFormats}.
+	 * 
+	 * @param copy if not null, the old values are copied to this map
+	 * @return an unmodifiable version of the original registrations.
+	 */
+	public static void clearDateFormats(Map<String, DateFormat> copy) {
+	  synchronized(dateFormats) {
+	    if (copy != null) {
+	      copy.putAll(dateFormats);
+	    }
+		dateFormats.clear();
+	  }
+	}
+	
+	private Util() {}
 	
 	public static void setKeyWordClass(String pvKeyWordClass) { 
 		if (pvKeyWordClass != null && pvKeyWordClass.length() > 0) {
@@ -97,38 +136,6 @@ public final class Util {
 	}
 
 	/**
-	 * Fill the milliseconds by a timestamp with zeros.
-	 * Example: <code>2007-03-29 19:20:56.39</code> to  <code>2007-03-29 19:20:56.39</code><b>0</b>.
-	 * 
-	 * @param pvTimestampStr The timestamp string
-	 * @return The converted timestamp strin.
-	 */
-	public static String fillMillisecondsWithZero(final String pvTimestampStr) {
-		if (pvTimestampStr == null) {
-			return null;
-		}
-		
-		String str = pvTimestampStr;
-		
-		int index = str.lastIndexOf('.');
-		if (index >= 0) {
-			String strBeforePoint = str.substring(0, index);
-			String strAfterPoint = str.substring(index+1);
-			if (strAfterPoint.length() == 2) {
-				strAfterPoint = strAfterPoint + "0";
-			}
-			else if (strAfterPoint.length() == 1) {
-				strAfterPoint = strAfterPoint + "00";
-			}
-			else if (strAfterPoint.length() == 0) {
-				strAfterPoint = "000";
-			}
-			str = strBeforePoint + "." + strAfterPoint;
-		}
-		return str;
-	}
-	
-	/**
 	 * Convert a Date-String to a Date. The Converter <b>ignored the Millisecond</b>.
 	 * Example: Thu Aug 11 19:30:57 CEST 2005
 	 * 
@@ -136,46 +143,42 @@ public final class Util {
 	 * @return Valid <code>java.util.Date</code>.
 	 */
 	public static Date string2Date (String pvDateString) {
-		if (pvDateString == null) { throw new IllegalArgumentException ("The Date-String was null by string2Date."); }
+		if (pvDateString == null) { 
+			throw new IllegalArgumentException(pvDateString); 
+		}
 		
-		Date date = null;
-		
-		// 0. Versuch, Datums-String ist eine ganze Zahl
+		// 1. pass: pvDateString is a long as milliseconds after Jan 1st 1970
 		try {
-			date = new Date(Long.parseLong(pvDateString));
-			return date;
+			return new Date(Long.parseLong(pvDateString));
 		} catch (Exception e) {
 			if (NonCriticalExceptionHandler.isNonCriticalExceptionHandlerEnabled()) {
-				NonCriticalExceptionHandler.handleException(Util.class, e, "First try to convert by string2Date: " + pvDateString);
+				NonCriticalExceptionHandler.handleException(Util.class, e, "1st pass string2Date: " + pvDateString);
 			}
 		}
 		
-		// 1. Versuch, Timestamp-Format
-		try { 
-			String lvTimestampStr = fillMillisecondsWithZero(pvDateString);
-			DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
-			date = df.parse(lvTimestampStr); 
-			return date;
-		} catch (ParseException e) {
-			if (NonCriticalExceptionHandler.isNonCriticalExceptionHandlerEnabled()) {
-				NonCriticalExceptionHandler.handleException(Util.class, e, "Forth try to convert by string2Date: " + pvDateString);
-			}
-		}
-
-		
-		// 2. Versuch, mit allen bekannten Timestamp-Formaten
-		for (DateFormat df : dateFormatList) {
+		// 2. pass: Timestamp format. The Timestamp format with two digits og fractional seconds are not parsed correctly by SimpleDateFormat,
+		//          hence we have to use Timestamp.valueOf, which handles this correctly
 			try {
-				date = df.parse(pvDateString); 
-				return date;
+		  return Timestamp.valueOf(pvDateString);
+    } catch (Exception e) {
+      if (NonCriticalExceptionHandler.isNonCriticalExceptionHandlerEnabled()) {
+        NonCriticalExceptionHandler.handleException(Util.class, e, "2nd pass string2Date: " + pvDateString);
+      }
+    }
+		
+		// 3. pass, iterate through all registered DateFormats
+		Collection<DateFormat> dfList = getDateFormats();
+		for (DateFormat df : dfList) {
+			try {
+				return df.parse(pvDateString); 
 			} catch (ParseException e) {
 				if (NonCriticalExceptionHandler.isNonCriticalExceptionHandlerEnabled()) {
-					NonCriticalExceptionHandler.handleException(Util.class, e, "Fifth try to convert by string2Date: " + pvDateString);
+					NonCriticalExceptionHandler.handleException(Util.class, e, "3nd pass string2Date: " + pvDateString);
 				}
 			}
 		}
 		
-		throw new IllegalStateException ("The String: \"" + pvDateString + "\" is not valid date."); 
+		throw new IllegalArgumentException (pvDateString); 
 	}
 
 	

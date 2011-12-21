@@ -35,31 +35,19 @@ public class UniqueIdGenerator {
 	private int currentUniqueID = 0;
 	private int minimalUniqueID = MINIMAL_UNIQUE_ID;
 	private boolean withHashCodeInUniqueId = false;
-	private Map<Object, String> uniqueIdObjectMap = new HashMap<Object, String>();
-	private Map<String, Object> reverseObjectMap = new HashMap<String, Object>();
+	private Map<Object, Object> uniqueIdObjectMap = new HashMap<Object,Object>();
 	
 	public UniqueIdGenerator() {
 	}
 	
-	public void setMinimalUniqueID(int pvMinimalUniqueID) { 
-	  minimalUniqueID = pvMinimalUniqueID; 
-	}
+	public void setMinimalUniqueID(int pvMinimalUniqueID) { minimalUniqueID = pvMinimalUniqueID; }
+	public int getMinimalUniqueID() { return minimalUniqueID; }
 	
-	public int getMinimalUniqueID() { 
-	  return minimalUniqueID; 
-	}
+	public void setWithHashCodeInUniqueId(boolean pvWithHashCodeInUniqueId) { withHashCodeInUniqueId = pvWithHashCodeInUniqueId; }
+	public boolean getWithHashCodeInUniqueId() { return withHashCodeInUniqueId; }
 	
-	public void setWithHashCodeInUniqueId(boolean pvWithHashCodeInUniqueId) { 
-	  withHashCodeInUniqueId = pvWithHashCodeInUniqueId; 
-	}
+	public int getCurrentUniqueID() { return currentUniqueID; }
 	
-	public boolean getWithHashCodeInUniqueId() { 
-	  return withHashCodeInUniqueId; 
-	}
-	
-	public int getCurrentUniqueID() { 
-	  return currentUniqueID; 
-	}
 	
 	protected String getStringRepresentationFromId (int pvUniqueId, Object pvObject) {
 		String lvUniqueId = Integer.toString(pvUniqueId);
@@ -69,19 +57,18 @@ public class UniqueIdGenerator {
 		return lvUniqueId;
 	}
 	
+	
 	public final String getUniqueId(Object pvObject) {
-		if (pvObject == null) {
-		  return null; 
-		}
+		if (pvObject == null) {return null; }
 
 		String lvUniqueId = null;
 		
-		if (!((pvObject instanceof Collection) || (pvObject instanceof Map))) {
-			lvUniqueId = uniqueIdObjectMap.get(pvObject); 
+		if ( ! (pvObject instanceof Collection) && ! (pvObject instanceof Map)) {
+			lvUniqueId = (String) uniqueIdObjectMap.get(pvObject); 
 			if (lvUniqueId == null){
 				lvUniqueId = getStringRepresentationFromId(currentUniqueID, pvObject);
 				currentUniqueID++;
-				addObject(lvUniqueId, pvObject);
+				uniqueIdObjectMap.put(pvObject, lvUniqueId);
 			}
 		}
 		
@@ -101,12 +88,19 @@ public class UniqueIdGenerator {
 	}
 
 	public Object getObjectByUniqueId (String pvUniqueId) {
-		return reverseObjectMap.get(pvUniqueId);
+//		Iterator iter = uniqueIdObjectMap.entrySet().iterator();
+//		while (iter.hasNext()) {
+//			Map.Entry lvEntry = (Entry) iter.next();
+//			if (lvEntry.getKey().equals(pvUniqueId)) {
+//				return lvEntry.getValue();
+//			}
+//		}
+//		return null;
+		return uniqueIdObjectMap.get(pvUniqueId);
 	}
 	
-	public final void addObject(String pvUniqueId, Object pvObject) {
-		uniqueIdObjectMap.put(pvObject, pvUniqueId);
-		reverseObjectMap.put(pvUniqueId, pvObject);
+	public final Object addObject(String pvUniqueId, Object pvObject) {
+		return uniqueIdObjectMap.put(pvUniqueId, pvObject);
 	}
 
 	public void clear() {

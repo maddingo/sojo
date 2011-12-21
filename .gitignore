@@ -4,3 +4,5 @@
 /.project
 /.settings
 *.log
+*.bak
+.DS_Store
