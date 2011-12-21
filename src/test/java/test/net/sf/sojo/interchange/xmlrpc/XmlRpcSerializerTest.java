@@ -139,7 +139,10 @@ public class XmlRpcSerializerTest extends TestCase {
 	public void testSimpleDateDeserialize() throws Exception {
 		String s = "<params><param><value><dateTime.iso8601>20010330T13:54:55</dateTime.iso8601></value></param></params>";
 		Object lvResult = xmlRpcSerializer.deserialize(s);
-		assertEquals(new Date(980859295000l), lvResult);
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(2001, 2, 30, 13, 54, 55);
+                calendar.set(Calendar.MILLISECOND, 0);
+		assertEquals(calendar.getTime(), lvResult);
 		
 		try {
 			s = "<params><param><value><dateTime.iso8601>20010330X13:54:55</dateTime.iso8601></value></param></params>";
@@ -155,7 +158,7 @@ public class XmlRpcSerializerTest extends TestCase {
 		Date d = lvCalendar.getTime();
 		Object lvResult = xmlRpcSerializer.serialize(lvCalendar);
 		
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMDD'T'HH:mm:ss.SSS");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd'T'HH:mm:ss.SSS");
 		String lvDateStr = sdf.format(d);
 		String s = "<params><param><value><ex:dateTime>" + lvDateStr + "</ex:dateTime></value></param></params>";
 		assertEquals(s, lvResult);

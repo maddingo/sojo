@@ -22,6 +22,7 @@ import java.sql.Timestamp;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -1150,7 +1151,11 @@ public class ObjectUtilTest extends TestCase {
 		ObjectUtil lvObjectUtil = new ObjectUtil();
 		lvObjectUtil.getConverter().addConversion(lvConversion);
 
-		Date lvDate = new Date(82800000);
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(1970, 0, 2, 0, 0, 0);
+                calendar.set(Calendar.MILLISECOND, 0);
+                
+		Date lvDate = calendar.getTime();
 		Object lvDateStr = lvObjectUtil.makeComplex(lvDate);
 		assertEquals("02-01-1970", lvDateStr);
 		
