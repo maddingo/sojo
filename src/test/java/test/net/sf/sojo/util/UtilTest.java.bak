@@ -288,6 +288,28 @@ public class UtilTest extends TestCase {
 		assertEquals(lvMap, lvResultMap);
 	}
 	
+	public void testFillMillisecondsWithZero() throws Exception {
+		assertNull(Util.fillMillisecondsWithZero(null));
+
+		String lvTimestampStr = "";
+		assertEquals(lvTimestampStr, Util.fillMillisecondsWithZero(lvTimestampStr));
+
+		lvTimestampStr = "2007-01-03 12:02:01";
+		assertEquals(lvTimestampStr, Util.fillMillisecondsWithZero(lvTimestampStr));
+		
+		lvTimestampStr = "2007-01-03 12:02:01.123";
+		assertEquals(lvTimestampStr, Util.fillMillisecondsWithZero(lvTimestampStr));
+
+		lvTimestampStr = "2007-01-03 12:02:01.12";
+		assertEquals(lvTimestampStr + "0", Util.fillMillisecondsWithZero(lvTimestampStr));
+
+		lvTimestampStr = "2007-01-03 12:02:01.1";
+		assertEquals(lvTimestampStr + "00", Util.fillMillisecondsWithZero(lvTimestampStr));
+
+		lvTimestampStr = "2007-01-03 12:02:01.";
+		assertEquals(lvTimestampStr + "000", Util.fillMillisecondsWithZero(lvTimestampStr));
+	}
+	
 	public void testUSformatFail() throws Exception {
 		try {
 			Date dt = Util.string2Date("Sat Oct 01 20:25:34 ABC 2005");

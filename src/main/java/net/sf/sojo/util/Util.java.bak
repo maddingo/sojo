@@ -142,6 +142,38 @@ public final class Util {
 	}
 
 	/**
+	 * Fill the milliseconds by a timestamp with zeros.
+	 * Example: <code>2007-03-29 19:20:56.39</code> to  <code>2007-03-29 19:20:56.39</code><b>0</b>.
+	 * 
+	 * @param pvTimestampStr The timestamp string
+	 * @return The converted timestamp strin.
+	 */
+	public static String fillMillisecondsWithZero(final String pvTimestampStr) {
+		if (pvTimestampStr == null) {
+			return null;
+		}
+		
+		String str = pvTimestampStr;
+		
+		int index = str.lastIndexOf('.');
+		if (index >= 0) {
+			String strBeforePoint = str.substring(0, index);
+			String strAfterPoint = str.substring(index+1);
+			if (strAfterPoint.length() == 2) {
+				strAfterPoint = strAfterPoint + "0";
+			}
+			else if (strAfterPoint.length() == 1) {
+				strAfterPoint = strAfterPoint + "00";
+			}
+			else if (strAfterPoint.length() == 0) {
+				strAfterPoint = "000";
+			}
+			str = strBeforePoint + "." + strAfterPoint;
+		}
+		return str;
+	}
+	
+	/**
 	 * Convert a Date-String to a Date. The Converter <b>ignored the Millisecond</b>.
 	 * Example: Thu Aug 11 19:30:57 CEST 2005
 	 * 
