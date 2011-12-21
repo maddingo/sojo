@@ -26,6 +26,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
@@ -58,11 +59,13 @@ public final class Util {
 	}
 
 	/**
-	 * Add the format string as {@link SimpleDateFormat}. The format can be removed by the format string.
+	 * Add the format string as {@link SimpleDateFormat} using English as locale. 
+	 * The format can be removed by the format string.
+	 * If you need a different locale use {@link #registerDateFormat(String, DateFormat)}.
 	 * @param format {@link SimpleDateFormat#SimpleDateFormat(String)}
 	 */
 	public static DateFormat registerDateFormat(String format) {
-		return registerDateFormat(format, new SimpleDateFormat(format));
+		return registerDateFormat(format, new SimpleDateFormat(format, Locale.ENGLISH));
 	}
 	
 	public static void unregisterDateFormat(String key) {

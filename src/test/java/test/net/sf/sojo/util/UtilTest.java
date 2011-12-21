@@ -48,31 +48,22 @@ public class UtilTest extends TestCase {
 		assertEquals(new Date(1234567), lvDate);
 		
 		Date lvDate2 = new Date();
-		String formatString = "EEE MMM dd HH:mm:ss zzz yyyy";
-		DateFormat oldFormat = Util.registerDateFormat(formatString, new SimpleDateFormat(formatString, Locale.ENGLISH));
+		lvDate = Util.string2Date(lvDate2.toString());
+		assertEquals(lvDate2.toString(), lvDate.toString());
+		
+		try {
+			lvDate2 = Util.string2Date(null);
+			fail("Date euqals null is illegal argument");
+		} catch (IllegalArgumentException e) {
+			assertTrue(true);
+		}
 
 		try {
-			lvDate = Util.string2Date(lvDate2.toString());
-			assertEquals(lvDate2.toString(), lvDate.toString());
-			
-			try {
-				lvDate2 = Util.string2Date(null);
-				fail("Date euqals null is illegal argument");
-			} catch (IllegalArgumentException e) {
-				assertTrue(true);
-			}
-	
-			try {
-				lvDate2 = Util.string2Date("False Date");
-				fail("Date euqals String: 'False Date' is illegal argument");
-			} catch (Exception e) {
-				assertTrue(true); 
-			}	
-		} finally {
-		  if (oldFormat != null) {
-		    Util.registerDateFormat(formatString,oldFormat);
-		  }
-		}
+			lvDate2 = Util.string2Date("False Date");
+			fail("Date euqals String: 'False Date' is illegal argument");
+		} catch (Exception e) {
+			assertTrue(true); 
+		}	
 	}
 	
 	public void testString2Date2() throws Exception {

@@ -153,9 +153,6 @@ public final class Converter implements IConverter {
 		try {
 			lvResult = convertInternal(lvResult, pvToType);
 		} catch (Exception e) {
-			// TODO remove after test
-			e.printStackTrace();
-			
 			interceptorHandler.fireOnError(e);
 			if (e instanceof ConversionException) {
 				throw (ConversionException) e;
