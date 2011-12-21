@@ -50,6 +50,7 @@ public final class Util {
 	
 	static {
 		registerDateFormat("EEE MMM dd HH:mm:ss z yyyy"); // java.util.Date.toString() format
+		registerDateFormat("yyyy-MM-dd"); // SQL date format
 	}
 	
 	public static DateFormat registerDateFormat(String key, DateFormat pvDateFormat) {
