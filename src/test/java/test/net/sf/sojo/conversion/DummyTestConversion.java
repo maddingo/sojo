@@ -19,11 +19,13 @@ import net.sf.sojo.core.AbstractConversion;
 
 public class DummyTestConversion extends AbstractConversion {
 
+  @Override
 	public boolean isAssignableFrom(Object pvObject) {
 		return true;
 	}
 
-	public boolean isAssignableTo(Class pvToType) {
+	@Override
+	public boolean isAssignableTo(Class<?> pvToType) {
 		return true;
 	}
 

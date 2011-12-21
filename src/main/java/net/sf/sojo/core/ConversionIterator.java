@@ -112,7 +112,7 @@ public abstract class ConversionIterator extends AbstractConversion {
 			
 			if (ClassPropertyFilterHelper.isPropertyToFiltering(classPropertyFilterHandler, pvSourceObject.getClass(), lvKeyValue[0])  == false) {
 				ConversionContext lvContext = fireBeforeConvertRecursion( (pos + 1), lvKeyValue[0], lvKeyValue[1]);
-				if (lvContext.cancelConvert == false) {
+				if (!lvContext.cancelConvert) {
 					lvKeyValue = doConvert(pvSourceObject, pvNewTargetObject, lvContext.key, lvContext.value, pvConverter);
 					Object lvValue = lvKeyValue[1];
 					if (lvValue != null && lvValue.toString() != null && lvValue.toString().startsWith(UniqueIdGenerator.UNIQUE_ID_PROPERTY)) {
@@ -125,7 +125,7 @@ public abstract class ConversionIterator extends AbstractConversion {
 				}
 				
 				lvContext = fireAfterConvertRecursion(lvContext, lvKeyValue[0], lvKeyValue[1]);
-				if ((lvContext.cancelConvert == false) &&
+				if ((!lvContext.cancelConvert) &&
 					 ((lvKeyValue[1] != null || getIgnoreNullValues() == false) || (lvKeyValue[0] != null && lvKeyValue[0].equals(Util.getKeyWordClass())))) {
 						this.doAddObject(pvSourceObject, pvNewTargetObject, lvKeyValue[0], lvKeyValue[1], pos);
 				}
