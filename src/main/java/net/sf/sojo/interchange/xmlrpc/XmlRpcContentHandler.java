@@ -146,7 +146,7 @@ public class XmlRpcContentHandler extends DefaultHandler {
 			
 		}
 		else if ("dateTime.iso8601".equals(pvName)) {
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMDD'T'HH:mm:ss");
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd'T'HH:mm:ss");
 			try {
 				currentValue = sdf.parse(value);
 				addValue("key", currentValue);
@@ -190,7 +190,7 @@ public class XmlRpcContentHandler extends DefaultHandler {
 			addValue("key", currentValue);
 		}				
 		else if ("ex:dateTime".equals(pvName)) {
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMDD'T'HH:mm:ss.SSS");
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd'T'HH:mm:ss.SSS");
 			try {
 				currentValue = sdf.parse(value);
 				Calendar lvCalendar = Calendar.getInstance();

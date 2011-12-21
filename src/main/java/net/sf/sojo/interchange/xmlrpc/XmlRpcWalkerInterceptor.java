@@ -154,7 +154,7 @@ public class XmlRpcWalkerInterceptor implements WalkerInterceptor {
 		}
 		else if (pvValue instanceof Date) {
 			Date d = (Date) pvValue;
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMDD'T'HH:mm:ss");
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd'T'HH:mm:ss");
 			String s = sdf.format(d);
 			xmlRpcString.append("<dateTime.iso8601>").append(s).append("</dateTime.iso8601>");
 		}
@@ -180,7 +180,7 @@ public class XmlRpcWalkerInterceptor implements WalkerInterceptor {
 		}		
 		else if (Calendar.class.isAssignableFrom(pvValue.getClass())) {
 			Calendar lvCalendar = (Calendar) pvValue;
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMDD'T'HH:mm:ss.SSS");
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd'T'HH:mm:ss.SSS");
 			String s = sdf.format(lvCalendar.getTime());
 			xmlRpcString.append("<ex:dateTime>").append(s).append("</ex:dateTime>");
 		}		

@@ -15,6 +15,7 @@
  */	
 package test.net.sf.sojo.interchange.xmlrpc;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -86,7 +87,9 @@ public class XmlRpcWalkerInterceptorTest extends TestCase {
 	}
 
 	public void testSimpleDate() throws Exception {
-		walker.walk(new Date(700000000));
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(1970, 0, 9, 3, 26, 40);
+		walker.walk(calendar.getTime());
 		String s = "<params><param><value><dateTime.iso8601>19700109T03:26:40</dateTime.iso8601></value></param></params>";
 		assertEquals(s, xmlRpcWalker.getXmlRpcString());
 	}
@@ -112,7 +115,9 @@ public class XmlRpcWalkerInterceptorTest extends TestCase {
 					"</params>";
 		assertEquals(s, xmlRpcWalker.getXmlRpcString());
 
-		walker.walk(new Object[] { Boolean.FALSE, new Date(700000000) });
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(1970, 0, 9, 3, 26, 40);
+		walker.walk(new Object[] { Boolean.FALSE, calendar.getTime() });
 		s = "<params>" +
 				"<param><value><boolean>0</boolean></value></param>" +
 				"<param><value><dateTime.iso8601>19700109T03:26:40</dateTime.iso8601></value></param>" +

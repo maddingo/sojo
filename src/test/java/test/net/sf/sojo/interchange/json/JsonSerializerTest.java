@@ -21,6 +21,7 @@ import java.util.Date;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -743,18 +744,38 @@ public class JsonSerializerTest extends TestCase {
 		JsonSerializer serializer = new JsonSerializer();
 		Bean bean = new Bean();
 		long lvTime = 980809200000l;
+                
+                Calendar cal = Calendar.getInstance();
+                cal.setTimeInMillis(lvTime);
+                
 		bean.setDate(new java.sql.Date(lvTime));
 		bean = (Bean) serializer.deserialize(serializer.serialize(bean));
-		assertEquals(lvTime, bean.getDate().getTime());
+                
+                Calendar cal2 = Calendar.getInstance();
+                cal2.setTimeInMillis(bean.getDate().getTime());
+                
+		assertEquals(cal.get(Calendar.YEAR), cal2.get(Calendar.YEAR));
+                assertEquals(cal.get(Calendar.MONTH), cal2.get(Calendar.MONTH));
+                assertEquals(cal.get(Calendar.DAY_OF_MONTH), cal2.get(Calendar.DAY_OF_MONTH));
 	}
 
 	public void testSqlDate() throws Exception {
 		JsonSerializer serializer = new JsonSerializer();
 		serializer.getObjectUtil().getConverter().addConversion(new Simple2SimpleConversion(String.class, java.sql.Date.class));
 		long lvTime = 980809200000l;
+                
+                Calendar cal = Calendar.getInstance();
+                cal.setTimeInMillis(lvTime);
+                
 		Object o = serializer.serialize(new java.sql.Date(lvTime));
 		o = serializer.deserialize(o, java.sql.Date.class);
-		assertEquals(lvTime, ((java.sql.Date) o).getTime());
+                
+                Calendar cal2 = Calendar.getInstance();
+                cal2.setTimeInMillis(((java.sql.Date) o).getTime());
+                
+                assertEquals(cal.get(Calendar.YEAR), cal2.get(Calendar.YEAR));
+                assertEquals(cal.get(Calendar.MONTH), cal2.get(Calendar.MONTH));
+                assertEquals(cal.get(Calendar.DAY_OF_MONTH), cal2.get(Calendar.DAY_OF_MONTH));
 	}
 
 	public void testRepeatedEscapesWithSlash() throws Exception {
@@ -909,7 +930,12 @@ public class JsonSerializerTest extends TestCase {
 	public void testSerializeMapWithBeanValue() throws Exception {
 		JsonSerializer lvSerializer = new JsonSerializer();
 		Bean lvBean = new Bean();
-		java.sql.Date lvDate = new java.sql.Date(980809200000l);
+                long lvTime = 980809200000l;
+                        
+                Calendar cal = Calendar.getInstance();
+                cal.setTimeInMillis(lvTime);
+                
+		java.sql.Date lvDate = new java.sql.Date(lvTime);
 		lvBean.setDate(lvDate);
 		
 		Map map = new HashMap();  
@@ -920,8 +946,14 @@ public class JsonSerializerTest extends TestCase {
 		lvResult = lvSerializer.deserialize(lvResult);
 		assertNotNull(lvResult);
 		Map lvMapAfter = (Map) lvResult;
-		assertEquals(lvDate.getTime(), ((Bean) lvMapAfter.get("bean")).getDate().getTime()); 
-		assertEquals("value", lvMapAfter.get("key"));
+                assertEquals("value", lvMapAfter.get("key"));
+                
+                Calendar cal2 = Calendar.getInstance();
+                cal2.setTimeInMillis(((Bean)lvMapAfter.get("bean")).getDate().getTime());
+                
+		assertEquals(cal.get(Calendar.YEAR), cal2.get(Calendar.YEAR));
+                assertEquals(cal.get(Calendar.MONTH), cal2.get(Calendar.MONTH));
+                assertEquals(cal.get(Calendar.DAY_OF_MONTH), cal2.get(Calendar.DAY_OF_MONTH));
 	}
 	
 	/** Solve Bug 1958512 empty string serialized to JSON */
