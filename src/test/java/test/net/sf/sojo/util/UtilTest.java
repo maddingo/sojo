@@ -33,15 +33,6 @@ import junit.framework.TestCase;
 import net.sf.sojo.util.Util;
 
 public class UtilTest extends TestCase {
-	
-	public void testUreateNumberOfBlank() throws Exception {
-		String s = Util.createNumberOfBlank(2,	1);
-		assertEquals("  ", s);
-
-		s = Util.createNumberOfBlank(2,	3);
-		assertEquals("      ", s);
-
-	}
 
 	public void testString2Date() throws Exception {
 		Date lvDate = Util.string2Date("1234567");

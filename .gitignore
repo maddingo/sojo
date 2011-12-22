@@ -1,6 +1,7 @@
 /target
 /sojo
-
+/.classpath
+/.project
 /.settings
 *.log
 *.bak
