@@ -133,16 +133,6 @@ public final class Util {
 		}		
 		return false;
 	}
-	
-	public static String createNumberOfBlank(int pvNumberOfBlank, int pvMultiplier ) {
-		StringBuffer sb =  new StringBuffer();
-		for (int i=0; i<pvNumberOfBlank; i++) {
-			for (int j=0; j<pvMultiplier; j++) {
-				sb.append(" ");
-			}
-		}
-		return sb.toString();
-	}
 
 	/**
 	 * Convert a Date-String to a Date. The Converter <b>ignored the Millisecond</b>.
