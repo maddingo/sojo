@@ -148,12 +148,13 @@ public class CsvParser {
 		return lvReturn;
 	}
 
-	public List parseAndGetFirstLine(final String pvLineString) {
+	public List<?> parseAndGetFirstLine(final String pvLineString) {
 		Table lvTable = parse(pvLineString);
 		if (lvTable.getCurrentRowNumber() > 0) {
-			return (List) lvTable.getRows().get(0);
+			return lvTable.getRows().get(0);
 		} else {
-			return new ArrayList();
+			// @TODO use Collections.emptyList() instead?
+			return new ArrayList<Object>();
 		}
 	}
 	

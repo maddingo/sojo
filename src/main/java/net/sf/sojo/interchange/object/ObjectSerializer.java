@@ -38,6 +38,7 @@ public class ObjectSerializer extends AbstractSerializer {
 	public boolean getConvertBySerialization() { return convertBySerialization; }
 	public void setConvertBySerialization(boolean pvConvertBySerialization) { convertBySerialization = pvConvertBySerialization; }
 
+	@Override
 	public Object serialize(Object pvRootObject, String[] pvExcludedProperties) {
 		ObjectOutputStream lvObjectOutputStream = null;
 		ByteArrayOutputStream lvArrayOutputStream = new ByteArrayOutputStream();
@@ -63,11 +64,13 @@ public class ObjectSerializer extends AbstractSerializer {
 	}
 
 	
+	@Override
 	public Object serialize(Object pvRootObject) {
 		return serialize(pvRootObject, null); 
 	}
 
-	public Object deserialize(Object pvSourceObject, Class pvRootClass) {
+	@Override
+	public Object deserialize(Object pvSourceObject, Class<?> pvRootClass) {
 		Object lvReturn = null;
 		if (pvSourceObject instanceof byte[]) {
 			ObjectInputStream lvObjectInputStream = null;

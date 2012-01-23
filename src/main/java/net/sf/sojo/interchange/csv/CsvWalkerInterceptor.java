@@ -39,8 +39,10 @@ public class CsvWalkerInterceptor implements WalkerInterceptor {
 	public void setWithColumnNames(boolean pvWithColumnNames) { withColumnNames = pvWithColumnNames; }
 	public boolean getWithColumnNames() { return withColumnNames; }
 	
+	@Override
 	public void endWalk() {	}
 
+	@Override
 	public void startWalk(Object pvStartObject) {
 		table.clear();
 		table.setWithColumnNames(getWithColumnNames());
@@ -76,6 +78,7 @@ public class CsvWalkerInterceptor implements WalkerInterceptor {
 		return lvValue;
 	}
 	
+	@Override
 	public boolean visitElement(Object pvKey, int pvIndex, Object pvValue, int pvType, String pvPath, int pvNumberOfRecursion) {
 		
 		if (pvType == Constants.TYPE_SIMPLE ) {
@@ -90,6 +93,7 @@ public class CsvWalkerInterceptor implements WalkerInterceptor {
 		return false;
 	}
 
+	@Override
 	public void visitIterateableElement(Object pvValue, int pvType, String pvPath, int pvTypeBeginOrEnd) {
 
 		
@@ -107,13 +111,13 @@ public class CsvWalkerInterceptor implements WalkerInterceptor {
 		int lvSize = 0;
 		if (Constants.TYPE_ITERATEABLE == pvType) {
 			if (pvValue instanceof Collection) {
-				lvSize = ((Collection) pvValue).size();
+				lvSize = ((Collection<?>) pvValue).size();
 			} else {
 				lvSize = Arrays.asList( (Object[]) pvValue).size();
 			}
 		}
 		else {
-			lvSize = ((Map) pvValue).size();
+			lvSize = ((Map<?,?>) pvValue).size();
 		}
 		return lvSize;
 	}

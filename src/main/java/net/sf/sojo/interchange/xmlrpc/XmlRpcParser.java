@@ -69,7 +69,7 @@ public class XmlRpcParser {
 		}
 
 		if (lvIsFault == true && getConvertResult2XmlRpcExceptionAndThrow()) {
-			Map lvMap = (Map) lvReturn;
+			Map<?,?> lvMap = (Map<?,?>) lvReturn;
 			Object lvFaultCode = lvMap.get("faultCode");
 			Object lvMessage = lvMap.get("faultString");
 			throw new XmlRpcException(lvFaultCode + ": " + lvMessage);

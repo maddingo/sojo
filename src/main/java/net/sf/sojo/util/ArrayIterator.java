@@ -48,10 +48,12 @@ public class ArrayIterator implements Iterator<Object> {
 	public int getLength() { return length; }
 	public int getPos() { return pos; }
 	
+	@Override
 	public boolean hasNext() {
 		return (pos < length);
 	}
 
+	@Override
 	public Object next() {
 		if (pos >= length) {
 			throw new NoSuchElementException("No more elements in the array (the pointer is after the last element).");
@@ -61,6 +63,7 @@ public class ArrayIterator implements Iterator<Object> {
 		return lvValue;
 	}
 
+	@Override
 	public void remove() {
 		// do nothing
 	}

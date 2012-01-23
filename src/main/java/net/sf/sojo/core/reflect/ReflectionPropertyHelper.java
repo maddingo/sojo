@@ -25,8 +25,8 @@ import java.util.Map;
  */
 public class ReflectionPropertyHelper {
 
-	public static Map getAllGetterProperties(Class pvClass, String pvFilter[]) {
-		Map lvProperties = null;
+	public static Map<?,?> getAllGetterProperties(Class<?> pvClass, String pvFilter[]) {
+		Map<?,?> lvProperties = null;
 		if (ReflectionFieldHelper.containsClass(pvClass) == true) {
 			lvProperties = ReflectionFieldHelper.getAllGetFieldMapsByClass(pvClass, pvFilter);
 		} else {		
@@ -35,8 +35,8 @@ public class ReflectionPropertyHelper {
 		return lvProperties;
 	}
 	
-	public static Map getAllSetterProperties(Class pvClass, String pvFilter[]) {
-		Map lvProperties = null;
+	public static Map<?,?> getAllSetterProperties(Class<?> pvClass, String pvFilter[]) {
+		Map<?,?> lvProperties = null;
 		if (ReflectionFieldHelper.containsClass(pvClass) == true) {
 			lvProperties = ReflectionFieldHelper.getAllSetFieldMapsByClass(pvClass, pvFilter);
 		} else {		

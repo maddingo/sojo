@@ -29,12 +29,13 @@ public class XmlRpcWalkerInterceptor implements WalkerInterceptor {
 
 	private StringBuffer xmlRpcString = new StringBuffer();
 	private Object rootObjectArray = null;
-	private Stack stack = new Stack();
+	private Stack<Integer> stack = new Stack<Integer>();
 	
 	public String getXmlRpcString() {
 		return xmlRpcString.toString();
 	}
 	
+	@Override
 	public void startWalk(Object pvStartObject) {
 		xmlRpcString = new StringBuffer("<params>");
 		if (pvStartObject != null && pvStartObject.getClass().isArray()) {
@@ -42,6 +43,7 @@ public class XmlRpcWalkerInterceptor implements WalkerInterceptor {
 		}
 	}
 
+	@Override
 	public void endWalk() {
 		xmlRpcString.append("</params>");
 		stack.clear();
@@ -66,6 +68,7 @@ public class XmlRpcWalkerInterceptor implements WalkerInterceptor {
 		}		
 	}
 	
+	@Override
 	public boolean visitElement(Object pvKey, int pvIndex, Object pvValue, int pvType, String pvPath, int pvNumberOfRecursion) {
 		if (pvType == Constants.TYPE_NULL) {
 			createParamTag(pvPath, "<param>");
@@ -86,6 +89,7 @@ public class XmlRpcWalkerInterceptor implements WalkerInterceptor {
 		return false;
 	}
 
+	@Override
 	public void visitIterateableElement(Object pvValue, int pvType, String pvPath, int pvTypeBeginOrEnd) {
 		if (pvTypeBeginOrEnd == Constants.ITERATOR_BEGIN) {
 			if (pvType == Constants.TYPE_ITERATEABLE && pvValue.equals(rootObjectArray) == false) {
@@ -104,7 +108,7 @@ public class XmlRpcWalkerInterceptor implements WalkerInterceptor {
 					xmlRpcString.append("</data></array></value>");
 				}
 				if (stack.size() > 0) {
-					Integer i = (Integer) stack.peek();
+					Integer i = stack.peek();
 					if (i.intValue() == Constants.TYPE_ITERATEABLE) {
 						stack.pop();
 						xmlRpcString.append("</member>");
@@ -118,7 +122,7 @@ public class XmlRpcWalkerInterceptor implements WalkerInterceptor {
 			else if (pvType == Constants.TYPE_MAP) {
 				xmlRpcString.append("</struct></value>");
 				if (stack.size() > 0) {
-					Integer i = (Integer) stack.peek();
+					Integer i = stack.peek();
 					if (i.intValue() == Constants.TYPE_MAP) {
 						stack.pop();
 						xmlRpcString.append("</member>");
@@ -180,6 +184,7 @@ public class XmlRpcWalkerInterceptor implements WalkerInterceptor {
 		}		
 		else if (Calendar.class.isAssignableFrom(pvValue.getClass())) {
 			Calendar lvCalendar = (Calendar) pvValue;
+			// @TODO is the time zone missing here?
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd'T'HH:mm:ss.SSS");
 			String s = sdf.format(lvCalendar.getTime());
 			xmlRpcString.append("<ex:dateTime>").append(s).append("</ex:dateTime>");

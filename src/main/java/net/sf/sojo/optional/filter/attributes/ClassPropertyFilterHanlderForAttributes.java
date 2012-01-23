@@ -18,9 +18,7 @@ package net.sf.sojo.optional.filter.attributes;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import net.sf.sojo.core.UniqueIdGenerator;
 import net.sf.sojo.core.filter.ClassPropertyFilter;
@@ -33,9 +31,10 @@ import org.apache.commons.attributes.Attributes;
 
 public class ClassPropertyFilterHanlderForAttributes implements ClassPropertyFilterHandler {
 	
-	private Map classCache = new HashMap();
+	private Map<Class<?>, ClassPropertyFilter> classCache = new HashMap<Class<?>, ClassPropertyFilter>();
 
-	public ClassPropertyFilter getClassPropertyFilterByClass(Class pvClass) {
+	@Override
+	public ClassPropertyFilter getClassPropertyFilterByClass(Class<?> pvClass) {
 		ClassPropertyFilter lvFilter = null;
 		if (classCache.containsKey(pvClass)) {
 			lvFilter = (ClassPropertyFilter) classCache.get(pvClass);
@@ -46,7 +45,7 @@ public class ClassPropertyFilterHanlderForAttributes implements ClassPropertyFil
 	}
 	
 	
-	private ClassPropertyFilter createClassPropertyFilter(Class pvClass) {
+	private ClassPropertyFilter createClassPropertyFilter(Class<?> pvClass) {
 		ClassPropertyFilter lvFilter = null;
 		ClassAttribute lvClassAttribute = (ClassAttribute) Attributes.getAttribute(pvClass, ClassAttribute.class);
 		if (lvClassAttribute != null) {
@@ -63,7 +62,7 @@ public class ClassPropertyFilterHanlderForAttributes implements ClassPropertyFil
 		return lvFilter;
 	}
 	
-	private void createPropertyFilterForFieldAnnotation(final ClassPropertyFilter pvFilter, Class pvClass) {
+	private void createPropertyFilterForFieldAnnotation(final ClassPropertyFilter pvFilter, Class<?> pvClass) {
 		Field lvFields[] = ReflectionFieldHelper.getAllFieldsByClass(pvClass);
 		for (int i = 0; i < lvFields.length; i++) {
 			Object lvPropertyAttribute = Attributes.getAttribute(lvFields[i], PropertyAttribute.class);
@@ -73,11 +72,9 @@ public class ClassPropertyFilterHanlderForAttributes implements ClassPropertyFil
 		}
 	}
 
-	private void createPropertyFilterForPropertyAnnotation(final ClassPropertyFilter pvFilter, Class pvClass) {
-		Map lvMethodMap = ReflectionMethodHelper.getAllGetterMethodWithCache(pvClass, null);
-		Iterator it = lvMethodMap.entrySet().iterator();
-		while (it.hasNext()) {
-			Map.Entry lvEntry = (Entry) it.next();
+	private void createPropertyFilterForPropertyAnnotation(final ClassPropertyFilter pvFilter, Class<?> pvClass) {
+		Map<?, ?> lvMethodMap = ReflectionMethodHelper.getAllGetterMethodWithCache(pvClass, null);
+		for (Map.Entry<?, ?> lvEntry : lvMethodMap.entrySet()) {
 			String lvPropertyName = (String) lvEntry.getKey();
 			if (Util.getKeyWordClass().equals(lvPropertyName) == false) {
 				Method lvMethod = (Method)  lvEntry.getValue();

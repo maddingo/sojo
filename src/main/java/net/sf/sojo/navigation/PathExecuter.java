@@ -21,8 +21,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.Map.Entry;
 
 import net.sf.sojo.core.reflect.Property;
 import net.sf.sojo.core.reflect.ReflectionPropertyHelper;
@@ -121,9 +119,9 @@ public class PathExecuter {
 			return pvRootObject.getClass();
 		}
 		if (pvRootObject instanceof Map) {
-			lvReturn = ((Map) pvRootObject).get(pvPath);
+			lvReturn = ((Map<?,?>) pvRootObject).get(pvPath);
 		} else {
-			Map lvAllGetterMethod = ReflectionPropertyHelper.getAllGetterProperties(pvRootObject.getClass(), null);
+			Map<?,?> lvAllGetterMethod = ReflectionPropertyHelper.getAllGetterProperties(pvRootObject.getClass(), null);
 			AccessibleObject lvAccessibleObject = (AccessibleObject) lvAllGetterMethod.get(pvPath);
 			if (lvAccessibleObject == null) {
 				throw new PathExecuteException("No such method find for path: " + pvPath + " and class: " + pvRootObject.getClass().getName());
@@ -137,15 +135,16 @@ public class PathExecuter {
 		return lvReturn;
 	}
 
+	@SuppressWarnings("unchecked")
 	public static void setSimpleProperty (Object pvRootObject, String pvPath, Object pvValue) {
 		if (pvPath == null) {
 			throw new PathExecuteException("The property-path must be different from null.");
 		}
 		if (pvPath.length() > 0) {
 			if (pvRootObject instanceof Map) {
-				((Map) pvRootObject).put(pvPath, pvValue);
+				((Map<String,Object>) pvRootObject).put(pvPath, pvValue);
 			} else {
-				Map lvAllSetterMethod = ReflectionPropertyHelper.getAllSetterProperties(pvRootObject.getClass(), null);
+				Map<?,?> lvAllSetterMethod = ReflectionPropertyHelper.getAllSetterProperties(pvRootObject.getClass(), null);
 				AccessibleObject lvAccessibleObject = (AccessibleObject) lvAllSetterMethod.get(pvPath);
 				if (lvAccessibleObject == null) {
 					throw new PathExecuteException("No such method find for path: " + pvPath + " and class: " + pvRootObject.getClass().getName());
@@ -165,11 +164,11 @@ public class PathExecuter {
 			lvReturn = pvRootObject;
 		}
 		else if (pvRootObject instanceof List) {
-			lvReturn = ((List) pvRootObject).get(pvIndex);
+			lvReturn = ((List<?>) pvRootObject).get(pvIndex);
 		}
 		else if (pvRootObject instanceof Collection) {
-			Collection lvColl = (Collection) pvRootObject;
-			Iterator lvIterator = lvColl.iterator();
+			Collection<?> lvColl = (Collection<?>) pvRootObject;
+			Iterator<?> lvIterator = lvColl.iterator();
 			int lvConter = 0;
 			while (lvIterator.hasNext()) {
 				Object lvObject = lvIterator.next();
@@ -193,16 +192,17 @@ public class PathExecuter {
 		setIndexProperty(pvRootObject, -1, pvValue);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static void setIndexProperty (Object pvRootObject, int pvIndex, Object pvValue) {
 		if (pvRootObject instanceof List) {
 			if (pvIndex >= 0) {
-				((List) pvRootObject).add(pvIndex, pvValue);
+				((List<Object>) pvRootObject).add(pvIndex, pvValue);
 			} else {
-				((List) pvRootObject).add(pvValue);
+				((List<Object>) pvRootObject).add(pvValue);
 			}
 		}
 		else if (pvRootObject instanceof Collection) {
-			((Collection) pvRootObject).add(pvValue);
+			((Collection<Object>) pvRootObject).add(pvValue);
 		} 
 		else if (pvRootObject.getClass().isArray()) {
 			if (pvIndex >= 0) {
@@ -230,7 +230,7 @@ public class PathExecuter {
 			lvReturn = pvRootObject;
 		}
 		else if (pvRootObject instanceof Map) {
-			Map lvMap = (Map) pvRootObject;
+			Map<?, ?> lvMap = (Map<?, ?>) pvRootObject;
 			lvReturn = lvMap.get(pvKey);
 			if (lvReturn == null) {
 				lvReturn = findKeyIfKeyIsNotStringType(lvMap, pvKey);
@@ -243,19 +243,17 @@ public class PathExecuter {
 	}
 
 	
+	@SuppressWarnings("unchecked")
 	public static void setKeyProperty (Object pvRootObject, Object pvKey, Object pvValue) {
 		if (pvRootObject instanceof Map) {
-			((Map) pvRootObject).put(pvKey, pvValue);
+			((Map<Object, Object>) pvRootObject).put(pvKey, pvValue);
 		} else {
 			throw new PathExecuteException("The object must be a Map: " + pvRootObject);
 		} 
 	}
 	
-	protected static Object findKeyIfKeyIsNotStringType (Map pvMap, Object pvKey) {
-		Set lvSet = pvMap.entrySet();
-		Iterator lvIterator = lvSet.iterator();
-		while (lvIterator.hasNext()) {
-			Map.Entry lvEntry = (Entry) lvIterator.next();
+	protected static Object findKeyIfKeyIsNotStringType (Map<?, ?> pvMap, Object pvKey) {
+		for (Map.Entry<?, ?> lvEntry : pvMap.entrySet()) {
 			if (lvEntry.getKey().toString().equals(pvKey)) {
 				return lvEntry.getValue();
 			}

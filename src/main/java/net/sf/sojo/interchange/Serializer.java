@@ -31,7 +31,7 @@ public interface Serializer {
 	
 	public Object deserialize(Object pvSourceObject);
 	
-	public Object deserialize(Object pvSourceObject, Class pvRootClass);
+	public Object deserialize(Object pvSourceObject, Class<?> pvRootClass);
 
 	public void setClassPropertyFilterHandler(ClassPropertyFilterHandler pvClassPropertyFilterHandler);
 	public ClassPropertyFilterHandler getClassPropertyFilterHandler();

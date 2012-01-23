@@ -25,11 +25,11 @@ import net.sf.sojo.interchange.csv.CsvParser;
  * The table represent a structure with columns and rows.
  * By this structure should all numbers of columns the same size.
  * In the first row can be the head with the names for the columns.
- * <br>
+ * <br/>
  * This class has methods, where can convert several rows or the total table
- * to a String representation. By this transformation are all columns seperated 
+ * to a String representation. By this transformation are all columns separated 
  * by a delimiter (a possible sample is CSV).
- * <br>
+ * <br/>
  * Example of a table:
  * <pre>
  * |---------------------|
@@ -41,7 +41,7 @@ import net.sf.sojo.interchange.csv.CsvParser;
  * |---------------------|
  * </pre>
  * 
- * Transform to a Strin with comma - delimiter:
+ * Transform to a String with comma - delimiter:
  * <pre>
  * ColName1,ColName2
  * value11,value12
@@ -52,15 +52,13 @@ import net.sf.sojo.interchange.csv.CsvParser;
  * @author linke
  *
  */
-public class Table  {
+public class Table {
 
 	public static final String DEFAULT_DELIMITER = ",";
 
-	private static final long serialVersionUID = 936013998377909481L;
-	
-	private List rows = new ArrayList();
-	private List currentColumn = null;
-	private List columnNames = new ArrayList();
+	private List<List<?>> rows = new ArrayList<List<?>>();
+	private List<Object> currentColumn = null;
+	private List<String> columnNames = new ArrayList<String>();
 	private boolean withColumnNames = true;
 	private String delimiter = DEFAULT_DELIMITER; 
 	private int numberOfColumns = -1;
@@ -105,7 +103,7 @@ public class Table  {
 	}
 
 	public int newRow() {
-		currentColumn = new ArrayList();
+		currentColumn = new ArrayList<Object>();
 		rows.add(currentColumn);
 		return rows.size();
 	}
@@ -119,8 +117,8 @@ public class Table  {
 	public int getNumberOfColumns() { return numberOfColumns; }
 	public int getCurrentColumnNumber() { return (currentColumn.size() - 1); }
 	public int getCurrentRowNumber() { return rows.size(); }
-	public List getRows() { return rows; }
-	public List getLastRow () { return (List) rows.get(rows.size() - 1); }
+	public List<List<?>> getRows() { return rows; }
+	public List<?> getLastRow () { return rows.get(rows.size() - 1); }
 	public void removeRow(int pvPos) { rows.remove(pvPos); }
 
 
@@ -180,7 +178,7 @@ public class Table  {
 	 */
 	public String row2String(int pvRow) {
 		StringBuffer sb = new StringBuffer();
-		List lvColumn = (List) rows.get(pvRow);
+		List<?> lvColumn = rows.get(pvRow);
 		int lvSize = lvColumn.size();
 		for (int i=0;i<lvSize; i++) {
 			sb.append(lvColumn.get(i));
@@ -194,6 +192,7 @@ public class Table  {
 	/**
 	 * Transform the table in a String.
 	 */
+	@Override
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append(getColumnNames()).append("\n");
@@ -211,11 +210,11 @@ public class Table  {
 	 *
 	 */
 	public void validateAndRemoveEmptyRows() {
-		Iterator it = rows.iterator();
+		Iterator<List<?>> it = rows.iterator();
 		int i = -1;
 		while (it.hasNext()) {
 			i++;
-			List lvRow = (List) it.next();
+			List<?> lvRow = it.next();
 			if (lvRow.size() != numberOfColumns) {
 				if (lvRow.size() == 1 && lvRow.get(0).toString().trim().length() == 0) {
 					it.remove();

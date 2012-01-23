@@ -39,7 +39,7 @@ public class ClassPropertiesCache {
 	 * @param pvClass The class, to there is save the information.
 	 * @param pvClassProperteiesMap Map, with key the property-name and the value contains the method or field object.
 	 */
-	public void addClassPropertiesMap (Class<?> pvClass, Map pvClassProperteiesMap) {
+	public void addClassPropertiesMap (Class<?> pvClass, Map<?,?> pvClassProperteiesMap) {
 		classPropertiesMap.put(pvClass, pvClassProperteiesMap);
 	}
 

@@ -74,7 +74,7 @@ public class Property {
 		Object lvReturnValue = null;
 		AccessController.doPrivileged(new AccessiblePrivilegedAction(accessibleObject));
 		if (propertyType == PROPERTY_TYPE_METHOD) {
-			lvReturnValue = ((Method) accessibleObject).invoke(pvObject, null);	
+			lvReturnValue = ((Method) accessibleObject).invoke(pvObject, (Object)null);	
 		} else {
 			lvReturnValue = ((Field) accessibleObject).get(pvObject);
 		}
@@ -85,11 +85,11 @@ public class Property {
 	 * Return the type of parameter (index 0) from the method or the type from the field.
 	 * @return The type (class)
 	 */
-	public Class getParameterType() {
-		Class lvParamType = null;
+	public Class<?> getParameterType() {
+		Class<?> lvParamType = null;
 		if (propertyType == PROPERTY_TYPE_METHOD) {
 			Method lvMethod = (Method) accessibleObject;
-			Class[] lvParameterTypes = lvMethod.getParameterTypes();
+			Class<?>[] lvParameterTypes = lvMethod.getParameterTypes();
 			if (lvParameterTypes != null && lvParameterTypes.length > 0) {
 				lvParamType = lvMethod.getParameterTypes()[0];
 			}
@@ -110,6 +110,7 @@ public class Property {
 		}
 	}
 	
+	@Override
 	public String toString() {
 		return toString;
 	}

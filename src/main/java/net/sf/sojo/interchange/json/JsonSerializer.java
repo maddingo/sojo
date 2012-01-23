@@ -31,13 +31,15 @@ public class JsonSerializer extends AbstractSerializer {
 	public boolean getWithNullValuesInMap() { return jsonInterceptor.getWithNullValuesInMap(); }
 	public void setWithNullValuesInMap(boolean pvWithNullValuesInMap) { jsonInterceptor.setWithNullValuesInMap(pvWithNullValuesInMap); }
 
+	@Override
 	public Object serialize(Object pvRootObject) {
 		walker.walk(pvRootObject);
 		return jsonInterceptor.getJsonString();
 	}
 
 	
-	public Object deserialize(Object pvSourceObject, Class pvRootClass) {
+	@Override
+	public Object deserialize(Object pvSourceObject, Class<?> pvRootClass) {
 		String lvParseString = (pvSourceObject == null ? null : pvSourceObject.toString());
 		Object lvResult = new JsonParser().parse(lvParseString);
 		lvResult = getObjectUtil().makeComplex(lvResult, pvRootClass);

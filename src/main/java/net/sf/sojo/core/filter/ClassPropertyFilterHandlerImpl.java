@@ -64,6 +64,7 @@ public class ClassPropertyFilterHandlerImpl implements ClassPropertyFilterHandle
 		classPropertyFilterMap.remove(pvFilterClass);
 	}
 
+	@Override
 	public ClassPropertyFilter getClassPropertyFilterByClass(Class<?> pvFilterClass) {
 		if (withAssignableFilterClasses) {
 			for (Map.Entry<Class<?>, ClassPropertyFilter> lvEntry : classPropertyFilterMap.entrySet()) {

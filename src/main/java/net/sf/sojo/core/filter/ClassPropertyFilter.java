@@ -22,11 +22,11 @@ import java.util.regex.Pattern;
 import net.sf.sojo.util.Util;
 
 /**
- * This class describe, which properties are to ignore by convert class to a new representation. 
+ * This class describes, which properties are to be ignored when converting a class to a new representation. 
  * The properties, which are added to this filter are transient by
  * call a serialize method by the <code>net.sf.sojo.interchange.Serializer</code>. 
  * 
- * <b>Hint:</b> a property is by a JavaBean the name of the getter/setter method. By a Map is the property equivalent with the key.
+ * <b>Hint:</b> a property of a JavaBean is by a getter/setter method. This corresponds to a key/value pair in a map.
  *  
  * @author linke
  *

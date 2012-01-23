@@ -28,11 +28,11 @@ import net.sf.sojo.core.filter.ClassPropertyFilterHandler;
 public abstract class AbstractSerializer implements Serializer {
 
 	protected ObjectGraphWalker walker = new ObjectGraphWalker();
-
 	
-	
+	@Override
 	public abstract Object serialize(Object pvRootObject);
 	
+	@Override
 	public Object serialize(Object pvRootObject, String[] pvExcludedProperties) {
 		Object lvReturn = null;
 		try {
@@ -45,8 +45,10 @@ public abstract class AbstractSerializer implements Serializer {
 		return lvReturn;
 	}
 	
-	public abstract Object deserialize(Object pvSourceObject, Class pvRootClass);
+	@Override
+	public abstract Object deserialize(Object pvSourceObject, Class<?> pvRootClass);
 	
+	@Override
 	public Object deserialize(Object pvSourceObject) {
 		return deserialize(pvSourceObject, null);
 	}
@@ -58,13 +60,17 @@ public abstract class AbstractSerializer implements Serializer {
 	public void setWithSimpleKeyMapper(boolean pvWithSimpleKeyMapper) {
 		getObjectUtil().setWithSimpleKeyMapper(pvWithSimpleKeyMapper);
 	}
+	
 	public boolean getWithSimpleKeyMapper() { 
 		return getObjectUtil().getWithSimpleKeyMapper(); 
 	}
 	
+	@Override
 	public void setClassPropertyFilterHandler(ClassPropertyFilterHandler pvClassPropertyFilterHandler) { 
 		getObjectUtil().setClassPropertyFilterHandler(pvClassPropertyFilterHandler);
 	}
+	
+	@Override
 	public ClassPropertyFilterHandler getClassPropertyFilterHandler() { 
 		return getObjectUtil().getClassPropertyFilterHandler(); 
 	}

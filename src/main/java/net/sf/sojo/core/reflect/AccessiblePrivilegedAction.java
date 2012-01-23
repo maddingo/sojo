@@ -33,6 +33,7 @@ public class AccessiblePrivilegedAction implements PrivilegedAction<Object> {
 		accessibleObject = pvAccessibleObject;
 	}
 	
+	@Override
 	public Object run() {
 		accessibleObject.setAccessible(true);
 		return null;

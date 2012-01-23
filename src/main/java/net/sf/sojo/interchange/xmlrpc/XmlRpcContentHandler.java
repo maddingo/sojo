@@ -23,11 +23,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
-import java.util.Map.Entry;
 
 import net.sf.sojo.core.NonCriticalExceptionHandler;
 
@@ -38,13 +36,13 @@ import org.xml.sax.helpers.DefaultHandler;
 public class XmlRpcContentHandler extends DefaultHandler {
 	
 	private String value = null;
-	private List params = new ArrayList();
-	private Stack stack = new Stack();
+	private List<Object> params = new ArrayList<Object>();
+	private Stack<Object> stack = new Stack<Object>();
 	private boolean returnValueAsList = true;
 	private boolean isFault = false;
 	private String methodName = null;
 	
-	private static final Map validTags = new HashMap (); 
+	private static final Map<String, String> validTags = new HashMap<String,String>(); 
 	{ 
 		validTags.put("fault", "");
 		validTags.put("data", "");
@@ -56,42 +54,44 @@ public class XmlRpcContentHandler extends DefaultHandler {
 		validTags.put("methodResponse", "");
 	};
 	
+	@Override
 	public void startDocument() throws SAXException { 
 		stack.clear();
 		isFault = false;
 		methodName = null;
 	}
 
+	@Override
 	public void endDocument() throws SAXException { 	}
 
+	@Override
 	public void startElement(String pvUri, String pvLocalName, String pvName, Attributes pvAttributes) throws SAXException {
 		if ("params".equals(pvName)) {
 			params.clear();
 		}
 		else if ("array".equals(pvName)) {
-			stack.push(new ArrayList());
+			stack.push(new ArrayList<Object>());
 		}
 		else if ("struct".equals(pvName)) {
-			stack.push(new HashMap());
+			stack.push(new HashMap<Object, Object>());
 		}
 		else if ("fault".equals(pvName)) {
 			isFault = true;
 		}				
 	}
 
+	@SuppressWarnings("unchecked")
 	private void addValue(String pvName, Object pvValue) {
 		if (stack.size() > 0) {
 			Object lvCurrentStackObj = stack.peek();
 			if (lvCurrentStackObj instanceof List) {
-				((List) lvCurrentStackObj).add(pvValue);
+				((List<Object>) lvCurrentStackObj).add(pvValue);
 			} 
 			else if (lvCurrentStackObj instanceof Map) {
-				Map lvMap = (Map) lvCurrentStackObj;
+				Map<Object, Object> lvMap = (Map<Object, Object>) lvCurrentStackObj;
 				lvMap.put(pvName, pvValue);
 				if ("key".equals(pvName)) {
-					Iterator it = lvMap.entrySet().iterator();
-					while (it.hasNext()) {
-						Map.Entry lvEntry = (Entry) it.next();
+					for (Map.Entry<?, Object> lvEntry : lvMap.entrySet()) {
 						if (lvEntry.getValue() == null) {
 							lvEntry.setValue(pvValue);
 						}
@@ -110,6 +110,7 @@ public class XmlRpcContentHandler extends DefaultHandler {
 		}
 	}
 	
+	@Override
 	public void endElement(String pvUri, String pvLocalName, String pvName) throws SAXException {
 
 		Object currentValue = null;
@@ -221,6 +222,7 @@ public class XmlRpcContentHandler extends DefaultHandler {
 		value = null;
 	}
 	
+	@Override
 	public void characters(char[] pvCh, int pvStart, int pvLength) throws SAXException {
 		String lvOldValue = "";
 		if (value != null) {

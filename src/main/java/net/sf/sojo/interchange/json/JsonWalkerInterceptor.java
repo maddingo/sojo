@@ -33,10 +33,12 @@ public class JsonWalkerInterceptor implements WalkerInterceptor {
 	public boolean getWithNullValuesInMap() { return withNullValuesInMap; }
 	public void setWithNullValuesInMap(boolean pvWithNullValuesInMap) { withNullValuesInMap = pvWithNullValuesInMap; }
 
+	@Override
 	public void startWalk(Object pvStartObject) {
 		jsonString = new StringBuffer();
 	}
 
+	@Override
 	public void endWalk() {
 		Util.delLastComma(jsonString);
 	}
@@ -182,6 +184,7 @@ public class JsonWalkerInterceptor implements WalkerInterceptor {
     	return s;
     }
     
+	@Override
 	public boolean visitElement(Object pvKey, int pvIndex, Object pvValue, int pvType, String pvPath, int pvNumberOfRecursion) {
 		// --- SIMPLE ---
 		if (pvType == Constants.TYPE_SIMPLE) {
@@ -218,6 +221,7 @@ public class JsonWalkerInterceptor implements WalkerInterceptor {
 	}
 	
 
+	@Override
 	public void visitIterateableElement(Object pvValue, int pvType, String pvPath, int pvBeginEnd) {
 		
 		if (pvBeginEnd == Constants.ITERATOR_BEGIN) {

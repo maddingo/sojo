@@ -66,28 +66,27 @@ public final class StackTraceElementWrapper implements Serializable {
 	public boolean getNativeMethod() { return nativeMethod; }
 
 	
+	@Override
 	public String toString() {
 		return getClassName() + "." + getMethodName() + " (" + getFileName() + ":" + getLineNumber() + ")";
 	}
 
 	/**
-	 * Two variants, to create a <code>StackTraceElement</code>. 
+	 * Two variants, to create a {@code StackTraceElement}. 
 	 * The first variant is for jdk 1.4 and the second is greate 1.4, for example by
 	 * <a href="http://java.sun.com/j2se/1.5.0/docs/api/java/lang/StackTraceElement.html#StackTraceElement(java.lang.String,%20java.lang.String,%20java.lang.String,%20int)">
 	 * Java 2 Platform Standard Edition 5.0
 	 * </a> A <code>StackTraceElement</code> instance or <code>null</code>.
-	 * 
-	 * @return
 	 */
 	private StackTraceElement tryToCreateStackTraceElementInstanceIntern() {
 		StackTraceElement lvStackTraceElement = null;
 		try {
-			Constructor lvConstructor = StackTraceElement.class.getDeclaredConstructor(null);
+			Constructor<StackTraceElement> lvConstructor = StackTraceElement.class.getDeclaredConstructor();
 			AccessController.doPrivileged(new AccessiblePrivilegedAction(lvConstructor));
-			lvStackTraceElement = (StackTraceElement) lvConstructor.newInstance(null);
+			lvStackTraceElement = (StackTraceElement) lvConstructor.newInstance();
 		} catch (Exception e) {
 			try {
-				Constructor lvConstructor = StackTraceElement.class.getDeclaredConstructors()[0];
+				Constructor<?> lvConstructor = StackTraceElement.class.getDeclaredConstructors()[0];
 				AccessController.doPrivileged(new AccessiblePrivilegedAction(lvConstructor));
 				lvStackTraceElement = (StackTraceElement) lvConstructor.newInstance(new Object[] { 
 									getClassName(), getMethodName(), getFileName(), new Integer(getLineNumber()) });

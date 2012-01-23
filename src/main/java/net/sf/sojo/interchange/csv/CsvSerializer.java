@@ -57,6 +57,7 @@ public class CsvSerializer extends AbstractSerializer {
 		return csvWalkerInterceptor.getWithColumnNames();
 	}
 	
+	@Override
 	public Object serialize(Object pvRootObject) {
 		csvWalkerInterceptor.setWrapSimpleValueAsList(false);
 		if (pvRootObject == null) {
@@ -65,7 +66,7 @@ public class CsvSerializer extends AbstractSerializer {
 			Object o = pvRootObject;
 			if ( ! (o instanceof Collection) && o.getClass().isArray() == false) {
 				csvWalkerInterceptor.setWrapSimpleValueAsList(true);
-				List l = new ArrayList();
+				List<Object> l = new ArrayList<Object>();
 				l.add(pvRootObject);
 				o = l;
 			}
@@ -76,7 +77,8 @@ public class CsvSerializer extends AbstractSerializer {
 
 	
 
-	public Object deserialize(Object pvSourceObject, Class pvRootClass) {
+	@Override
+	public Object deserialize(Object pvSourceObject, Class<?> pvRootClass) {
 		Object o = null;
 		if (pvSourceObject == null) {
 			o = null;
@@ -86,12 +88,12 @@ public class CsvSerializer extends AbstractSerializer {
 		}
 		else {
 			Table lvTable = csvParser.parse(pvSourceObject.toString());
-			List lvRows = lvTable.getRows();
+			List<?> lvRows = lvTable.getRows();
 			if (lvRows.size() == 0) {
 				o = getNullValue();
 			}
 			else if (lvRows.size() == 1) {
-				List lvColumn = (List) lvRows.get(0);
+				List<?> lvColumn = (List<?>) lvRows.get(0);
 				if (lvColumn.size() == 1) {
 					o = lvColumn.get(0);
 				} else {
@@ -107,7 +109,8 @@ public class CsvSerializer extends AbstractSerializer {
 			// more than one row
 			else {
 				if (getWithPropertyNamesInFirstLine()) {
-					List lvObjectList = convertSimple2ObjectList(lvRows, pvRootClass);
+					@SuppressWarnings("unchecked")
+					List<?> lvObjectList = convertSimple2ObjectList((List<List<?>>) lvRows, pvRootClass);
 					o = lvObjectList;
 					if (pvRootClass != null && pvRootClass.isArray()) {
 						Object objArr[] = (Object[]) Array.newInstance(pvRootClass.getComponentType(), lvObjectList.size());
@@ -126,7 +129,7 @@ public class CsvSerializer extends AbstractSerializer {
 	
 	
 	
-	private Object convertString2Object(Object pvSourceObject, Class pvRootClass) {
+	private Object convertString2Object(Object pvSourceObject, Class<?> pvRootClass) {
 		Object o = pvSourceObject;
 		if (pvRootClass != null) {
 			if (ReflectionHelper.isSimpleType(pvRootClass)) {
@@ -144,15 +147,15 @@ public class CsvSerializer extends AbstractSerializer {
 		return o;
 	}
 
-	public List convertSimple2ObjectList(List pvNamedList, Class pvRootClass) {
+	public List<?> convertSimple2ObjectList(List<List<?>> pvNamedList, Class<?> pvRootClass) {
 		int lvRowSize = pvNamedList.size();
-		List lvReturn = new ArrayList(lvRowSize - 1);
-		List lvColumnNames = (List) pvNamedList.get(0);
+		List<Object> lvReturn = new ArrayList<Object>(lvRowSize - 1);
+		List<?> lvColumnNames = pvNamedList.get(0);
 		int lvColumnNamesSize = lvColumnNames.size();
 		
 		for (int i=1; i<lvRowSize; i++) {
-			Map lvNameValueMap = new HashMap();
-			List lvColumnValues = (List) pvNamedList.get(i);
+			Map<Object,Object> lvNameValueMap = new HashMap<Object, Object>();
+			List<?> lvColumnValues = pvNamedList.get(i);
 			
 			for (int j=0;j<lvColumnNamesSize; j++) {
 				Object lvName = lvColumnNames.get(j);
@@ -162,7 +165,7 @@ public class CsvSerializer extends AbstractSerializer {
 				}
 				lvNameValueMap.put(lvName, lvValue);
 			}
-			Class lvRootClass = (pvRootClass != null && pvRootClass.isArray() ? pvRootClass.getComponentType() : pvRootClass);
+			Class<?> lvRootClass = (pvRootClass != null && pvRootClass.isArray() ? pvRootClass.getComponentType() : pvRootClass);
 			Object o = getObjectUtil().makeComplex(lvNameValueMap, lvRootClass);
 			lvReturn.add(o);
 		}

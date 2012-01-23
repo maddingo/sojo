@@ -21,7 +21,7 @@ import java.util.Map;
 
 /**
  * This is a helper class, to find cycles in Collections or Maps. <br>
- * This implementation don't find all possibillities of cycles!
+ * This implementation don't find all possibilities of cycles!
  * 
  * @author linke
  *
@@ -46,12 +46,12 @@ public class CycleDetector {
 		return cycleDetection(pvSearchObject, pvSearchObject);
 	}
 		
-	private boolean cycleDetectionCollection (Object pvRootObject, Collection pvCollection) {
-		Iterator it = pvCollection.iterator();
+	private boolean cycleDetectionCollection (Object pvRootObject, Collection<?> pvCollection) {
+		Iterator<?> it = pvCollection.iterator();
 		return cycleDetectionIntern(pvRootObject, it);
 	}
 	
-	private boolean cycleDetectionMap (Object pvRootObject, Map pvMap) {
+	private boolean cycleDetectionMap (Object pvRootObject, Map<?,?> pvMap) {
 		boolean lvReturn = cycleDetectionIntern(pvRootObject, pvMap.values().iterator());
 		if (lvReturn == false && counter < maxCounter) {
 			lvReturn = cycleDetectionIntern(pvRootObject, pvMap.keySet().iterator());
@@ -63,15 +63,15 @@ public class CycleDetector {
 	private boolean cycleDetection (Object pvRootObject, Object pvSearchObject) {
 		boolean lvResult = false;
 		if (pvSearchObject instanceof Collection) {
-			lvResult = cycleDetectionCollection(pvRootObject, (Collection) pvSearchObject);
+			lvResult = cycleDetectionCollection(pvRootObject, (Collection<?>) pvSearchObject);
 		}
 		else if (pvSearchObject instanceof Map) {
-			lvResult = cycleDetectionMap(pvRootObject, (Map) pvSearchObject);
+			lvResult = cycleDetectionMap(pvRootObject, (Map<?, ?>) pvSearchObject);
 		}
 		return lvResult;
 	}
 
-	private boolean cycleDetectionIntern (Object pvRootObject, Iterator pvIterator) {
+	private boolean cycleDetectionIntern (Object pvRootObject, Iterator<?> pvIterator) {
 		counter++; 
 		boolean b = false;
 		if (counter < maxCounter) {

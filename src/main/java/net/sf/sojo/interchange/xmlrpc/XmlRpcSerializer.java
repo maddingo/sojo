@@ -53,6 +53,7 @@ public class XmlRpcSerializer extends AbstractSerializer {
 
 
 	
+	@Override
 	public Object serialize (Object pvRootObject) {
 		walker.walk(pvRootObject);
 		String lvReturn = xmlRpcWalker.getXmlRpcString();
@@ -76,7 +77,8 @@ public class XmlRpcSerializer extends AbstractSerializer {
 		return lvReturn.toString();		
 	}
 
-	public Object deserialize(Object pvSourceObject, Class pvRootClass) {
+	@Override
+	public Object deserialize(Object pvSourceObject, Class<?> pvRootClass) {
 		Object lvReturn = null;
 		if (pvSourceObject != null) {
 			xmlRpcParser.setReturnValueAsList(getReturnValueAsList());
