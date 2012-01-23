@@ -101,7 +101,7 @@ public class ComplexBean2MapConversionTest extends TestCase {
 		assertNull(lvResult);
 	}
 	
-	public void testNodeWithNamedChilds() throws Exception {		
+	public void testNodeWithNamedChildren() throws Exception {		
 		Converter c = new Converter();
 		c.addConversion(new ComplexBean2MapConversion());
 		c.addConversion(new IterateableMap2MapConversion());
@@ -111,22 +111,22 @@ public class ComplexBean2MapConversionTest extends TestCase {
 		String lvNodeName2 = "TestNode-2";
 		Node n2 = new Node(lvNodeName2);
 		
-		n1.getNamedChilds().put(lvNodeName2, n2);
+		n1.getNamedChildren().put(lvNodeName2, n2);
 		Object lvResult = c.convert(n1);
 		assertNotNull(lvResult);
 		Map lvMap1 = (Map) lvResult;
 		assertEquals(Node.class.getName(), lvMap1.get("class"));
 		assertEquals(lvNodeName, lvMap1.get("name"));
-		assertTrue(lvMap1.get("namedChilds") instanceof Map);
+		assertTrue(lvMap1.get("namedChildren") instanceof Map);
 		
-		Map lvMap = (Map) lvMap1.get("namedChilds");
+		Map lvMap = (Map) lvMap1.get("namedChildren");
 		Object o = lvMap.get(lvNodeName2);
 		Map lvMap2 = (Map) o;
 		assertEquals(Node.class.getName(), lvMap2.get("class"));
 		assertEquals(lvNodeName2, lvMap2.get("name"));		
 	}
 
-	public void testNodeWithNamedChildsWithSameReference() throws Exception {		
+	public void testNodeWithNamedChildrenWithSameReference() throws Exception {		
 		Converter c = new Converter();
 		c.addConversion(new ComplexBean2MapConversion());
 		c.addConversion(new IterateableMap2MapConversion());
@@ -136,16 +136,16 @@ public class ComplexBean2MapConversionTest extends TestCase {
 		String lvNodeName2 = "TestNode-2";
 		Node n2 = new Node(lvNodeName2);
 		
-		n1.getNamedChilds().put(lvNodeName, n1);
-		n1.getNamedChilds().put(lvNodeName2, n2);
+		n1.getNamedChildren().put(lvNodeName, n1);
+		n1.getNamedChildren().put(lvNodeName2, n2);
 		Object lvResult = c.convert(n1);
 		assertNotNull(lvResult);
 		Map lvMap1 = (Map) lvResult;
 		assertEquals(Node.class.getName(), lvMap1.get("class"));
 		assertEquals(lvNodeName, lvMap1.get("name"));
-		assertTrue(lvMap1.get("namedChilds") instanceof Map);
+		assertTrue(lvMap1.get("namedChildren") instanceof Map);
 		
-		Map lvMap = (Map) lvMap1.get("namedChilds");
+		Map lvMap = (Map) lvMap1.get("namedChildren");
 		Object o = lvMap.get(lvNodeName2);
 		Map lvMap2 = (Map) o;
 		assertEquals(Node.class.getName(), lvMap2.get("class"));
@@ -179,7 +179,7 @@ public class ComplexBean2MapConversionTest extends TestCase {
 		Hashtable lvHashtable = (Hashtable) lvResult;
 		assertEquals(Node.class.getName(), lvHashtable.get("class"));
 		assertEquals("Node", lvHashtable.get("name"));
-		assertEquals(new Vector(), lvHashtable.get("childs"));
+		assertEquals(new Vector(), lvHashtable.get("children"));
 		assertNull(lvHashtable.get("abc"));
 		
 		lvResult = c.convert(n, WeakHashMap.class);
@@ -188,7 +188,7 @@ public class ComplexBean2MapConversionTest extends TestCase {
 		WeakHashMap lvWeakHashMap = (WeakHashMap) lvResult;
 		assertEquals(Node.class.getName(), lvWeakHashMap.get("class"));
 		assertEquals("Node", lvWeakHashMap.get("name"));
-		assertEquals(new Vector(), lvWeakHashMap.get("childs"));
+		assertEquals(new Vector(), lvWeakHashMap.get("children"));
 		assertNull(lvWeakHashMap.get("abc"));
 
 	}

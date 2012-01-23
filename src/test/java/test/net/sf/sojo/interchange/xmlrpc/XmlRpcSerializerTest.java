@@ -463,19 +463,19 @@ public class XmlRpcSerializerTest extends TestCase {
 		Node n = new Node("ROOT");
 		Node n1 = new Node("N1");
 		Node n2 = new Node("N2");
-		n.getNamedChilds().put("n1", n1);
-		n.getNamedChilds().put("n2", n2);
+		n.getNamedChildren().put("n1", n1);
+		n.getNamedChildren().put("n2", n2);
 		n2.setParent(n);
 		
 		Object lvResult = xmlRpcSerializer.serialize(n);
 		lvResult = xmlRpcSerializer.deserialize(lvResult);
 		Node nAfter = (Node) lvResult;
 		assertEquals("ROOT", nAfter.getName());
-		assertEquals(2, nAfter.getNamedChilds().size());
-		Node n2After = (Node) nAfter.getNamedChilds().get("n2");
+		assertEquals(2, nAfter.getNamedChildren().size());
+		Node n2After = (Node) nAfter.getNamedChildren().get("n2");
 		assertEquals(nAfter, n2After.getParent());
 		
-		Node n1After = (Node) nAfter.getNamedChilds().get("n1");
+		Node n1After = (Node) nAfter.getNamedChildren().get("n1");
 		assertEquals("N1", n1After.getName());
 	}
 

@@ -17,18 +17,20 @@ package test.net.sf.sojo.model;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class Customer {
 	
-	private String firstName = null;
-	private String lastName = null;
-	private Date birthDate = null;
-	private Set addresses = new HashSet();
-	private Object partner[] = null;
-	private byte bytes[] = null;
+	private String firstName;
+	private String lastName;
+	private Date birthDate;
+	private Set<Object> addresses = new LinkedHashSet<Object>();
+	private Object partner[];
+	private byte bytes[];
 	
 	public Customer() { }	
+	
 	public Customer(String pvLastName) {
 		setLastName(pvLastName);
 	}
@@ -36,8 +38,13 @@ public class Customer {
 	public Object[] getPartner() { return partner; }
 	public void setPartner(Object[] pvPartner) { partner = pvPartner; }
 	
-	public Set getAddresses() { return addresses; }
-	public void setAddresses(Set pvAddresses) { addresses = pvAddresses; }
+	public Set<Object> getAddresses() { 
+	  return addresses; 
+	}
+
+	public void setAddresses(Set<Object> addresses) {
+	  this.addresses = addresses;
+	}
 	
 	public Date getBirthDate() { return birthDate; }
 	public void setBirthDate(Date pvBirthDate) { birthDate = pvBirthDate; }
@@ -50,5 +57,6 @@ public class Customer {
 	
 	public byte[] getBytes() { return bytes; }
 	public void setBytes(byte[] pvBytes) { bytes = pvBytes; }
+
 
 }

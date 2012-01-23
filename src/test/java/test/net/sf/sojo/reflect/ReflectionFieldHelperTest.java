@@ -52,12 +52,12 @@ public class ReflectionFieldHelperTest extends TestCase {
 		assertEquals(lvField.getName(), "name");
 		assertEquals(lvField.getType(), String.class);
 		
-		lvField = findFieldByName(lvFields, "childs");
-		assertEquals(lvField.getName(), "childs");
+		lvField = findFieldByName(lvFields, "children");
+		assertEquals(lvField.getName(), "children");
 		assertEquals(lvField.getType(), List.class);
 		
-		lvField = findFieldByName(lvFields, "namedChilds");
-		assertEquals(lvField.getName(), "namedChilds");
+		lvField = findFieldByName(lvFields, "namedChildren");
+		assertEquals(lvField.getName(), "namedChildren");
 		assertEquals(lvField.getType(), Map.class);
 	}
 	

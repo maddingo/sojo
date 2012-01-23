@@ -148,15 +148,15 @@ public class PathExecuterTest extends TestCase {
 	
 	public void testGetIndexPropertyFromBean() throws Exception {
 		Node lvNode = new Node("Test-Node");
-		lvNode.getChilds().add("Test_1");
-		lvNode.getChilds().add("Test_2");
-		lvNode.getChilds().add("Test_3");
+		lvNode.getChildren().add("Test_1");
+		lvNode.getChildren().add("Test_2");
+		lvNode.getChildren().add("Test_3");
 
-		Object lvResult = PathExecuter.getNestedProperty(lvNode, PathParser.parse("childs[0]")[0]);
+		Object lvResult = PathExecuter.getNestedProperty(lvNode, PathParser.parse("children[0]")[0]);
 		assertNotNull(lvResult);
 		assertEquals("Test_1", lvResult);
 		
-		lvResult = PathExecuter.getNestedProperty(lvNode, PathParser.parse("childs[2]")[0]);
+		lvResult = PathExecuter.getNestedProperty(lvNode, PathParser.parse("children[2]")[0]);
 		assertNotNull(lvResult);
 		assertEquals("Test_3", lvResult);
 	}
@@ -187,37 +187,37 @@ public class PathExecuterTest extends TestCase {
 
 	public void testSetIndexPropertyFromBean() throws Exception {
 		Node lvNode = new Node("Test-Node");
-		lvNode.getChilds().add("Test_1");
-		lvNode.getChilds().add("Test_2");
-		assertEquals(2, lvNode.getChilds().size());
+		lvNode.getChildren().add("Test_1");
+		lvNode.getChildren().add("Test_2");
+		assertEquals(2, lvNode.getChildren().size());
 		
-		PathExecuter.setNestedProperty(lvNode, "childs", "Test_3");
-		assertEquals(3, lvNode.getChilds().size());		
+		PathExecuter.setNestedProperty(lvNode, "children", "Test_3");
+		assertEquals(3, lvNode.getChildren().size());		
 		
-		Object lvResult = PathExecuter.getNestedProperty(lvNode, PathParser.parse("childs[2]")[0]);
+		Object lvResult = PathExecuter.getNestedProperty(lvNode, PathParser.parse("children[2]")[0]);
 		assertNotNull(lvResult);
 		assertEquals("Test_3", lvResult);
 		
-		PathExecuter.setNestedProperty(lvNode, "childs[-1]", "Test_4");
-		assertEquals(4, lvNode.getChilds().size());
+		PathExecuter.setNestedProperty(lvNode, "children[-1]", "Test_4");
+		assertEquals(4, lvNode.getChildren().size());
 		
-		lvResult = PathExecuter.getNestedProperty(lvNode, PathParser.parse("childs[3]")[0]);
+		lvResult = PathExecuter.getNestedProperty(lvNode, PathParser.parse("children[3]")[0]);
 		assertNotNull(lvResult);
 		assertEquals("Test_4", lvResult);
 		
-		PathExecuter.setNestedProperty(lvNode, "childs[2]", "Test_5");
-		assertEquals(5, lvNode.getChilds().size());
+		PathExecuter.setNestedProperty(lvNode, "children[2]", "Test_5");
+		assertEquals(5, lvNode.getChildren().size());
 		
-		lvResult = PathExecuter.getNestedProperty(lvNode, PathParser.parse("childs[2]")[0]);
+		lvResult = PathExecuter.getNestedProperty(lvNode, PathParser.parse("children[2]")[0]);
 		assertNotNull(lvResult);
 		assertEquals("Test_5", lvResult);
 
-		PathExecuter.setNestedProperty(lvNode, "childs[]", "Test_4");
-		assertEquals(6, lvNode.getChilds().size());
+		PathExecuter.setNestedProperty(lvNode, "children[]", "Test_4");
+		assertEquals(6, lvNode.getChildren().size());
 		
-		PathExecuter.setNestedProperty(lvNode, "childs[]", new Node("N1-List"));
-		assertEquals(7, lvNode.getChilds().size());
-		assertEquals("N1-List", ((Node) lvNode.getChilds().get(6)).getName());
+		PathExecuter.setNestedProperty(lvNode, "children[]", new Node("N1-List"));
+		assertEquals(7, lvNode.getChildren().size());
+		assertEquals("N1-List", ((Node) lvNode.getChildren().get(6)).getName());
 	}
 
 	public void testGetIndexPropertyArray() throws Exception {
@@ -307,15 +307,15 @@ public class PathExecuterTest extends TestCase {
 
 	public void testKeyIndexPropertyFromBean() throws Exception {
 		Node lvNode = new Node("Test-Node");
-		lvNode.getNamedChilds().put("N1", new Node("N1"));
-		lvNode.getNamedChilds().put("N2", new Node("N2"));
-		lvNode.getNamedChilds().put("N3", new Node("N3"));
+		lvNode.getNamedChildren().put("N1", new Node("N1"));
+		lvNode.getNamedChildren().put("N2", new Node("N2"));
+		lvNode.getNamedChildren().put("N3", new Node("N3"));
 
-		Object lvResult = PathExecuter.getNestedProperty(lvNode, PathParser.parse("namedChilds(N1)")[0]);
+		Object lvResult = PathExecuter.getNestedProperty(lvNode, PathParser.parse("namedChildren(N1)")[0]);
 		assertNotNull(lvResult);
 		assertEquals("N1", ((Node) lvResult).getName());
 		
-		lvResult = PathExecuter.getNestedProperty(lvNode, PathParser.parse("namedChilds(N3)")[0]);
+		lvResult = PathExecuter.getNestedProperty(lvNode, PathParser.parse("namedChildren(N3)")[0]);
 		assertNotNull(lvResult);
 		assertEquals("N3", ((Node) lvResult).getName());
 	}
@@ -336,14 +336,14 @@ public class PathExecuterTest extends TestCase {
 
 	public void testSetKeyPropertyToBean() throws Exception {
 		Node lvNode = new Node("Test-Node");
-		lvNode.getNamedChilds().put("N1", new Node("N1"));
-		lvNode.getNamedChilds().put("N2", new Node("N2"));
-		assertEquals(2, lvNode.getNamedChilds().size());
+		lvNode.getNamedChildren().put("N1", new Node("N1"));
+		lvNode.getNamedChildren().put("N2", new Node("N2"));
+		assertEquals(2, lvNode.getNamedChildren().size());
 		
-		PathExecuter.setNestedProperty(lvNode, "namedChilds(N3)", new Node("N3"));
-		assertEquals(3, lvNode.getNamedChilds().size());		
+		PathExecuter.setNestedProperty(lvNode, "namedChildren(N3)", new Node("N3"));
+		assertEquals(3, lvNode.getNamedChildren().size());		
 		
-		PathAction pv = PathParser.parse("namedChilds(N3)")[0];
+		PathAction pv = PathParser.parse("namedChildren(N3)")[0];
 		Object lvResult = PathExecuter.getNestedProperty(lvNode, pv);
 		assertNotNull(lvResult);
 		assertEquals("N3", ((Node) lvResult).getName());
@@ -354,9 +354,9 @@ public class PathExecuterTest extends TestCase {
 		Node lvNodeChild1 = new Node ("node-1");
 		Node lvNodeChild2 = new Node ("node-2");
 		
-		lvNode.getChilds().add(lvNodeChild1);
-		lvNode.getChilds().add(lvNodeChild2);
-		lvNode.getChilds().add(lvNodeChild1);
+		lvNode.getChildren().add(lvNodeChild1);
+		lvNode.getChildren().add(lvNodeChild2);
+		lvNode.getChildren().add(lvNodeChild1);
 		
 		lvNodeChild1.setParent(lvNode);
 		lvNodeChild2.setParent(lvNode);
@@ -364,14 +364,14 @@ public class PathExecuterTest extends TestCase {
 		assertEquals("node-1", lvNodeChild1.getName());
 		
 		
-		PathExecuter.setNestedProperty(lvNode, "childs[0].name", "new-node-1");
-		assertEquals("new-node-1", ((Node) lvNode.getChilds().get(0)).getName()); 
-		assertEquals("new-node-1", ((Node) lvNode.getChilds().get(2)).getName());
+		PathExecuter.setNestedProperty(lvNode, "children[0].name", "new-node-1");
+		assertEquals("new-node-1", ((Node) lvNode.getChildren().get(0)).getName()); 
+		assertEquals("new-node-1", ((Node) lvNode.getChildren().get(2)).getName());
 		
-		PathExecuter.setNestedProperty(lvNode, "childs[1].parent.name", "new-root-node");
+		PathExecuter.setNestedProperty(lvNode, "children[1].parent.name", "new-root-node");
 		assertEquals("new-root-node", lvNode.getName());
 		
-		PathExecuter.setNestedProperty(lvNode, "childs[0].parent.childs[0].parent.name", "new-root-node-second");
+		PathExecuter.setNestedProperty(lvNode, "children[0].parent.children[0].parent.name", "new-root-node-second");
 		assertEquals("new-root-node-second", lvNode.getName());
 	}
 
@@ -380,9 +380,9 @@ public class PathExecuterTest extends TestCase {
 		Node lvNodeChild1 = new Node ("node-1");
 		Node lvNodeChild2 = new Node ("node-2");
 		
-		lvNode.getNamedChilds().put("n1", lvNodeChild1);
-		lvNode.getNamedChilds().put("n2", lvNodeChild2);
-		lvNode.getNamedChilds().put("n1-1", lvNodeChild1);
+		lvNode.getNamedChildren().put("n1", lvNodeChild1);
+		lvNode.getNamedChildren().put("n2", lvNodeChild2);
+		lvNode.getNamedChildren().put("n1-1", lvNodeChild1);
 		
 		lvNodeChild1.setParent(lvNode);
 		lvNodeChild2.setParent(lvNode);
@@ -390,24 +390,24 @@ public class PathExecuterTest extends TestCase {
 		assertEquals("node-1", lvNodeChild1.getName());
 		
 		
-		PathExecuter.setNestedProperty(lvNode, "namedChilds(n1).name", "new-node-1");
-		assertEquals("new-node-1", ((Node) lvNode.getNamedChilds().get("n1")).getName()); 
-		assertEquals("new-node-1", ((Node) lvNode.getNamedChilds().get("n1-1")).getName());
+		PathExecuter.setNestedProperty(lvNode, "namedChildren(n1).name", "new-node-1");
+		assertEquals("new-node-1", ((Node) lvNode.getNamedChildren().get("n1")).getName()); 
+		assertEquals("new-node-1", ((Node) lvNode.getNamedChildren().get("n1-1")).getName());
 		
-		PathExecuter.setNestedProperty(lvNode, "namedChilds(n2).parent.name", "new-root-node");
+		PathExecuter.setNestedProperty(lvNode, "namedChildren(n2).parent.name", "new-root-node");
 		assertEquals("new-root-node", lvNode.getName());
 		
-		PathExecuter.setNestedProperty(lvNode, "namedChilds(n1-1).parent.namedChilds(n1).parent.name", "new-root-node-second");
+		PathExecuter.setNestedProperty(lvNode, "namedChildren(n1-1).parent.namedChildren(n1).parent.name", "new-root-node-second");
 		assertEquals("new-root-node-second", lvNode.getName());
 	}
 
 	public void testSetNestedSimplePropertyWithMapWithKeyTypeNotString() throws Exception {
 		Node lvNode = new Node ("root-node");
-		Node lvNodeChild1 = new Node ("node-1");
-		Node lvNodeChild2 = new Node ("node-2");
+		Node lvNodeChild1 = new Node("node-1");
+		Node lvNodeChild2 = new Node("node-2");
 		
-		lvNode.getNamedChilds().put(new Long(1), lvNodeChild1);
-		lvNode.getNamedChilds().put(new Long(2), lvNodeChild2);
+		lvNode.getNamedChildren().put(new Long(1), lvNodeChild1);
+		lvNode.getNamedChildren().put(new Long(2), lvNodeChild2);
 		
 		lvNodeChild1.setParent(lvNode);
 		lvNodeChild2.setParent(lvNode);
@@ -415,10 +415,10 @@ public class PathExecuterTest extends TestCase {
 		assertEquals("node-1", lvNodeChild1.getName());
 		
 		
-		PathExecuter.setNestedProperty(lvNode, "namedChilds(1).name", "new-node-1");
-		assertEquals("new-node-1", ((Node) lvNode.getNamedChilds().get(new Long(1))).getName()); 
+		PathExecuter.setNestedProperty(lvNode, "namedChildren(1).name", "new-node-1");
+		assertEquals("new-node-1", ((Node) lvNode.getNamedChildren().get(new Long(1))).getName()); 
 		
-		PathExecuter.setNestedProperty(lvNode, "namedChilds(2).parent.name", "new-root-node");
+		PathExecuter.setNestedProperty(lvNode, "namedChildren(2).parent.name", "new-root-node");
 		assertEquals("new-root-node", lvNode.getName());
 	}
 

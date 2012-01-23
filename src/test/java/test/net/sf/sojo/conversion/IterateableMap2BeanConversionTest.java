@@ -143,7 +143,7 @@ public class IterateableMap2BeanConversionTest extends TestCase {
 
 			Map lvMap = new Hashtable();
 			lvMap.put("class", Node.class.getName());
-			lvMap.put("childs", new Long(77));
+			lvMap.put("children", new Long(77));
 			
 			c.convert(lvMap);
 			fail("Long and String are not assignable.");
@@ -160,11 +160,11 @@ public class IterateableMap2BeanConversionTest extends TestCase {
 		
 		Map lvMap = new HashMap();
 		lvMap.put("class", Node.class.getName());
-		lvMap.put("childs", null);
+		lvMap.put("children", null);
 		lvMap.put("name", "MyNode");
 		
 		Node n = (Node) c.convert(lvMap);
-		assertNull(n.getChilds());		
+		assertNull(n.getChildren());		
 	}
 
 }

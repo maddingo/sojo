@@ -377,46 +377,46 @@ public class JsonSerializerTest extends TestCase {
 		Node n = new Node("N");
 		Node n1 = new Node("N1");
 		Node n2 = new Node("N2");
-		n.getChilds().add(n1);
-		n.getChilds().add(n2);
+		n.getChildren().add(n1);
+		n.getChildren().add(n2);
 		
 		Object lvResult = jsonSerializer.serialize(n);
 		lvResult = jsonSerializer.deserialize(lvResult);
 		Node nAfter = (Node) lvResult;
 		assertEquals("N", nAfter.getName());
 		assertNull(nAfter.getParent());
-		assertEquals(new HashMap(), nAfter.getNamedChilds());
+		assertEquals(new HashMap(), nAfter.getNamedChildren());
 		
-		assertEquals(2, nAfter.getChilds().size());
-		assertEquals("N1", ((Node) nAfter.getChilds().get(0)).getName());
-		assertEquals("N2", ((Node) nAfter.getChilds().get(1)).getName());
+		assertEquals(2, nAfter.getChildren().size());
+		assertEquals("N1", ((Node) nAfter.getChildren().get(0)).getName());
+		assertEquals("N2", ((Node) nAfter.getChildren().get(1)).getName());
 	}
 
 	public void testBeanWithNamedChilds() throws Exception {
 		Node n = new Node("N");
 		Node n1 = new Node("N1");
 		Node n2 = new Node("N2");
-		n.getNamedChilds().put("N1", n1);
-		n.getNamedChilds().put("N2", n2);
+		n.getNamedChildren().put("N1", n1);
+		n.getNamedChildren().put("N2", n2);
 		
 		Object lvResult = jsonSerializer.serialize(n);
 		lvResult = jsonSerializer.deserialize(lvResult);
 		Node nAfter = (Node) lvResult;
 		assertEquals("N", nAfter.getName());
 		assertNull(nAfter.getParent());
-		assertEquals(new ArrayList(), nAfter.getChilds());
+		assertEquals(new ArrayList(), nAfter.getChildren());
 		
-		assertEquals(2, nAfter.getNamedChilds().size());
-		assertEquals("N1", ((Node) nAfter.getNamedChilds().get("N1")).getName());
-		assertEquals("N2", ((Node) nAfter.getNamedChilds().get("N2")).getName());
+		assertEquals(2, nAfter.getNamedChildren().size());
+		assertEquals("N1", ((Node) nAfter.getNamedChildren().get("N1")).getName());
+		assertEquals("N2", ((Node) nAfter.getNamedChildren().get("N2")).getName());
 	}
 
 	public void testBeanWithChildsWithCycles() throws Exception {
 		Node n = new Node("N");
 		Node n1 = new Node("N1");
 		Node n2 = new Node("N2");
-		n.getChilds().add(n1);
-		n.getChilds().add(n2);
+		n.getChildren().add(n1);
+		n.getChildren().add(n2);
 		n2.setParent(n);
 		
 		Object lvResult = jsonSerializer.serialize(n);
@@ -424,11 +424,11 @@ public class JsonSerializerTest extends TestCase {
 		Node nAfter = (Node) lvResult;
 		assertEquals("N", nAfter.getName());
 		assertNull(nAfter.getParent());
-		assertEquals(new HashMap(), nAfter.getNamedChilds());
+		assertEquals(new HashMap(), nAfter.getNamedChildren());
 		
-		assertEquals(2, nAfter.getChilds().size());
-		assertEquals("N1", ((Node) nAfter.getChilds().get(0)).getName());
-		Node n2After = (Node) nAfter.getChilds().get(1);
+		assertEquals(2, nAfter.getChildren().size());
+		assertEquals("N1", ((Node) nAfter.getChildren().get(0)).getName());
+		Node n2After = (Node) nAfter.getChildren().get(1);
 		assertEquals("N2", n2After.getName());
 		assertEquals("N", n2After.getParent().getName());
 		assertEquals(nAfter, n2After.getParent());
@@ -438,8 +438,8 @@ public class JsonSerializerTest extends TestCase {
 		Node n = new Node("N");
 		Node n1 = new Node("N1");
 		Node n2 = new Node("N2");
-		n.getNamedChilds().put("N1", n1);
-		n.getNamedChilds().put("N2", n2);
+		n.getNamedChildren().put("N1", n1);
+		n.getNamedChildren().put("N2", n2);
 		n1.setParent(n);
 		
 		Object lvResult = jsonSerializer.serialize(n);
@@ -447,12 +447,12 @@ public class JsonSerializerTest extends TestCase {
 		Node nAfter = (Node) lvResult;
 		assertEquals("N", nAfter.getName());
 		assertNull(nAfter.getParent());
-		assertEquals(new ArrayList(), nAfter.getChilds());
+		assertEquals(new ArrayList(), nAfter.getChildren());
 		
-		assertEquals(2, nAfter.getNamedChilds().size());
-		Node n1After = (Node) nAfter.getNamedChilds().get("N1");
+		assertEquals(2, nAfter.getNamedChildren().size());
+		Node n1After = (Node) nAfter.getNamedChildren().get("N1");
 		assertEquals("N1", n1After.getName());
-		assertEquals("N2", ((Node) nAfter.getNamedChilds().get("N2")).getName());
+		assertEquals("N2", ((Node) nAfter.getNamedChildren().get("N2")).getName());
 		
 		assertEquals("N", n1After.getParent().getName());
 		assertEquals(nAfter, n1After.getParent());

@@ -24,6 +24,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -76,8 +77,8 @@ public class ObjectUtilTest extends TestCase {
 		Node lvNode = new Node("Test-Node");
 		Node lvNodeCopy = (Node) new ObjectUtil().copy(lvNode);
 		assertEquals("Test-Node", lvNodeCopy.getName());
-		assertEquals(new ArrayList(), lvNodeCopy.getChilds());
-		assertEquals(new HashMap(), lvNodeCopy.getNamedChilds());
+		assertEquals(new ArrayList(), lvNodeCopy.getChildren());
+		assertEquals(new HashMap(), lvNodeCopy.getNamedChildren());
 		assertNull(lvNodeCopy.getParent());
 		
 	}
@@ -89,37 +90,36 @@ public class ObjectUtilTest extends TestCase {
 		Node lvNodeCopy = (Node) new ObjectUtil().copy(lvNode);
 		assertNotNull(lvNodeCopy.getParent());
 		assertEquals("Parent-Node", lvNodeCopy.getParent().getName());
-		assertEquals(new ArrayList(), lvNodeCopy.getParent().getChilds());
-		assertEquals(new HashMap(), lvNodeCopy.getParent().getNamedChilds());
+		assertEquals(new ArrayList(), lvNodeCopy.getParent().getChildren());
+		assertEquals(new HashMap(), lvNodeCopy.getParent().getNamedChildren());
 		
 	}
 	
-	public void testCopyBean_NodeWithChilds() throws Exception {
+	public void testCopyBean_NodeWithChildren() throws Exception {
 		Node lvNode = new Node("Test-Node");
 		Node lvNodeChild1 = new Node("Test-Node-Child1");
 		Node lvNodeChild2 = new Node("Test-Node-Child2");
-		lvNode.getChilds().add(lvNodeChild1);
-		lvNode.getChilds().add(lvNodeChild2);
-		lvNode.getChilds().add(lvNode);
+		lvNode.getChildren().add(lvNodeChild1);
+		lvNode.getChildren().add(lvNodeChild2);
+		lvNode.getChildren().add(lvNode);
 		
 		Node lvNodeCopy = (Node) new ObjectUtil().copy(lvNode);
-		assertEquals(3, lvNodeCopy.getChilds().size());
-		assertEquals("Test-Node-Child1", ((Node) lvNodeCopy.getChilds().get(0)).getName());
-		assertEquals("Test-Node-Child2", ((Node) lvNodeCopy.getChilds().get(1)).getName());
-		assertEquals(lvNodeCopy, lvNodeCopy.getChilds().get(2));
+		assertEquals(3, lvNodeCopy.getChildren().size());
+		assertEquals("Test-Node-Child1", ((Node) lvNodeCopy.getChildren().get(0)).getName());
+		assertEquals("Test-Node-Child2", ((Node) lvNodeCopy.getChildren().get(1)).getName());
+		assertEquals(lvNodeCopy, lvNodeCopy.getChildren().get(2));
 	}
 
 
 	public void testCopyBean_Customer() throws Exception {
 		Customer lvCustomer = new Customer("MyName");
-		lvCustomer.setAddresses(new HashSet());
 		Date lvDate = new Date();
 		lvCustomer.setBirthDate(lvDate);
 		lvCustomer.setPartner(new Customer[] { new Customer("Partner"), lvCustomer } );
 		
 		Customer lvCustomerCopy = (Customer) new ObjectUtil().copy(lvCustomer);
 		assertEquals("MyName", lvCustomerCopy.getLastName());
-		assertEquals(new HashSet(), lvCustomerCopy.getAddresses());
+		assertEquals(Collections.<Address>emptySet(), lvCustomerCopy.getAddresses());
 		assertEquals(lvDate, lvCustomerCopy.getBirthDate());
 		assertEquals(2, lvCustomerCopy.getPartner().length);
 		assertEquals("Partner", ((Customer) lvCustomerCopy.getPartner()[0]).getLastName());
@@ -260,39 +260,39 @@ public class ObjectUtilTest extends TestCase {
 	}
 
 	
-	public void testEqualsSimpleDifferrentNodeBeanWithChilds() throws Exception {
+	public void testEqualsSimpleDifferrentNodeBeanWithChildren() throws Exception {
 		Node lvNode1 = new Node("Test-Node");
-		lvNode1.getChilds().add(new Node("child-1"));
-		lvNode1.getChilds().add(new Node("child-2"));
+		lvNode1.getChildren().add(new Node("child-1"));
+		lvNode1.getChildren().add(new Node("child-2"));
 		Node lvNode2 = new Node("Test-Node");
-		lvNode2.getChilds().add(new Node("child-1"));
-		lvNode2.getChilds().add(new Node("child-2"));
+		lvNode2.getChildren().add(new Node("child-1"));
+		lvNode2.getChildren().add(new Node("child-2"));
 
 		assertTrue(new ObjectUtil().equals(lvNode1, lvNode2));
 	}
 
-	public void testNotEqualsSimpleDifferrentNodeBeanWithChilds() throws Exception {
+	public void testNotEqualsSimpleDifferrentNodeBeanWithChildren() throws Exception {
 		Node lvNode1 = new Node("Test-Node");
-		lvNode1.getChilds().add(new Node("child-1"));
-		lvNode1.getChilds().add(new Node("child-2"));
+		lvNode1.getChildren().add(new Node("child-1"));
+		lvNode1.getChildren().add(new Node("child-2"));
 		Node lvNode2 = new Node("Test-Node");
-		lvNode2.getChilds().add(new Node("child-1"));
-		lvNode2.getChilds().add(new Node("child-2-X"));
+		lvNode2.getChildren().add(new Node("child-1"));
+		lvNode2.getChildren().add(new Node("child-2-X"));
 
 		assertFalse(new ObjectUtil().equals(lvNode1, lvNode2));
 	}
 
-	public void testNotEqualsSimpleDifferrentNodeBeanWithChilds2() throws Exception {
+	public void testNotEqualsSimpleDifferrentNodeBeanWithChildren2() throws Exception {
 		Node lvNode1 = new Node("Test-Node");
-		lvNode1.getChilds().add(new Node("child-1"));
-		lvNode1.getChilds().add(new Node("child-2"));
-		lvNode1.getNamedChilds().put("key-1", "value-1");
-		lvNode1.getNamedChilds().put("key-2", "value-2");
+		lvNode1.getChildren().add(new Node("child-1"));
+		lvNode1.getChildren().add(new Node("child-2"));
+		lvNode1.getNamedChildren().put("key-1", "value-1");
+		lvNode1.getNamedChildren().put("key-2", "value-2");
 		Node lvNode2 = new Node("Test-Node");
-		lvNode2.getChilds().add(new Node("child-1"));
-		lvNode2.getChilds().add(new Node("child-2"));
-		lvNode2.getNamedChilds().put("key-1", "value-1");
-		lvNode2.getNamedChilds().put("key-2", "value-2-X");
+		lvNode2.getChildren().add(new Node("child-1"));
+		lvNode2.getChildren().add(new Node("child-2"));
+		lvNode2.getNamedChildren().put("key-1", "value-1");
+		lvNode2.getNamedChildren().put("key-2", "value-2-X");
 
 		assertFalse(new ObjectUtil().equals(lvNode1, lvNode2));
 		assertFalse(new ObjectUtil().equals(lvNode2, lvNode1));
@@ -301,25 +301,25 @@ public class ObjectUtilTest extends TestCase {
 		assertTrue(new ObjectUtil().equals(lvNode2, lvNode2));
 	}
 
-	public void testNotEqualsSimpleDifferrentNodeBeanWithChilds3() throws Exception {
+	public void testNotEqualsSimpleDifferrentNodeBeanWithChildren3() throws Exception {
 		Node lvNode1 = new Node("Test-Node");
-		lvNode1.getChilds().add(new Node("child-1"));
-		lvNode1.getChilds().add(new BigDecimal("23.006"));
+		lvNode1.getChildren().add(new Node("child-1"));
+		lvNode1.getChildren().add(new BigDecimal("23.006"));
 		Node lvNode2 = new Node("Test-Node");
-		lvNode2.getChilds().add(new BigDecimal("23.006"));
-		lvNode2.getChilds().add(new Node("child-1"));
+		lvNode2.getChildren().add(new BigDecimal("23.006"));
+		lvNode2.getChildren().add(new Node("child-1"));
 
 		assertFalse(new ObjectUtil().equals(lvNode1, lvNode2));
 		assertFalse(new ObjectUtil().equals(lvNode2, lvNode1));
 	}
 
-	public void testNotEqualsSimpleDifferrentNodeBeanWithChilds4() throws Exception {
+	public void testNotEqualsSimpleDifferrentNodeBeanWithChildren4() throws Exception {
 		Node lvNode1 = new Node("Test-Node");
-		lvNode1.getChilds().add(new Node("child-1"));
-		lvNode1.getChilds().add(new BigDecimal("23.006"));
+		lvNode1.getChildren().add(new Node("child-1"));
+		lvNode1.getChildren().add(new BigDecimal("23.006"));
 		Node lvNode2 = new Node("Test-Node");
-		lvNode2.getChilds().add(new Node("child-1"));
-		lvNode2.getChilds().add(new BigDecimal("23.007"));
+		lvNode2.getChildren().add(new Node("child-1"));
+		lvNode2.getChildren().add(new BigDecimal("23.007"));
 
 
 		assertFalse(new ObjectUtil().equals(lvNode1, lvNode2));
@@ -664,14 +664,14 @@ public class ObjectUtilTest extends TestCase {
 	public void testCompareAllSimpleCarBeanWithMoreDifferentsInverseBug() throws Exception {
 		Node lvNode1 = new Node();
 		lvNode1.setName("Node 1");
-		lvNode1.getNamedChilds().put("key", "value");
-		lvNode1.getChilds().add("Avihai");
-		lvNode1.getChilds().add("AvihaiAdd");
+		lvNode1.getNamedChildren().put("key", "value");
+		lvNode1.getChildren().add("Avihai");
+		lvNode1.getChildren().add("AvihaiAdd");
 
 		Node lvNode2 = new Node();
 		lvNode2.setName("Node 2");
-		lvNode2.getNamedChilds().put("key", "value");
-		lvNode2.getChilds().add("Avihai2");
+		lvNode2.getNamedChildren().put("key", "value");
+		lvNode2.getChildren().add("Avihai2");
 		
 		
 		CompareResult lvResult[] = new ObjectUtil().compareAll(lvNode2, lvNode1);
@@ -679,7 +679,7 @@ public class ObjectUtilTest extends TestCase {
 		assertNotNull(lvResult);
 		assertEquals(3, lvResult.length);
 		
-		assertEquals("childs[0]", lvResult[0].differentPath);
+		assertEquals("children[0]", lvResult[0].differentPath);
 		assertEquals("Avihai2", lvResult[0].differentValue1);		
 		assertEquals("Avihai", lvResult[0].differentValue2);
 
@@ -834,9 +834,9 @@ public class ObjectUtilTest extends TestCase {
 		l.add(new BigDecimal("0.07"));
 		
 		Node n1 = new Node("n1");
-		n1.setChilds(l);
+		n1.setChildren(l);
 		Node n2 = new Node("n2");
-		n2.setChilds(l);
+		n2.setChildren(l);
 		
 		List mainList = new ArrayList();
 		mainList.add(n1);
@@ -850,9 +850,9 @@ public class ObjectUtilTest extends TestCase {
 		assertEquals("n1", n1After.getName());
 		assertEquals("n2", n2After.getName());
 		
-		assertEquals(n1After.getChilds(), n2After.getChilds());
-		assertEquals(n1After.getChilds().size(), n2After.getChilds().size());
-		assertTrue(n1After.getChilds() != n2After.getChilds());
+		assertEquals(n1After.getChildren(), n2After.getChildren());
+		assertEquals(n1After.getChildren().size(), n2After.getChildren().size());
+		assertTrue(n1After.getChildren() != n2After.getChildren());
 	}
 	
 	public void testDoubleCallFromMakeSimple() throws Exception {

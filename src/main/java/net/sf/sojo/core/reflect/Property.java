@@ -74,7 +74,7 @@ public class Property {
 		Object lvReturnValue = null;
 		AccessController.doPrivileged(new AccessiblePrivilegedAction(accessibleObject));
 		if (propertyType == PROPERTY_TYPE_METHOD) {
-			lvReturnValue = ((Method) accessibleObject).invoke(pvObject, (Object)null);	
+			lvReturnValue = ((Method) accessibleObject).invoke(pvObject);	
 		} else {
 			lvReturnValue = ((Field) accessibleObject).get(pvObject);
 		}

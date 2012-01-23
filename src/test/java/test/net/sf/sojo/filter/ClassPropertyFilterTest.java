@@ -278,8 +278,8 @@ public class ClassPropertyFilterTest extends TestCase {
 		Node nRoot = new Node("ROOT");
 		Node nChild1 = new Node("Child 1");
 		Node nChild2 = new Node("Child 2");
-		nRoot.getChilds().add(nChild1);
-		nRoot.getChilds().add(nChild2);
+		nRoot.getChildren().add(nChild1);
+		nRoot.getChildren().add(nChild2);
 		nChild2.setParent(nRoot);
 		
 		ObjectUtil lvObjectUtil = new ObjectUtil();

@@ -29,6 +29,7 @@ import net.sf.sojo.navigation.PathAction;
 import net.sf.sojo.navigation.PathExecuter;
 import net.sf.sojo.navigation.PathParseException;
 import net.sf.sojo.navigation.PathParser;
+import test.net.sf.sojo.model.Address;
 import test.net.sf.sojo.model.Car;
 import test.net.sf.sojo.model.Customer;
 import test.net.sf.sojo.model.Node;
@@ -260,16 +261,16 @@ public class PathParserTest extends TestCase {
 	}
 
 	public void testExceuteIndexFromListWithPropertyName() throws Exception {
-		PathAction lvAction[] = PathParser.parse("childs[0]");
+		PathAction lvAction[] = PathParser.parse("children[0]");
 		Node lvNode = new Node("Node");
-		lvNode.getChilds().add("TestString_1");
-		lvNode.getChilds().add("TestString_2");
-		lvNode.getChilds().add("TestString_3");
-		lvNode.getChilds().add("TestString_4");
+		lvNode.getChildren().add("TestString_1");
+		lvNode.getChildren().add("TestString_2");
+		lvNode.getChildren().add("TestString_3");
+		lvNode.getChildren().add("TestString_4");
 		Object lvResult = PathExecuter.getNestedProperty(lvNode, lvAction[0]);
 		assertEquals("TestString_1", lvResult);
 		
-		lvAction = PathParser.parse("childs[3]");
+		lvAction = PathParser.parse("children[3]");
 		lvResult = PathExecuter.getNestedProperty(lvNode, lvAction[0]);
 		assertEquals("TestString_4", lvResult);
 	}
@@ -294,7 +295,7 @@ public class PathParserTest extends TestCase {
 	public void testExceuteIndexFromSetWithPropertyName() throws Exception {
 		PathAction lvAction[] = PathParser.parse("addresses[0]");
 		Customer c = new Customer();
-		c.setAddresses(new LinkedHashSet());
+		c.setAddresses(new LinkedHashSet<Object>());
 		c.getAddresses().add("TestString_1");
 		Object lvResult = PathExecuter.getNestedProperty(c, lvAction[0]);
 		assertEquals("TestString_1", lvResult);
@@ -324,34 +325,34 @@ public class PathParserTest extends TestCase {
 	}
 
 	public void testExceuteKeyWithPropertyName() throws Exception {
-		PathAction lvAction[] = PathParser.parse("namedChilds(Key_1)");
+		PathAction lvAction[] = PathParser.parse("namedChildren(Key_1)");
 		Node lvNode = new Node();
-		lvNode.getNamedChilds().put("Key_1", "Test_String_1");
+		lvNode.getNamedChildren().put("Key_1", "Test_String_1");
 		Object lvResult = PathExecuter.getNestedProperty(lvNode, lvAction[0]);
 		assertEquals("Test_String_1", lvResult);
 		
-		lvNode.getNamedChilds().put("Key_2", "Test_String_2");
-		lvNode.getNamedChilds().put("Key_3", "Test_String_3");
-		lvAction = PathParser.parse("namedChilds(Key_3)");
+		lvNode.getNamedChildren().put("Key_2", "Test_String_2");
+		lvNode.getNamedChildren().put("Key_3", "Test_String_3");
+		lvAction = PathParser.parse("namedChildren(Key_3)");
 		lvResult = PathExecuter.getNestedProperty(lvNode, lvAction[0]);
 		assertEquals("Test_String_3", lvResult);
 	}
 	
 	public void testExceuteKeyWithNestedPropertyNames() throws Exception {
 		Node lvNode = new Node("Node_1");
-		lvNode.getNamedChilds().put("Key_1", lvNode);
-		Object lvResult = PathExecuter.getNestedProperty(lvNode, "namedChilds(Key_1).name");
+		lvNode.getNamedChildren().put("Key_1", lvNode);
+		Object lvResult = PathExecuter.getNestedProperty(lvNode, "namedChildren(Key_1).name");
 		assertEquals("Node_1", lvResult);
 		
-		lvNode.getNamedChilds().put("Key_2", new Node("Node_2"));
-		lvNode.getNamedChilds().put("Key_3", new Node("Node_3"));
-		lvResult = PathExecuter.getNestedProperty(lvNode, "namedChilds(Key_3).name");
+		lvNode.getNamedChildren().put("Key_2", new Node("Node_2"));
+		lvNode.getNamedChildren().put("Key_3", new Node("Node_3"));
+		lvResult = PathExecuter.getNestedProperty(lvNode, "namedChildren(Key_3).name");
 		assertEquals("Node_3", lvResult);
 
 		Node lvNode4 = new Node("Node_4");
 		lvNode4.setParent(lvNode);
-		lvNode.getNamedChilds().put("Key_3", lvNode4);
-		lvResult = PathExecuter.getNestedProperty(lvNode, "namedChilds(Key_3).parent.name");
+		lvNode.getNamedChildren().put("Key_3", lvNode4);
+		lvResult = PathExecuter.getNestedProperty(lvNode, "namedChildren(Key_3).parent.name");
 		assertEquals("Node_1", lvResult);
 
 	}

@@ -97,7 +97,7 @@ public class CycleDetectorTest extends TestCase {
 		Node n = new Node("N");
 		Node n1 = new Node("N1");
 		n1.setParent(n);
-		n.getChilds().add(n1);
+		n.getChildren().add(n1);
 		lvList1.add(n);
 		assertEquals(1, lvList1.size());
 		assertFalse(cycleDetector.cycleDetection(lvList1));
@@ -182,7 +182,7 @@ public class CycleDetectorTest extends TestCase {
 		Node n = new Node("N");
 		Node n1 = new Node("N1");
 		n1.setParent(n);
-		n.getChilds().add(n1);
+		n.getChildren().add(n1);
 		lvMap1.put("N", n);
 		assertEquals(1, lvMap1.size());
 		assertFalse(cycleDetector.cycleDetection(lvMap1));

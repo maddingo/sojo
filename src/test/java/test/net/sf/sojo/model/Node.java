@@ -22,28 +22,48 @@ import java.util.Map;
 
 public class Node {
 	
-	private String name = null;
-	private Node parent = null;
-	private List childs = new ArrayList();
-	private Map namedChilds = new HashMap();
+	private String name;
+	private Node parent;
+	private List<Object> children = new ArrayList<Object>();
+	private Map<Object, Object> namedChildren = new HashMap<Object, Object>();
 	
 	public Node() { }
+	
 	public Node(String pvName) { 
-		setName(pvName);
+	  this.name = pvName;
 	}
 
-	public final void setName(String pvName) { name = pvName; }
-	public String getName() { return name; }
+	public final void setName(String pvName) { 
+	  name = pvName; 
+	}
 	
-	public Node getParent() { return parent; }
+	public String getName() { 
+	  return name; 
+	}
+	
+	public Node getParent() { 
+	  return parent; 
+	}
+	
 	public void setParent(Node pvParent) { parent = pvParent; }
 	
-	public List getChilds() { return childs; }
-	public void setChilds(List pvChilds) { childs = pvChilds; }
+	public List<Object> getChildren() {
+	  return children; 
+	}
 	
-	public Map getNamedChilds() { return namedChilds; }
-	public void setNamedChilds(Map pvNamedChilds) { namedChilds = pvNamedChilds; }
+	public void setChildren(List<Object> children) {
+	  this.children = children;
+	}
 	
+	public Map<Object, Object> getNamedChildren() {
+	  return namedChildren; 
+	}
+
+	public void setNamedChildren(Map<Object,Object> namedChildren) {
+	  this.namedChildren = namedChildren;
+	}
+	
+	@Override
 	public String toString() {
 		return getName() + " - " + super.toString();
 	}

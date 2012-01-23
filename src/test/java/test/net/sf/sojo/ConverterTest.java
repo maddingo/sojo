@@ -23,8 +23,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -172,41 +170,46 @@ public class ConverterTest extends TestCase {
 		c.addConversion(new Simple2SimpleConversion(String.class, Integer.class));
 		c.addConversion(new Iterateable2IterateableConversion(Vector.class));
 		
-		List lvList = new ArrayList();
+		List<String> lvList = new ArrayList<String>(2);
 		lvList.add("12");
 		lvList.add("34");
 		Object lvResult = c.convert(lvList);
 		assertNotNull(lvResult);
-		List lvListAfter = (List) lvResult;
+		List<?> lvListAfter = (List<?>) lvResult;
 		assertEquals(lvList.size(), lvListAfter.size());
 		assertTrue(lvListAfter instanceof Vector);
-		assertEquals(new Integer("12"), lvListAfter.get(0));
-		assertEquals(new Integer("34"), lvListAfter.get(1));
+		assertEquals(Integer.valueOf("12"), lvListAfter.get(0));
+		assertEquals(Integer.valueOf("34"), lvListAfter.get(1));
 		
 		
 		
 		c.addConverterInterceptor(new ConverterInterceptorRecursive() {
 
-			public void afterConvertRecursion(ConversionContext pvContext) { }
+			@Override
+      public void afterConvertRecursion(ConversionContext pvContext) { }
 
-			public void beforeConvertRecursion(ConversionContext pvContext) {
+			@Override
+      public void beforeConvertRecursion(ConversionContext pvContext) {
 				pvContext.cancelConvert = true;
 			}
 
-			public Object afterConvert(Object pvResult, Class pvToType) { return pvResult; }
-			public Object beforeConvert(Object pvConvertObject, Class pvToType) { return pvConvertObject; }
-			public void onError(Exception pvException) { }
+			@Override
+      public Object afterConvert(Object pvResult, Class<?> pvToType) { return pvResult; }
 			
-		}
+			@Override
+      public Object beforeConvert(Object pvConvertObject, Class<?> pvToType) { return pvConvertObject; }
+			
+			@Override
+      public void onError(Exception pvException) { }
+			
+		});
 
-		);
-
-		lvList = new ArrayList();
+		lvList = new ArrayList<String>(2);
 		lvList.add("12");
 		lvList.add("34");
 		lvResult = c.convert(lvList);
 		assertNotNull(lvResult);
-		lvListAfter = (List) lvResult;
+		lvListAfter = (List<?>) lvResult;
 		assertEquals(lvList.size(), lvListAfter.size());
 		assertTrue(lvListAfter instanceof ArrayList);
 		assertEquals("12", lvListAfter.get(0));
@@ -218,27 +221,33 @@ public class ConverterTest extends TestCase {
 		Iterateable2IterateableConversion lvCollectionConversion = new Iterateable2IterateableConversion(Vector.class);
 		lvCollectionConversion.getConverterInterceptorHandler().addConverterInterceptor(new ConverterInterceptorRecursive() {
 
-			public void afterConvertRecursion(ConversionContext pvContext) { }
+			@Override
+      public void afterConvertRecursion(ConversionContext pvContext) { }
 
-			public void beforeConvertRecursion(ConversionContext pvContext) {
+			@Override
+      public void beforeConvertRecursion(ConversionContext pvContext) {
 				pvContext.cancelConvert = true;
 			}
 
-			public Object afterConvert(Object pvResult, Class pvToType) { return pvResult; }
-			public Object beforeConvert(Object pvConvertObject, Class pvToType) { return pvConvertObject; }
-			public void onError(Exception pvException) { }
+			@Override
+      public Object afterConvert(Object pvResult, Class<?> pvToType) { return pvResult; }
 			
+			@Override
+      public Object beforeConvert(Object pvConvertObject, Class<?> pvToType) { return pvConvertObject; }
+			
+			@Override
+      public void onError(Exception pvException) { }
 		}
 
 		);
 		c.addConversion(lvCollectionConversion);
 		
-		List lvList = new ArrayList();
+		List<String> lvList = new ArrayList<String>(2);
 		lvList.add("12");
 		lvList.add("34");
 		Object lvResult = c.convert(lvList);
 		assertNotNull(lvResult);
-		List lvListAfter = (List) lvResult;
+		List<?> lvListAfter = (List<?>) lvResult;
 		assertEquals(0, lvListAfter.size());
 		assertTrue(lvListAfter instanceof Vector);
 	}
@@ -309,10 +318,9 @@ public class ConverterTest extends TestCase {
 		c.addConversion(new ComplexBean2MapConversion());
 		
 		Node n = new Node("TestNode");
-		n.setChilds(new ArrayList());
-		n.getChilds().add(new Node("ChildNode_1"));
-		n.getChilds().add(new Node("ChildNode_2"));
-		n.getChilds().add(n);
+		n.getChildren().add(new Node("ChildNode_1"));
+		n.getChildren().add(new Node("ChildNode_2"));
+		n.getChildren().add(n);
 		
 		Object lvMapObj = c.convert(n);
 		
@@ -320,11 +328,11 @@ public class ConverterTest extends TestCase {
 		assertNotNull(lvNodeAfter);
 		Node nAfter = (Node) lvNodeAfter;
 		assertEquals("TestNode", nAfter.getName());
-		assertEquals(3, nAfter.getChilds().size());
-		assertEquals(0, nAfter.getNamedChilds().size());
-		assertEquals(nAfter, nAfter.getChilds().get(2));
-		assertEquals("ChildNode_1", ((Node) nAfter.getChilds().get(0)).getName());
-		assertEquals("ChildNode_2", ((Node) nAfter.getChilds().get(1)).getName());
+		assertEquals(3, nAfter.getChildren().size());
+		assertEquals(0, nAfter.getNamedChildren().size());
+		assertEquals(nAfter, nAfter.getChildren().get(2));
+		assertEquals("ChildNode_1", ((Node)nAfter.getChildren().get(0)).getName());
+		assertEquals("ChildNode_2", ((Node)nAfter.getChildren().get(1)).getName());
 	}
 
 	public void testConvertBeanAndConvertBackWithChildMap() throws Exception {
@@ -334,10 +342,9 @@ public class ConverterTest extends TestCase {
 		c.addConversion(new ComplexBean2MapConversion());
 		
 		Node n = new Node("TestNode");
-		n.setNamedChilds(new HashMap());
-		n.getNamedChilds().put("Node_1", new Node("ChildNode_1"));
-		n.getNamedChilds().put("Node_2", new Node("ChildNode_2"));
-		n.getNamedChilds().put("TestNode", n);
+		n.getNamedChildren().put("Node_1", new Node("ChildNode_1"));
+		n.getNamedChildren().put("Node_2", new Node("ChildNode_2"));
+		n.getNamedChildren().put("TestNode", n);
 		
 		Object lvMapObj = c.convert(n);
 		
@@ -345,11 +352,11 @@ public class ConverterTest extends TestCase {
 		assertNotNull(lvNodeAfter);
 		Node nAfter = (Node) lvNodeAfter;
 		assertEquals("TestNode", nAfter.getName());
-		assertEquals(3, nAfter.getNamedChilds().size());
-		assertEquals(0, nAfter.getChilds().size());
-		assertEquals(nAfter, nAfter.getNamedChilds().get("TestNode"));
-		assertEquals("ChildNode_1", ((Node) nAfter.getNamedChilds().get("Node_1")).getName());
-		assertEquals("ChildNode_2", ((Node) nAfter.getNamedChilds().get("Node_2")).getName());
+		assertEquals(3, nAfter.getNamedChildren().size());
+		assertEquals(0, nAfter.getChildren().size());
+		assertEquals(nAfter, nAfter.getNamedChildren().get("TestNode"));
+		assertEquals("ChildNode_1", ((Node)nAfter.getNamedChildren().get("Node_1")).getName());
+		assertEquals("ChildNode_2", ((Node)nAfter.getNamedChildren().get("Node_2")).getName());
 	}
 
 
@@ -364,7 +371,7 @@ public class ConverterTest extends TestCase {
 		lvPrimitive.setIntValue(7);
 		Object lvResult = c.convert(lvPrimitive);
 		assertNotNull(lvResult);
-		Map lvMap = (Map) lvResult;
+		Map<?,?> lvMap = (Map<?,?>) lvResult;
 		assertEquals("7", lvMap.get("intValue"));
 		
 		lvResult = c.convert(lvResult);
@@ -384,7 +391,7 @@ public class ConverterTest extends TestCase {
 		lvPrimitive.setIntValue(7);
 		Object lvResult = c.convert(lvPrimitive);
 		assertNotNull(lvResult);
-		Map lvMap = (Map) lvResult;
+		Map<?,?> lvMap = (Map<?,?>) lvResult;
 		assertEquals("7", lvMap.get("intValue"));
 		
 		lvResult = c.convert(lvResult);
@@ -419,9 +426,9 @@ public class ConverterTest extends TestCase {
 		Object lvResult = c.convert(lvPrimitive);
 		assertNotNull(lvResult);
 		assertTrue(lvResult instanceof Map);
-		Map lvMap = (Map) lvResult;
-		assertEquals(new Double("3.4"), lvMap.get("floatValue"));
-		assertEquals(new Float("2.3"), lvMap.get("doubleValue"));
+		Map<?,?> lvMap = (Map<?,?>) lvResult;
+		assertEquals(Double.valueOf(3.4), lvMap.get("floatValue"));
+		assertEquals(Float.valueOf(2.3f), lvMap.get("doubleValue"));
 		
 		lvResult = c.convert(lvResult);
 		assertNotNull(lvResult);
@@ -439,9 +446,9 @@ public class ConverterTest extends TestCase {
 		Object lvResult = c.convert(lvPrimitive);
 		assertNotNull(lvResult);
 		assertTrue(lvResult instanceof Map);
-		Map lvMap = (Map) lvResult;
-		assertEquals(new Byte("7"), lvMap.get("shortValue"));
-		assertEquals(new Short("2"), lvMap.get("byteValue"));
+		Map<?,?> lvMap = (Map<?,?>) lvResult;
+		assertEquals(Byte.valueOf((byte)7), lvMap.get("shortValue"));
+		assertEquals(Short.valueOf((short)2), lvMap.get("byteValue"));
 		
 		lvResult = c.convert(lvResult);
 		assertNotNull(lvResult);
@@ -459,7 +466,7 @@ public class ConverterTest extends TestCase {
 		Object lvResult = c.convert(lvPrimitive);
 		assertNotNull(lvResult);
 		assertTrue(lvResult instanceof Map);
-		Map lvMap = (Map) lvResult;
+		Map<?,?> lvMap = (Map<?,?>) lvResult;
 		assertEquals("a", lvMap.get("charValue"));
 		
 		lvResult = c.convert(lvResult);
@@ -478,9 +485,9 @@ public class ConverterTest extends TestCase {
 		Object lvResult = c.convert(lvPrimitive);
 		assertNotNull(lvResult);
 		assertTrue(lvResult instanceof Map);
-		Map lvMap = (Map) lvResult;
-		assertEquals(new Long("3"), lvMap.get("intValue"));
-		assertEquals(new Integer("5"), lvMap.get("longValue"));
+		Map<?,?> lvMap = (Map<?,?>) lvResult;
+		assertEquals(Long.valueOf(3L), lvMap.get("intValue"));
+		assertEquals(Integer.valueOf(5), lvMap.get("longValue"));
 
 		
 		lvResult = c.convert(lvResult);
@@ -499,7 +506,7 @@ public class ConverterTest extends TestCase {
 		Object lvResult = c.convert(lvPrimitive);
 		assertNotNull(lvResult);
 		assertTrue(lvResult instanceof Map);
-		Map lvMap = (Map) lvResult;
+		Map<?,?> lvMap = (Map<?,?>) lvResult;
 		assertEquals("true", lvMap.get("booleanValue"));
 		
 		lvResult = c.convert(lvResult);
@@ -555,7 +562,7 @@ public class ConverterTest extends TestCase {
 		Converter c = new Converter();
 		c.addConversion(new Simple2SimpleConversion(Class.class, String.class));
 
-		Class lvTimeClass = Time.class;
+		Class<Time> lvTimeClass = Time.class;
 		Object o = c.convert(lvTimeClass);
 		
 		c.addConversion(new Simple2SimpleConversion(String.class, Class.class));
@@ -568,7 +575,7 @@ public class ConverterTest extends TestCase {
 		c.addConversion(new Simple2SimpleConversion(BigInteger.class, String.class));
 		c.addConversion(new Simple2SimpleConversion(String.class, BigInteger.class));
 
-		BigInteger lvBigInteger = new BigInteger("12345");
+		BigInteger lvBigInteger = BigInteger.valueOf(12345L); 
 		Object o = c.convert(lvBigInteger);
 		o = c.convert(o);
 		assertEquals(lvBigInteger, o);
@@ -584,20 +591,20 @@ public class ConverterTest extends TestCase {
 	}
 	
 	public void testMakeSimpleMapWithKeyConverterLong2Integer() throws Exception {
-		Map lvMap = new HashMap();
-		lvMap.put(new Long(1), new Long(2));
+		Map<Long, Long> lvMap = new HashMap<Long,Long>();
+		lvMap.put(Long.valueOf(1L), Long.valueOf(2L));
 		
 		Converter c = new Converter();
 		c.addConversion(new Simple2SimpleConversion(Long.class, Integer.class));
 		c.addConversion(new IterateableMap2MapConversion());
 
-		Map lvResultMap = (Map) c.convert(lvMap);
+		Map<?,?> lvResultMap = (Map<?,?>) c.convert(lvMap);
 		Object lvKey = lvResultMap.keySet().iterator().next();
 		Object lvValue = lvResultMap.values().iterator().next();
 		assertEquals(lvKey.getClass(), Integer.class);
 		assertEquals(lvValue.getClass(), Integer.class);
-		assertEquals(lvKey, new Integer(1));
-		assertEquals(lvValue, new Integer(2));
+		assertEquals(lvKey, Integer.valueOf(1));
+		assertEquals(lvValue, Integer.valueOf(2));
 	}
 
 	public void testMakeSimpleAndComplexMapWithKeyConverterLong2Integer_2() throws Exception {
@@ -605,21 +612,20 @@ public class ConverterTest extends TestCase {
 		c.addConversion(new Simple2SimpleConversion(Long.class, Integer.class));
 		c.addConversion(new IterateableMap2MapConversion());
 		
-		Map lvMap = new HashMap();
-		lvMap.put(new Long(3), new Long(4));
-		lvMap.put(new Long(1), new Long(2));
-		lvMap.put(new Long(-1), new Long(-2));
+		Map<Long, Long> lvMap = new HashMap<Long, Long>();
+		lvMap.put(Long.valueOf(3L), Long.valueOf(4L));
+		lvMap.put(Long.valueOf(1L), Long.valueOf(2L));
+		lvMap.put(Long.valueOf(-1L), Long.valueOf(-2L));
 		Object lvSimple = c.convert(lvMap);
 		Object lvComplex = c.convert(lvSimple);
 		assertNotNull(lvComplex);
 		assertTrue(lvComplex instanceof Map);
-		Map lvMapAfter = (Map) lvComplex;
+		@SuppressWarnings("unchecked")
+    Map<Integer,Integer> lvMapAfter = (Map<Integer,Integer>) lvComplex;
 		assertEquals(lvMapAfter.size(), 3);
-		Iterator it = lvMapAfter.keySet().iterator();
-		while (it.hasNext()) {
-			Integer lvKey = (Integer) it.next();
-			Integer lvValue = (Integer) lvMapAfter.get(lvKey);
-			Long lvValueBefore =(Long) lvMap.get(new Long(lvKey.toString()));
+		for (Integer lvKey : lvMapAfter.keySet()) {
+			Integer lvValue = lvMapAfter.get(lvKey);
+			Long lvValueBefore = lvMap.get(Long.valueOf(lvKey.toString()));
 			assertEquals(lvValueBefore.intValue(), lvValue.intValue());
 		}
 	}
@@ -627,34 +633,35 @@ public class ConverterTest extends TestCase {
 	public void testMakeSimpleVector() throws Exception {
 		Node n1 = new Node("Node");
 		Node n2 = new Node("Node");
-		List lvListNodes = new ArrayList(2);
+		List<Node> lvListNodes = new ArrayList<Node>(2);
 		lvListNodes.add(n1);
 		lvListNodes.add(n2);
 		
 		Converter c = new Converter();
 		c.addConversion(new Iterateable2IterateableConversion(Vector.class));
 		c.addConversion(new ComplexBean2MapConversion());
-		Vector lvVecNodes = (Vector) c.convert(lvListNodes);
+		Vector<?> lvVecNodes = (Vector<?>) c.convert(lvListNodes);
 		
-		Map lvNode1Map = (Map) lvVecNodes.get(0);
+		Map<?,?> lvNode1Map = (Map<?,?>) lvVecNodes.get(0);
 		assertEquals(n1.getName(), lvNode1Map.get("name"));
-		assertEquals(n1.getChilds(), lvNode1Map.get("childs"));
+		assertEquals(n1.getChildren(), lvNode1Map.get("children"));
 
-		Map lvNode2Map = (Map) lvVecNodes.get(0);
+		Map<?,?> lvNode2Map = (Map<?,?>) lvVecNodes.get(0);
 		assertEquals(n2.getName(), lvNode2Map.get("name"));
-		assertEquals(n2.getChilds(), lvNode2Map.get("childs"));
+		assertEquals(n2.getChildren(), lvNode2Map.get("children"));
 	}
 	
-	public void testBiDirectionalNodeRelation() throws Exception {
+	@SuppressWarnings("unchecked")
+  public void testBiDirectionalNodeRelation() throws Exception {
 		Node n1 = new Node("Node1");
 		Node n2 = new Node("Node2");
 		Node n3 = new Node("Node3");
 		
-		n1.getNamedChilds().put(n2.getName(), n2);
-		n1.getNamedChilds().put(n3.getName(), n3);
+		n1.getNamedChildren().put(n2.getName(), n2);
+		n1.getNamedChildren().put(n3.getName(), n3);
 		n2.setParent(n1);
 		n3.setParent(n1);
-		Vector v = new Vector();
+		Vector<Node> v = new Vector<Node>();
 		v.add(n2);
 		v.add(n3);
 
@@ -668,10 +675,10 @@ public class ConverterTest extends TestCase {
 		o = c.convert(o);
 		
 		assertTrue(o instanceof Vector);
-		v = (Vector) o;
+		v = (Vector<Node>) o;
 		assertEquals(v.size(), 2);
-		Node n22 = (Node) v.get(0);
-		Node n33 = (Node) v.get(1);
+		Node n22 = v.get(0);
+		Node n33 = v.get(1);
 		assertEquals(n22.getName(), n2.getName());
 		assertEquals(n33.getName(), n3.getName());
 		Node n11 = n22.getParent();
@@ -679,23 +686,23 @@ public class ConverterTest extends TestCase {
 		assertEquals(n22.getParent(), n33.getParent());
 		assertEquals(n22.getParent(), n11);
 		assertEquals(n33.getParent(), n11);
-		assertEquals(n11.getNamedChilds().get(n22.getName()), n22);
-		assertEquals(n11.getNamedChilds().get(n33.getName()), n33);
+		assertEquals(n11.getNamedChildren().get(n22.getName()), n22);
+		assertEquals(n11.getNamedChildren().get(n33.getName()), n33);
 	}
 	
 	
 	public void testMakeComplexList() throws Exception {
-		List lvList = new ArrayList();
-		lvList.add(new Integer(5));
+		List<Object> lvList = new ArrayList<Object>();
+		lvList.add(Integer.valueOf(5));
 		lvList.add("abc");
 
 		Converter c = new Converter();
 		c.addConversion(new Iterateable2IterateableConversion(Vector.class));
 		
-		List lvComplexList = (List) c.convert(lvList);
+		List<?> lvComplexList = (List<?>) c.convert(lvList);
 		assertTrue(lvComplexList instanceof Vector);
 		assertTrue(lvComplexList.size() == 2);
-		assertEquals(lvComplexList.get(0), new Integer(5));
+		assertEquals(lvComplexList.get(0), Integer.valueOf(5));
 		assertEquals(lvComplexList.get(1), "abc");
 	}	
 	
@@ -709,37 +716,37 @@ public class ConverterTest extends TestCase {
 
 		c.addConversion(new Simple2SimpleConversion(String.class, short.class));
 		o = c.convert("3");
-		assertEquals(new Short("3"), o);
+		assertEquals(Short.valueOf((short)3), o);
 		c.getConversionHandler().clear();
 
 		c.addConversion(new Simple2SimpleConversion(String.class, byte.class));
 		o = c.convert("5");
-		assertEquals(new Byte("5"), o);
+		assertEquals(Byte.valueOf((byte)5), o);
 		c.getConversionHandler().clear();
 
 		c.addConversion(new Simple2SimpleConversion(String.class, int.class));
 		o = c.convert("7");
-		assertEquals(new Integer("7"), o);
+		assertEquals(Integer.valueOf(7), o);
 		c.getConversionHandler().clear();
 
 		c.addConversion(new Simple2SimpleConversion(String.class, long.class));
 		o = c.convert("9");
-		assertEquals(new Long("9"), o);
+		assertEquals(Long.valueOf(9), o);
 		c.getConversionHandler().clear();
 
 		c.addConversion(new Simple2SimpleConversion(String.class, double.class));
 		o = c.convert("3.5");
-		assertEquals(new Double("3.5"), o);
+		assertEquals(Double.valueOf(3.5), o);
 		c.getConversionHandler().clear();
 
 		c.addConversion(new Simple2SimpleConversion(String.class, float.class));
 		o = c.convert("5.7");
-		assertEquals(new Float("5.7"), o);
+		assertEquals(Float.valueOf(5.7F), o);
 		c.getConversionHandler().clear();
 		
 		c.addConversion(new Simple2SimpleConversion(String.class, char.class));
 		o = c.convert("5");
-		assertEquals(new Character('5'), o);
+		assertEquals(Character.valueOf('5'), o);
 		c.getConversionHandler().clear();
 
 		c.addConversion(new Simple2SimpleConversion(String.class, String.class));
@@ -750,7 +757,7 @@ public class ConverterTest extends TestCase {
 		if (Locale.getDefault().equals(Locale.GERMANY)) {
 			c.addConversion(new Simple2SimpleConversion(String.class, Date.class));
 			o = c.convert("28.12.2005");
-			assertEquals(new Date(1135724400000l), o);
+			assertEquals(new Date(1135724400000L), o);
 			c.getConversionHandler().clear();
 		}
 
@@ -769,11 +776,11 @@ public class ConverterTest extends TestCase {
 		
 		Object lvResult = c.convert(lvNodes);
 		assertNotNull(lvResult);
-		Vector v = (Vector) lvResult;
+		Vector<?> v = (Vector<?>) lvResult;
 		assertEquals(3, v.size());	
-		assertEquals("Node_1", ((Map) v.get(0)).get("name"));
+		assertEquals("Node_1", ((Map<?,?>) v.get(0)).get("name"));
 		assertEquals(UniqueIdGenerator.UNIQUE_ID_PROPERTY + "0", v.get(1));
-		assertEquals("Node_2", ((Map) v.get(2)).get("name"));
+		assertEquals("Node_2", ((Map<?,?>) v.get(2)).get("name"));
 	}
 
 	public void testArrayWithNodesAndBackToArray() throws Exception {
@@ -794,13 +801,14 @@ public class ConverterTest extends TestCase {
 		assertNotNull(lvResult);
 		Node lvNodesAfter[] = (Node[]) lvResult;
 		assertEquals(3, lvNodesAfter.length);	
-		assertEquals("Node_1", ((Node) lvNodesAfter[0]).getName());
-		assertEquals("Node_1", ((Node) lvNodesAfter[1]).getName());
-		assertEquals("Node_2", ((Node) lvNodesAfter[2]).getName());
+		assertEquals("Node_1", lvNodesAfter[0].getName());
+		assertEquals("Node_1", lvNodesAfter[1].getName());
+		assertEquals("Node_2", lvNodesAfter[2].getName());
 		assertEquals(lvNodesAfter[0], lvNodesAfter[1]);
 	}
 
-	public void testArrayWithNodesWithNullValue() throws Exception {
+	@SuppressWarnings("unchecked")
+  public void testArrayWithNodesWithNullValue() throws Exception {
 		Converter c = new Converter();
 		Iterateable2IterateableConversion lvConversion = new Iterateable2IterateableConversion(Vector.class);
 		lvConversion.setIgnoreNullValues(true);
@@ -814,19 +822,20 @@ public class ConverterTest extends TestCase {
 		
 		Object lvResult = c.convert(lvNodes);
 		assertNotNull(lvResult);
-		Vector v = (Vector) lvResult;
+		
+		Vector<Node> v = (Vector<Node>) lvResult;
 		assertEquals(2, v.size());
-		assertEquals("Node_1", ((Node) v.get(0)).getName());
-		assertEquals("Node_2", ((Node) v.get(1)).getName());
+		assertEquals("Node_1", v.get(0).getName());
+		assertEquals("Node_2", v.get(1).getName());
 		
 		c.addConversion(new NullConversion("~Null~Value~"));
 		lvResult = c.convert(lvNodes);
 		assertNotNull(lvResult);
-		v = (Vector) lvResult;
+		v = (Vector<Node>) lvResult;
 		assertEquals(3, v.size());
-		assertEquals("Node_1", ((Node) v.get(0)).getName());
+		assertEquals("Node_1", v.get(0).getName());
 		assertEquals("~Null~Value~", v.get(1));
-		assertEquals("Node_2", ((Node) v.get(2)).getName());
+		assertEquals("Node_2", v.get(2).getName());
 	}
 
 
@@ -834,7 +843,7 @@ public class ConverterTest extends TestCase {
 		Converter c = new Converter();
 		c.addConversion(new Iterateable2IterateableConversion(Vector.class));
 
-		Object lvArray = new Object[] { new Integer(7), "JUnit-Test-String", new Date(123456789) };
+		Object lvArray = new Object[] { new Integer(7), "JUnit-Test-String", new Date(123456789L) };
 		
 		Object lvResult = c.convert(lvArray);
 		// convert back
@@ -854,7 +863,7 @@ public class ConverterTest extends TestCase {
 		Object lvArray = new Object[] { new Integer(7), "JUnit-Test-String", new Date(123456789), null };
 		
 		Object lvResult = c.convert(lvArray);
-		Vector v = (Vector) lvResult;
+		Vector<?> v = (Vector<?>) lvResult;
 		assertEquals(4, v.size());
 
 		// convert back
@@ -863,7 +872,8 @@ public class ConverterTest extends TestCase {
 		lvResult = c.convert(lvResult, Object[].class);
 		assertNotNull(lvResult);
 		Object lvArrayAfter[] = (Object[]) lvResult;
-		// sollte eigentlich 3 sein, Null-Werte kommen immer mit
+		
+		// should actually be 3 but null-values are always included
 		assertEquals(4, lvArrayAfter.length);	
 		assertEquals(new Integer(7), lvArrayAfter[0]);
 		assertEquals("JUnit-Test-String", lvArrayAfter[1]);
@@ -906,7 +916,7 @@ public class ConverterTest extends TestCase {
 	}
 	
 	public void testConvertMapWithNullElement() throws Exception {
-		Map lvMap = new HashMap(2);
+		Map<String, String> lvMap = new HashMap<String,String>(2);
 		lvMap.put("String", "String");
 		lvMap.put("null", null);
 		
@@ -916,7 +926,7 @@ public class ConverterTest extends TestCase {
 		Object result = c.convert(lvMap);
 		assertTrue(result instanceof Map);
 		assertTrue(result instanceof HashMap);
-		Map lvMapAfter = (Map) result;
+		Map<?,?> lvMapAfter = (Map<?,?>) result;
 		assertEquals(lvMapAfter.size(), 1);
 		assertNotSame(lvMap, result);
 		assertTrue( ! lvMap.equals(result) );
@@ -930,7 +940,7 @@ public class ConverterTest extends TestCase {
 		Converter c = new Converter();
 		c.addConversion(new Iterateable2IterateableConversion(Vector.class));
 
-		Vector v = (Vector) c.convert(lvByteArray);
+		Vector<?> v = (Vector<?>) c.convert(lvByteArray);
 		assertEquals(lvByteArray[0], ((Byte) v.get(0)).byteValue());
 		assertEquals(lvByteArray[1], ((Byte) v.get(1)).byteValue());
 		
@@ -943,7 +953,7 @@ public class ConverterTest extends TestCase {
 		Converter c = new Converter();
 		c.addConversion(new IterateableMap2MapConversion(HashMap.class));
 		
-		Map lvMap = new Hashtable();
+		Map<String,String> lvMap = new HashMap<String,String>();
 		lvMap.put("1", "1");
 		lvMap.put("5", "5");
 		lvMap.put("3", "3");
@@ -952,12 +962,12 @@ public class ConverterTest extends TestCase {
 		
 		Object lvSimple = c.convert(lvMap);
 		assertTrue(lvSimple instanceof Map);
-		assertEquals(4, ((Map) lvSimple).size());
+		assertEquals(4, ((Map<?,?>) lvSimple).size());
 		
 		Object lvComplex = c.convert(lvSimple);
 		assertTrue(lvComplex instanceof Map);
-		Map lvMapAfter = (Map) lvComplex;
-		assertEquals(4, ((Map) lvComplex).size());
+		Map<?,?> lvMapAfter = (Map<?,?>) lvComplex;
+		assertEquals(4, ((Map<?,?>) lvComplex).size());
 		assertEquals("1", lvMapAfter.get("1"));
 		assertEquals("5", lvMapAfter.get("5"));
 		assertEquals("A", lvMapAfter.get("A"));
@@ -971,7 +981,7 @@ public class ConverterTest extends TestCase {
 		Customer c = new Customer("Test-Kunde");
 		c.getAddresses().add(a);
 
-		Map lvMap = new Hashtable();
+		Map<String, Object> lvMap = new HashMap<String, Object>();
 		lvMap.put("ADRESSE_KEY_3", a);
 		lvMap.put("ADRESSE_KEY_2", a);
 		lvMap.put("ADRESSE_KEY_1", a);
@@ -988,7 +998,7 @@ public class ConverterTest extends TestCase {
 		Object lvComplex = conv.convert(lvSimple);
 		assertNotNull(lvComplex);
 		assertTrue(lvComplex instanceof Map);
-		Map lvMapAfter = (Map) lvComplex;
+		Map<?,?> lvMapAfter = (Map<?,?>) lvComplex;
 		assertEquals(4, lvMapAfter.size());
 
 		Object lvKundeAfter = lvMapAfter.get("ADRESSE_KEY_0");
@@ -1064,7 +1074,7 @@ public class ConverterTest extends TestCase {
 		Converter c = new Converter();
 		c.addConversion(new IterateableMap2BeanConversion());
 
-		Map lvMap = new HashMap();
+		Map<String, String> lvMap = new HashMap<String, String>();
 		lvMap.put("class", Car.class.getName());
 		lvMap.put("name", "BMW");			
 		
@@ -1081,7 +1091,7 @@ public class ConverterTest extends TestCase {
 		c.addConversion(new NullConversion("~Null~Value~"));
 		c.addConversion(new NullConversion(new Date(-1)));
 
-		Map lvMap = new HashMap();
+		Map<String, String> lvMap = new HashMap<String, String>();
 		lvMap.put("class", Car.class.getName());
 		lvMap.put("name", "BMW");			
 		lvMap.put("description", null);
@@ -1095,93 +1105,95 @@ public class ConverterTest extends TestCase {
 		assertEquals(new Date(-1), lvCar.getBuild());
 	}
 
-	public void testComplexObjectGraph() throws Exception {
+	@SuppressWarnings("unchecked")
+  public void testComplexObjectGraph() throws Exception {
 		Node n11 = new Node("n11");
 		Node n12 = new Node("n12");
 		Node n21 = new Node("n21");
 		Node n22 = new Node("n22");
-		n11.getChilds().add(n21);
-		n11.getChilds().add(n22);
+		n11.getChildren().add(n21);
+		n11.getChildren().add(n22);
 		
-		n12.getChilds().add(n21);
-		n12.getChilds().add(n22);
+		n12.getChildren().add(n21);
+		n12.getChildren().add(n22);
 		
-		List liste = new ArrayList();
-		liste.add(n11);
-		liste.add(n12);
-		liste.add(n21);
-		liste.add(n22);
+		List<Node> list = new ArrayList<Node>(4);
+		list.add(n11);
+		list.add(n12);
+		list.add(n21);
+		list.add(n22);
 
 		Converter c = new Converter();
 		c.addConversion(new IterateableMap2MapConversion());
 		c.addConversion(new IterateableMap2BeanConversion());
 		c.addConversion(new ComplexBean2MapConversion());
 
-		Object o = c.convert(liste);
-		liste = (List) c.convert(o);
+		Object o = c.convert(list);
+		list = (List<Node>) c.convert(o);
 		
-		assertNotNull(liste);
-		assertEquals(liste.size(), 4);
+		assertNotNull(list);
+		assertEquals(list.size(), 4);
 		
-		Node n1After = (Node) liste.get(0);
+		Node n1After = list.get(0);
 		assertEquals( n1After.getName(), "n11");
-		assertEquals( ((Node) n1After.getChilds().get(0)).getName(), "n21");
-		assertEquals( ((Node) n1After.getChilds().get(1)).getName(), "n22");
+		assertEquals( ((Node)n1After.getChildren().get(0)).getName(), "n21");
+		assertEquals( ((Node)n1After.getChildren().get(1)).getName(), "n22");
 
-		Node n2After = (Node) liste.get(1);
+		Node n2After = list.get(1);
 		assertEquals( n2After.getName(), "n12");
-		assertEquals( ((Node) n2After.getChilds().get(0)).getName(), "n21");
-		assertEquals( ((Node) n2After.getChilds().get(1)).getName(), "n22");
+		assertEquals( ((Node)n2After.getChildren().get(0)).getName(), "n21");
+		assertEquals( ((Node)n2After.getChildren().get(1)).getName(), "n22");
 		
-		assertEquals( ((Node) liste.get(2)).getName(), "n21");
-		assertEquals( ((Node) liste.get(3)).getName(), "n22");
+		assertEquals( list.get(2).getName(), "n21");
+		assertEquals( list.get(3).getName(), "n22");
 	}
 
-	public void testComplexObjectGraph_2() throws Exception {
+	@SuppressWarnings("unchecked")
+  public void testComplexObjectGraph_2() throws Exception {
 		Node n11 = new Node("n11");
 		Node n12 = new Node("n12");
 		Node n21 = new Node("n21");
 		Node n22 = new Node("n22");
-		n11.getChilds().add(n21);
-		n11.getChilds().add(n22);
+		n11.getChildren().add(n21);
+		n11.getChildren().add(n22);
 		
-		n12.getChilds().add(n21);
-		n12.getChilds().add(n22);
+		n12.getChildren().add(n21);
+		n12.getChildren().add(n22);
 		
-		List liste = new ArrayList();
-		liste.add(n11);
-		liste.add(n12);
-		liste.add(n21);
-		liste.add(n22);
+		List<Node> list = new ArrayList<Node>(4);
+		list.add(n11);
+		list.add(n12);
+		list.add(n21);
+		list.add(n22);
 
 		Converter c = new Converter();
 		c.addConversion(new IterateableMap2MapConversion());
 		c.addConversion(new IterateableMap2BeanConversion());
 		c.addConversion(new ComplexBean2MapConversion());
 
-		Object o = c.convert(liste);
-		liste = (List) c.convert(o);
+		Object o = c.convert(list);
+		list = (List<Node>) c.convert(o);
 		
-		assertNotNull(liste);
-		assertEquals(liste.size(), 4);
+		assertNotNull(list);
+		assertEquals(list.size(), 4);
 		
-		Node n1After = (Node) liste.get(0);
+		Node n1After = list.get(0);
 		assertEquals( n1After.getName(), "n11");
-		assertEquals( ((Node) n1After.getChilds().get(0)).getName(), "n21");
-		assertEquals( ((Node) n1After.getChilds().get(1)).getName(), "n22");
+		assertEquals( ((Node)n1After.getChildren().get(0)).getName(), "n21");
+		assertEquals( ((Node)n1After.getChildren().get(1)).getName(), "n22");
 
-		Node n2After = (Node) liste.get(1);
+		Node n2After = list.get(1);
 		assertEquals( n2After.getName(), "n12");
-		assertEquals( ((Node) n2After.getChilds().get(0)).getName(), "n21");
-		assertEquals( ((Node) n2After.getChilds().get(1)).getName(), "n22");
+		assertEquals( ((Node)n2After.getChildren().get(0)).getName(), "n21");
+		assertEquals( ((Node)n2After.getChildren().get(1)).getName(), "n22");
 		
-		assertEquals( ((Node) liste.get(2)).getName(), "n21");
-		assertEquals( ((Node) liste.get(3)).getName(), "n22");
+		assertEquals( list.get(2).getName(), "n21");
+		assertEquals( list.get(3).getName(), "n22");
 	}
 
 
 	public void testConvertMakeCompleyWithInValidMap() throws Exception {
-		Map map = new HashMap();
+		Map<String, String> map = new HashMap<String, String>();
 		map.put("class", "i.am.a.not.valid.Clazz");
 
 		Converter c = new Converter();
@@ -1206,7 +1218,7 @@ public class ConverterTest extends TestCase {
 		c.addConversion(lvConversion);
 
 
-		List l = new Vector();
+		List<Object> l = new Vector<Object>();
 		Customer lvCustomer = new Customer("Junit-Test-Kunde");
 		Object lvSimple = c.convert(lvCustomer);
 		
@@ -1219,7 +1231,7 @@ public class ConverterTest extends TestCase {
 		assertNotNull(lvComplex);
 		assertTrue(lvComplex instanceof List);
 		// without null value
-		assertEquals(2, ((List) lvComplex).size());
+		assertEquals(2, ((List<?>) lvComplex).size());
 	}
 	
 	public void testMapInArrayByMakeComplex() throws Exception {
@@ -1228,7 +1240,7 @@ public class ConverterTest extends TestCase {
 		c.addConversion(new Iterateable2IterateableConversion());
 		c.addConversion(new IterateableMap2BeanConversion());
 
-		Map lvPrimitiveMap = (Map) c.convert(Primitive.createPrimitiveExample());
+		Map<?,?> lvPrimitiveMap = (Map<?,?>) c.convert(Primitive.createPrimitiveExample());
 		assertNotNull(lvPrimitiveMap);
 		Integer lvIntValue = (Integer) lvPrimitiveMap.get("intValue");
 		assertEquals(3, lvIntValue.intValue());
@@ -1249,12 +1261,12 @@ public class ConverterTest extends TestCase {
 		Address a = new Address();
 		a.setCity("Hier");
 		lvCustomer.getAddresses().add(a);
-		Map lvMap = new Hashtable();
+		Map<String, Object> lvMap = new HashMap<String, Object>();
 		lvMap.put("ADDRESS_KEY", a);
 		lvMap.put("CUSTOMER_KEY", lvCustomer);
 
 		Object lvSimple = c.convert(lvMap);
-		Map lvMapAfter = (Map) c.convert(lvSimple);
+		Map<?,?> lvMapAfter = (Map<?,?>) c.convert(lvSimple);
 		assertNotNull(lvMapAfter);
 		assertEquals(2, lvMapAfter.size());
 
@@ -1276,8 +1288,8 @@ public class ConverterTest extends TestCase {
 		Address a = new Address();
 		a.setCity("Hier");
 		lvCustomer.getAddresses().add(a);
-		Map lvMap = new Hashtable();
-		Collection lvColl = new ArrayList();
+		Map<String, Object> lvMap = new HashMap<String, Object>();
+		Collection<Object> lvColl = new ArrayList<Object>(1);
 		lvColl.add(a);
 		
 		lvMap.put("ADDRESS_KEY", lvColl);
@@ -1285,11 +1297,11 @@ public class ConverterTest extends TestCase {
 
 
 		Object lvSimple = c.convert(lvMap);
-		Map lvMapAfter = (Map) c.convert(lvSimple);
+		Map<?,?> lvMapAfter = (Map<?,?>)c.convert(lvSimple);
 		assertNotNull(lvMapAfter);
 		assertEquals(2, lvMapAfter.size());
 
-		Collection lvCollAfter = (Collection) lvMap.get("ADDRESS_KEY");
+		Collection<?> lvCollAfter = (Collection<?>) lvMap.get("ADDRESS_KEY");
 		Customer lvCustomerAfter = (Customer) lvMap.get("CUSTOMER_KEY");
 		
 		assertEquals(lvColl.size(), lvCollAfter.size());
@@ -1312,10 +1324,10 @@ public class ConverterTest extends TestCase {
 
 		Object lvSimple = c.convert(ar);
 		
-		List l = new Vector();
+		List<Object> l = new Vector<Object>();
 		// swap the order of the array
-		l.add(((List) lvSimple).get(1));
-		l.add(((List) lvSimple).get(0));
+		l.add(((List<?>) lvSimple).get(1));
+		l.add(((List<?>) lvSimple).get(0));
 		
 		try {
 			c.convert(l, ar.getClass());
@@ -1331,7 +1343,7 @@ public class ConverterTest extends TestCase {
 		a.setCity("Hier");
 		k.getAddresses().add(a);
 		
-		Map lvMap = new Hashtable();
+		Map<String, Object> lvMap = new HashMap<String, Object>();
 		lvMap.put("KEY_5", a);
 		lvMap.put("KEY_2", k);
 		
@@ -1347,7 +1359,7 @@ public class ConverterTest extends TestCase {
 		
 		assertNotNull(lvComplex);
 		assertTrue(lvComplex instanceof Map);
-		Map lvMapAfter = (Map) lvComplex;
+		Map<?,?> lvMapAfter = (Map<?,?>) lvComplex;
 		assertEquals(2, lvMapAfter.size());
 		Address aAfter = (Address) lvMapAfter.get("KEY_5");
 		Customer kAfter = (Customer) lvMapAfter.get("KEY_2");
@@ -1374,7 +1386,7 @@ public class ConverterTest extends TestCase {
 		a.setCity("Hier");
 		lvCustomer.getAddresses().add(a);
 		
-		Map lvMap = new Hashtable();
+		Map<String, Object> lvMap = new HashMap<String, Object>();
 		lvMap.put("KEY_1", a);
 		lvMap.put("KEY_2", lvCustomer);
 		
@@ -1385,7 +1397,7 @@ public class ConverterTest extends TestCase {
 		
 		assertNotNull(lvComplex);
 		assertTrue(lvComplex instanceof Map);
-		Map lvMapAfter = (Map) lvComplex;
+		Map<?,?> lvMapAfter = (Map<?,?>) lvComplex;
 		assertEquals(2, lvMapAfter.size());
 		Address aAfter = (Address) lvMapAfter.get("KEY_1");
 		Customer kAfter = (Customer) lvMapAfter.get("KEY_2");
@@ -1395,7 +1407,7 @@ public class ConverterTest extends TestCase {
 		assertEquals(aAfter, kAfter.getAddresses().iterator().next());
 	}
 
-	public void __testObjectFoundForHashCodeByMakeComplex_2() throws Exception {
+	public void testObjectFoundForHashCodeByMakeComplex_2() throws Exception {
 		Converter c = new Converter();
 		c.addConversion(new IterateableMap2MapConversion());
 		c.addConversion(new IterateableMap2BeanConversion());
@@ -1407,7 +1419,7 @@ public class ConverterTest extends TestCase {
 		Customer k = new Customer("Test-Kunde");
 		k.getAddresses().add(a);
 
-		Map lvMap = new Hashtable();
+		Map<String, Object> lvMap = new HashMap<String, Object>();
 		lvMap.put("ADRESSE_KEY_3", a);
 		lvMap.put("ADRESSE_KEY_2", a);
 		lvMap.put("ADRESSE_KEY_1", a);
@@ -1417,7 +1429,7 @@ public class ConverterTest extends TestCase {
 		Object lvComplex = c.convert(lvSimple);
 		assertNotNull(lvComplex);
 		assertTrue(lvComplex instanceof Map);
-		Map lvMapAfter = (Map) lvComplex;
+		Map<?,?> lvMapAfter = (Map<?,?>) lvComplex;
 		assertEquals(4, lvMapAfter.size());
 
 		Object lvKundeAfter = lvMapAfter.get("ADRESSE_KEY_0");
@@ -1460,7 +1472,7 @@ public class ConverterTest extends TestCase {
 	public void testSimpleBooleanArray() throws Exception {
 		Object o = new ObjectUtil().makeSimple(new boolean[] { true, false, true });
 		assertNotNull(o);
-		ArrayList al = (ArrayList) o;
+		List<?> al = (List<?>) o;
 		assertEquals(3, al.size());
 		assertEquals(Boolean.TRUE, al.get(0));
 	}
@@ -1484,19 +1496,18 @@ public class ConverterTest extends TestCase {
 		ObjectUtil lvUtil = new ObjectUtil();
 		
 		Customer lvCustomer = new Customer("Junit-Test-Kunde");
-		List l = new Vector();
+		List<Customer> l = new Vector<Customer>();
 		l.add(lvCustomer);
 		l.add(null);
 		l.add(lvCustomer);
 
 		Object lvSimple = lvUtil.makeSimple(l);
 		
-		
 		Object lvComplex = lvUtil.makeComplex(lvSimple);
 		
 		assertNotNull(lvComplex);
 		assertTrue(lvComplex instanceof List);
-		List lAfter = (List) lvComplex;
+		List<?> lAfter = (List<?>) lvComplex;
 		assertEquals(3, lAfter.size());
 		
 		Customer lvCustomerAfter = (Customer) lAfter.get(0);
@@ -1532,7 +1543,7 @@ public class ConverterTest extends TestCase {
 		IterateableMap2BeanConversion lvBeanConversion = new IterateableMap2BeanConversion();
 		Converter lvConverter = new Converter();
 		lvConverter.addConversion(lvBeanConversion);
-		Map lvMap = new HashMap();
+		Map<String, Object> lvMap = new HashMap<String, Object>();
 		lvMap.put("name", "MyName");
 		lvMap.put("build", new Car());
 		try {
@@ -1547,7 +1558,7 @@ public class ConverterTest extends TestCase {
 		IterateableMap2BeanConversion lvBeanConversion = new IterateableMap2BeanConversion();
 		Converter lvConverter = new Converter();
 		lvConverter.addConversion(lvBeanConversion);
-		Map lvMap = new HashMap();
+		Map<String, Object> lvMap = new HashMap<String, Object>();
 		lvMap.put("name", "MyName");
 		lvMap.put("properties", "not a property");
 		try {

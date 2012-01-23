@@ -356,8 +356,8 @@ public class ObjectGraphWalkerTest extends TestCase {
 		lvWalker.walk(lvNode);
 		Map lvPathes = lvInterceptor.getAllRecordedPaths();
 		
-		assertNotNull(lvPathes.get("childs[]"));
-		assertNotNull(lvPathes.get("namedChilds()"));
+		assertNotNull(lvPathes.get("children[]"));
+		assertNotNull(lvPathes.get("namedChildren()"));
 		assertNotNull(lvPathes.get("class"));
 		assertNotNull(lvPathes.get("name"));
 		assertNull(lvPathes.get(UniqueIdGenerator.UNIQUE_ID_PROPERTY));
@@ -366,11 +366,11 @@ public class ObjectGraphWalkerTest extends TestCase {
 		Iterator lvIterator = lvPathes.entrySet().iterator();
 		while (lvIterator.hasNext()) {
 			Map.Entry lvEntry = (Entry) lvIterator.next();
-			if (lvEntry.getKey().equals("childs[]")) {
+			if (lvEntry.getKey().equals("children[]")) {
 				Object lvResult = PathExecuter.getNestedProperty(lvNode, lvEntry.getKey().toString());
 				assertEquals(new ArrayList(), lvResult);
 			}
-			else if (lvEntry.getKey().equals("namedChilds()")) {
+			else if (lvEntry.getKey().equals("namedChildren()")) {
 				Object lvResult = PathExecuter.getNestedProperty(lvNode, lvEntry.getKey().toString());
 				assertEquals(new Hashtable(), lvResult);
 			}
@@ -424,9 +424,9 @@ public class ObjectGraphWalkerTest extends TestCase {
 
 	public void testWalkBeanSimpleInList() throws Exception {
 		Node lvNode1 = new Node("Test-Node-1");
-		lvNode1.getChilds().add("child-1");
+		lvNode1.getChildren().add("child-1");
 		Node lvNode2 = new Node("Test-Node-2");
-		lvNode2.getNamedChilds().put("key-1", "value-1");
+		lvNode2.getNamedChildren().put("key-1", "value-1");
 		List lvList = new ArrayList();
 		lvList.add(lvNode1);
 		lvList.add(lvNode2);
@@ -448,7 +448,7 @@ public class ObjectGraphWalkerTest extends TestCase {
 		assertNotNull(lvResult);
 		assertEquals("Test-Node-1", lvResult);
 
-		lvPath = "[0].childs[0]";
+		lvPath = "[0].children[0]";
 		assertNotNull(lvPathes.get(lvPath));
 		lvResult = PathExecuter.getNestedProperty(lvList, lvPath);
 		assertNotNull(lvResult);
@@ -460,7 +460,7 @@ public class ObjectGraphWalkerTest extends TestCase {
 		assertNotNull(lvResult);
 		assertEquals("Test-Node-2", lvResult);
 
-		lvPath = "[1].namedChilds(key-1)";
+		lvPath = "[1].namedChildren(key-1)";
 		assertNotNull(lvPathes.get(lvPath));
 		lvResult = PathExecuter.getNestedProperty(lvList, lvPath);
 		assertNotNull(lvResult);
@@ -471,9 +471,9 @@ public class ObjectGraphWalkerTest extends TestCase {
 		Node lvNode = new Node("Test-Node");
 		Node lvNodeParent = new Node("Test-Node-Parent");
 		lvNode.setParent(lvNodeParent);
-		lvNode.getChilds().add("child-1");
-		lvNode.getChilds().add("child-2");
-		lvNode.getNamedChilds().put("child-key-1", "child-value-1");
+		lvNode.getChildren().add("child-1");
+		lvNode.getChildren().add("child-2");
+		lvNode.getNamedChildren().put("child-key-1", "child-value-1");
 		ObjectGraphWalker lvWalker = new ObjectGraphWalker();
 		PathRecordWalkerInterceptor lvInterceptor = new PathRecordWalkerInterceptor();
 		lvWalker.addInterceptor(lvInterceptor);
@@ -486,23 +486,23 @@ public class ObjectGraphWalkerTest extends TestCase {
 		Object lvResult = PathExecuter.getNestedProperty(lvNode, lvPath);
 		assertEquals("Test-Node", lvResult);
 
-		lvPath = "childs[0]";
+		lvPath = "children[0]";
 		assertEquals("child-1", lvPathes.get(lvPath));
 		lvResult = PathExecuter.getNestedProperty(lvNode, lvPath);
 		assertEquals("child-1", lvResult);
 
-		lvPath = "childs[]";
-		assertEquals(lvNode.getChilds(), lvPathes.get(lvPath));
+		lvPath = "children[]";
+		assertEquals(lvNode.getChildren(), lvPathes.get(lvPath));
 		lvResult = PathExecuter.getNestedProperty(lvNode, lvPath);
-		assertEquals(lvNode.getChilds().size(), ((List) lvResult).size());
-		assertEquals(lvNode.getChilds(), lvResult);
+		assertEquals(lvNode.getChildren().size(), ((List) lvResult).size());
+		assertEquals(lvNode.getChildren(), lvResult);
 		
-		lvPath = "namedChilds(child-key-1)";
-		assertEquals(lvNode.getNamedChilds().get("child-key-1"), lvPathes.get(lvPath));
+		lvPath = "namedChildren(child-key-1)";
+		assertEquals(lvNode.getNamedChildren().get("child-key-1"), lvPathes.get(lvPath));
 		lvResult = PathExecuter.getNestedProperty(lvNode, lvPath);
 		assertEquals("child-value-1", lvResult);
 
-		lvResult = PathExecuter.getNestedProperty(lvNode, "namedChilds(key-not-found)");
+		lvResult = PathExecuter.getNestedProperty(lvNode, "namedChildren(key-not-found)");
 		assertNull(lvResult);
 	}
 	
@@ -510,10 +510,10 @@ public class ObjectGraphWalkerTest extends TestCase {
 		Node lvNode = new Node("Test-Node");
 		Node lvNodeParent = new Node("Test-Node-Parent");
 		lvNode.setParent(lvNodeParent);
-		lvNode.getChilds().add("child-1");
-		lvNode.getChilds().add("child-2");
-		lvNode.getNamedChilds().put("key", "value");
-		lvNode.getNamedChilds().put("self", lvNode);
+		lvNode.getChildren().add("child-1");
+		lvNode.getChildren().add("child-2");
+		lvNode.getNamedChildren().put("key", "value");
+		lvNode.getNamedChildren().put("self", lvNode);
 		
 		ObjectGraphWalker lvWalker = new ObjectGraphWalker();
 		PathRecordWalkerInterceptor lvInterceptor = new PathRecordWalkerInterceptor();
@@ -527,51 +527,51 @@ public class ObjectGraphWalkerTest extends TestCase {
 		Object lvResult = PathExecuter.getNestedProperty(lvNode, lvPath);
 		assertEquals("Test-Node", lvResult);
 		
-		lvPath = "namedChilds(key)";
+		lvPath = "namedChildren(key)";
 		assertEquals("value", lvPathes.get(lvPath));
 		lvResult = PathExecuter.getNestedProperty(lvNode, lvPath);
 		assertEquals("value", lvResult);
 
-		lvPath = "namedChilds(self)";
+		lvPath = "namedChildren(self)";
 		assertNotNull(lvPathes.get(lvPath));
 		lvResult = PathExecuter.getNestedProperty(lvNode, lvPath);
 		assertEquals(lvNode, lvResult);
 
-		lvPath = "namedChilds(self).name";
+		lvPath = "namedChildren(self).name";
 		assertNull(lvPathes.get(lvPath));
 		lvResult = PathExecuter.getNestedProperty(lvNode, lvPath);
 		assertEquals("Test-Node", lvResult);
 
-		lvPath = "namedChilds(self).namedChilds(self).name";
+		lvPath = "namedChildren(self).namedChildren(self).name";
 		assertNull(lvPathes.get(lvPath));
 		lvResult = PathExecuter.getNestedProperty(lvNode, lvPath);
 		assertEquals("Test-Node", lvResult);
 
-		lvPath = "namedChilds(self).namedChilds(self).namedChilds(self).name";
+		lvPath = "namedChildren(self).namedChildren(self).namedChildren(self).name";
 		assertNull(lvPathes.get(lvPath));
 		lvResult = PathExecuter.getNestedProperty(lvNode, lvPath);
 		assertEquals("Test-Node", lvResult);
 
-		lvPath = "namedChilds(self).childs[0]";
+		lvPath = "namedChildren(self).children[0]";
 		assertNull(lvPathes.get(lvPath));
 		lvResult = PathExecuter.getNestedProperty(lvNode, lvPath);
 		assertEquals("child-1", lvResult);
 
-		lvPath = "namedChilds(self).childs[1]";
+		lvPath = "namedChildren(self).children[1]";
 		assertNull(lvPathes.get(lvPath));
 		lvResult = PathExecuter.getNestedProperty(lvNode, lvPath);
 		assertEquals("child-2", lvResult);
 
-		lvPath = "namedChilds(self).childs[]";
+		lvPath = "namedChildren(self).children[]";
 		assertNull(lvPathes.get(lvPath));
 		lvResult = PathExecuter.getNestedProperty(lvNode, lvPath);
-		assertEquals(lvNode.getChilds(), lvResult);
+		assertEquals(lvNode.getChildren(), lvResult);
 		
-		lvPath = "namedChilds(self).parent.name";
+		lvPath = "namedChildren(self).parent.name";
 		lvResult = PathExecuter.getNestedProperty(lvNode, lvPath);
 		assertEquals("Test-Node-Parent", lvResult);
 
-		lvPath = "namedChilds(self).namedChilds(self).namedChilds(self).parent.name";
+		lvPath = "namedChildren(self).namedChildren(self).namedChildren(self).parent.name";
 		lvResult = PathExecuter.getNestedProperty(lvNode, lvPath);
 		assertEquals("Test-Node-Parent", lvResult);
 	}
@@ -583,7 +583,6 @@ public class ObjectGraphWalkerTest extends TestCase {
 		lvWalker.addInterceptor(lvInterceptor);
 
 		Customer lvCustomer = new Customer();
-		lvCustomer.setAddresses(new LinkedHashSet());
 		lvCustomer.setBirthDate(new Date());
 		lvCustomer.setFirstName("First");
 		lvCustomer.setLastName("Last");

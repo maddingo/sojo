@@ -448,8 +448,8 @@ public class JsonParserTest extends TestCase {
 		o = new ObjectUtil(false).makeComplex(o);
 		Node lvNodeAfter = (Node) o;
 		assertEquals("N1", lvNodeAfter.getName());
-		assertEquals(new ArrayList(), lvNodeAfter.getChilds());
-		assertEquals(new HashMap(), lvNodeAfter.getNamedChilds());
+		assertEquals(new ArrayList(), lvNodeAfter.getChildren());
+		assertEquals(new HashMap(), lvNodeAfter.getNamedChildren());
 		assertNull(lvNodeAfter.getParent());
 	}
 
@@ -457,8 +457,8 @@ public class JsonParserTest extends TestCase {
 		Node lvNode = new Node("N1");
 		Node lvNode1 = new Node("N1-1");
 		Node lvNode2 = new Node("N1-2");
-		lvNode.getChilds().add(lvNode1);
-		lvNode.getChilds().add(lvNode2);
+		lvNode.getChildren().add(lvNode1);
+		lvNode.getChildren().add(lvNode2);
 		
 		ObjectGraphWalker walker = new ObjectGraphWalker();
 		JsonWalkerInterceptor jsonInterceptor = new JsonWalkerInterceptor();
@@ -471,19 +471,19 @@ public class JsonParserTest extends TestCase {
 		o = new ObjectUtil(false).makeComplex(o);
 		Node lvNodeAfter = (Node) o;
 		assertEquals("N1", lvNodeAfter.getName());
-		assertEquals(new HashMap(), lvNodeAfter.getNamedChilds());
+		assertEquals(new HashMap(), lvNodeAfter.getNamedChildren());
 		assertNull(lvNodeAfter.getParent());
-		assertEquals(2, lvNodeAfter.getChilds().size());
-		assertEquals("N1-1", ((Node) lvNodeAfter.getChilds().get(0)).getName());
-		assertEquals("N1-2", ((Node) lvNodeAfter.getChilds().get(1)).getName());
+		assertEquals(2, lvNodeAfter.getChildren().size());
+		assertEquals("N1-1", ((Node) lvNodeAfter.getChildren().get(0)).getName());
+		assertEquals("N1-2", ((Node) lvNodeAfter.getChildren().get(1)).getName());
 	}
 
 	public void testNodeWithNamedChilds2JsonAndBack() throws Exception {
 		Node lvNode = new Node("N1");
 		Node lvNode1 = new Node("N1-1");
 		Node lvNode2 = new Node("N1-2");
-		lvNode.getNamedChilds().put("N1-1",lvNode1);
-		lvNode.getNamedChilds().put("N1-2",lvNode2);
+		lvNode.getNamedChildren().put("N1-1",lvNode1);
+		lvNode.getNamedChildren().put("N1-2",lvNode2);
 		
 		ObjectGraphWalker walker = new ObjectGraphWalker();
 		JsonWalkerInterceptor jsonInterceptor = new JsonWalkerInterceptor();
@@ -497,19 +497,19 @@ public class JsonParserTest extends TestCase {
 		Node lvNodeAfter = (Node) o;
 		assertEquals("N1", lvNodeAfter.getName());
 		assertNull(lvNodeAfter.getParent());
-		assertEquals(new ArrayList(), lvNodeAfter.getChilds());
-		assertEquals(2, lvNodeAfter.getNamedChilds().size());
-		assertEquals("N1-1", ((Node) lvNodeAfter.getNamedChilds().get("N1-1")).getName());
-		assertEquals("N1-2", ((Node) lvNodeAfter.getNamedChilds().get("N1-2")).getName());
+		assertEquals(new ArrayList(), lvNodeAfter.getChildren());
+		assertEquals(2, lvNodeAfter.getNamedChildren().size());
+		assertEquals("N1-1", ((Node) lvNodeAfter.getNamedChildren().get("N1-1")).getName());
+		assertEquals("N1-2", ((Node) lvNodeAfter.getNamedChildren().get("N1-2")).getName());
 	}
 	
 	public void testNodeWithCycle2Json() throws Exception {
 		Node lvNode = new Node("N1");
 		Node lvNode1 = new Node("N1-1");
 		Node lvNode2 = new Node("N1-2");
-		lvNode.getChilds().add(lvNode1);
-		lvNode.getChilds().add(lvNode2);
-		lvNode.getChilds().add(lvNode);
+		lvNode.getChildren().add(lvNode1);
+		lvNode.getChildren().add(lvNode2);
+		lvNode.getChildren().add(lvNode);
 		
 		ObjectGraphWalker walker = new ObjectGraphWalker();
 		JsonWalkerInterceptor jsonInterceptor = new JsonWalkerInterceptor();
@@ -522,12 +522,12 @@ public class JsonParserTest extends TestCase {
 		o = new ObjectUtil(false).makeComplex(o);
 		Node lvNodeAfter = (Node) o;
 		assertEquals("N1", lvNodeAfter.getName());
-		assertEquals(new HashMap(), lvNodeAfter.getNamedChilds());
+		assertEquals(new HashMap(), lvNodeAfter.getNamedChildren());
 		assertNull(lvNodeAfter.getParent());
-		assertEquals(3, lvNodeAfter.getChilds().size());
-		assertEquals("N1-1", ((Node) lvNodeAfter.getChilds().get(0)).getName());
-		assertEquals("N1-2", ((Node) lvNodeAfter.getChilds().get(1)).getName());
-		assertEquals(lvNodeAfter, lvNodeAfter.getChilds().get(2));
+		assertEquals(3, lvNodeAfter.getChildren().size());
+		assertEquals("N1-1", ((Node) lvNodeAfter.getChildren().get(0)).getName());
+		assertEquals("N1-2", ((Node) lvNodeAfter.getChildren().get(1)).getName());
+		assertEquals(lvNodeAfter, lvNodeAfter.getChildren().get(2));
 	}
 
 	public void testNodeWithCycle2Json2() throws Exception {

@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import junit.framework.TestCase;
@@ -156,10 +157,11 @@ public class IterateableMap2MapConversionTest extends TestCase {
 	
 	public void testConvertBeansAsKey() throws Exception {
 		Converter c = new Converter();
-		c.addConversion(new IterateableMap2MapConversion(Hashtable.class));
-		c.addConversion(new ComplexBean2MapConversion(Hashtable.class));
+		// TODO this code depends on the order of the beans, maybe not such a good idea 
+		c.addConversion(new IterateableMap2MapConversion(LinkedHashMap.class));
+		c.addConversion(new ComplexBean2MapConversion(LinkedHashMap.class));
 		
-		Map lvMap = new HashMap();
+		Map lvMap = new LinkedHashMap();
 		lvMap.put(new Node("1"), "Node_1");
 		lvMap.put(new Node("2"), "Node_2");
 		
