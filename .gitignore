@@ -6,3 +6,4 @@
 *.log
 *.bak
 .DS_Store
+/bin
