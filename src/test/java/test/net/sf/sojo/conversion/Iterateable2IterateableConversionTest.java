@@ -41,21 +41,21 @@ public class Iterateable2IterateableConversionTest extends TestCase {
 	public void testVector() throws Exception {
 		Converter c = new Converter();
 		c.getConversionHandler().addConversion(new Iterateable2IterateableConversion(Vector.class));
-		List lvList = new ArrayList();
+		List<String> lvList = new ArrayList<String>();
 		lvList.add("Test-1");
 		lvList.add("Test-2");
 		Object lvResult = c.convert(lvList);
 		assertNotNull(lvResult);
 		assertTrue(lvResult instanceof List);
 		assertTrue(lvResult instanceof Vector);
-		List lvListAfter = (List) lvResult;
+		List<?> lvListAfter = (List<?>) lvResult;
 		assertEquals(lvList.size(), lvListAfter.size());		
 		assertEquals(lvList.get(0), lvListAfter.get(0));
 		assertEquals(lvList.get(1), lvListAfter.get(1));
 	}
 	
 	public void testMakeSimpleConverterWithVectorWithNotAddNullElement() throws Exception {
-		List v = new ArrayList();
+		List<?> v = new ArrayList<Object>();
 		v.add(null);
 
 		Converter c = new Converter();
@@ -66,12 +66,12 @@ public class Iterateable2IterateableConversionTest extends TestCase {
 		Object lvResult = c.convert(v);
 		assertNotNull(lvResult);
 		assertTrue(lvResult instanceof Vector);
-		Vector v2 = (Vector) lvResult;
+		Vector<?> v2 = (Vector<?>) lvResult;
 		assertEquals(v2.size(), 0);
 	}
 	
 	public void testMakeSimpleConverterWithVectorWithAddNullElement() throws Exception {
-		List v = new ArrayList();
+		List<?> v = new ArrayList<Object>();
 		v.add(null);
 
 		Converter c = new Converter();
@@ -80,12 +80,12 @@ public class Iterateable2IterateableConversionTest extends TestCase {
 		Object lvResult = c.convert(v);
 		assertNotNull(lvResult);
 		assertTrue(lvResult instanceof Vector);
-		Vector v2 = (Vector) lvResult;
+		Vector<?> v2 = (Vector<?>) lvResult;
 		assertEquals(v2.size(), 1);
 	}
 
 	public void testMakeSimpleConverterWithVectorWithNullElement() throws Exception {
-		List v = new ArrayList();
+		List<?> v = new ArrayList<Object>();
 		v.add(null);
 
 		Converter c = new Converter();
@@ -95,14 +95,14 @@ public class Iterateable2IterateableConversionTest extends TestCase {
 		Object lvResult = c.convert(v);
 		assertNotNull(lvResult);
 		assertTrue(lvResult instanceof Vector);
-		Vector v2 = (Vector) lvResult;
+		Vector<?> v2 = (Vector<?>) lvResult;
 		assertEquals(v2.size(), 1);
 		assertEquals("~my~null~value~", v2.get(0));
 		
 		lvResult = c.convert(lvResult);
 		assertNotNull(lvResult);
 		assertTrue(lvResult instanceof Vector);
-		v2 = (Vector) lvResult;
+		v2 = (Vector<?>) lvResult;
 		assertEquals(v2.size(), 1);
 		assertNull(v2.get(0));
 	}
@@ -110,14 +110,14 @@ public class Iterateable2IterateableConversionTest extends TestCase {
 
 	public void testVectorWithoutConversion() throws Exception {
 		Converter c = new Converter();
-		List lvList = new ArrayList();
+		List<String> lvList = new ArrayList<String>();
 		lvList.add("Test-1");
 		lvList.add("Test-2");
 		Object lvResult = c.convert(lvList);
 		assertNotNull(lvResult);
 		assertTrue(lvResult instanceof List);
 		assertTrue(lvResult instanceof ArrayList);
-		List lvListAfter = (List) lvResult;
+		List<?> lvListAfter = (List<?>) lvResult;
 		assertEquals(lvList.size(), lvListAfter.size());		
 		assertEquals(lvList.get(0), lvListAfter.get(0));
 		assertEquals(lvList.get(1), lvListAfter.get(1));
@@ -126,9 +126,9 @@ public class Iterateable2IterateableConversionTest extends TestCase {
 	public void testDoubleVector() throws Exception {
 		Converter c = new Converter();
 		c.getConversionHandler().addConversion(new Iterateable2IterateableConversion(Vector.class));
-		List lvList = new ArrayList();
+		List<Object> lvList = new ArrayList<Object>();
 		lvList.add("Test-1");
-		List lvList2 = new ArrayList();
+		List<String> lvList2 = new ArrayList<String>();
 		lvList2.add("Test-2");
 		lvList.add(lvList2);
 		
@@ -136,13 +136,13 @@ public class Iterateable2IterateableConversionTest extends TestCase {
 		assertNotNull(lvResult);
 		assertTrue(lvResult instanceof List);
 		assertTrue(lvResult instanceof Vector);
-		List lvListAfter = (List) lvResult;
+		List<?> lvListAfter = (List<?>) lvResult;
 		assertEquals(lvList.size(), lvListAfter.size());		
 		assertEquals(lvList.get(0), lvListAfter.get(0));
 		assertTrue(lvListAfter.get(1) instanceof Vector);
 		assertEquals(lvList.get(1), lvListAfter.get(1));
 		
-		Vector v = (Vector) lvListAfter.get(1);
+		Vector<?> v = (Vector<?>) lvListAfter.get(1);
 		assertEquals(lvList2.size(), v.size());
 		assertEquals(lvList2.get(0), v.get(0));
 	}
@@ -150,14 +150,14 @@ public class Iterateable2IterateableConversionTest extends TestCase {
 	public void testDefaultCollectionType() throws Exception {
 		Converter c = new Converter();
 		c.getConversionHandler().addConversion(new Iterateable2IterateableConversion());
-		List lvList = new Vector();
+		List<String> lvList = new Vector<String>();
 		lvList.add("Test-1");
 		lvList.add("Test-2");
 		Object lvResult = c.convert(lvList);
 		assertNotNull(lvResult);
 		assertTrue(lvResult instanceof List);
 		assertTrue(lvResult instanceof ArrayList);
-		List lvListAfter = (List) lvResult;
+		List<?> lvListAfter = (List<?>) lvResult;
 		assertEquals(lvList.size(), lvListAfter.size());		
 		assertEquals(lvList.get(0), lvListAfter.get(0));
 		assertEquals(lvList.get(1), lvListAfter.get(1));
@@ -166,14 +166,14 @@ public class Iterateable2IterateableConversionTest extends TestCase {
 	public void testHashSet() throws Exception {
 		Converter c = new Converter();
 		c.getConversionHandler().addConversion(new Iterateable2IterateableConversion(HashSet.class));
-		List lvList = new ArrayList();
+		List<String> lvList = new ArrayList<String>();
 		lvList.add("Test-1");
 		lvList.add("Test-2");
 		Object lvResult = c.convert(lvList);
 		assertNotNull(lvResult);
 		assertTrue(lvResult instanceof Set);
 		assertTrue(lvResult instanceof HashSet);
-		Set lvSetAfter = (Set) lvResult;
+		Set<?> lvSetAfter = (Set<?>) lvResult;
 		assertEquals(lvList.size(), lvSetAfter.size());
 		String s[] = (String[]) lvSetAfter.toArray(new String[2]);
 		assertEquals(lvList.get(0), s[0]);
@@ -183,7 +183,7 @@ public class Iterateable2IterateableConversionTest extends TestCase {
 	public void testHashSet2() throws Exception {
 		Converter c = new Converter();
 		c.getConversionHandler().addConversion(new Iterateable2IterateableConversion(HashSet.class));
-		Set lvSet = new HashSet();
+		Set<Node> lvSet = new HashSet<Node>();
 		Node n = new Node("Test-1");
 		lvSet.add(n);
 		lvSet.add(n);
@@ -192,7 +192,7 @@ public class Iterateable2IterateableConversionTest extends TestCase {
 		assertNotNull(lvResult);
 		assertTrue(lvResult instanceof Set);
 		assertTrue(lvResult instanceof HashSet);
-		Set lvSetAfter = (Set) lvResult;
+		Set<?> lvSetAfter = (Set<?>) lvResult;
 		assertEquals(lvSet.size(), lvSetAfter.size());
 		
 		Node node[] = (Node[]) lvSet.toArray(new Node[2]);
@@ -205,18 +205,18 @@ public class Iterateable2IterateableConversionTest extends TestCase {
 	public void testTreeSet() throws Exception {
 		Converter c = new Converter();
 		c.getConversionHandler().addConversion(new Iterateable2IterateableConversion(TreeSet.class));
-		Set lvSet = new HashSet();
+		Set<String> lvSet = new HashSet<String>();
 		lvSet.add("Test-1");
 		lvSet.add("Test-2");
 		Object lvResult = c.convert(lvSet);
 		assertNotNull(lvResult);
 		assertTrue(lvResult instanceof Set);
 		assertTrue(lvResult instanceof TreeSet);
-		Set lvSetAfter = (Set) lvResult;
+		Set<?> lvSetAfter = (Set<?>) lvResult;
 		assertEquals(lvSet.size(), lvSetAfter.size());
 		
-		Iterator iter = lvSet.iterator();
-		Iterator iterAfter = lvSetAfter.iterator();
+		Iterator<String> iter = lvSet.iterator();
+		Iterator<?> iterAfter = lvSetAfter.iterator();
 		assertEquals(iter.next(), iterAfter.next());
 		assertEquals(iter.next(), iterAfter.next());
 	}
@@ -258,7 +258,7 @@ public class Iterateable2IterateableConversionTest extends TestCase {
 		assertNotNull(lvResult);
 		assertTrue(lvResult instanceof List);
 		assertTrue(lvResult instanceof Vector);
-		List lvListAfter = (List) lvResult;
+		List<?> lvListAfter = (List<?>) lvResult;
 		assertEquals(s.length, lvListAfter.size());		
 		assertEquals(s[0], lvListAfter.get(0));
 		assertEquals(s[1], lvListAfter.get(1));
@@ -272,7 +272,7 @@ public class Iterateable2IterateableConversionTest extends TestCase {
 		assertNotNull(lvResult);
 		assertTrue(lvResult instanceof List);
 		assertTrue(lvResult instanceof ArrayList);
-		List lvListAfter = (List) lvResult;
+		List<?> lvListAfter = (List<?>) lvResult;
 		assertEquals(o.length, lvListAfter.size());		
 		assertEquals(o[0], lvListAfter.get(0));
 		assertEquals(o[1], lvListAfter.get(1));
@@ -290,11 +290,11 @@ public class Iterateable2IterateableConversionTest extends TestCase {
 		assertNotNull(lvResult);
 		assertTrue(lvResult instanceof List);
 		assertTrue(lvResult instanceof ArrayList);
-		List lvListAfter = (List) lvResult;
+		List<?> lvListAfter = (List<?>) lvResult;
 		assertEquals(o.length, lvListAfter.size());		
 		assertEquals(o[1], lvListAfter.get(1));
 		
-		Map lvNodeMap = (Map) lvListAfter.get(0);
+		Map<?, ?> lvNodeMap = (Map<?, ?>) lvListAfter.get(0);
 		assertEquals(Node.class.getName(), lvNodeMap.get("class"));
 		assertEquals("Test-1", lvNodeMap.get("name"));
 		String lvUniqueId = (String) lvNodeMap.get(UniqueIdGenerator.UNIQUE_ID_PROPERTY);
@@ -307,7 +307,7 @@ public class Iterateable2IterateableConversionTest extends TestCase {
 	public void testToCollectionDirect() throws Exception {
 		Converter c = new Converter();
 		c.addConversion(new Iterateable2IterateableConversion());
-		Vector lvVector = new Vector();
+		Vector<String> lvVector = new Vector<String>();
 		lvVector.add("1");
 		lvVector.add("2");
 		Object lvResult = c.convert(lvVector, LinkedList.class);
@@ -320,15 +320,15 @@ public class Iterateable2IterateableConversionTest extends TestCase {
 		Iterateable2IterateableConversion lvConversion = new Iterateable2IterateableConversion();
 		c.addConversion(lvConversion);
 		
-		Vector lvVector = new Vector();
+		Vector<String> lvVector = new Vector<String>();
 		lvVector.add("1");
 		lvVector.add(null);
 		lvVector.add("3");
-		List lvList = (List) c.convert(lvVector);
+		List<?> lvList = (List<?>) c.convert(lvVector);
 		assertEquals(3, lvList.size());
 		
 		lvConversion.setIgnoreNullValues(true);
-		lvList = (List) c.convert(lvList);
+		lvList = (List<?>) c.convert(lvList);
 		assertEquals(2, lvList.size());
 	}
 

@@ -43,13 +43,13 @@ public class XmlRpcWalkerInterceptorTest extends TestCase {
 		XmlRpcWalkerInterceptor lvInterceptor = new XmlRpcWalkerInterceptor();
 		assertEquals("", lvInterceptor.getXmlRpcString());
 		
-		lvInterceptor.visitIterateableElement(new HashMap(), -1, "", -1);
+		lvInterceptor.visitIterateableElement(new HashMap<Object, Object>(), -1, "", -1);
 		assertEquals("", lvInterceptor.getXmlRpcString());
 
-		lvInterceptor.visitIterateableElement(new HashMap(), Constants.ITERATOR_END, "", -1);
+		lvInterceptor.visitIterateableElement(new HashMap<Object, Object>(), Constants.ITERATOR_END, "", -1);
 		assertEquals("", lvInterceptor.getXmlRpcString());
 				
-		lvInterceptor.visitIterateableElement(new HashMap(), -1, "", Constants.ITERATOR_END);
+		lvInterceptor.visitIterateableElement(new HashMap<Object, Object>(), -1, "", Constants.ITERATOR_END);
 		assertEquals("", lvInterceptor.getXmlRpcString());
 	}
 	
@@ -126,7 +126,7 @@ public class XmlRpcWalkerInterceptorTest extends TestCase {
 	}
 
 	public void __testMapWithStringElements() throws Exception {
-		Map lvMap = new HashMap();
+		Map<String, String> lvMap = new HashMap<String, String>();
 		lvMap.put("key", "value");
 		walker.walk(lvMap);
 		String s = "<params><param><value><struct>" +
@@ -145,7 +145,7 @@ public class XmlRpcWalkerInterceptorTest extends TestCase {
 	}
 	
 	public void __testMapWithDifferentsElements() throws Exception {
-		Map lvMap = new HashMap();
+		Map<String, Comparable<?>> lvMap = new HashMap<String, Comparable<?>>();
 		lvMap.put("key-int", new Integer(1234));
 		walker.walk(lvMap);
 		
@@ -172,7 +172,7 @@ public class XmlRpcWalkerInterceptorTest extends TestCase {
 	}
 	
 	public void testKeyIsNotFromTypeString() throws Exception {
-		Map lvMap = new HashMap();
+		Map<Integer, Integer> lvMap = new HashMap<Integer, Integer>();
 		lvMap.put(new Integer(1), new Integer(1234));
 		try {
 			walker.walk(lvMap);
@@ -197,7 +197,7 @@ public class XmlRpcWalkerInterceptorTest extends TestCase {
 	}
 	
 	public void testMapInArray() throws Exception {
-		Map lvMap = new Hashtable();
+		Map<String, Comparable<?>> lvMap = new Hashtable<String, Comparable<?>>();
 		lvMap.put("k1", "v1");
 		lvMap.put("k2", new Double("1.00005"));
 		Object lvArray[] = new Object[] { new Integer(7), lvMap , "my-test-string" };
@@ -225,7 +225,7 @@ public class XmlRpcWalkerInterceptorTest extends TestCase {
 	}
 
 	public void testEmptyArrayInMap() throws Exception {
-		Map lvMap = new HashMap();
+		Map<String, Object[]> lvMap = new HashMap<String, Object[]>();
 		lvMap.put("emptyArray", new Object[] {} );
 		walker.walk(lvMap);
 		String s = "<params><param><value>" +
@@ -238,7 +238,7 @@ public class XmlRpcWalkerInterceptorTest extends TestCase {
 	}
 
 	public void testEmptyMap() throws Exception {
-		walker.walk(new HashMap());
+		walker.walk(new HashMap<Object, Object>());
 		String s = "<params><param><value><struct></struct></value></param></params>";
 		assertEquals(s, xmlRpcWalker.getXmlRpcString());
 	}

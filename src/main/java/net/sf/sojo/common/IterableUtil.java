@@ -32,7 +32,7 @@ import java.util.TreeSet;
  */
 public class IterableUtil {
 	
-	public static List<?> sort(List<?> pvList) {
+	public static <T> List<T> sort(List<T> pvList) {
 		Collections.sort(pvList, new GenericComparator());
 		return pvList;
 	}
@@ -42,14 +42,14 @@ public class IterableUtil {
 		return pvObjArray;
 	}
 	
-	public static Set<Object> sort(Set<Object> pvSet) {
-		TreeSet<Object> lvTreeSet = new TreeSet<Object>(new GenericComparator(true));
+	public static <T> Set<T> sort(Set<T> pvSet) {
+		TreeSet<T> lvTreeSet = new TreeSet<T>(new GenericComparator(true));
 		lvTreeSet.addAll(pvSet);
 		return lvTreeSet;
 	}
 
-	public static Map<Object, Object> sort(Map<?,?> pvMap) {
-		TreeMap<Object, Object> lvTreeMap = new TreeMap<Object, Object>(new GenericComparator());
+	public static <K,V> Map<K, V> sort(Map<K,V> pvMap) {
+		TreeMap<K, V> lvTreeMap = new TreeMap<K, V>(new GenericComparator());
 		lvTreeMap.putAll(pvMap);
 		return lvTreeMap;
 	}

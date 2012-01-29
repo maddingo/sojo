@@ -19,11 +19,12 @@ import net.sf.sojo.core.SimpleConversion;
 
 public class DummyTestSimpleConversion extends SimpleConversion {
 
-	public DummyTestSimpleConversion(Class pvFromType) {
+	public DummyTestSimpleConversion(Class<?> pvFromType) {
 		super(pvFromType);
 	}
 
-	public Object convert(Object pvObject, Class pvToType) {
+	@Override
+	public Object convert(Object pvObject, Class<?> pvToType) {
 		throw new IllegalStateException("Convert-method throw a Test-Exception");
 	}
 

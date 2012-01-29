@@ -214,14 +214,14 @@ public class JsonParserTest extends TestCase {
 	public void testEmptyArray() throws Exception {
 		String s = "[]";
 		Object lvResult = new JsonParser().parse(s);
-		List lvList = (List) lvResult;
+		List<?> lvList = (List<?>) lvResult;
 		assertEquals(0, lvList.size());
 	}
 	
 	public void testSimpleArray() throws Exception {
 		String s = "[true, false, true, null]";
 		Object lvResult = new JsonParser().parse(s);
-		List lvList = (List) lvResult;
+		List<?> lvList = (List<?>) lvResult;
 		assertEquals(4, lvList.size());
 		assertEquals(Boolean.TRUE, lvList.get(0));
 		assertEquals(Boolean.FALSE, lvList.get(1));
@@ -232,7 +232,7 @@ public class JsonParserTest extends TestCase {
 	public void testSimpleArray2() throws Exception {
 		String s = "[1, 22, 33.3, \"nUll\"]";
 		Object lvResult = new JsonParser().parse(s);
-		List lvList = (List) lvResult;
+		List<?> lvList = (List<?>) lvResult;
 		assertEquals(4, lvList.size());
 		assertEquals(new Long("1"), lvList.get(0));
 		assertEquals(new Long("22"), lvList.get(1));
@@ -243,24 +243,24 @@ public class JsonParserTest extends TestCase {
 	public void testNestedArray() throws Exception {
 		String s = "[2.005, .017, \"a\", [9087, 987654, null] ]";
 		Object lvResult = new JsonParser().parse(s);
-		List lvList = (List) lvResult;
+		List<?> lvList = (List<?>) lvResult;
 		assertEquals(4, lvList.size());
 		assertEquals(new Double("2.005"), lvList.get(0));
 		assertEquals(new Double("0.017"), lvList.get(1));
 		assertEquals("a", lvList.get(2));
-		List lvInnerList = (List) lvList.get(3);
+		List<?> lvInnerList = (List<?>) lvList.get(3);
 		assertEquals(3, lvInnerList.size());
 	}
 
 	public void testNestedArray2() throws Exception {
 		String s = "[2.005, .017, \"a\", [9087, 987654, null], 54.32 ]";
 		Object lvResult = new JsonParser().parse(s);
-		List lvList = (List) lvResult;
+		List<?> lvList = (List<?>) lvResult;
 		assertEquals(5, lvList.size());
 		assertEquals(new Double("2.005"), lvList.get(0));
 		assertEquals(new Double("0.017"), lvList.get(1));
 		assertEquals("a", lvList.get(2));
-		List lvInnerList = (List) lvList.get(3);
+		List<?> lvInnerList = (List<?>) lvList.get(3);
 		assertEquals(3, lvInnerList.size());
 		
 		assertEquals(new Double("54.32"), lvList.get(4));
@@ -269,31 +269,31 @@ public class JsonParserTest extends TestCase {
 	public void testEmptyObject() throws Exception {
 		String s = "{}";
 		Object lvResult = new JsonParser().parse(s);
-		Map lvMap = (Map) lvResult;
+		Map<?, ?> lvMap = (Map<?, ?>) lvResult;
 		assertEquals(0, lvMap.size());
 	}
 	
 	public void testEmptyListInObject() throws Exception {
 		String s = "{\"empty\" : []}";
 		Object lvResult = new JsonParser().parse(s);
-		Map lvMap = (Map) lvResult;
+		Map<?, ?> lvMap = (Map<?, ?>) lvResult;
 		assertEquals(1, lvMap.size());
-		assertEquals(new Vector(), lvMap.get("empty"));
+		assertEquals(new Vector<Object>(), lvMap.get("empty"));
 	}
 
 	public void testEmptyObjectInListIn() throws Exception {
 		String s = "[ { } ]";
 		Object lvResult = new JsonParser().parse(s);
-		List lvList = (List) lvResult;
+		List<?> lvList = (List<?>) lvResult;
 		assertEquals(1, lvList.size());
-		assertEquals(new Hashtable(), lvList.get(0));
+		assertEquals(new Hashtable<Object, Object>(), lvList.get(0));
 	}
 
 
 	public void testSimpleObject() throws Exception {
 		String s = "{\"k1\" : true, \"k2\" : false, \"k3\" : true, \"k4\" : null}";
 		Object lvResult = new JsonParser().parse(s);
-		Map lvMap = (Map) lvResult;
+		Map<?, ?> lvMap = (Map<?, ?>) lvResult;
 		assertEquals(4, lvMap.size());
 		assertEquals(Boolean.TRUE, lvMap.get("k1"));
 		assertEquals(Boolean.FALSE, lvMap.get("k2"));
@@ -305,7 +305,7 @@ public class JsonParserTest extends TestCase {
 	public void testSimpleObject2() throws Exception {
 		String s = "{\"k1\" : 1, \"k2\" : 22, \"k3\" : 33.3, \"k4\" : \"VaLue\"}";
 		Object lvResult = new JsonParser().parse(s);
-		Map lvMap = (Map) lvResult;
+		Map<?, ?> lvMap = (Map<?, ?>) lvResult;
 		assertEquals(4, lvMap.size());
 		assertEquals(new Long("1"), lvMap.get("k1"));
 		assertEquals(new Long("22"), lvMap.get("k2"));
@@ -316,7 +316,7 @@ public class JsonParserTest extends TestCase {
 	public void testSimpleObject3() throws Exception {
 		String s = "{\"k1\" : 1, \"k1\" : 22, \"k3\" : null, \"k4\" : \"VaLue\"}";
 		Object lvResult = new JsonParser().parse(s);
-		Map lvMap = (Map) lvResult;
+		Map<?, ?> lvMap = (Map<?, ?>) lvResult;
 		assertEquals(3, lvMap.size());
 		assertNull(lvMap.get("k2"));
 		assertEquals(new Long("22"), lvMap.get("k1"));
@@ -328,24 +328,24 @@ public class JsonParserTest extends TestCase {
 	public void testNestedObject() throws Exception {
 		String s = "{\"k1\" : 1, \"k2\" : 22, \"k3\" : 33.3, \"k4\" : {\"k1\" : \"VaLue\"}}";
 		Object lvResult = new JsonParser().parse(s);
-		Map lvMap = (Map) lvResult;
+		Map<?, ?> lvMap = (Map<?, ?>) lvResult;
 		assertEquals(4, lvMap.size());
 		assertEquals(new Long("1"), lvMap.get("k1"));
 		assertEquals(new Long("22"), lvMap.get("k2"));
 		assertEquals(new Double("33.3"), lvMap.get("k3"));
-		Map lvInnerMap = (Map) lvMap.get("k4");
+		Map<?, ?> lvInnerMap = (Map<?, ?>) lvMap.get("k4");
 		assertEquals("VaLue", lvInnerMap.get("k1"));
 	}
 
 	public void testNestedObject2() throws Exception {
 		String s = "{\"k1\" : 1, \"k2\" : 22, \"k3\" : 33.3, \"k4\" : {\"k1\" : \"VaLue\"}, \"k5\" : \"c\"}";
 		Object lvResult = new JsonParser().parse(s);
-		Map lvMap = (Map) lvResult;
+		Map<?, ?> lvMap = (Map<?, ?>) lvResult;
 		assertEquals(5, lvMap.size());
 		assertEquals(new Long("1"), lvMap.get("k1"));
 		assertEquals(new Long("22"), lvMap.get("k2"));
 		assertEquals(new Double("33.3"), lvMap.get("k3"));
-		Map lvInnerMap = (Map) lvMap.get("k4");
+		Map<?, ?> lvInnerMap = (Map<?, ?>) lvMap.get("k4");
 		assertEquals("VaLue", lvInnerMap.get("k1"));
 		
 		assertEquals("c", lvMap.get("k5"));
@@ -356,21 +356,21 @@ public class JsonParserTest extends TestCase {
 				"\"array\" : [2.005, .017, \"a\", [9087, 987654, null] ], " +
 				"\"k4\" : {\"k1\" : \"VaLue\"}, \"k5\" : \"c\"}";
 		Object lvResult = new JsonParser().parse(s);
-		Map lvMap = (Map) lvResult;
+		Map<?, ?> lvMap = (Map<?, ?>) lvResult;
 		assertEquals(6, lvMap.size());
 		assertEquals(new Long("1"), lvMap.get("k1"));
 		assertEquals(new Long("22"), lvMap.get("k2"));
 		assertEquals(new Double("33.3"), lvMap.get("k3"));
-		Map lvInnerMap = (Map) lvMap.get("k4");
+		Map<?, ?> lvInnerMap = (Map<?, ?>) lvMap.get("k4");
 		assertEquals("VaLue", lvInnerMap.get("k1"));
 		
 		assertEquals("c", lvMap.get("k5"));
 		
-		List lvList = (List) lvMap.get("array");
+		List<?> lvList = (List<?>) lvMap.get("array");
 		assertEquals(new Double("2.005"), lvList.get(0));
 		assertEquals(new Double("0.017"), lvList.get(1));
 		assertEquals("a", lvList.get(2));
-		List lvInnerList = (List) lvList.get(3);
+		List<?> lvInnerList = (List<?>) lvList.get(3);
 		assertEquals(3, lvInnerList.size());
 		
 		assertEquals(new Long("9087"), lvInnerList.get(0));
@@ -427,7 +427,7 @@ public class JsonParserTest extends TestCase {
 		assertEquals(new Long(4711), lvCarAfter.getProperties().get("key2"));
 		assertEquals(Boolean.TRUE, lvCarAfter.getProperties().get("key3"));
 		assertEquals(new Double("47.11"), lvCarAfter.getProperties().get("key4"));
-		List lvList = (List) lvCarAfter.getProperties().get("key5");
+		List<?> lvList = (List<?>) lvCarAfter.getProperties().get("key5");
 		assertEquals(3, lvList.size());
 		assertEquals(new Double("0.03"), lvList.get(0));
 		assertEquals(new Long("123"), lvList.get(1));
@@ -448,8 +448,8 @@ public class JsonParserTest extends TestCase {
 		o = new ObjectUtil(false).makeComplex(o);
 		Node lvNodeAfter = (Node) o;
 		assertEquals("N1", lvNodeAfter.getName());
-		assertEquals(new ArrayList(), lvNodeAfter.getChildren());
-		assertEquals(new HashMap(), lvNodeAfter.getNamedChildren());
+		assertEquals(new ArrayList<Object>(), lvNodeAfter.getChildren());
+		assertEquals(new HashMap<Object, Object>(), lvNodeAfter.getNamedChildren());
 		assertNull(lvNodeAfter.getParent());
 	}
 
@@ -471,7 +471,7 @@ public class JsonParserTest extends TestCase {
 		o = new ObjectUtil(false).makeComplex(o);
 		Node lvNodeAfter = (Node) o;
 		assertEquals("N1", lvNodeAfter.getName());
-		assertEquals(new HashMap(), lvNodeAfter.getNamedChildren());
+		assertEquals(new HashMap<Object, Object>(), lvNodeAfter.getNamedChildren());
 		assertNull(lvNodeAfter.getParent());
 		assertEquals(2, lvNodeAfter.getChildren().size());
 		assertEquals("N1-1", ((Node) lvNodeAfter.getChildren().get(0)).getName());
@@ -497,7 +497,7 @@ public class JsonParserTest extends TestCase {
 		Node lvNodeAfter = (Node) o;
 		assertEquals("N1", lvNodeAfter.getName());
 		assertNull(lvNodeAfter.getParent());
-		assertEquals(new ArrayList(), lvNodeAfter.getChildren());
+		assertEquals(new ArrayList<Object>(), lvNodeAfter.getChildren());
 		assertEquals(2, lvNodeAfter.getNamedChildren().size());
 		assertEquals("N1-1", ((Node) lvNodeAfter.getNamedChildren().get("N1-1")).getName());
 		assertEquals("N1-2", ((Node) lvNodeAfter.getNamedChildren().get("N1-2")).getName());
@@ -522,7 +522,7 @@ public class JsonParserTest extends TestCase {
 		o = new ObjectUtil(false).makeComplex(o);
 		Node lvNodeAfter = (Node) o;
 		assertEquals("N1", lvNodeAfter.getName());
-		assertEquals(new HashMap(), lvNodeAfter.getNamedChildren());
+		assertEquals(new HashMap<Object, Object>(), lvNodeAfter.getNamedChildren());
 		assertNull(lvNodeAfter.getParent());
 		assertEquals(3, lvNodeAfter.getChildren().size());
 		assertEquals("N1-1", ((Node) lvNodeAfter.getChildren().get(0)).getName());
@@ -626,7 +626,7 @@ public class JsonParserTest extends TestCase {
         Object o = serializer.deserialize(jsonString);
         assertTrue(Map.class.isAssignableFrom(o.getClass()));
 
-        Map lvMap = (Map) o;
+        Map<?, ?> lvMap = (Map<?, ?>) o;
         assertEquals(lvMap.get("str1"), "abc\\");
         assertEquals(lvMap.get("str2"), "def");
 	}

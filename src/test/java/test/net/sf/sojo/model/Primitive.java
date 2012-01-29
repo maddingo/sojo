@@ -39,6 +39,7 @@ public class Primitive {
         return lvPrimitive;
 	}
 	
+	@Override
 	public boolean equals(Object pvPrimitive) {
 		if (pvPrimitive == null) {
 			return false;
@@ -65,6 +66,7 @@ public class Primitive {
 		}
 	}
 
+	@Override
 	public int hashCode() {
 		int lvHashCode = super.hashCode();
 		return lvHashCode;

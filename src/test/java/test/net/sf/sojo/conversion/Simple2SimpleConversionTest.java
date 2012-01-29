@@ -122,11 +122,19 @@ public class Simple2SimpleConversionTest extends TestCase {
 		Converter c = new Converter();
 		c.addConverterInterceptor(new ConverterInterceptorRecursive () {
 
-			public Object afterConvert(Object pvResult, final Class pvToType) { return pvResult; }
-			public Object beforeConvert(Object pvConvertObject, final Class pvToType) { return pvConvertObject; }
+			@Override
+			public Object afterConvert(Object pvResult, final Class<?> pvToType) { return pvResult; }
+			
+			@Override
+			public Object beforeConvert(Object pvConvertObject, final Class<?> pvToType) { return pvConvertObject; }
+			
+			@Override
 			public void onError(Exception pvException) {}
+			
+			@Override
 			public void afterConvertRecursion(ConversionContext pvContext) { }
 
+			@Override
 			public void beforeConvertRecursion(ConversionContext pvContext) {
 				pvContext.cancelConvert = true;
 			}
@@ -316,13 +324,13 @@ public class Simple2SimpleConversionTest extends TestCase {
 	public void testArrayList2VectorDirect() throws Exception {
 		Converter c = new Converter();
 		c.addConversion(new Iterateable2IterateableConversion());
-		ArrayList lvList = new ArrayList();
+		ArrayList<String> lvList = new ArrayList<String>();
 		lvList.add("111");
 		lvList.add("222");
 		Object lvResult = c.convert(lvList, Vector.class);
 		assertNotNull(lvResult);
 		assertTrue(lvResult instanceof Vector);
-		Vector lvVector = (Vector) lvResult;
+		Vector<?> lvVector = (Vector<?>) lvResult;
 		assertEquals(lvList.size(), lvVector.size());
 		assertEquals(lvList.get(0), lvVector.get(0));
 		assertEquals(lvList.get(1), lvVector.get(1));

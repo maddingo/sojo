@@ -119,7 +119,7 @@ public class JsonSerializerTest extends TestCase {
 		byte b[] = new byte[] { 2, 4, 9 };
 		Object lvResult = jsonSerializer.serialize(b);
 		lvResult = jsonSerializer.deserialize(lvResult);
-		List l = new ArrayList();
+		List<Long> l = new ArrayList<Long>();
 		l.add(new Long("2"));
 		l.add(new Long("4"));
 		l.add(new Long("9"));
@@ -239,7 +239,7 @@ public class JsonSerializerTest extends TestCase {
 	}
 
 	public void testMapWithByteArray() throws Exception {
-		Map lvMap = new HashMap();
+		Map<String, Object> lvMap = new HashMap<String, Object>();
 		lvMap.put("a", "a");
 		lvMap.put("array", new byte[] { 2, 4, 9 });
 		
@@ -247,37 +247,37 @@ public class JsonSerializerTest extends TestCase {
 		lvResult = jsonSerializer.deserialize(lvResult);
 		
 		assertTrue("Is not a Map: " + lvResult.getClass(), lvResult instanceof Map);
-		Map lvMapAfter = (Map) lvResult;
+		Map<?, ?> lvMapAfter = (Map<?, ?>) lvResult;
 		assertEquals("a", lvMapAfter.get("a"));
-		List l = (List) lvMapAfter.get("array");
+		List<?> l = (List<?>) lvMapAfter.get("array");
 		assertEquals(new Long(2), l.get(0));
 		assertEquals(new Long(4), l.get(1));
 		assertEquals(new Long(9), l.get(2));
 	}
 	
 	public void testEmptyListAndBack() throws Exception {
-		Collection c = new ArrayList();
+		Collection<?> c = new ArrayList<Object>();
 		Object lvResult = jsonSerializer.serialize(c);
 		lvResult = jsonSerializer.deserialize(lvResult);
 		assertEquals(c, lvResult);
 	}
 
 	public void testListAndBack() throws Exception {
-		Collection c = new ArrayList();
+		Collection<Object> c = new ArrayList<Object>();
 		c.add("text");
 		c.add(new Integer(4711));
 		c.add(new Car("MyCar"));
-		Map m = new HashMap();
+		Map<String, String> m = new HashMap<String, String>();
 		m.put("k1", "v1");
-		List lvList2 = new Vector();
+		List<Object> lvList2 = new Vector<Object>();
 		lvList2.add(c);
 		lvList2.add(m);
 		Object lvResult = jsonSerializer.serialize(lvList2);
 		lvResult = jsonSerializer.deserialize(lvResult);
-		List lvListAfter = (List) lvResult;
+		List<?> lvListAfter = (List<?>) lvResult;
 		assertEquals(2, lvListAfter.size());
-		Collection cAfter = (Collection) lvListAfter.get(0);
-		Iterator it = cAfter.iterator();
+		Collection<?> cAfter = (Collection<?>) lvListAfter.get(0);
+		Iterator<?> it = cAfter.iterator();
 		assertEquals("text", it.next());
 		assertEquals(new Long(4711), it.next());
 		Car lvCarAfter = (Car) it.next();
@@ -286,42 +286,42 @@ public class JsonSerializerTest extends TestCase {
 	}
 
 	public void testEmptySetAndBack() throws Exception {
-		Set s = new HashSet();
+		Set<?> s = new HashSet<Object>();
 		Object lvResult = jsonSerializer.serialize(s);
 		lvResult = jsonSerializer.deserialize(lvResult);
-		assertEquals(new Vector(), lvResult);
+		assertEquals(new Vector<Object>(), lvResult);
 	}
 
 	public void testEmptyMapAndBack() throws Exception {
-		Map m = new HashMap();
+		Map<?, ?> m = new HashMap<Object, Object>();
 		Object lvResult = jsonSerializer.serialize(m);
 		lvResult = jsonSerializer.deserialize(lvResult);
 		assertEquals(m, lvResult);
 	}
 	
 	public void testMapContainsEmptyListAndBack() throws Exception {
-		Map m = new HashMap();
-		m.put("empty-list", new Vector());
+		Map<String, Vector<?>> m = new HashMap<String, Vector<?>>();
+		m.put("empty-list", new Vector<Object>());
 		Object lvResult = jsonSerializer.serialize(m);
 		lvResult = jsonSerializer.deserialize(lvResult);
 		assertEquals(m, lvResult);
-		assertEquals(m.get("empty-list"), new ArrayList());
+		assertEquals(m.get("empty-list"), new ArrayList<Object>());
 	}
 
 	public void testListContainsEmptyMapAndBack() throws Exception {
-		Collection c = new ArrayList();
-		c.add(new HashMap());
+		Collection<HashMap<?, ?>> c = new ArrayList<HashMap<?, ?>>();
+		c.add(new HashMap<Object, Object>());
 		Object lvResult = jsonSerializer.serialize(c);
 		lvResult = jsonSerializer.deserialize(lvResult);
 		assertEquals(c, lvResult);
-		assertEquals(c.iterator().next(), new Hashtable());
+		assertEquals(c.iterator().next(), new Hashtable<Object, Object>());
 	}
 	
 	public void testNestedMapInList() throws Exception {
-		List l = new ArrayList();
-		Map m = new HashMap();
+		List<Object> l = new ArrayList<Object>();
+		Map<String, Object> m = new HashMap<String, Object>();
 		m.put("k1", "v1");
-		Set s = new HashSet();
+		Set<String> s = new HashSet<String>();
 		s.add("SetValue");
 		m.put("set", s);
 		l.add(s);
@@ -329,9 +329,9 @@ public class JsonSerializerTest extends TestCase {
 		
 		Object lvResult = jsonSerializer.serialize(l);
 		lvResult = jsonSerializer.deserialize(lvResult);
-		List lAfter = (List) lvResult;
-		Set sAfter = (Set) l.get(0);
-		Map mAfter = (Map) l.get(1);
+		List<?> lAfter = (List<?>) lvResult;
+		Set<?> sAfter = (Set<?>) l.get(0);
+		Map<?, ?> mAfter = (Map<?, ?>) l.get(1);
 		
 		assertEquals(l.size(), lAfter.size());
 		assertEquals(s.size(), sAfter.size());
@@ -339,7 +339,7 @@ public class JsonSerializerTest extends TestCase {
 		assertEquals(s.iterator().next(), sAfter.iterator().next());
 		assertEquals(m.get("k1"), mAfter.get("k1"));
 		assertEquals(m.get("set"), mAfter.get("set"));
-		assertEquals(((Set) m.get("set")).iterator().next(), ((Set) mAfter.get("set")).iterator().next());
+		assertEquals(((Set<?>) m.get("set")).iterator().next(), ((Set<?>) mAfter.get("set")).iterator().next());
 	}
 
 	public void testDeserializeNullValue() throws Exception {
@@ -385,7 +385,7 @@ public class JsonSerializerTest extends TestCase {
 		Node nAfter = (Node) lvResult;
 		assertEquals("N", nAfter.getName());
 		assertNull(nAfter.getParent());
-		assertEquals(new HashMap(), nAfter.getNamedChildren());
+		assertEquals(new HashMap<Object, Object>(), nAfter.getNamedChildren());
 		
 		assertEquals(2, nAfter.getChildren().size());
 		assertEquals("N1", ((Node) nAfter.getChildren().get(0)).getName());
@@ -404,7 +404,7 @@ public class JsonSerializerTest extends TestCase {
 		Node nAfter = (Node) lvResult;
 		assertEquals("N", nAfter.getName());
 		assertNull(nAfter.getParent());
-		assertEquals(new ArrayList(), nAfter.getChildren());
+		assertEquals(new ArrayList<Object>(), nAfter.getChildren());
 		
 		assertEquals(2, nAfter.getNamedChildren().size());
 		assertEquals("N1", ((Node) nAfter.getNamedChildren().get("N1")).getName());
@@ -424,7 +424,7 @@ public class JsonSerializerTest extends TestCase {
 		Node nAfter = (Node) lvResult;
 		assertEquals("N", nAfter.getName());
 		assertNull(nAfter.getParent());
-		assertEquals(new HashMap(), nAfter.getNamedChildren());
+		assertEquals(new HashMap<Object, Object>(), nAfter.getNamedChildren());
 		
 		assertEquals(2, nAfter.getChildren().size());
 		assertEquals("N1", ((Node) nAfter.getChildren().get(0)).getName());
@@ -447,7 +447,7 @@ public class JsonSerializerTest extends TestCase {
 		Node nAfter = (Node) lvResult;
 		assertEquals("N", nAfter.getName());
 		assertNull(nAfter.getParent());
-		assertEquals(new ArrayList(), nAfter.getChildren());
+		assertEquals(new ArrayList<Object>(), nAfter.getChildren());
 		
 		assertEquals(2, nAfter.getNamedChildren().size());
 		Node n1After = (Node) nAfter.getNamedChildren().get("N1");
@@ -475,7 +475,7 @@ public class JsonSerializerTest extends TestCase {
 	}
 
 	public void testWithSimpleKeyMapper() throws Exception {
-		Map lvMap = new HashMap();
+		Map<String, String> lvMap = new HashMap<String, String>();
 		lvMap.put("k1", "v1");
 		jsonSerializer.serialize(lvMap);
 		
@@ -511,7 +511,7 @@ public class JsonSerializerTest extends TestCase {
 	}
 
 	public void testMapWithKeyThatAreNotStrings() throws Exception {
-		Map lvMap = new Hashtable();
+		Map<Comparable<?>, Comparable<?>> lvMap = new Hashtable<Comparable<?>, Comparable<?>>();
 		lvMap.put("foo", "foo");
 		lvMap.put(new Integer(4711), new Integer(4712));
 		
@@ -525,13 +525,13 @@ public class JsonSerializerTest extends TestCase {
 	}
 	
 	public void testMapWithKeyThatAreStrings() throws Exception {
-		Map lvMap = new Hashtable();
+		Map<String, String> lvMap = new Hashtable<String, String>();
 		lvMap.put("foo", "foo");
 		lvMap.put("bar", "bar");
 		
 		Serializer lvSerializer = new JsonSerializer();
 		Object lvJsonStr = lvSerializer.serialize(lvMap);
-		Map lvMapAfter = (Map) lvSerializer.deserialize(lvJsonStr);
+		Map<?, ?> lvMapAfter = (Map<?, ?>) lvSerializer.deserialize(lvJsonStr);
 		
 		assertEquals("foo", lvMapAfter.get("foo"));
 		assertEquals("bar", lvMapAfter.get("bar"));
@@ -539,14 +539,14 @@ public class JsonSerializerTest extends TestCase {
 	}
 
 	public void testMapWithKeyThatAreStringsWithNullValue() throws Exception {
-		Map lvMap = new HashMap();
+		Map<String, String> lvMap = new HashMap<String, String>();
 		lvMap.put("foo", "foo");
 		lvMap.put("null", null);
 		
 		JsonSerializer lvSerializer = new JsonSerializer();
 		
 		Object lvJsonStr = lvSerializer.serialize(lvMap);
-		Map lvMapAfter = (Map) lvSerializer.deserialize(lvJsonStr);
+		Map<?, ?> lvMapAfter = (Map<?, ?>) lvSerializer.deserialize(lvJsonStr);
 		
 		assertEquals("foo", lvMapAfter.get("foo"));
 		assertTrue(lvMapAfter.containsKey("null"));
@@ -555,7 +555,7 @@ public class JsonSerializerTest extends TestCase {
 	}
 
 	public void testMapWithKeyThatAreStringsWithNoNullValue() throws Exception {
-		Map lvMap = new HashMap();
+		Map<String, String> lvMap = new HashMap<String, String>();
 		lvMap.put("foo", "foo");
 		lvMap.put("null", null);
 		
@@ -566,7 +566,7 @@ public class JsonSerializerTest extends TestCase {
 		assertFalse(lvSerializer.getWithNullValuesInMap());
 		
 		Object lvJsonStr = lvSerializer.serialize(lvMap);
-		Map lvMapAfter = (Map) lvSerializer.deserialize(lvJsonStr);
+		Map<?, ?> lvMapAfter = (Map<?, ?>) lvSerializer.deserialize(lvJsonStr);
 		
 		assertEquals("foo", lvMapAfter.get("foo"));
 		assertFalse(lvMapAfter.containsKey("null"));
@@ -582,7 +582,7 @@ public class JsonSerializerTest extends TestCase {
 		o = lvSerializer.serialize("this \" is an \"quoted string\"");
 		assertEquals("\"this \\\" is an \\\"quoted string\\\"\"", o);
 		
-		Map lvMap = new HashMap();
+		Map<String, String> lvMap = new HashMap<String, String>();
 		lvMap.put("ke\"y", "val\"ue");
 		o = lvSerializer.serialize(lvMap);
 		assertEquals("{\"ke\\\"y\":\"val\\\"ue\"}", o);
@@ -606,7 +606,7 @@ public class JsonSerializerTest extends TestCase {
 		o = lvSerializer.serialize("this \\/ is an \\/slash string\\/");
 		assertEquals("\"this \\\\\\/ is an \\\\\\/slash string\\\\\\/\"", o);
 
-		Map lvMap = new HashMap();
+		Map<String, String> lvMap = new HashMap<String, String>();
 		lvMap.put("ke/y", "val/ue");
 		o = lvSerializer.serialize(lvMap);
 		assertEquals("{\"ke\\/y\":\"val\\/ue\"}", o);
@@ -620,7 +620,7 @@ public class JsonSerializerTest extends TestCase {
 		o = lvSerializer.serialize("this \\ is an \\/slash string\\");
 		assertEquals("\"this \\\\ is an \\\\\\/slash string\\\\\"", o);
 		
-		Map lvMap = new HashMap();
+		Map<String, String> lvMap = new HashMap<String, String>();
 		lvMap.put("ke\\\\y", "va\\\\lue");
 		o = lvSerializer.serialize(lvMap);
 		assertEquals("{\"ke\\\\\\\\y\":\"va\\\\\\\\lue\"}", o);
@@ -663,7 +663,7 @@ public class JsonSerializerTest extends TestCase {
 		Serializer lvSerializer = new JsonSerializer();
 		String lvJsonStr = "{\"description\":\"This BMW is my Car\",\"name\":\"BMW\"}";
 		Object o = lvSerializer.deserialize(lvJsonStr);
-		Map lvMap = (Map) o;
+		Map<?, ?> lvMap = (Map<?, ?>) o;
 		assertEquals("BMW", lvMap.get("name"));
 		assertEquals("This BMW is my Car", lvMap.get("description"));
 		assertFalse("Map don't contains class attribute", lvMap.containsKey("class"));
@@ -783,7 +783,7 @@ public class JsonSerializerTest extends TestCase {
 		JsonSerializer lvSerializer = new JsonSerializer();
 		Object lvResult = lvSerializer.deserialize(str, HashMap.class);
 		assertTrue("Result is no Map: " + lvResult.getClass().getName(), lvResult instanceof Map);
-		Map lvMap = (Map) lvResult;
+		Map<?, ?> lvMap = (Map<?, ?>) lvResult;
 		assertTrue(lvMap.containsKey("key"));
 		String lvValue = (String) lvMap.get("key");
 		assertEquals("/path", lvValue);
@@ -801,7 +801,7 @@ public class JsonSerializerTest extends TestCase {
 		JsonSerializer lvSerializer = new JsonSerializer();
 		Object lvResult = lvSerializer.deserialize(str, HashMap.class);
 		assertTrue("Result is no Map: " + lvResult.getClass().getName(), lvResult instanceof Map);
-		Map lvMap = (Map) lvResult;
+		Map<?, ?> lvMap = (Map<?, ?>) lvResult;
 		assertTrue(lvMap.containsKey("key"));
 		String lvValue = (String) lvMap.get("key");
 		assertEquals("\n path", lvValue);
@@ -810,7 +810,7 @@ public class JsonSerializerTest extends TestCase {
 		assertEquals("{\"key\":\"\\n path\"}", lvResult);
 		
 		lvResult = lvSerializer.deserialize(lvResult, HashMap.class);
-		lvMap = (Map) lvResult;
+		lvMap = (Map<?, ?>) lvResult;
 		assertTrue(lvMap.containsKey("key"));
 		lvValue = (String) lvMap.get("key");
 		assertEquals("\n path", lvValue);
@@ -824,7 +824,7 @@ public class JsonSerializerTest extends TestCase {
 		JsonSerializer lvSerializer = new JsonSerializer();
 		Object lvResult = lvSerializer.deserialize(str, HashMap.class);
 		assertTrue("Result is no Map: " + lvResult.getClass().getName(), lvResult instanceof Map);
-		Map lvMap = (Map) lvResult;
+		Map<?, ?> lvMap = (Map<?, ?>) lvResult;
 		assertTrue(lvMap.containsKey("key"));
 		String lvValue = (String) lvMap.get("key");
 		assertEquals("/ path", lvValue);
@@ -833,7 +833,7 @@ public class JsonSerializerTest extends TestCase {
 		assertEquals("{\"key\":\"\\/ path\"}", lvResult);
 		
 		lvResult = lvSerializer.deserialize(lvResult, HashMap.class);
-		lvMap = (Map) lvResult;
+		lvMap = (Map<?, ?>) lvResult;
 		assertTrue(lvMap.containsKey("key"));
 		lvValue = (String) lvMap.get("key");
 		assertEquals("/ path", lvValue);
@@ -870,7 +870,7 @@ public class JsonSerializerTest extends TestCase {
 		Object lvResult = lvSerializer.deserialize(lvTemp);
 		
 		assertTrue("Is not a Map: " + lvResult.getClass().getName(), lvResult instanceof Map);
-		Map lvMap = (Map) lvResult;
+		Map<?, ?> lvMap = (Map<?, ?>) lvResult;
 		assertFalse(lvMap.containsKey("class"));
 		assertFalse(lvMap.containsKey("build"));
 		assertTrue(lvMap.containsKey("name"));
@@ -894,7 +894,7 @@ public class JsonSerializerTest extends TestCase {
 		Object lvResult = lvSerializer.deserialize(lvTemp, HashMap.class);
 		
 		assertTrue("Is not a Map: " + lvResult.getClass().getName(), lvResult instanceof Map);
-		Map lvMap = (Map) lvResult;
+		Map<?, ?> lvMap = (Map<?, ?>) lvResult;
 		assertFalse(lvMap.containsKey(UniqueIdGenerator.UNIQUE_ID_PROPERTY));
 		assertFalse(lvMap.containsKey("build"));
 		assertTrue(lvMap.containsKey("name"));
@@ -916,13 +916,13 @@ public class JsonSerializerTest extends TestCase {
 	}
 	
 	public void testEmptyString() throws Exception {
-		Map map = new HashMap();  
+		Map<String, String> map = new HashMap<String, String>();  
 		map.put("name", "" );
 
 		Object result =new JsonSerializer().serialize(map);
 		assertEquals("{\"name\":\"\"}", result);
 		
-		Map mapAfter = (Map) new JsonSerializer().deserialize(result);
+		Map<?, ?> mapAfter = (Map<?, ?>) new JsonSerializer().deserialize(result);
 		assertEquals(map, mapAfter);
 	}
 	
@@ -938,14 +938,14 @@ public class JsonSerializerTest extends TestCase {
 		java.sql.Date lvDate = new java.sql.Date(lvTime);
 		lvBean.setDate(lvDate);
 		
-		Map map = new HashMap();  
+		Map<String, Object> map = new HashMap<String, Object>();  
 		map.put("bean", lvBean );
 		map.put("key", "value" );
 		
 		Object lvResult = lvSerializer.serialize(map);
 		lvResult = lvSerializer.deserialize(lvResult);
 		assertNotNull(lvResult);
-		Map lvMapAfter = (Map) lvResult;
+		Map<?, ?> lvMapAfter = (Map<?, ?>) lvResult;
                 assertEquals("value", lvMapAfter.get("key"));
                 
                 Calendar cal2 = Calendar.getInstance();
@@ -958,7 +958,7 @@ public class JsonSerializerTest extends TestCase {
 	
 	/** Solve Bug 1958512 empty string serialized to JSON */
 	public void testEscapingEmptyStringByMap2Json() {
-		Map object = new HashMap();
+		Map<String, String> object = new HashMap<String, String>();
 		object.put("emptyString", "");
 
 		Serializer serializer = new JsonSerializer();
@@ -971,7 +971,7 @@ public class JsonSerializerTest extends TestCase {
 	public void testEscapingEmptyStringByJson2Map() {
 		String jsonStr = "{\"emptyString\":\"\"}";
 		Serializer serializer = new JsonSerializer();
-		Map lvMap = (Map) serializer.deserialize(jsonStr);
+		Map<?, ?> lvMap = (Map<?, ?>) serializer.deserialize(jsonStr);
 
 		Object lvExpectedValue = lvMap.get("emptyString");
 		assertEquals("Expected empty String and NOT:" + lvExpectedValue, lvExpectedValue , "");

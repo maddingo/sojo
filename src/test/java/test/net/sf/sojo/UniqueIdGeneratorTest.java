@@ -58,9 +58,9 @@ public class UniqueIdGeneratorTest extends TestCase {
 	
 	public void testUniqueIdOfCollection() throws Exception {
 		UniqueIdGenerator lvIdGenerator = new UniqueIdGenerator();
-		assertNull(lvIdGenerator.getUniqueId(new ArrayList()));
+		assertNull(lvIdGenerator.getUniqueId(new ArrayList<Object>()));
 
-		List l = new Vector();
+		List<Object> l = new Vector<Object>();
 		l.add("aa");
 		l.add(new Double(0.07));
 		assertNull(lvIdGenerator.getUniqueId(l));
@@ -69,9 +69,9 @@ public class UniqueIdGeneratorTest extends TestCase {
 	
 	public void testUniqueIdOfMap() throws Exception {
 		UniqueIdGenerator lvIdGenerator = new UniqueIdGenerator();
-		assertNull(lvIdGenerator.getUniqueId(new HashMap()));
+		assertNull(lvIdGenerator.getUniqueId(new HashMap<Object, Object>()));
 
-		Map m = new HashMap();
+		Map<Comparable<?>, Comparable<?>> m = new HashMap<Comparable<?>, Comparable<?>>();
 		m.put("aa", "aa");
 		m.put(new Double(0.07), new Double(0.07));
 		assertNull(lvIdGenerator.getUniqueId(m));

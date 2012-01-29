@@ -52,7 +52,7 @@ public class IterateableMap2BeanConversionTest extends TestCase {
 		c.addConversion(new IterateableMap2BeanConversion());
 		c.addConversion(new Iterateable2IterateableConversion());
 		
-		List lvList = new ArrayList();
+		List<Node> lvList = new ArrayList<Node>();
 		lvList.add(new Node("Node1"));
 		lvList.add(new Node("Node2"));
 		
@@ -60,7 +60,7 @@ public class IterateableMap2BeanConversionTest extends TestCase {
 		Object lvNode = c.convert(lvNodeMap);
 		assertNotNull(lvNode);
 		assertTrue(lvNode instanceof List);
-		List lvListNodes = (List) lvNode;
+		List<?> lvListNodes = (List<?>) lvNode;
 		assertEquals(lvList.size(), lvListNodes.size());
 		assertEquals("Node1", ((Node) lvListNodes.get(0)).getName()); 
 		assertEquals("Node2", ((Node) lvListNodes.get(1)).getName());
@@ -72,7 +72,7 @@ public class IterateableMap2BeanConversionTest extends TestCase {
 		c.addConversion(new IterateableMap2BeanConversion());
 		c.addConversion(new Iterateable2IterateableConversion());
 		
-		List lvList = new ArrayList();
+		List<Node> lvList = new ArrayList<Node>();
 		Node n1 = new Node("Node1and3");
 		lvList.add(n1);
 		lvList.add(new Node("Node2"));
@@ -82,7 +82,7 @@ public class IterateableMap2BeanConversionTest extends TestCase {
 		Object lvNode = c.convert(lvNodeMap);
 		assertNotNull(lvNode);
 		assertTrue(lvNode instanceof List);
-		List lvListNodes = (List) lvNode;
+		List<?> lvListNodes = (List<?>) lvNode;
 		assertEquals(lvList.size(), lvListNodes.size());
 		Node n1After = (Node) lvListNodes.get(0);
 		assertEquals("Node1and3", n1After.getName()); 
@@ -99,8 +99,8 @@ public class IterateableMap2BeanConversionTest extends TestCase {
 		c.addConversion(new ComplexBean2MapConversion());
 		c.addConversion(new IterateableMap2BeanConversion());
 		
-		List lvList = new ArrayList();
-		Map lvMap = new HashMap();
+		List<Object> lvList = new ArrayList<Object>();
+		Map<String, String> lvMap = new HashMap<String, String>();
 		lvMap.put("1", "1");
 		lvList.add(lvMap);
 		lvList.add(new Node("Node"));
@@ -110,10 +110,10 @@ public class IterateableMap2BeanConversionTest extends TestCase {
 
 		assertNotNull(lvComplex);
 		assertTrue(lvComplex instanceof List);
-		List lvListAfter = (List) lvComplex;
+		List<?> lvListAfter = (List<?>) lvComplex;
 		assertEquals(lvList.size(), lvListAfter.size());
 		
-		Map lvMapAfter = (Map) lvListAfter.get(0);
+		Map<?, ?> lvMapAfter = (Map<?, ?>) lvListAfter.get(0);
 		assertEquals(lvMap.get("1"), lvMapAfter.get("1"));
 		assertTrue(lvMapAfter instanceof Hashtable);
 		
@@ -141,7 +141,7 @@ public class IterateableMap2BeanConversionTest extends TestCase {
 			Converter c = new Converter();
 			c.addConversion(new IterateableMap2BeanConversion());
 
-			Map lvMap = new Hashtable();
+			Map<String, Comparable<?>> lvMap = new Hashtable<String, Comparable<?>>();
 			lvMap.put("class", Node.class.getName());
 			lvMap.put("children", new Long(77));
 			
@@ -158,7 +158,7 @@ public class IterateableMap2BeanConversionTest extends TestCase {
 		lvConversion.setIgnoreNullValues(false);
 		c.addConversion(lvConversion);
 		
-		Map lvMap = new HashMap();
+		Map<String, String> lvMap = new HashMap<String, String>();
 		lvMap.put("class", Node.class.getName());
 		lvMap.put("children", null);
 		lvMap.put("name", "MyNode");

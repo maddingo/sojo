@@ -222,7 +222,7 @@ public class XmlRpcSerializerTest extends TestCase {
 					"</params>";
 
 		Object lvResult = xmlRpcSerializer.deserialize(s);
-		List lvList = (List) lvResult;
+		List<?> lvList = (List<?>) lvResult;
 		assertEquals(new Integer(123), lvList.get(0));
 		assertEquals(Boolean.TRUE, lvList.get(1));
 		assertEquals("MyString 1", lvList.get(2));
@@ -235,7 +235,7 @@ public class XmlRpcSerializerTest extends TestCase {
 						"<value><string>bBb</string></value>" +
 					"</data></array></value></param></params>";
 		Object lvResult = xmlRpcSerializer.deserialize(s);
-		List lvList = (List) lvResult;
+		List<?> lvList = (List<?>) lvResult;
 		assertEquals("aaA", lvList.get(0));
 		assertEquals("bBb", lvList.get(1));
 	}
@@ -248,7 +248,7 @@ public class XmlRpcSerializerTest extends TestCase {
 						"<value><double>.123</double></value>" +
 					"</data></array></value></param></params>";
 		Object lvResult = xmlRpcSerializer.deserialize(s);
-		List lvList = (List) lvResult;
+		List<?> lvList = (List<?>) lvResult;
 		assertEquals("aaA", lvList.get(0));
 		assertEquals(new Integer(123), lvList.get(1));
 		assertEquals(Boolean.TRUE, lvList.get(2));
@@ -265,10 +265,10 @@ public class XmlRpcSerializerTest extends TestCase {
 						"</data></array></value>" +
 					"</data></array></value></param></params>";
 		Object lvResult = xmlRpcSerializer.deserialize(s);
-		List lvParams = (List) lvResult;
+		List<?> lvParams = (List<?>) lvResult;
 		assertEquals("text", lvParams.get(0));
 		assertEquals(new Integer(123), lvParams.get(1));
-		List lvList2 = (List) lvParams.get(2);
+		List<?> lvList2 = (List<?>) lvParams.get(2);
 		assertEquals(Boolean.TRUE, lvList2.get(0));
 		assertEquals(new Double("0.123"), lvList2.get(1));
 	}
@@ -279,7 +279,7 @@ public class XmlRpcSerializerTest extends TestCase {
 						"<member><name>key 2</name><value>value 2</value></member>" +
 					"</struct></value></param></params>";
 		Object lvResult = xmlRpcSerializer.deserialize(s);
-		Map lvMap = (Map) lvResult;
+		Map<?, ?> lvMap = (Map<?, ?>) lvResult;
 		assertEquals(2, lvMap.size());
 		assertEquals("value 1", lvMap.get("key 1"));
 		assertEquals("value 2", lvMap.get("key 2"));
@@ -293,7 +293,7 @@ public class XmlRpcSerializerTest extends TestCase {
 						"<member><name>boolean</name><value><boolean>0</boolean></value></member>" +
 					"</struct></value></param></params>";
 		Object lvResult = xmlRpcSerializer.deserialize(s);
-		Map lvMap = (Map) lvResult;
+		Map<?, ?> lvMap = (Map<?, ?>) lvResult;
 		assertEquals(4, lvMap.size());
 		assertEquals("RHAT", lvMap.get("symbol"));
 		assertEquals(new Double("2.25"), lvMap.get("limit"));
@@ -312,11 +312,11 @@ public class XmlRpcSerializerTest extends TestCase {
 				"<member><name>boolean</name><value><boolean>1</boolean></value></member>" +
 			"</struct></value></param></params>";
 		Object lvResult = xmlRpcSerializer.deserialize(s);
-		Map lvMap = (Map) lvResult;
+		Map<?, ?> lvMap = (Map<?, ?>) lvResult;
 		assertEquals(4, lvMap.size());
 		assertEquals("RHAT", lvMap.get("symbol"));
 		assertEquals(new Double("2.25"), lvMap.get("limit"));
-		Map lvMap2 = (Map) lvMap.get("map");
+		Map<?, ?> lvMap2 = (Map<?, ?>) lvMap.get("map");
 		assertEquals("v1", lvMap2.get("k1"));
 		assertEquals("v2", lvMap2.get("k2"));
 		assertEquals(Boolean.TRUE, lvMap.get("boolean"));
@@ -332,10 +332,10 @@ public class XmlRpcSerializerTest extends TestCase {
 						"</struct></value>" +						
 					"</data></array></value></param></params>";
 		Object lvResult = xmlRpcSerializer.deserialize(s);
-		List lvList = (List) lvResult;
+		List<?> lvList = (List<?>) lvResult;
 		assertEquals("text", lvList.get(0));
 		assertEquals(new Integer(123), lvList.get(1));
-		Map lvMap = (Map) lvList.get(2);
+		Map<?, ?> lvMap = (Map<?, ?>) lvList.get(2);
 		assertEquals("v1", lvMap.get("k1"));
 		assertEquals("v2", lvMap.get("k2"));
 	}
@@ -404,7 +404,7 @@ public class XmlRpcSerializerTest extends TestCase {
 		assertEquals("LastName", lvCustomerAfter.getLastName());
 		assertEquals(d, lvCustomerAfter.getBirthDate());
 		assertEquals(2, lvCustomerAfter.getAddresses().size());
-		Iterator it = lvCustomer.getAddresses().iterator();
+		Iterator<?> it = lvCustomer.getAddresses().iterator();
 		Address a1After = (Address) it.next();
 		Address a2After = (Address) it.next();
 		if (a1After.getCity().equals("MyCity 1")) {
@@ -488,7 +488,7 @@ public class XmlRpcSerializerTest extends TestCase {
 		
 		xmlRpcSerializer.setReturnValueAsList(false);
 		Object lvResult = xmlRpcSerializer.deserialize(s);
-		Map lvMap = (Map) lvResult;
+		Map<?, ?> lvMap = (Map<?, ?>) lvResult;
 		assertEquals(new Integer("23"), lvMap.get("faultCode"));
 		assertEquals("Unknown stock symbol ABCD", lvMap.get("faultString"));
 		xmlRpcSerializer.setReturnValueAsList(true);
@@ -599,7 +599,7 @@ public class XmlRpcSerializerTest extends TestCase {
 
 
 		xmlRpcSerializer.setConvertResult2XmlRpcExceptionAndThrow(false);
-		Map lvMap = (Map) xmlRpcSerializer.deserialize(faultString);
+		Map<?, ?> lvMap = (Map<?, ?>) xmlRpcSerializer.deserialize(faultString);
 		assertEquals(new Integer("23"), lvMap.get("faultCode"));
 		assertEquals("Unknown stock symbol ABCD", lvMap.get("faultString"));
 	}
@@ -651,7 +651,7 @@ public class XmlRpcSerializerTest extends TestCase {
 									"<member><name>name</name><value><string>BMW</string></value></member>" +
 								"</struct></value></param></params>";
 		Object o = lvSerializer.deserialize(lvXmlRpcStr);
-		Map lvMap = (Map) o;
+		Map<?, ?> lvMap = (Map<?, ?>) o;
 		assertEquals("BMW", lvMap.get("name"));
 		assertEquals("This BMW is my Car", lvMap.get("description"));
 		assertFalse("Map don't contains class attribute", lvMap.containsKey("class"));
@@ -724,7 +724,7 @@ public class XmlRpcSerializerTest extends TestCase {
 		Object lvResult = lvSerializer.deserialize(lvTemp);
 		
 		assertTrue("Is not a Map: " + lvResult.getClass().getName(), lvResult instanceof Map);
-		Map lvMap = (Map) lvResult;
+		Map<?, ?> lvMap = (Map<?, ?>) lvResult;
 		assertFalse(lvMap.containsKey("class"));
 		assertFalse(lvMap.containsKey("build"));
 		assertTrue(lvMap.containsKey("name"));
@@ -748,7 +748,7 @@ public class XmlRpcSerializerTest extends TestCase {
 		Object lvResult = lvSerializer.deserialize(lvTemp, HashMap.class);
 		
 		assertTrue("Is not a Map: " + lvResult.getClass().getName(), lvResult instanceof Map);
-		Map lvMap = (Map) lvResult;
+		Map<?, ?> lvMap = (Map<?, ?>) lvResult;
 		assertFalse(lvMap.containsKey(UniqueIdGenerator.UNIQUE_ID_PROPERTY));
 		assertFalse(lvMap.containsKey("build"));
 		assertTrue(lvMap.containsKey("name"));

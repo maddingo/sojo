@@ -40,7 +40,7 @@ public class PropertyTest extends TestCase {
 
 	public void testConstructorInvalidObject() throws Exception {
 		try {
-			new Property(Car.class.getConstructor(null));
+			new Property(Car.class.getConstructor());
 			fail("Expected Method or Field and not an Constructor");
 		} catch (Exception e) {
 			assertTrue(e instanceof IllegalArgumentException);
@@ -64,7 +64,7 @@ public class PropertyTest extends TestCase {
 	}
 
 	public void testExecuteGetPropertyMethod() throws Exception {
-		Method lvMethod = Car.class.getMethod("getName", null);
+		Method lvMethod = Car.class.getMethod("getName");
 		Property lvProperty = new Property(lvMethod);
 		Object lvValue = lvProperty.executeGetValue(new Car("Trabant"));
 		assertEquals("Trabant", lvValue);
@@ -79,7 +79,7 @@ public class PropertyTest extends TestCase {
 
 	
 	public void testGetParameterTypesMethod() throws Exception {
-		Method lvMethod = Car.class.getMethod("getName", null);
+		Method lvMethod = Car.class.getMethod("getName");
 		Property lvProperty = new Property(lvMethod);
 		assertEquals(null, lvProperty.getParameterType());
 		

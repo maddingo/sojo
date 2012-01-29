@@ -16,6 +16,7 @@
 package test.net.sf.sojo.reflect;
 
 import java.beans.beancontext.BeanContext;
+import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -79,7 +80,7 @@ public class ReflectionHelperTest extends TestCase {
 		assertFalse(ReflectionHelper.isSimpleType(Vector.class));
 		assertFalse(ReflectionHelper.isSimpleType(Math.class));
 		
-		assertFalse(ReflectionHelper.isSimpleType(new Hashtable()));
+		assertFalse(ReflectionHelper.isSimpleType(new Hashtable<Object, Object>()));
 		assertFalse(ReflectionHelper.isSimpleType((Object) null));
 	}
 	
@@ -139,15 +140,15 @@ public class ReflectionHelperTest extends TestCase {
 	}
 	
 	public void testFindConstructorByParameterTypes() throws Exception {
-		Constructor lvConstructor = ReflectionHelper.findConstructorByParameterTypes(Vector.class, new Class [] { int.class });
+		Constructor<?> lvConstructor = ReflectionHelper.findConstructorByParameterTypes(Vector.class, new Class [] { int.class });
 		assertNotNull(lvConstructor);
 		assertEquals(1, lvConstructor.getParameterTypes().length);
 		assertEquals(int.class, lvConstructor.getParameterTypes()[0]);
-		assertEquals(new Vector(), lvConstructor.newInstance(new Object[] { Integer.valueOf("0") }));
+		assertEquals(new Vector<Object>(), lvConstructor.newInstance(new Object[] { Integer.valueOf("0") }));
 	}
 
 	public void testNotFindConstructorByParameterTypes() throws Exception {
-		Constructor lvConstructor = ReflectionHelper.findConstructorByParameterTypes(Vector.class, new Class [] { String.class });
+		Constructor<?> lvConstructor = ReflectionHelper.findConstructorByParameterTypes(Vector.class, new Class [] { String.class });
 		assertNull(lvConstructor);
 	}
 	
@@ -204,7 +205,7 @@ public class ReflectionHelperTest extends TestCase {
 	}
 	
 	public void testIsSimpleWithNullValue() throws Exception {
-		assertFalse(ReflectionHelper.isSimpleType((Class) null));
+		assertFalse(ReflectionHelper.isSimpleType((Class<?>) null));
 	}
 	
 	public void testAddSimple() throws Exception {
@@ -221,7 +222,7 @@ public class ReflectionHelperTest extends TestCase {
 	}
 
 	public void testIsIterateableType() throws Exception {
-		Class c[] = new Class[] { Node.class };
+		Class<?> c[] = new Class[] { Node.class };
 		assertTrue(ReflectionHelper.isIterateableType(c.getClass()));
 	}
 
@@ -236,13 +237,13 @@ public class ReflectionHelperTest extends TestCase {
 	
 	public void testCreateBeanFromMapWithEmptyMap() throws Exception {
 		try {
-			ReflectionHelper.createBeanFromMap(new HashMap(), null);
+			ReflectionHelper.createBeanFromMap(new HashMap<Object, Object>(), null);
 			fail("No map and no type are set!");
 		} catch (NullPointerException e) {
 			assertNotNull(e);
 		}
 		
-		Object lvBean = ReflectionHelper.createBeanFromMap(new HashMap(), Node.class);
+		Object lvBean = ReflectionHelper.createBeanFromMap(new HashMap<Object, Object>(), Node.class);
 		assertNotNull(lvBean);
 		assertTrue(lvBean instanceof Node);
 		
@@ -252,7 +253,7 @@ public class ReflectionHelperTest extends TestCase {
 	}
 
 	public void testCreateBeanFromMapWithMap() throws Exception {
-		Map lvMap = new HashMap();
+		Map<String, Serializable> lvMap = new HashMap<String, Serializable>();
 		lvMap.put("class", Node.class.getName());
 		Object lvBean = ReflectionHelper.createBeanFromMap(lvMap, null);
 		assertNotNull(lvBean);
@@ -276,7 +277,7 @@ public class ReflectionHelperTest extends TestCase {
 	
 	public void testCreateBeanFromMapWithInvalidClass2() throws Exception {
 		try {
-			Map lvMap = new Hashtable();
+			Map<String, String> lvMap = new Hashtable<String, String>();
 			lvMap.put("class", "NotValidClass");
 			ReflectionHelper.createBeanFromMap(lvMap, null);
 			fail("Long is not a Bean!");
@@ -287,7 +288,7 @@ public class ReflectionHelperTest extends TestCase {
 
 	public void testCreateBeanFromMapWithInvalidClass3() throws Exception {
 		try {
-			Map lvMap = new Hashtable();
+			Map<String, String> lvMap = new Hashtable<String, String>();
 			lvMap.put("class", NotJavaBean.class.getName());
 			ReflectionHelper.createBeanFromMap(lvMap, null);
 			fail("Long is not a Bean!");

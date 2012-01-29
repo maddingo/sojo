@@ -58,7 +58,7 @@ public class ReflectionMethodHelperTest extends TestCase {
 	}
 	
 	public void testGetAllSetterMethodWithCache() throws Exception {
-		Map lvMap = ReflectionMethodHelper.getAllSetterMethodWithCache(Node.class, null);
+		Map<?, ?> lvMap = ReflectionMethodHelper.getAllSetterMethodWithCache(Node.class, null);
 		assertNotNull(lvMap);
 		assertTrue(lvMap.size() > 1);
 		
@@ -68,8 +68,8 @@ public class ReflectionMethodHelperTest extends TestCase {
 	}
 	
 	public void testGetAllNotEqualsGetterAndSetterAndRemoveThisProperties() throws Exception {
-		Map lvMapSetter = ReflectionMethodHelper.getAllSetterMethod(SubNode.class);
-		Map lvMapGetter = ReflectionMethodHelper.getAllGetterMethod(SubNode.class);
+		Map<Object, Object> lvMapSetter = ReflectionMethodHelper.getAllSetterMethod(SubNode.class);
+		Map<Object, Object> lvMapGetter = ReflectionMethodHelper.getAllGetterMethod(SubNode.class);
 		assertNotNull(lvMapSetter);
 		assertNotNull(lvMapGetter);
 		
@@ -83,7 +83,7 @@ public class ReflectionMethodHelperTest extends TestCase {
 		assertFalse(lvMapGetter.containsKey("ohterWithOutGetMethod"));
 		assertTrue(lvMapSetter.containsKey("ohterWithOutGetMethod"));
 		
-		Map lvMap = ReflectionMethodHelper.getAllNotEqualsGetterAndSetterAndRemoveThisProperties(lvMapGetter, lvMapSetter);
+		Map<?, ?> lvMap = ReflectionMethodHelper.getAllNotEqualsGetterAndSetterAndRemoveThisProperties(lvMapGetter, lvMapSetter);
 		// one getter was removed: getWithOutGetMethod
 		assertEquals(lvMap.size() + 1, lvMapGetter.size());
 		assertEquals(lvMap.size(), lvMapSetter.size());
@@ -94,7 +94,7 @@ public class ReflectionMethodHelperTest extends TestCase {
 	}
 
 	public void testGetAllGetterAndSetterMethod() throws Exception {
-		Map lvMap = ReflectionMethodHelper.getAllGetterAndSetterMethod(Node.class, -7);
+		Map<?, ?> lvMap = ReflectionMethodHelper.getAllGetterAndSetterMethod(Node.class, -7);
 		assertNotNull(lvMap);
 		assertEquals(0, lvMap.size());
 	}
@@ -114,7 +114,7 @@ public class ReflectionMethodHelperTest extends TestCase {
 	}
 	
 	public void testTryToModifyGetterMap() throws Exception {
-		Map lvMap = ReflectionMethodHelper.getAllGetterAndSetterMethod(Car.class, ReflectionMethodHelper.GET_METHOD);
+		Map<?, ?> lvMap = ReflectionMethodHelper.getAllGetterAndSetterMethod(Car.class, ReflectionMethodHelper.GET_METHOD);
 		try {
 			lvMap.remove("class");
 			fail("Changes in the map are not supported!");
@@ -124,7 +124,7 @@ public class ReflectionMethodHelperTest extends TestCase {
 	}
 
 	public void testTryToModifySetterMap() throws Exception {
-		Map lvMap = ReflectionMethodHelper.getAllGetterAndSetterMethod(Car.class, ReflectionMethodHelper.SET_METHOD);
+		Map<?, ?> lvMap = ReflectionMethodHelper.getAllGetterAndSetterMethod(Car.class, ReflectionMethodHelper.SET_METHOD);
 		try {
 			lvMap.remove("name");
 			fail("Changes in the map are not supported!");
@@ -135,7 +135,7 @@ public class ReflectionMethodHelperTest extends TestCase {
 	}
 
 	public void testTryToModifyGetterMapFromCache() throws Exception {
-		Map lvMap = ReflectionMethodHelper.getAllGetterMethodWithCache(Car.class, null);
+		Map<?, ?> lvMap = ReflectionMethodHelper.getAllGetterMethodWithCache(Car.class, null);
 		try {
 			lvMap.remove("class");
 			fail("Changes in the map are not supported!");
@@ -145,7 +145,7 @@ public class ReflectionMethodHelperTest extends TestCase {
 	}
 	
 	public void testTryToModifySetterMapFromCache() throws Exception {
-		Map lvMap = ReflectionMethodHelper.getAllGetterMethodWithCache(Car.class, null);
+		Map<?, ?> lvMap = ReflectionMethodHelper.getAllGetterMethodWithCache(Car.class, null);
 		try {
 			lvMap.remove("name");
 			fail("Changes in the map are not supported!");
@@ -155,19 +155,19 @@ public class ReflectionMethodHelperTest extends TestCase {
 	}
 
 	public void testGetAllGetterAndSetterMethodFromBadJavaBeanForGet() throws Exception {
-		Map lvMap = ReflectionMethodHelper.getAllGetterAndSetterMethod(BadJavaBean.class, ReflectionMethodHelper.GET_METHOD);
+		Map<?, ?> lvMap = ReflectionMethodHelper.getAllGetterAndSetterMethod(BadJavaBean.class, ReflectionMethodHelper.GET_METHOD);
 		assertEquals(1, lvMap.size());
 		assertEquals(BadJavaBean.class.getName(), lvMap.get("class"));
 	}
 
 	public void testGetAllGetterAndSetterMethodFromBadJavaBeanForSet() throws Exception {
-		Map lvMap = ReflectionMethodHelper.getAllGetterAndSetterMethod(BadJavaBean.class, ReflectionMethodHelper.SET_METHOD);
+		Map<?, ?> lvMap = ReflectionMethodHelper.getAllGetterAndSetterMethod(BadJavaBean.class, ReflectionMethodHelper.SET_METHOD);
 		assertEquals(0, lvMap.size());
 		assertFalse(lvMap.containsKey("class"));
 	}
 	
 	public void testBeanBooleanIsProperty() throws Exception {
-		Map lvMap = ReflectionMethodHelper.getAllGetterAndSetterMethod(Bean.class, ReflectionMethodHelper.SET_METHOD);
+		Map<?, ?> lvMap = ReflectionMethodHelper.getAllGetterAndSetterMethod(Bean.class, ReflectionMethodHelper.SET_METHOD);
 		assertEquals(4, lvMap.size());
 		assertFalse(lvMap.containsKey("class"));
 		assertTrue(lvMap.containsKey("retired"));

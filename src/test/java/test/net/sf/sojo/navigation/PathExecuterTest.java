@@ -77,7 +77,7 @@ public class PathExecuterTest extends TestCase {
 	}
 
 	public void testGetSimplePropertyMap() throws Exception {
-		Map lvMap = new Hashtable();
+		Map<String, String> lvMap = new Hashtable<String, String>();
 		lvMap.put("name", "Test-Node");
 		Object lvResult = PathExecuter.getSimpleProperty(lvMap, "name");
 		assertNotNull(lvResult);
@@ -117,14 +117,14 @@ public class PathExecuterTest extends TestCase {
 	}
 
 	public void testSetSimplePropertyMap() throws Exception {
-		Map lvMap = new Hashtable();
+		Map<?, ?> lvMap = new Hashtable<Object, Object>();
 		assertNull(lvMap.get("name"));
 		PathExecuter.setSimpleProperty(lvMap, "name", "Test-Node");
 		assertEquals("Test-Node", lvMap.get("name"));
 	}
 	
 	public void testGetIndexPropertyFromList() throws Exception {
-		List lvList = new ArrayList();
+		List<Node> lvList = new ArrayList<Node>();
 		lvList.add(new Node("N1"));
 		lvList.add(new Node("N2"));
 		lvList.add(new Node("N3"));
@@ -139,7 +139,7 @@ public class PathExecuterTest extends TestCase {
 	}
 	
 	public void testGetIndexPropertyFromListWithinValidIndex() throws Exception {
-		Set lvSet = new HashSet();
+		Set<Node> lvSet = new HashSet<Node>();
 		lvSet.add(new Node("N1"));
 		
 		PathExecuter.getIndexProperty(lvSet, 2);
@@ -162,7 +162,7 @@ public class PathExecuterTest extends TestCase {
 	}
 	
 	public void testSetIndexPropertyToList() throws Exception {
-		List lvList = new ArrayList();
+		List<Node> lvList = new ArrayList<Node>();
 		lvList.add(new Node("N1"));
 		lvList.add(new Node("N2"));
 		assertEquals(2, lvList.size());
@@ -176,7 +176,7 @@ public class PathExecuterTest extends TestCase {
 	}
 	
 	public void testSetIndexPropertyToSet() throws Exception {
-		Set lvSet = new HashSet();
+		Set<String> lvSet = new HashSet<String>();
 		lvSet.add("N1");
 		lvSet.add("N2");
 		assertEquals(2, lvSet.size());
@@ -229,7 +229,7 @@ public class PathExecuterTest extends TestCase {
 	}
 	
 	public void testSetKeyPropertyMap() throws Exception {
-		Map lvMap = new HashMap();
+		Map<String, String> lvMap = new HashMap<String, String>();
 		lvMap.put("k1", "v1");
 		lvMap.put("k2", "v2");
 
@@ -276,7 +276,7 @@ public class PathExecuterTest extends TestCase {
 	}
 
 	public void testSetIndexPropertyListAddElement() throws Exception {
-		List lvList = new ArrayList();
+		List<Comparable<?>> lvList = new ArrayList<Comparable<?>>();
 		lvList.add("Obj-1");
 		lvList.add(new Integer(2));
 		lvList.add("Obj-3");
@@ -291,7 +291,7 @@ public class PathExecuterTest extends TestCase {
 	}
 	
 	public void testGetKeyPropertyFromMap() throws Exception {
-		Map lvMap = new Hashtable();
+		Map<String, Node> lvMap = new Hashtable<String, Node>();
 		lvMap.put("N1", new Node("N1"));
 		lvMap.put("N2", new Node("N2"));
 		lvMap.put("N3", new Node("N3"));
@@ -321,7 +321,7 @@ public class PathExecuterTest extends TestCase {
 	}
 
 	public void testSetKeyPropertyToMap() throws Exception {
-		Map lvMap = new Hashtable();
+		Map<String, Node> lvMap = new Hashtable<String, Node>();
 		lvMap.put("N1", new Node("N1"));
 		lvMap.put("N2", new Node("N2"));
 		assertEquals(2, lvMap.size());
@@ -505,15 +505,15 @@ public class PathExecuterTest extends TestCase {
 	}
 
 	public void testGetKeyPropertyWithBadKey() throws Exception {
-		Map lvMap = new Hashtable();
+		Map<Double, String> lvMap = new Hashtable<Double, String>();
 		lvMap.put(new Double(12.34), "12.34");
 		assertEquals("12.34", PathExecuter.getKeyProperty(lvMap, new Double(12.34)));
 		assertNull(PathExecuter.getKeyProperty(lvMap, new Double(34.56)));
 	}
 	
 	public void testMapInList() throws Exception {
-		List lvList = new ArrayList();
-		Map lvMap = new Hashtable();
+		List<Map<String, String>> lvList = new ArrayList<Map<String, String>>();
+		Map<String, String> lvMap = new Hashtable<String, String>();
 		lvMap.put("key", "value");
 		lvList.add(lvMap);
 		
@@ -522,8 +522,8 @@ public class PathExecuterTest extends TestCase {
 	}
 	
 	public void testListInList() throws Exception {
-		List lvList = new ArrayList();
-		List lvList2 = new Vector();
+		List<Object> lvList = new ArrayList<Object>();
+		List<String> lvList2 = new Vector<String>();
 		lvList2.add("value1");
 		lvList2.add("value2");
 		lvList.add(lvList2);

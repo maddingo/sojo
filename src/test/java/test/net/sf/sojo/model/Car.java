@@ -46,6 +46,7 @@ public class Car {
 	public void setProperties(Properties pvProperties) { properties = pvProperties; }
 	public Properties getProperties() { return properties; }
 
+	@Override
 	public String toString() {
 		if (getName() != null) {
 			return getName();

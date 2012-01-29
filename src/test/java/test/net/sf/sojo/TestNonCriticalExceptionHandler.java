@@ -19,22 +19,24 @@ import net.sf.sojo.core.NonCriticalExceptionHandler;
 
 public class TestNonCriticalExceptionHandler extends NonCriticalExceptionHandler {
 
-	private Class thrownClasses = null;
+	private Class<?> thrownClasses = null;
 	private Exception exception = null;
 	private String message = null;
 	
-	public void handleExceptionInternal(Class pvThrownClasses, Exception pvException,String pvMessage) {
+	@Override
+	public void handleExceptionInternal(Class<?> pvThrownClasses, Exception pvException,String pvMessage) {
 		thrownClasses = pvThrownClasses;
 		exception = pvException;
 		message = pvMessage;
 	}
 
-	public void handleExceptionInternal(Class pvThrownClasses, String pvMessage) {
+	@Override
+	public void handleExceptionInternal(Class<?> pvThrownClasses, String pvMessage) {
 		thrownClasses = pvThrownClasses;
 		message = pvMessage;
 	}
 	
-	public Class getThrownClasses() {
+	public Class<?> getThrownClasses() {
 		return thrownClasses;
 	}
 	public Exception getException() {

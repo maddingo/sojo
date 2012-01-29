@@ -27,19 +27,19 @@ public class CsvParserTest extends TestCase {
 
 	public void testParseWithNullValue() throws Exception {
 		CsvParser lvParser = new CsvParser();
-		List l = lvParser.parseAndGetFirstLine(null);
+		List<?> l = lvParser.parseAndGetFirstLine(null);
 		assertEquals(0, l.size());
 	}
 
 	public void testNoElementLine() throws Exception {
 		CsvParser lvParser = new CsvParser();
-		List l = lvParser.parseAndGetFirstLine("");
+		List<?> l = lvParser.parseAndGetFirstLine("");
 		assertEquals(0, l.size());
 	}
 
 	public void testParseLine() throws Exception {
 		CsvParser lvParser = new CsvParser();
-		List l = lvParser.parseAndGetFirstLine("a, b, c");
+		List<?> l = lvParser.parseAndGetFirstLine("a, b, c");
 		assertEquals(3, l.size());
 		assertEquals("a", l.get(0));
 		assertEquals("b", l.get(1));
@@ -49,7 +49,7 @@ public class CsvParserTest extends TestCase {
 	public void testParseLineWithSemicolonAsSeperator() throws Exception {
 		CsvParser lvParser = new CsvParser();
 		lvParser.setSeperator(';');
-		List l = lvParser.parseAndGetFirstLine("a; b, c");
+		List<?> l = lvParser.parseAndGetFirstLine("a; b, c");
 		assertEquals(2, l.size());
 		assertEquals("a", l.get(0));
 		assertEquals("b, c", l.get(1));
@@ -58,14 +58,14 @@ public class CsvParserTest extends TestCase {
 	public void testParseLineWithSemicolonAsSeperatorWithTwoRows() throws Exception {
 		CsvParser lvParser = new CsvParser();
 		lvParser.setSeperator(';');
-		List l = lvParser.parse("a;b " + CsvParser.CRLF + "1; 2 ").getRows();
+		List<?> l = lvParser.parse("a;b " + CsvParser.CRLF + "1; 2 ").getRows();
 		assertEquals(2, l.size());
 		
-		List l1 = (List) l.get(0);
+		List<?> l1 = (List<?>) l.get(0);
 		assertEquals("a", l1.get(0));
 		assertEquals("b", l1.get(1));
 		
-		List l2 = (List) l.get(1);
+		List<?> l2 = (List<?>) l.get(1);
 		assertEquals("1", l2.get(0));
 		assertEquals("2", l2.get(1));
 	}
@@ -73,21 +73,21 @@ public class CsvParserTest extends TestCase {
 	public void testParseLineWithSemicolonAsSeperatorWithTwoRowsAndDoubleQuote() throws Exception {
 		CsvParser lvParser = new CsvParser();
 		lvParser.setSeperator(';');
-		List l = lvParser.parse("a; \"b \n s\" " + CsvParser.CRLF + "1; 2 ").getRows();
+		List<?> l = lvParser.parse("a; \"b \n s\" " + CsvParser.CRLF + "1; 2 ").getRows();
 		assertEquals(2, l.size());
 		
-		List l1 = (List) l.get(0);
+		List<?> l1 = (List<?>) l.get(0);
 		assertEquals("a", l1.get(0));
 		assertEquals("b \n s", l1.get(1));
 		
-		List l2 = (List) l.get(1);
+		List<?> l2 = (List<?>) l.get(1);
 		assertEquals("1", l2.get(0));
 		assertEquals("2", l2.get(1));
 	}
 
 	public void testEmptyLine() throws Exception {
 		CsvParser lvParser = new CsvParser();
-		List l = lvParser.parseAndGetFirstLine(",,");
+		List<?> l = lvParser.parseAndGetFirstLine(",,");
 		assertEquals(3, l.size());
 		assertEquals("", l.get(0));
 		assertEquals("", l.get(1));
@@ -114,7 +114,7 @@ public class CsvParserTest extends TestCase {
 	
 	public void testStringWithEmptyValue() throws Exception {
 		CsvParser lvParser = new CsvParser();
-		List l = lvParser.parseAndGetFirstLine(",Wed Jan 31 20:18:00 CET 2007,,BMW,0,test.net.sf.sojo.model.Car");
+		List<?> l = lvParser.parseAndGetFirstLine(",Wed Jan 31 20:18:00 CET 2007,,BMW,0,test.net.sf.sojo.model.Car");
 		assertEquals(6, l.size());
 		assertEquals("", l.get(0));
 		assertEquals("Wed Jan 31 20:18:00 CET 2007", l.get(1));
@@ -126,7 +126,7 @@ public class CsvParserTest extends TestCase {
 	
 	public void testParseLineWithSpaceValue() throws Exception {
 		CsvParser lvParser = new CsvParser();
-		List l = lvParser.parseAndGetFirstLine(" , b, c");
+		List<?> l = lvParser.parseAndGetFirstLine(" , b, c");
 		assertEquals(3, l.size());
 		assertEquals("", l.get(0));
 		assertEquals("b", l.get(1));
@@ -135,7 +135,7 @@ public class CsvParserTest extends TestCase {
 
 	public void testParseLineWithEmptyValue() throws Exception {
 		CsvParser lvParser = new CsvParser();
-		List l = lvParser.parseAndGetFirstLine(", b, c");
+		List<?> l = lvParser.parseAndGetFirstLine(", b, c");
 		assertEquals(3, l.size());
 		assertEquals("", l.get(0));
 		assertEquals("b", l.get(1));
@@ -144,7 +144,7 @@ public class CsvParserTest extends TestCase {
 
 	public void testParseLineWithEmptyValueInTheMiddle() throws Exception {
 		CsvParser lvParser = new CsvParser();
-		List l = lvParser.parseAndGetFirstLine("a,  , c");
+		List<?> l = lvParser.parseAndGetFirstLine("a,  , c");
 		assertEquals(3, l.size());
 		assertEquals("a", l.get(0));
 		assertEquals("", l.get(1));
@@ -153,7 +153,7 @@ public class CsvParserTest extends TestCase {
 	
 	public void testParseLineDoubleQuote() throws Exception {
 		CsvParser lvParser = new CsvParser();
-		List l = lvParser.parseAndGetFirstLine("\" a,b \", b, c");
+		List<?> l = lvParser.parseAndGetFirstLine("\" a,b \", b, c");
 		assertEquals(3, l.size());
 		assertEquals(" a,b ", l.get(0));
 		assertEquals("b", l.get(1));
@@ -162,7 +162,7 @@ public class CsvParserTest extends TestCase {
 	
 	public void testParseLineDoubleQuoteWithSpace() throws Exception {
 		CsvParser lvParser = new CsvParser();
-		List l = lvParser.parseAndGetFirstLine("\" a, b \", b, c");
+		List<?> l = lvParser.parseAndGetFirstLine("\" a, b \", b, c");
 		assertEquals(3, l.size());
 		assertEquals(" a, b ", l.get(0));
 		assertEquals("b", l.get(1));
@@ -171,7 +171,7 @@ public class CsvParserTest extends TestCase {
 
 	public void testParseLineDoubleQuoteWithSpace2() throws Exception {
 		CsvParser lvParser = new CsvParser();
-		List l = lvParser.parseAndGetFirstLine("a, \"  b  \",  c");
+		List<?> l = lvParser.parseAndGetFirstLine("a, \"  b  \",  c");
 		assertEquals(3, l.size());
 		assertEquals("a", l.get(0));
 		assertEquals("  b  ", l.get(1));
@@ -180,7 +180,7 @@ public class CsvParserTest extends TestCase {
 
 	public void testParseLineDoubleQuoteWithSpace3() throws Exception {
 		CsvParser lvParser = new CsvParser();
-		List l = lvParser.parseAndGetFirstLine("a,\"  b  \" ,  c");
+		List<?> l = lvParser.parseAndGetFirstLine("a,\"  b  \" ,  c");
 		assertEquals(3, l.size());
 		assertEquals("a", l.get(0));
 		assertEquals("  b  ", l.get(1));
@@ -189,7 +189,7 @@ public class CsvParserTest extends TestCase {
 
 	public void testParseLineDoubleQuoteWithSpaceOnTheEndOfLine() throws Exception {
 		CsvParser lvParser = new CsvParser();
-		List l = lvParser.parseAndGetFirstLine("a,  c, \"  b  \"  ");
+		List<?> l = lvParser.parseAndGetFirstLine("a,  c, \"  b  \"  ");
 		assertEquals(3, l.size());
 		assertEquals("a", l.get(0));
 		assertEquals("c", l.get(1));
@@ -198,7 +198,7 @@ public class CsvParserTest extends TestCase {
 
 	public void testParseLineWithSpaceInDoubleQuote() throws Exception {
 		CsvParser lvParser = new CsvParser();
-		List l = lvParser.parseAndGetFirstLine("\" a b \", b, c");
+		List<?> l = lvParser.parseAndGetFirstLine("\" a b \", b, c");
 		assertEquals(3, l.size());
 		assertEquals(" a b ", l.get(0));
 		assertEquals("b", l.get(1));
@@ -207,7 +207,7 @@ public class CsvParserTest extends TestCase {
 
 	public void testParseLineDoubleQuoteWithInsideComma() throws Exception {
 		CsvParser lvParser = new CsvParser();
-		List l = lvParser.parseAndGetFirstLine("ab ,\", \", cd, xyz");
+		List<?> l = lvParser.parseAndGetFirstLine("ab ,\", \", cd, xyz");
 		assertEquals(4, l.size());
 		assertEquals("ab", l.get(0));
 		assertEquals(", ", l.get(1));
@@ -217,7 +217,7 @@ public class CsvParserTest extends TestCase {
 
 	public void testParseLineDobleDoubleQuote() throws Exception {
 		CsvParser lvParser = new CsvParser();
-		List l = lvParser.parseAndGetFirstLine("\"a \"\"bc\"\" d\", xyz");
+		List<?> l = lvParser.parseAndGetFirstLine("\"a \"\"bc\"\" d\", xyz");
 		assertEquals(2, l.size());
 		assertEquals("a \"bc\" d", l.get(0));
 		assertEquals("xyz", l.get(1));
@@ -250,7 +250,7 @@ public class CsvParserTest extends TestCase {
 
 	public void testParseLineExtra() throws Exception {
 		CsvParser lvParser = new CsvParser();
-		List l = lvParser.parseAndGetFirstLine("John,Doe,120 jefferson st.,Riverside, NJ, 08075");
+		List<?> l = lvParser.parseAndGetFirstLine("John,Doe,120 jefferson st.,Riverside, NJ, 08075");
 		assertEquals(6, l.size());
 		assertEquals("John", l.get(0));
 		assertEquals("Doe", l.get(1));
@@ -280,19 +280,19 @@ public class CsvParserTest extends TestCase {
 
 	public void testWithOneElementWithoutComma() throws Exception {
 		CsvParser lvParser = new CsvParser();
-		List l = lvParser.parseAndGetFirstLine("A");
+		List<?> l = lvParser.parseAndGetFirstLine("A");
 		assertEquals(1, l.size());
 	}
 
 	public void testWithEmptyCrOnTheEnd() throws Exception {
 		CsvParser lvParser = new CsvParser();
-		List l = lvParser.parseAndGetFirstLine("\r");
+		List<?> l = lvParser.parseAndGetFirstLine("\r");
 		assertEquals(1, l.size());
 	}
 
 	public void testWithEmptyLfOnTheEnd() throws Exception {
 		CsvParser lvParser = new CsvParser();
-		List l = lvParser.parseAndGetFirstLine("\n");
+		List<?> l = lvParser.parseAndGetFirstLine("\n");
 		assertEquals(1, l.size());
 	}
 
@@ -308,7 +308,7 @@ public class CsvParserTest extends TestCase {
 
 	public void testWithLineFeedOnTheEnd() throws Exception {
 		CsvParser lvParser = new CsvParser();
-		List l = lvParser.parseAndGetFirstLine("a, b, c\n");
+		List<?> l = lvParser.parseAndGetFirstLine("a, b, c\n");
 		assertEquals(3, l.size());
 		assertEquals("a", l.get(0));
 		assertEquals("b", l.get(1));
@@ -317,7 +317,7 @@ public class CsvParserTest extends TestCase {
 	
 	public void testWithCrLfOnTheEnd() throws Exception {
 		CsvParser lvParser = new CsvParser();
-		List l = lvParser.parseAndGetFirstLine("a, b, c\r\n");
+		List<?> l = lvParser.parseAndGetFirstLine("a, b, c\r\n");
 		assertEquals(3, l.size());
 		assertEquals("a", l.get(0));
 		assertEquals("b", l.get(1));
@@ -326,7 +326,7 @@ public class CsvParserTest extends TestCase {
 
 	public void testWithCrInTheCsvString() throws Exception {
 		CsvParser lvParser = new CsvParser();
-		List l = lvParser.parseAndGetFirstLine("a, \" \rb\", c");
+		List<?> l = lvParser.parseAndGetFirstLine("a, \" \rb\", c");
 		assertEquals(3, l.size());
 		assertEquals("a", l.get(0));
 		assertEquals(" \rb", l.get(1));
@@ -335,7 +335,7 @@ public class CsvParserTest extends TestCase {
 
 	public void testWithLfInTheCsvString() throws Exception {
 		CsvParser lvParser = new CsvParser();
-		List l = lvParser.parseAndGetFirstLine("a, \" \nb \", c");
+		List<?> l = lvParser.parseAndGetFirstLine("a, \" \nb \", c");
 		assertEquals(3, l.size());
 		assertEquals("a", l.get(0));
 		assertEquals(" \nb ", l.get(1));
@@ -344,7 +344,7 @@ public class CsvParserTest extends TestCase {
 
 	public void testWithCrLfInTheCsvString() throws Exception {
 		CsvParser lvParser = new CsvParser();
-		List l = lvParser.parseAndGetFirstLine("a, \" \r\nb \", c");
+		List<?> l = lvParser.parseAndGetFirstLine("a, \" \r\nb \", c");
 		assertEquals(3, l.size());
 		assertEquals("a", l.get(0));
 		assertEquals(" \r\nb ", l.get(1));
@@ -372,7 +372,7 @@ public class CsvParserTest extends TestCase {
 
 	public void testManyCsvLines() throws Exception {
 		CsvParser lvParser = new CsvParser();
-		List l = lvParser.parseAndGetFirstLine("a,b, c\r\n x,y,z");
+		List<?> l = lvParser.parseAndGetFirstLine("a,b, c\r\n x,y,z");
 		assertEquals(3, l.size());
 		assertEquals("a", l.get(0));
 		assertEquals("b", l.get(1));
@@ -381,13 +381,13 @@ public class CsvParserTest extends TestCase {
 		l = lvParser.parse("a,b, c\r\n x,y,z").getRows();
 		assertEquals(2, l.size());
 		
-		List l1 = (List) l.get(0);
+		List<?> l1 = (List<?>) l.get(0);
 		assertEquals(3, l1.size());
 		assertEquals("a", l1.get(0));
 		assertEquals("b", l1.get(1));
 		assertEquals("c", l1.get(2));
 		
-		List l2 = (List) l.get(1);
+		List<?> l2 = (List<?>) l.get(1);
 		assertEquals(3, l2.size());
 		assertEquals("x", l2.get(0));
 		assertEquals("y", l2.get(1));
@@ -396,14 +396,14 @@ public class CsvParserTest extends TestCase {
 
 	public void testParsCsvStringWithCrLf() throws Exception {
 		String str = "b,c\r\n2,3";
-		List l = new CsvParser().parse(str).getRows();
+		List<?> l = new CsvParser().parse(str).getRows();
 		assertEquals(2, l.size());
 		
-		List l2 = (List) l.get(0);
+		List<?> l2 = (List<?>) l.get(0);
 		assertEquals("b", l2.get(0));
 		assertEquals("c", l2.get(1));
 		
-		l2 = (List) l.get(1);
+		l2 = (List<?>) l.get(1);
 		assertEquals("2", l2.get(0));
 		assertEquals("3", l2.get(1));
 	}
@@ -412,17 +412,17 @@ public class CsvParserTest extends TestCase {
 		String s = "description,build,properties,name,~unique-id~,class" + CsvParser.CRLF +
 						"\"This is my car." + CsvParser.CRLF +
 						"I love this car.\",,,BMW,0,test.net.sf.sojo.model.Car";
-		List lvRows = new CsvParser().parse(s).getRows();
+		List<?> lvRows = new CsvParser().parse(s).getRows();
 		assertEquals(2, lvRows.size());
 		
-		List lvRow1 = (List) lvRows.get(0);
+		List<?> lvRow1 = (List<?>) lvRows.get(0);
 		assertEquals(6, lvRow1.size());
 		assertEquals("description", lvRow1.get(0));
 		assertEquals("build", lvRow1.get(1));
 		assertEquals("name", lvRow1.get(3));
 		assertEquals("class", lvRow1.get(5));
 
-		List lvRow2 = (List) lvRows.get(1);
+		List<?> lvRow2 = (List<?>) lvRows.get(1);
 		assertEquals(6, lvRow2.size());
 		assertEquals("This is my car." + CsvParser.CRLF + "I love this car.", lvRow2.get(0));
 		assertEquals("", lvRow2.get(1));
@@ -434,7 +434,7 @@ public class CsvParserTest extends TestCase {
 		CsvParser lvParser = new CsvParser();
 		String s = 	"aaa,bbb,ccc" + CsvParser.CRLF +
 					"zzz,yyy,xxx"  + CsvParser.CRLF;
-		List l = lvParser.parse(s).getRows();
+		List<?> l = lvParser.parse(s).getRows();
 		assertEquals(2, l.size());
 		
 		s = 	"aaa,bbb,ccc" + CsvParser.CRLF +
@@ -484,14 +484,14 @@ public class CsvParserTest extends TestCase {
 	public void testParseWithoutLineFeed_CRandLF() throws Exception {
 		CsvParser lvParser = new CsvParser();
 		lvParser.setWithLineFeed(false);
-		List l = lvParser.parse("a,b " + CsvParser.CRLF + "1, 2 ").getRows();
+		List<?> l = lvParser.parse("a,b " + CsvParser.CRLF + "1, 2 ").getRows();
 		assertEquals(2, l.size());
 		
-		List l1 = (List) l.get(0);
+		List<?> l1 = (List<?>) l.get(0);
 		assertEquals("a", l1.get(0));
 		assertEquals("b", l1.get(1));
 		
-		List l2 = (List) l.get(1);
+		List<?> l2 = (List<?>) l.get(1);
 		assertEquals("1", l2.get(0));
 		assertEquals("2", l2.get(1));
 	}
@@ -499,14 +499,14 @@ public class CsvParserTest extends TestCase {
 	public void _testParseWithoutLineFeed_onlyLF() throws Exception {
 		CsvParser lvParser = new CsvParser();
 		lvParser.setWithLineFeed(false);
-		List l = lvParser.parse("a,b " + CsvParser.LF + "1, 2 ").getRows();
+		List<?> l = lvParser.parse("a,b " + CsvParser.LF + "1, 2 ").getRows();
 		assertEquals(1, l.size());
 		
-		List l1 = (List) l.get(0);
+		List<?> l1 = (List<?>) l.get(0);
 		assertEquals("a", l1.get(0));
 		assertEquals("b", l1.get(1));
 		
-		List l2 = (List) l.get(1);
+		List<?> l2 = (List<?>) l.get(1);
 		assertEquals("1", l2.get(0));
 		assertEquals("2", l2.get(1));
 	}

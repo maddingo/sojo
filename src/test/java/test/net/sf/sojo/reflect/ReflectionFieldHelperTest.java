@@ -93,7 +93,7 @@ public class ReflectionFieldHelperTest extends TestCase {
 	}
 	
 	public void testAddAllField2MapsByClass() throws Exception {
-		Map lvFieldMap = ReflectionFieldHelper.getAllSetFieldMapsByClass(DefaultMutableTreeNode.class, null);
+		Map<?, ?> lvFieldMap = ReflectionFieldHelper.getAllSetFieldMapsByClass(DefaultMutableTreeNode.class, null);
 		assertNotNull(lvFieldMap);
 		boolean b = ReflectionFieldHelper.containsClass(DefaultMutableTreeNode.class);
 		assertFalse(b);
@@ -110,7 +110,7 @@ public class ReflectionFieldHelperTest extends TestCase {
 	}
 	
 	public void testFieldFilter() throws Exception {
-		Map lvFieldMap = ReflectionFieldHelper.getAllSetFieldMapsByClass(DefaultMutableTreeNode.class, null);
+		Map<?, ?> lvFieldMap = ReflectionFieldHelper.getAllSetFieldMapsByClass(DefaultMutableTreeNode.class, null);
 		assertEquals(5, lvFieldMap.size());
 		
 		// add class
@@ -123,8 +123,8 @@ public class ReflectionFieldHelperTest extends TestCase {
 	}
 	
 	public void testSetterAndGetter() throws Exception {
-		Map lvMapGet = ReflectionFieldHelper.getAllGetFieldMapsByClass(Car.class, null);
-		Map lvMapSet = ReflectionFieldHelper.getAllSetFieldMapsByClass(Car.class, null);
+		Map<?, ?> lvMapGet = ReflectionFieldHelper.getAllGetFieldMapsByClass(Car.class, null);
+		Map<?, ?> lvMapSet = ReflectionFieldHelper.getAllSetFieldMapsByClass(Car.class, null);
 		
 		// get contains the same fields, plus the class attribute
 		assertEquals(lvMapGet.size(), lvMapSet.size() + 1);

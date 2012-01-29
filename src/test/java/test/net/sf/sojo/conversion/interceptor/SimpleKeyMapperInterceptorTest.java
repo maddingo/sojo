@@ -17,9 +17,7 @@ package test.net.sf.sojo.conversion.interceptor;
 
 import java.util.Date;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import junit.framework.TestCase;
 import net.sf.sojo.core.ConversionContext;
@@ -72,9 +70,9 @@ public class SimpleKeyMapperInterceptorTest extends TestCase {
 		lvInterceptor.beforeConvertRecursion(lvContext);
 		
 		lvInterceptor = new SimpleKeyMapperInterceptor();
-		Hashtable lvHashtable = new Hashtable();
+		Hashtable<Object, String> lvHashtable = new Hashtable<Object, String>();
 		lvHashtable.put(lvContext.key, "result-key");
-		Map lvMap = (Map) lvInterceptor.beforeConvert(lvHashtable, null);
+		Map<?, ?> lvMap = (Map<?, ?>) lvInterceptor.beforeConvert(lvHashtable, null);
 		lvInterceptor.beforeConvertRecursion(lvContext);
 		assertEquals(lvMap.get("key"), "result-key");
 	}
@@ -88,15 +86,15 @@ public class SimpleKeyMapperInterceptorTest extends TestCase {
 		assertEquals("1~_-_~77~_-_~java.lang.Long", lvContext.key);
 		
 		lvInterceptor = new SimpleKeyMapperInterceptor();
-		Hashtable lvHashtable = new Hashtable();
+		Hashtable<Object, Long> lvHashtable = new Hashtable<Object, Long>();
 		lvHashtable.put(lvContext.key, new Long(55));
-		Map lvMap = (Map) lvInterceptor.beforeConvert(lvHashtable, null);
+		Map<?, ?> lvMap = (Map<?, ?>) lvInterceptor.beforeConvert(lvHashtable, null);
 		lvInterceptor.beforeConvertRecursion(lvContext);
 		assertEquals(lvMap.get(new Long(77)), new Long(55));
 	}
 
 	public void __testResultOrderedMap() throws Exception {
-		Map lvMap = new Hashtable();
+		Map<Comparable<?>, String> lvMap = new Hashtable<Comparable<?>, String>();
 		lvMap.put("key_1", "value_1");
 		lvMap.put("key_2", "value_2");
 		lvMap.put(new Double(12.89), "value_3");
@@ -107,10 +105,10 @@ public class SimpleKeyMapperInterceptorTest extends TestCase {
 		lvConversion.getConverterInterceptorHandler().addConverterInterceptor(lvInterceptor); 
 		c.addConversion(lvConversion);
 
-		Map lvResultMap = (Map) c.convert(lvMap);
+		Map<?, ?> lvResultMap = (Map<?, ?>) c.convert(lvMap);
 
 		lvInterceptor.setMakeSimple(false);
-		lvResultMap = (Map) c.convert(lvResultMap);
+		lvResultMap = (Map<?, ?>) c.convert(lvResultMap);
 
 		assertEquals(lvMap.get("key_1"), lvResultMap.get("key_1"));
     assertEquals(lvMap.get("key_2"), lvResultMap.get("key_2"));
@@ -119,7 +117,7 @@ public class SimpleKeyMapperInterceptorTest extends TestCase {
 
 	public void testResultOrderedMap2() throws Exception {
 		Date lvDate = new Date();
-		Map lvMap = new Hashtable();
+		Map<Comparable<?>, String> lvMap = new Hashtable<Comparable<?>, String>();
 		lvMap.put("key_1", "value_1");
 		lvMap.put("key_2", "value_2");
 		lvMap.put(lvDate, "value_date");
@@ -131,11 +129,11 @@ public class SimpleKeyMapperInterceptorTest extends TestCase {
 		lvConversion.getConverterInterceptorHandler().addConverterInterceptor(lvInterceptor); 
 		c.addConversion(lvConversion);
 
-		Map lvResultMap = (Map) c.convert(lvMap);
+		Map<?, ?> lvResultMap = (Map<?, ?>) c.convert(lvMap);
 
 		lvConversion.getConverterInterceptorHandler().clear();
 		lvConversion.getConverterInterceptorHandler().addConverterInterceptor(new SimpleKeyMapperInterceptor());
-		lvResultMap = (Map) c.convert(lvResultMap);
+		lvResultMap = (Map<?, ?>) c.convert(lvResultMap);
 		
 		assertEquals("value_1", lvResultMap.get("key_1"));
 		assertEquals("value_2", lvResultMap.get("key_2"));
@@ -144,7 +142,7 @@ public class SimpleKeyMapperInterceptorTest extends TestCase {
 	}
 
 	public void testResultOrderedMapInvalidKey() throws Exception {
-		Map lvMap = new Hashtable();
+		Map<String, String> lvMap = new Hashtable<String, String>();
 		lvMap.put("key_1", "value_1");
 		lvMap.put("key_2", "value_2");
 		
@@ -154,7 +152,8 @@ public class SimpleKeyMapperInterceptorTest extends TestCase {
 		lvConversion.getConverterInterceptorHandler().addConverterInterceptor(lvInterceptor); 
 		c.addConversion(lvConversion);
 
-		Map lvResultMap = (Map) c.convert(lvMap);
+		@SuppressWarnings("unchecked")
+		Map<Long, Long> lvResultMap = (Map<Long, Long>) c.convert(lvMap);
 		String lvStrKey_1 = "2" + SimpleKeyMapperInterceptor.DELIMITER + "key_1";
 		String lvStrKey_2 = "1" + SimpleKeyMapperInterceptor.DELIMITER + "key_2";
 		assertEquals("value_1", lvResultMap.get(lvStrKey_1));
@@ -173,7 +172,7 @@ public class SimpleKeyMapperInterceptorTest extends TestCase {
 	}
 
 	public void testResultOrderedMapInvalidKey2() throws Exception {
-		Map lvMap = new Hashtable();
+		Map<String, String> lvMap = new Hashtable<String, String>();
 		lvMap.put("key_1", "value_1");
 		lvMap.put("key_2", "value_2");
 		
@@ -183,7 +182,8 @@ public class SimpleKeyMapperInterceptorTest extends TestCase {
 		lvConversion.getConverterInterceptorHandler().addConverterInterceptor(lvInterceptor); 
 		c.addConversion(lvConversion);
 
-		Map lvResultMap = (Map) c.convert(lvMap);
+		@SuppressWarnings("unchecked")
+		Map<String, String> lvResultMap = (Map<String, String>) c.convert(lvMap);
 		lvResultMap.put("key_faul","faul");
 		lvInterceptor.setMakeSimple(false);
 		try {
@@ -197,7 +197,7 @@ public class SimpleKeyMapperInterceptorTest extends TestCase {
 	}
 	
 	public void testResultOrderedMapInvalidKey3() throws Exception {
-		Map lvMap = new Hashtable();
+		Map<Comparable<?>, String> lvMap = new Hashtable<Comparable<?>, String>();
 		lvMap.put("key_1", "value_1");
 		lvMap.put(new Integer(1), "value_2");
 		
@@ -207,7 +207,8 @@ public class SimpleKeyMapperInterceptorTest extends TestCase {
 		lvConversion.getConverterInterceptorHandler().addConverterInterceptor(lvInterceptor); 
 		c.addConversion(lvConversion);
 
-		Map lvResultMap = (Map) c.convert(lvMap);
+		@SuppressWarnings("unchecked")
+		Map<String, String> lvResultMap = (Map<String, String>) c.convert(lvMap);
 		lvResultMap.put("2~_-_~1~_-_~not.valid.class.Name","faul");
 		lvInterceptor.setMakeSimple(false);
 		try {

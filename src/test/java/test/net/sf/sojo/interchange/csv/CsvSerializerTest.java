@@ -45,6 +45,7 @@ public class CsvSerializerTest extends TestCase {
 	
 	private CsvSerializer csvSerializer = new CsvSerializer();
 
+	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 		csvSerializer.setWithPropertyNamesInFirstLine(false);
@@ -171,7 +172,7 @@ public class CsvSerializerTest extends TestCase {
 		assertEquals("b", s[1]);
 		assertEquals("c", s[2]);
 		
-		List l = (List) csvSerializer.deserialize(o, ArrayList.class);
+		List<?> l = (List<?>) csvSerializer.deserialize(o, ArrayList.class);
 		assertEquals(3, l.size());
 		assertEquals("a", l.get(0));
 		assertEquals("b", l.get(1));
@@ -200,7 +201,7 @@ public class CsvSerializerTest extends TestCase {
 		Car arr[] = new Car[] { c1 };
 		csvSerializer.setWithPropertyNamesInFirstLine(true);
 		Object o = csvSerializer.serialize(arr);
-		List lvList = (List) csvSerializer.deserialize(o);
+		List<?> lvList = (List<?>) csvSerializer.deserialize(o);
 		assertEquals(1, lvList.size());
 		assertTrue("Class is not a Car: " + lvList.get(0), lvList.get(0) instanceof Car);
 		Car c = (Car) lvList.get(0);
@@ -227,7 +228,7 @@ public class CsvSerializerTest extends TestCase {
 		csvSerializer.setNullValue("");
 
 		Object o = csvSerializer.serialize(arr);
-		List lvList = (List) csvSerializer.deserialize(o);
+		List<?> lvList = (List<?>) csvSerializer.deserialize(o);
 		assertEquals(3, lvList.size());
 		assertTrue("Class is not a Car: " + lvList.get(0), lvList.get(0) instanceof Car);
 		Car c = (Car) lvList.get(0);
@@ -266,7 +267,7 @@ public class CsvSerializerTest extends TestCase {
 		assertEquals("2,test.net.sf.sojo.model.Car,~Null~Value~,~Null~Value~,This is your car,Opel", s[3]);
 		
 		
-		List lvList = (List) csvSerializer.deserialize(o);
+		List<?> lvList = (List<?>) csvSerializer.deserialize(o);
 		assertEquals(3, lvList.size());
 		assertTrue("Class is not a Car: " + lvList.get(0), lvList.get(0) instanceof Car);
 		Car c = (Car) lvList.get(0);
@@ -331,15 +332,15 @@ public class CsvSerializerTest extends TestCase {
 		Object rows[] = new Object[] { row1, row2 };
 		
 		Object o = csvSerializer.serialize(rows);
-		List l = (List) csvSerializer.deserialize(o);
+		List<?> l = (List<?>) csvSerializer.deserialize(o);
 		assertEquals(2, l.size());
 		
-		List l2 = (List) l.get(0);
+		List<?> l2 = (List<?>) l.get(0);
 		assertEquals("a", l2.get(0));
 		assertEquals("b", l2.get(1));
 		assertEquals("c", l2.get(2));
 		
-		l2 = (List) l.get(1);
+		l2 = (List<?>) l.get(1);
 		assertEquals("1", l2.get(0));
 		assertEquals("2", l2.get(1));
 		assertEquals("3", l2.get(2));
@@ -349,20 +350,20 @@ public class CsvSerializerTest extends TestCase {
 		rows = new Object[] { row1, row2, row3 };
 		
 		o = csvSerializer.serialize(rows);
-		l = (List) csvSerializer.deserialize(o);
+		l = (List<?>) csvSerializer.deserialize(o);
 		assertEquals(3, l.size());
 		
-		l2 = (List) l.get(0);
+		l2 = (List<?>) l.get(0);
 		assertEquals("a", l2.get(0));
 		assertEquals("b", l2.get(1));
 		assertEquals("c", l2.get(2));
 		
-		l2 = (List) l.get(1);
+		l2 = (List<?>) l.get(1);
 		assertEquals("1", l2.get(0));
 		assertEquals("2", l2.get(1));
 		assertEquals("3", l2.get(2));
 		
-		l2 = (List) l.get(2);
+		l2 = (List<?>) l.get(2);
 		assertEquals(".", l2.get(0));
 		assertEquals(";", l2.get(1));
 		assertEquals("?", l2.get(2));
@@ -380,7 +381,7 @@ public class CsvSerializerTest extends TestCase {
 	}
 
 	public void testSerializeStringMap() throws Exception {
-		Map lvMap = new HashMap();
+		Map<String, String> lvMap = new HashMap<String, String>();
 		lvMap.put("k1", "v1");
 		lvMap.put("k2", "v2");
 		lvMap.put("k3", "v3");
@@ -389,13 +390,13 @@ public class CsvSerializerTest extends TestCase {
 	}
 
 	public void testDeSerializeStringMap() throws Exception {
-		Map lvMap = new HashMap();
+		Map<String, String> lvMap = new HashMap<String, String>();
 		lvMap.put("k1", "v1");
 		lvMap.put("k2", "v2");
 		lvMap.put("k3", "v3");
 		Object o = csvSerializer.serialize(lvMap);
 		o = csvSerializer.deserialize(o);
-		List l = (List) o;
+		List<?> l = (List<?>) o;
 		assertEquals(3, l.size());
 		assertEquals("v3", l.get(0));
 		assertEquals("v1", l.get(1));
@@ -403,7 +404,7 @@ public class CsvSerializerTest extends TestCase {
 	}
 
 	public void testSerializeStringMapWithNamesInFirstRow() throws Exception {
-		Map lvMap = new HashMap();
+		Map<String, String> lvMap = new HashMap<String, String>();
 		lvMap.put("k1", "v1");
 		lvMap.put("k2", "v2");
 		lvMap.put("k3", "v3");
@@ -467,15 +468,15 @@ public class CsvSerializerTest extends TestCase {
 	public void testDeSerializeListWithNullValues() throws Exception {
 		String s ="a,b,c" + CsvParser.CRLF  +"1,2,3";
 		
-		List l = (List) csvSerializer.deserialize(s);
+		List<?> l = (List<?>) csvSerializer.deserialize(s);
 		assertEquals(2, l.size());
 
-		List l0 = (List) l.get(0);
+		List<?> l0 = (List<?>) l.get(0);
 		assertEquals("a", l0.get(0));
 		assertEquals("b", l0.get(1));
 		assertEquals("c", l0.get(2));
 		
-		List l1 = (List) l.get(1);
+		List<?> l1 = (List<?>) l.get(1);
 		assertEquals("1", l1.get(0));
 		assertEquals("2", l1.get(1));
 		assertEquals("3", l1.get(2));
@@ -483,7 +484,7 @@ public class CsvSerializerTest extends TestCase {
 	}
 
 	public void testDeSerializeListWithNullValuesAndWithOutCrLf() throws Exception {
-		List l = new ArrayList();
+		List<String> l = new ArrayList<String>();
 		l.add("a,b,c");
 
 		try {
@@ -506,6 +507,7 @@ public class CsvSerializerTest extends TestCase {
 		assertTrue(csvSerializer.getWithPropertyNamesInFirstLine());
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void __testDeSerializeListWithAddresses() throws Exception {
 		Address a1 = new Address();
 		a1.setCity("Magdeburg");
@@ -519,7 +521,7 @@ public class CsvSerializerTest extends TestCase {
 		a3.setCity("Cottbus");
 		a3.setPostcode("03045");
 
-		List l = new ArrayList(3);
+		List<Address> l = new ArrayList<Address>(3);
 		l.add(a1);
 		l.add(a2);
 		l.add(a3);
@@ -531,7 +533,7 @@ public class CsvSerializerTest extends TestCase {
 		    "2,test.net.sf.sojo.model.Address,03045,Cottbus";
 		assertEquals(s, lvResult);
 
-		l = (List) csvSerializer.deserialize(s);
+		l = (List<Address>) csvSerializer.deserialize(s);
 		assertEquals(3, l.size());
 		
 		Address a = (Address) l.get(0);
@@ -590,7 +592,7 @@ public class CsvSerializerTest extends TestCase {
 	
 	public void testEmptyMap() throws Exception {
 		csvSerializer.setWithPropertyNamesInFirstLine(true);
-		Object o = csvSerializer.serialize(new HashMap());
+		Object o = csvSerializer.serialize(new HashMap<Object, Object>());
 		assertNotNull(o);
 		assertEquals("", o);
 
@@ -601,7 +603,7 @@ public class CsvSerializerTest extends TestCase {
 	
 	public void testEmptyList() throws Exception {
 		csvSerializer.setWithPropertyNamesInFirstLine(true);
-		Object o = csvSerializer.serialize(new ArrayList());
+		Object o = csvSerializer.serialize(new ArrayList<Object>());
 		assertNotNull(o);
 		assertEquals("", o);
 
@@ -623,7 +625,7 @@ public class CsvSerializerTest extends TestCase {
 	
 	public void testEmptySet() throws Exception {
 		csvSerializer.setWithPropertyNamesInFirstLine(true);
-		Object o = csvSerializer.serialize(new HashSet());
+		Object o = csvSerializer.serialize(new HashSet<Object>());
 		assertNotNull(o);
 		assertEquals("", o);
 
@@ -638,7 +640,7 @@ public class CsvSerializerTest extends TestCase {
 		lvCar.setDescription(s);
 		CsvSerializer lvCsvSerializer = new CsvSerializer();
 		Object o = lvCsvSerializer.serialize(lvCar);
-		List l = (List) lvCsvSerializer.deserialize(o);
+		List<?> l = (List<?>) lvCsvSerializer.deserialize(o);
 		o = l.get(0);
 		assertTrue("Is not a Car: " + o.getClass(), o instanceof Car);
 		Car lvCarAfter = (Car) o;
@@ -654,7 +656,7 @@ public class CsvSerializerTest extends TestCase {
 		lvCar.setDescription(s);
 		CsvSerializer lvCsvSerializer = new CsvSerializer();
 		Object o = lvCsvSerializer.serialize(lvCar);
-		List l = (List) lvCsvSerializer.deserialize(o);
+		List<?> l = (List<?>) lvCsvSerializer.deserialize(o);
 		o = l.get(0);
 		assertTrue("Is not a Car: " + o.getClass(), o instanceof Car);
 		Car lvCarAfter = (Car) o;
@@ -670,7 +672,7 @@ public class CsvSerializerTest extends TestCase {
 		lvCar.setDescription(s);
 		CsvSerializer lvCsvSerializer = new CsvSerializer();
 		Object o = lvCsvSerializer.serialize(lvCar);
-		List l = (List) lvCsvSerializer.deserialize(o);
+		List<?> l = (List<?>) lvCsvSerializer.deserialize(o);
 		o = l.get(0);
 		assertTrue("Is not a Car: " + o.getClass(), o instanceof Car);
 		Car lvCarAfter = (Car) o;
@@ -687,8 +689,8 @@ public class CsvSerializerTest extends TestCase {
 		Serializer lvSerializer = new CsvSerializer();
 		String lvCsvStr = "description,name" + CsvParser.CRLF + "This BMW is my Car,BMW";
 		Object o = lvSerializer.deserialize(lvCsvStr);
-		List lvList =  (List) o;
-		Map lvMap = (Map) lvList.get(0);
+		List<?> lvList =  (List<?>) o;
+		Map<?, ?> lvMap = (Map<?, ?>) lvList.get(0);
 		assertEquals("BMW", lvMap.get("name"));
 		assertEquals("This BMW is my Car", lvMap.get("description"));
 		assertFalse("Map don't contains class attribute", lvMap.containsKey("class"));		
@@ -701,7 +703,7 @@ public class CsvSerializerTest extends TestCase {
 		Serializer lvSerializer = new CsvSerializer();
 		String lvCsvStr = "description,name" + CsvParser.CRLF + "This BMW is my Car,BMW";
 		Object o = lvSerializer.deserialize(lvCsvStr, Car.class);
-		List lvList = (List) o;
+		List<?> lvList = (List<?>) o;
 		Car lvCarAfter = (Car) lvList.get(0);
 		assertEquals("BMW", lvCarAfter.getName());
 		assertEquals("This BMW is my Car", lvCarAfter.getDescription());
@@ -746,7 +748,7 @@ public class CsvSerializerTest extends TestCase {
 		assertEquals("~unique-id~,class,properties,build,description,name"+CsvParser.CRLF+
 		  "0,test.net.sf.sojo.model.Car,,02-01-1970,This is my car.,Ferrari", o);
 		o = lvSerializer.deserialize(o);
-		List lvList = (List) o;
+		List<?> lvList = (List<?>) o;
 		Car lvCarAfter = (Car) lvList.get(0);
 		assertEquals(lvCar.getName(), lvCarAfter.getName());
 		assertEquals(lvCar.getDescription(), lvCarAfter.getDescription());
@@ -763,7 +765,7 @@ public class CsvSerializerTest extends TestCase {
 		
 		AbstractSerializer lvSerializer = new CsvSerializer();
 		Object lvTemp = lvSerializer.serialize(lvCar, new String[] { "build" });
-		List l = (List) lvSerializer.deserialize(lvTemp);
+		List<?> l = (List<?>) lvSerializer.deserialize(lvTemp);
 		Car lvCarAfter = (Car) l.get(0);
 		
 		assertEquals(lvCar.getName(), lvCarAfter.getName());
@@ -780,16 +782,16 @@ public class CsvSerializerTest extends TestCase {
 		
 		AbstractSerializer lvSerializer = new CsvSerializer();
 		Object lvTemp = lvSerializer.serialize(lvCar, new String[] { "build", "class" });
-		Object lvResult = ((List) lvSerializer.deserialize(lvTemp)).get(0);
+		Object lvResult = ((List<?>) lvSerializer.deserialize(lvTemp)).get(0);
 		
 		assertTrue("Is not a Map: " + lvResult.getClass().getName(), lvResult instanceof Map);
-		Map lvMap = (Map) lvResult;
+		Map<?, ?> lvMap = (Map<?, ?>) lvResult;
 		assertFalse(lvMap.containsKey("class"));
 		assertFalse(lvMap.containsKey("build"));
 		assertTrue(lvMap.containsKey("name"));
 		assertTrue(lvMap.containsKey("description"));
 		
-		List l = (List) lvSerializer.deserialize(lvTemp, Car.class);
+		List<?> l = (List<?>) lvSerializer.deserialize(lvTemp, Car.class);
 		Car lvCarAfter = (Car) l.get(0);
 		assertEquals(lvCar.getName(), lvCarAfter.getName());
 		assertEquals(lvCar.getDescription(), lvCarAfter.getDescription());
@@ -805,18 +807,18 @@ public class CsvSerializerTest extends TestCase {
 		
 		AbstractSerializer lvSerializer = new CsvSerializer();
 		Object lvTemp = lvSerializer.serialize(lvCar, new String[] { "build", UniqueIdGenerator.UNIQUE_ID_PROPERTY});
-		List l = (List) lvSerializer.deserialize(lvTemp, HashMap.class);
+		List<?> l = (List<?>) lvSerializer.deserialize(lvTemp, HashMap.class);
 		Object lvResult = l.get(0);
 		
 		assertTrue("Is not a Map: " + lvResult.getClass().getName(), lvResult instanceof Map);
-		Map lvMap = (Map) lvResult;
+		Map<?, ?> lvMap = (Map<?, ?>) lvResult;
 		assertFalse(lvMap.containsKey(UniqueIdGenerator.UNIQUE_ID_PROPERTY));
 		assertFalse(lvMap.containsKey("build"));
 		assertTrue(lvMap.containsKey("name"));
 		assertTrue(lvMap.containsKey("description"));
 		assertTrue(lvMap.containsKey("class"));
 		
-		l = (List) lvSerializer.deserialize(lvTemp, Car.class);
+		l = (List<?>) lvSerializer.deserialize(lvTemp, Car.class);
 		Car lvCarAfter = (Car) l.get(0);
 		assertEquals(lvCar.getName(), lvCarAfter.getName());
 		assertEquals(lvCar.getDescription(), lvCarAfter.getDescription());
@@ -832,7 +834,7 @@ public class CsvSerializerTest extends TestCase {
 		String lvXmlStr = (String) lvSerializer.serialize(lvBean);
 		assertTrue(lvXmlStr.indexOf(lvUrlStr) > 0);
 		
-		List lvList = (List) lvSerializer.deserialize(lvXmlStr);
+		List<?> lvList = (List<?>) lvSerializer.deserialize(lvXmlStr);
 		SpecialTypeBean lvBeanAfter = (SpecialTypeBean) lvList.get(0);
 		assertEquals(lvBean.getUrl(), lvBeanAfter.getUrl());
 		assertEquals(lvUrlStr, lvBeanAfter.getUrl().toString());
@@ -848,7 +850,7 @@ public class CsvSerializerTest extends TestCase {
 		String lvXmlStr = (String) lvSerializer.serialize(lvBean);
 		assertTrue(lvXmlStr.indexOf(lvValue.toString()) > 0);
 		
-		List lvList = (List) lvSerializer.deserialize(lvXmlStr);
+		List<?> lvList = (List<?>) lvSerializer.deserialize(lvXmlStr);
 		SpecialTypeBean lvBeanAfter = (SpecialTypeBean) lvList.get(0);
 		assertEquals(lvBean.getObject().toString(), lvBeanAfter.getObject());
 		assertEquals(lvValue, new BigDecimal (lvBeanAfter.getObject().toString()));

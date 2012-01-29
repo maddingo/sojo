@@ -27,26 +27,31 @@ public class TestConverterInterceptorRecursive implements ConverterInterceptorRe
 	public int onError = 0;
 	public ConversionContext conversionContext = null;
 
+	@Override
 	public void afterConvertRecursion(ConversionContext pvContext) {
 		afterConvertRecursive++;
 		conversionContext = pvContext;
 	}
 
+	@Override
 	public void beforeConvertRecursion(ConversionContext pvContext) {
 		beforeConvertRecursive++;
 		conversionContext = pvContext;
 	}
 
-	public Object afterConvert(Object pvResult, final Class pvToType) {
+	@Override
+	public Object afterConvert(Object pvResult, final Class<?> pvToType) {
 		afterConvert++;
 		return pvResult;
 	}
 
-	public Object beforeConvert(Object pvConvertObject, final Class pvToType) {
+	@Override
+	public Object beforeConvert(Object pvConvertObject, final Class<?> pvToType) {
 		beforeConvert++;
 		return pvConvertObject;
 	}
 
+	@Override
 	public void onError(Exception pvException) {
 		onError++;
 	}

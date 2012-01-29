@@ -146,14 +146,14 @@ public class GenericComparatorTest extends TestCase {
 		Node n0 = new Node("Node0");
 		Node n1 = new Node("Node1");
 
-		Set lvSet = new HashSet();
+		Set<Object> lvSet = new HashSet<Object>();
 		lvSet.add("String-Value");
 		lvSet.add(n1);
 		lvSet.add(n0);
 		
 		assertEquals(3, lvSet.size());
 		
-		Set lvSetAfter = IterableUtil.sort(lvSet);
+		Set<?> lvSetAfter = IterableUtil.sort(lvSet);
 		assertEquals(3, lvSetAfter.size());
 	}
 

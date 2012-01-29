@@ -27,7 +27,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Locale;
@@ -77,8 +76,8 @@ public class ObjectUtilTest extends TestCase {
 		Node lvNode = new Node("Test-Node");
 		Node lvNodeCopy = (Node) new ObjectUtil().copy(lvNode);
 		assertEquals("Test-Node", lvNodeCopy.getName());
-		assertEquals(new ArrayList(), lvNodeCopy.getChildren());
-		assertEquals(new HashMap(), lvNodeCopy.getNamedChildren());
+		assertEquals(new ArrayList<Object>(), lvNodeCopy.getChildren());
+		assertEquals(new HashMap<Object, Object>(), lvNodeCopy.getNamedChildren());
 		assertNull(lvNodeCopy.getParent());
 		
 	}
@@ -90,8 +89,8 @@ public class ObjectUtilTest extends TestCase {
 		Node lvNodeCopy = (Node) new ObjectUtil().copy(lvNode);
 		assertNotNull(lvNodeCopy.getParent());
 		assertEquals("Parent-Node", lvNodeCopy.getParent().getName());
-		assertEquals(new ArrayList(), lvNodeCopy.getParent().getChildren());
-		assertEquals(new HashMap(), lvNodeCopy.getParent().getNamedChildren());
+		assertEquals(new ArrayList<Object>(), lvNodeCopy.getParent().getChildren());
+		assertEquals(new HashMap<Object, Object>(), lvNodeCopy.getParent().getNamedChildren());
 		
 	}
 	
@@ -391,7 +390,7 @@ public class ObjectUtilTest extends TestCase {
 	}
 	
 	public void testEqualsList() throws Exception {
-		List lvList1 = new ArrayList();
+		List<Comparable<?>> lvList1 = new ArrayList<Comparable<?>>();
 		lvList1.add("Sojo");
 		lvList1.add(new Integer(4711));
 		lvList1.add(new Double("47.11"));
@@ -399,7 +398,7 @@ public class ObjectUtilTest extends TestCase {
 		lvList1.add(new Character('D'));
 		lvList1.add(Boolean.TRUE);
 
-		List lvList2 = new ArrayList();
+		List<Comparable<?>> lvList2 = new ArrayList<Comparable<?>>();
 		lvList2.add("Sojo");
 		lvList2.add(new Integer(4711));
 		lvList2.add(new Double("47.11"));
@@ -412,7 +411,7 @@ public class ObjectUtilTest extends TestCase {
 	}
 	
 	public void testEqualsDifferrentListBoolean() throws Exception {
-		List lvList1 = new ArrayList();
+		List<Comparable<?>> lvList1 = new ArrayList<Comparable<?>>();
 		lvList1.add("Sojo");
 		lvList1.add(new Integer(4711));
 		lvList1.add(new Double("47.11"));
@@ -420,7 +419,7 @@ public class ObjectUtilTest extends TestCase {
 		lvList1.add(new Character('D'));
 		lvList1.add(Boolean.TRUE);
 
-		List lvList2 = new ArrayList();
+		List<Comparable<?>> lvList2 = new ArrayList<Comparable<?>>();
 		lvList2.add("Sojo");
 		lvList2.add(new Integer(4711));
 		lvList2.add(new Double("47.11"));
@@ -433,7 +432,7 @@ public class ObjectUtilTest extends TestCase {
 	}
 
 	public void testEqualsDifferrentListCharacter() throws Exception {
-		List lvList1 = new ArrayList();
+		List<Comparable<?>> lvList1 = new ArrayList<Comparable<?>>();
 		lvList1.add("Sojo");
 		lvList1.add(new Integer(4711));
 		lvList1.add(new Double("47.11"));
@@ -441,7 +440,7 @@ public class ObjectUtilTest extends TestCase {
 		lvList1.add(new Character('D'));
 		lvList1.add(Boolean.TRUE);
 
-		List lvList2 = new ArrayList();
+		List<Comparable<?>> lvList2 = new ArrayList<Comparable<?>>();
 		lvList2.add("Sojo");
 		lvList2.add(new Integer(4711));
 		lvList2.add(new Double("47.11"));
@@ -454,7 +453,7 @@ public class ObjectUtilTest extends TestCase {
 	}
 
 	public void testEqualsDifferrentListDouble() throws Exception {
-		List lvList1 = new ArrayList();
+		List<Comparable<?>> lvList1 = new ArrayList<Comparable<?>>();
 		lvList1.add("Sojo");
 		lvList1.add(new Integer(4711));
 		lvList1.add(new Double("47.11"));
@@ -462,7 +461,7 @@ public class ObjectUtilTest extends TestCase {
 		lvList1.add(new Character('D'));
 		lvList1.add(Boolean.TRUE);
 
-		List lvList2 = new ArrayList();
+		List<Comparable<?>> lvList2 = new ArrayList<Comparable<?>>();
 		lvList2.add("Sojo");
 		lvList2.add(new Integer(4711));
 		lvList2.add(new Double("47.111"));
@@ -475,13 +474,13 @@ public class ObjectUtilTest extends TestCase {
 	}
 	
 	public void testEqualsMap() throws Exception {
-		Map lvMap1 = new Hashtable();
+		Map<Comparable<?>, Comparable<?>> lvMap1 = new Hashtable<Comparable<?>, Comparable<?>>();
 		lvMap1.put("sojo", "sojo");
 		lvMap1.put(new Integer(4711), new Integer(4711));
 		lvMap1.put(new Double("47.11"), new Double("47.11"));
 		lvMap1.put(new Date(987654321), new Date(987654321));
 		
-		Map lvMap2 = new Hashtable();
+		Map<Comparable<?>, Comparable<?>> lvMap2 = new Hashtable<Comparable<?>, Comparable<?>>();
 		lvMap2.put("sojo", "sojo");
 		lvMap2.put(new Integer(4711), new Integer(4711));
 		lvMap2.put(new Double("47.11"), new Double("47.11"));
@@ -492,13 +491,13 @@ public class ObjectUtilTest extends TestCase {
 	}
 
 	public void testEqualsMapDifferentIntegerKey() throws Exception {
-		Map lvMap1 = new Hashtable();
+		Map<Comparable<?>, Comparable<?>> lvMap1 = new Hashtable<Comparable<?>, Comparable<?>>();
 		lvMap1.put("sojo", "sojo");
 		lvMap1.put(new Integer(471199), new Integer(4711));
 		lvMap1.put(new Double("47.11"), new Double("47.11"));
 		lvMap1.put(new Date(987654321), new Date(987654321));
 		
-		Map lvMap2 = new Hashtable();
+		Map<Comparable<?>, Comparable<?>> lvMap2 = new Hashtable<Comparable<?>, Comparable<?>>();
 		lvMap2.put("sojo", "sojo");
 		lvMap2.put(new Integer(4711), new Integer(4711));
 		lvMap2.put(new Double("47.11"), new Double("47.11"));
@@ -509,13 +508,13 @@ public class ObjectUtilTest extends TestCase {
 	}
 
 	public void testEqualsMapDifferentDateValue() throws Exception {
-		Map lvMap1 = new Hashtable();
+		Map<Comparable<?>, Comparable<?>> lvMap1 = new Hashtable<Comparable<?>, Comparable<?>>();
 		lvMap1.put("sojo", "sojo");
 		lvMap1.put(new Integer(4711), new Integer(4711));
 		lvMap1.put(new Double("47.11"), new Double("47.11"));
 		lvMap1.put(new Date(987654321), new Date(987654));
 		
-		Map lvMap2 = new Hashtable();
+		Map<Comparable<?>, Comparable<?>> lvMap2 = new Hashtable<Comparable<?>, Comparable<?>>();
 		lvMap2.put("sojo", "sojo");
 		lvMap2.put(new Integer(4711), new Integer(4711));
 		lvMap2.put(new Double("47.11"), new Double("47.11"));
@@ -699,12 +698,12 @@ public class ObjectUtilTest extends TestCase {
 
 	public void testChangeWithSimpleKeyMapper() throws Exception {
 		ObjectUtil lvUtil = new ObjectUtil();
-		Map lvMap = new HashMap();
+		Map<String, String> lvMap = new HashMap<String, String>();
 		lvMap.put("key_1", "value_1");
 		lvMap.put("key_2", "value_2");
 		
 		lvUtil.setWithSimpleKeyMapper(false);
-		Map lvMapAfter = (Map) lvUtil.makeComplex(lvMap);
+		Map<?, ?> lvMapAfter = (Map<?, ?>) lvUtil.makeComplex(lvMap);
 		assertEquals(lvMap, lvMapAfter);
 		
 		lvUtil.setWithSimpleKeyMapper(true);
@@ -725,7 +724,7 @@ public class ObjectUtilTest extends TestCase {
 		}
 
 		lvUtil.setWithSimpleKeyMapper(false);
-		lvMapAfter = (Map) lvUtil.makeComplex(lvMap);
+		lvMapAfter = (Map<?, ?>) lvUtil.makeComplex(lvMap);
 		assertEquals(lvMap, lvMapAfter);
 	}
 	
@@ -749,7 +748,7 @@ public class ObjectUtilTest extends TestCase {
 		lvUtil.setWithCycleDetection(true);
 		assertTrue(lvUtil.getWithCycleDetection());
 		
-		List lvList = new ArrayList();
+		List<List<?>> lvList = new ArrayList<List<?>>();
 		lvList.add(lvList);
 		try {
 			lvUtil.makeSimple(lvList);
@@ -770,10 +769,10 @@ public class ObjectUtilTest extends TestCase {
 		ObjectUtil lvUtil = new ObjectUtil();
 		lvUtil.setWithCycleDetection(true);
 		
-		List lvList1 = new ArrayList();
-		List lvList2 = new ArrayList();
-		List lvList3 = new ArrayList();
-		List lvList4 = new ArrayList();
+		List<List<List<List<List<?>>>>> lvList1 = new ArrayList<List<List<List<List<?>>>>>();
+		List<List<List<List<?>>>> lvList2 = new ArrayList<List<List<List<?>>>>();
+		List<List<List<?>>> lvList3 = new ArrayList<List<List<?>>>();
+		List<List<?>> lvList4 = new ArrayList<List<?>>();
 		lvList1.add(lvList2);
 		lvList2.add(lvList3);
 		lvList3.add(lvList4);
@@ -792,7 +791,7 @@ public class ObjectUtilTest extends TestCase {
 		ObjectUtil lvUtil = new ObjectUtil();
 		lvUtil.setWithCycleDetection(true);
 
-		Map lvMap = new HashMap();
+		Map<String, Map<?,?>> lvMap = new HashMap<String, Map<?,?>>();
 		lvUtil.makeSimple(lvMap);
 		
 		lvMap.put("key", lvMap);
@@ -808,9 +807,9 @@ public class ObjectUtilTest extends TestCase {
 		ObjectUtil lvUtil = new ObjectUtil();
 		lvUtil.setWithCycleDetection(true);
 
-		Map lvMap1 = new HashMap();
-		Map lvMap2 = new HashMap();
-		Map lvMap3 = new HashMap();
+		Map<String, Object> lvMap1 = new HashMap<String, Object>();
+		Map<String, Map<String, Map<?,?>>> lvMap2 = new HashMap<String, Map<String, Map<?,?>>>();
+		Map<String, Map<?,?>> lvMap3 = new HashMap<String, Map<?,?>>();
 		lvMap1.put("k1", "v1");
 		lvMap1.put("map2", lvMap2);
 		lvMap2.put("map3", lvMap3);
@@ -829,7 +828,7 @@ public class ObjectUtilTest extends TestCase {
 	public void testTwiceCollections() throws Exception {
 		ObjectUtil lvUtil = new ObjectUtil();
 		
-		List l = new ArrayList();
+		List<Object> l = new ArrayList<Object>();
 		l.add("foo");
 		l.add(new BigDecimal("0.07"));
 		
@@ -838,12 +837,12 @@ public class ObjectUtilTest extends TestCase {
 		Node n2 = new Node("n2");
 		n2.setChildren(l);
 		
-		List mainList = new ArrayList();
+		List<Node> mainList = new ArrayList<Node>();
 		mainList.add(n1);
 		mainList.add(n2);
 		
 		Object o = lvUtil.makeSimple(mainList);
-		List lAfter = (List) lvUtil.makeComplex(o);
+		List<?> lAfter = (List<?>) lvUtil.makeComplex(o);
 		Node n1After = (Node) lAfter.get(0);
 		Node n2After = (Node) lAfter.get(1);
 		
@@ -860,7 +859,7 @@ public class ObjectUtilTest extends TestCase {
 		
 		Car lvCar = new Car("MyCar");
 		lvCar.setDescription("This is really my car");
-		Map lvMap = (Map) lvUtil.makeSimple(lvCar);
+		Map<?, ?> lvMap = (Map<?, ?>) lvUtil.makeSimple(lvCar);
 		assertTrue(lvMap.containsKey("class"));
 		assertEquals(Car.class.getName(), lvMap.get("class"));
 		
@@ -872,11 +871,11 @@ public class ObjectUtilTest extends TestCase {
 		assertEquals("MyCar", lvCarAfter.getName());
 		assertEquals("This is really my car", lvCarAfter.getDescription());
 		
-		lvMap = (Map) lvUtil.makeSimple(lvCar);
+		lvMap = (Map<?, ?>) lvUtil.makeSimple(lvCar);
 		assertTrue(lvMap.containsKey("class"));
 		assertEquals(Car.class.getName(), lvMap.get("class"));
 		
-		lvMap = (Map) lvUtil.makeSimple(lvCar);
+		lvMap = (Map<?, ?>) lvUtil.makeSimple(lvCar);
 		assertTrue(lvMap.containsKey("class"));
 		assertEquals(Car.class.getName(), lvMap.get("class"));
 	}
@@ -887,7 +886,7 @@ public class ObjectUtilTest extends TestCase {
 
 		Car lvCar = new Car("MyCar");
 		lvCar.setDescription("This is really my car");
-		Map lvMap = (Map) lvObjectUtil.makeSimple(lvCar);
+		Map<?, ?> lvMap = (Map<?, ?>) lvObjectUtil.makeSimple(lvCar);
 
 		assertEquals("MyCar", lvMap.get("name"));
 		assertEquals("This is really my car", lvMap.get("description"));
@@ -900,7 +899,7 @@ public class ObjectUtilTest extends TestCase {
 		);
 		lvObjectUtil.setClassPropertyFilterHandler(lvFilterHandler);
 		
-		lvMap = (Map) lvObjectUtil.makeSimple(lvCar);
+		lvMap = (Map<?, ?>) lvObjectUtil.makeSimple(lvCar);
 
 		assertEquals("MyCar", lvMap.get("name"));
 		assertEquals("This is really my car", lvMap.get("description"));
@@ -915,7 +914,7 @@ public class ObjectUtilTest extends TestCase {
 		
 		Person lvPerson = new Person();
 		lvPerson.setFirstName("Mario");
-		Map lvMap = (Map) lvObjectUtil.makeSimple(lvPerson);
+		Map<?, ?> lvMap = (Map<?, ?>) lvObjectUtil.makeSimple(lvPerson);
 
 		assertEquals("Mario", lvMap.get("firstName"));
 		assertFalse(lvMap.containsKey("lastName"));
@@ -927,7 +926,7 @@ public class ObjectUtilTest extends TestCase {
 		
 		Account lvAccount = new Account();
 		lvAccount.setAccountNumber("007");
-		lvMap = (Map) lvObjectUtil.makeComplex(lvAccount);
+		lvMap = (Map<?, ?>) lvObjectUtil.makeComplex(lvAccount);
 		
 		assertEquals("007", lvMap.get("accountNumber"));
 		assertTrue(lvMap.containsKey(UniqueIdGenerator.UNIQUE_ID_PROPERTY ));
@@ -939,7 +938,7 @@ public class ObjectUtilTest extends TestCase {
 		lvObjectUtil.setWithSimpleKeyMapper(false);
 
 		Car lvCar = new Car("MyCar");
-		Map lvMap = (Map) lvObjectUtil.makeSimple(lvCar);
+		Map<?, ?> lvMap = (Map<?, ?>) lvObjectUtil.makeSimple(lvCar);
 		assertTrue(lvMap.containsKey("class"));
 		assertEquals(Car.class.getName(), lvMap.get("class"));
 
@@ -955,7 +954,7 @@ public class ObjectUtilTest extends TestCase {
 		ClassPropertyFilterHandlerImpl lvFilterHandler = new ClassPropertyFilterHandlerImpl(lvClassPropertyFilter);
 		lvObjectUtil.setClassPropertyFilterHandler(lvFilterHandler);
 		
-		lvMap = (Map) lvObjectUtil.makeSimple(lvCar);
+		lvMap = (Map<?, ?>) lvObjectUtil.makeSimple(lvCar);
 		assertFalse(lvMap.containsKey("class"));
 	}
 
@@ -965,7 +964,7 @@ public class ObjectUtilTest extends TestCase {
 
 		MyAnnotationClass lvAnnotationClass = new MyAnnotationClass("My Annotation");
 		assertEquals("My Annotation", lvAnnotationClass.getName());
-		Map lvMap = (Map) lvObjectUtil.makeSimple(lvAnnotationClass);
+		Map<?, ?> lvMap = (Map<?, ?>) lvObjectUtil.makeSimple(lvAnnotationClass);
 		assertTrue(lvMap.containsKey("class"));
 		assertTrue(lvMap.containsKey(UniqueIdGenerator.UNIQUE_ID_PROPERTY));
 		assertEquals("My Annotation", lvMap.get("name"));
@@ -973,7 +972,7 @@ public class ObjectUtilTest extends TestCase {
 		// set filter for unique id
 		lvObjectUtil.setClassPropertyFilterHandler(new ClassPropertyFilterHanlderForAttributes());
 		
-		lvMap = (Map) lvObjectUtil.makeSimple(lvAnnotationClass);
+		lvMap = (Map<?, ?>) lvObjectUtil.makeSimple(lvAnnotationClass);
 		assertFalse(lvMap.containsKey("class"));
 		assertFalse(lvMap.containsKey(UniqueIdGenerator.UNIQUE_ID_PROPERTY));
 		assertEquals("My Annotation", lvMap.get("name"));
@@ -981,7 +980,7 @@ public class ObjectUtilTest extends TestCase {
 	}
 	
 	public void testMakeComplexWithoutClassInSimpleRepresentation() throws Exception {
-		Map lvMap = new HashMap();
+		Map<String, String> lvMap = new HashMap<String, String>();
 		lvMap.put("name", "My Car");
 		lvMap.put("description", "the description");
 		
@@ -995,9 +994,9 @@ public class ObjectUtilTest extends TestCase {
 	}
 
 	public void testMakeComplexWithoutClassInSimpleRepresentationMoreComplexExample() throws Exception {
-		Map lvMapNode = new HashMap();
+		Map<String, Object> lvMapNode = new HashMap<String, Object>();
 		lvMapNode.put("name", "Node");
-		Map lvMapParent = new HashMap();
+		Map<String, String> lvMapParent = new HashMap<String, String>();
 		lvMapParent.put("name", "Parent");
 		lvMapNode.put("parent", lvMapParent);
 		
@@ -1010,7 +1009,7 @@ public class ObjectUtilTest extends TestCase {
 	}
 
 	public void testMakeComplexWithoutClassInSimpleRepresentationIncompatibleProperty() throws Exception {
-		Map lvMap = new HashMap();
+		Map<String, String> lvMap = new HashMap<String, String>();
 		lvMap.put("name", "Node");
 		lvMap.put("description", "the description");
 		
@@ -1027,7 +1026,7 @@ public class ObjectUtilTest extends TestCase {
 		lvObjectUtil.setWithSimpleKeyMapper(false);
 		
 		Car lvCar = new Car("MyCar");
-		Map lvMap = (Map) lvObjectUtil.makeSimple(lvCar);
+		Map<?, ?> lvMap = (Map<?, ?>) lvObjectUtil.makeSimple(lvCar);
 
 		assertEquals("MyCar", lvMap.get("name"));
 		assertTrue(lvMap.containsKey("description"));
@@ -1040,7 +1039,7 @@ public class ObjectUtilTest extends TestCase {
 		lvObjectUtil.setClassPropertyFilterHandler(lvFilterHandler);
 		lvObjectUtil.setIgnoreAllNullValues(true);
 		
-		lvMap = (Map) lvObjectUtil.makeSimple(lvCar);
+		lvMap = (Map<?, ?>) lvObjectUtil.makeSimple(lvCar);
 
 		assertEquals("MyCar", lvMap.get("name"));
 		assertFalse(lvMap.containsKey("description"));
@@ -1053,23 +1052,23 @@ public class ObjectUtilTest extends TestCase {
 		lvCustomer.getAddresses().add(lvAddress);
 		
 		ObjectUtil lvUtil = new ObjectUtil();
-		Map lvMap = (Map) lvUtil.makeSimple(lvCustomer);
+		Map<?, ?> lvMap = (Map<?, ?>) lvUtil.makeSimple(lvCustomer);
 		
 		assertTrue(lvMap.containsKey("firstName"));
 		assertNull(lvMap.get("firstName"));
 		
-		Map lvMapAddress = (Map) ((List) lvMap.get("addresses")).get(0);
+		Map<?, ?> lvMapAddress = (Map<?, ?>) ((List<?>) lvMap.get("addresses")).get(0);
 		assertTrue(lvMapAddress.containsKey("postcode"));
 		assertNull(lvMapAddress.get("postcode"));
 		
 
 		lvUtil.setIgnoreAllNullValues(true);
-		lvMap = (Map) lvUtil.makeSimple(lvCustomer);
+		lvMap = (Map<?, ?>) lvUtil.makeSimple(lvCustomer);
 		
 		assertFalse(lvMap.containsKey("firstName"));
 		assertEquals("LastName", lvMap.get("lastName"));
 		
-		lvMapAddress = (Map) ((List) lvMap.get("addresses")).get(0);
+		lvMapAddress = (Map<?, ?>) ((List<?>) lvMap.get("addresses")).get(0);
 		assertFalse(lvMapAddress.containsKey("postcode"));
 		assertEquals("Nuernberg", lvMapAddress.get("city"));
 	}
@@ -1086,14 +1085,14 @@ public class ObjectUtilTest extends TestCase {
 		ObjectUtil lvUtil = new ObjectUtil();
 		Object o = lvUtil.makeSimple(new ConversionException("JUnit-Test-ConversionException"));
 		assertTrue("Keine ThrowableWrapper: " + o, o instanceof Map);
-		Map lvExceptionMap = (Map) o;
+		Map<?, ?> lvExceptionMap = (Map<?, ?>) o;
 		assertEquals("JUnit-Test-ConversionException", lvExceptionMap.get("message"));
 		assertEquals(ConversionException.class.getName(), lvExceptionMap.get("exceptionClassName"));
 		assertNull(lvExceptionMap.get("causeWrapper"));
 		
-		List lvList = (List) lvExceptionMap.get("stackTraceElementWrapperList");
+		List<?> lvList = (List<?>) lvExceptionMap.get("stackTraceElementWrapperList");
 		assertTrue(15 < lvList.size());
-		Map lvStackTraceElementMap = (Map) lvList.get(0);
+		Map<?, ?> lvStackTraceElementMap = (Map<?, ?>) lvList.get(0);
 		assertEquals("ObjectUtilTest.java", lvStackTraceElementMap.get("fileName"));
 		assertEquals(StackTraceElementWrapper.class.getName(), lvStackTraceElementMap.get("class"));
 		assertEquals(this.getClass().getName(), lvStackTraceElementMap.get("className"));
@@ -1116,7 +1115,7 @@ public class ObjectUtilTest extends TestCase {
 		assertTrue("Keine ThrowableWrapper: " + o, o instanceof Map);
 		o = lvUtil.makeSimple(o);
 		assertTrue("Keine ThrowableWrapper: " + o, o instanceof Map);
-		Map lvExceptionMap = (Map) o;
+		Map<?, ?> lvExceptionMap = (Map<?, ?>) o;
 		assertEquals("JUnit-Test-ConversionException", lvExceptionMap.get("message"));
 		assertEquals(ConversionException.class.getName(), lvExceptionMap.get("exceptionClassName"));
 	}
@@ -1259,7 +1258,7 @@ public class ObjectUtilTest extends TestCase {
 	public void testHashCodeByCollection() throws Exception {
 		Long lvLong = new Long(47711);
 		String lvString = "My String";
-		Collection lvCollection = new ArrayList();
+		Collection<Comparable<?>> lvCollection = new ArrayList<Comparable<?>>();
 		lvCollection.add(lvLong);
 		lvCollection.add(lvString);
 		int lvHashCode = new ObjectUtil().hashCode(lvCollection);
@@ -1272,7 +1271,7 @@ public class ObjectUtilTest extends TestCase {
 	public void testHashCodeByCollectionWithNullValue() throws Exception {
 		Long lvLong = new Long(47711);
 		String lvString = "My String";
-		Collection lvCollection = new ArrayList();
+		Collection<Comparable<?>> lvCollection = new ArrayList<Comparable<?>>();
 		lvCollection.add(lvLong);
 		lvCollection.add(null);
 		lvCollection.add(lvString);
@@ -1286,7 +1285,7 @@ public class ObjectUtilTest extends TestCase {
 	public void testHashCodeByMap() throws Exception {
 		Long lvLong = new Long(47711);
 		String lvString = "My String";
-		Map lvMap = new HashMap();
+		Map<Comparable<?>, Comparable<?>> lvMap = new HashMap<Comparable<?>, Comparable<?>>();
 		lvMap.put(lvLong, lvLong);
 		lvMap.put(lvString, lvString);
 		int lvHashCode = new ObjectUtil().hashCode(lvMap);
@@ -1299,7 +1298,7 @@ public class ObjectUtilTest extends TestCase {
 	public void testHashCodeByMapWithNullValue() throws Exception {
 		Long lvLong = new Long(47711);
 		String lvString = "My String";
-		Map lvMap = new HashMap();
+		Map<Comparable<?>, Comparable<?>> lvMap = new HashMap<Comparable<?>, Comparable<?>>();
 		lvMap.put(lvLong, lvLong);
 		lvMap.put("key", null);
 		lvMap.put(lvString, lvString);
@@ -1476,7 +1475,7 @@ public class ObjectUtilTest extends TestCase {
 		Object lvResult = lvObjectUtil.makeComplex(lvTemp);
 		
 		assertTrue("Is not a Map: " + lvResult.getClass().getName(), lvResult instanceof Map);
-		Map lvMap = (Map) lvResult;
+		Map<?, ?> lvMap = (Map<?, ?>) lvResult;
 		assertFalse(lvMap.containsKey("class"));
 		assertFalse(lvMap.containsKey("build"));
 		assertTrue(lvMap.containsKey("name"));
@@ -1550,7 +1549,7 @@ public class ObjectUtilTest extends TestCase {
 		lvBean.setUrl(new URL(lvUrlStr));
 		
 		ObjectUtil ou = new ObjectUtil();
-		Map lvResult = (Map) ou.makeSimple(lvBean);
+		Map<?, ?> lvResult = (Map<?, ?>) ou.makeSimple(lvBean);
 		assertEquals(lvResult.get("class"), SpecialTypeBean.class.getName());
 		assertEquals(lvResult.get("url"), lvUrlStr);
 		assertNull(lvResult.get("object"));
@@ -1567,7 +1566,7 @@ public class ObjectUtilTest extends TestCase {
 		lvBean.setObject(lvTestString);
 		
 		ObjectUtil ou = new ObjectUtil();
-		Map lvResult = (Map) ou.makeSimple(lvBean);
+		Map<?, ?> lvResult = (Map<?, ?>) ou.makeSimple(lvBean);
 		assertEquals(lvResult.get("class"), SpecialTypeBean.class.getName());
 		assertEquals(lvResult.get("object"), lvTestString);
 		assertNull(lvResult.get("url"));
@@ -1585,7 +1584,7 @@ public class ObjectUtilTest extends TestCase {
 		lvBean.setObject(lvTestLong);
 		
 		ObjectUtil ou = new ObjectUtil();
-		Map lvResult = (Map) ou.makeSimple(lvBean);
+		Map<?, ?> lvResult = (Map<?, ?>) ou.makeSimple(lvBean);
 		assertEquals(lvResult.get("class"), SpecialTypeBean.class.getName());
 		assertEquals(lvResult.get("object"), lvTestLong);
 		assertNull(lvResult.get("url"));
@@ -1603,7 +1602,7 @@ public class ObjectUtilTest extends TestCase {
 		lvBean.setObject(lvTestDate);
 		
 		ObjectUtil ou = new ObjectUtil();
-		Map lvResult = (Map) ou.makeSimple(lvBean);
+		Map<?, ?> lvResult = (Map<?, ?>) ou.makeSimple(lvBean);
 		assertEquals(lvResult.get("class"), SpecialTypeBean.class.getName());
 		assertEquals(lvResult.get("object"), lvTestDate);
 		assertNull(lvResult.get("url"));
@@ -1621,7 +1620,7 @@ public class ObjectUtilTest extends TestCase {
 		lvBean.setObject(lvValue);
 		
 		ObjectUtil ou = new ObjectUtil();
-		Map lvResult = (Map) ou.makeSimple(lvBean);
+		Map<?, ?> lvResult = (Map<?, ?>) ou.makeSimple(lvBean);
 		assertEquals(lvResult.get("class"), SpecialTypeBean.class.getName());
 		assertEquals(lvResult.get("object"), lvValue);
 		assertNull(lvResult.get("url"));
@@ -1641,7 +1640,7 @@ public class ObjectUtilTest extends TestCase {
 		Timestamp lvTimeStamp = new Timestamp(new Date().getTime());
 		lvBean.setTimestamp(lvTimeStamp);
 		ObjectUtil ou = new ObjectUtil();
-		Map lvResult = (Map) ou.makeSimple(lvBean);
+		Map<?, ?> lvResult = (Map<?, ?>) ou.makeSimple(lvBean);
 		assertEquals(lvResult.get("clazz"), Bean.class.getName());
 		assertEquals(lvResult.get("myProp"), "name");
 		assertEquals(lvResult.get("timestamp"), lvTimeStamp);

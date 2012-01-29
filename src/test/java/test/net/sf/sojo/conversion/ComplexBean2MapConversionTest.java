@@ -39,7 +39,7 @@ public class ComplexBean2MapConversionTest extends TestCase {
 		Object lvResult = c.convert(n1);
 		assertNotNull(lvResult);
 		assertTrue(lvResult instanceof Map);
-		Map lvMap = (Map) lvResult;
+		Map<?, ?> lvMap = (Map<?, ?>) lvResult;
 		assertEquals(Node.class.getName(), lvMap.get("class"));
 		assertEquals(lvNodeName, lvMap.get("name"));
 		Object o = lvMap.get(UniqueIdGenerator.UNIQUE_ID_PROPERTY);
@@ -58,14 +58,14 @@ public class ComplexBean2MapConversionTest extends TestCase {
 		Object lvResult = c.convert(n2);
 		assertNotNull(lvResult);
 		assertTrue(lvResult instanceof Map);
-		Map lvMap = (Map) lvResult;
+		Map<?, ?> lvMap = (Map<?, ?>) lvResult;
 		assertEquals(Node.class.getName(), lvMap.get("class"));
 		assertEquals(lvNodeName2, lvMap.get("name"));
 		Object o = lvMap.get(UniqueIdGenerator.UNIQUE_ID_PROPERTY);
 		assertEquals(UniqueIdGenerator.MINIMAL_UNIQUE_ID, Integer.valueOf(o.toString()).intValue());
 
 		assertNotNull(lvMap.get("parent"));
-		Map lvMapParent = (Map) lvMap.get("parent");
+		Map<?, ?> lvMapParent = (Map<?, ?>) lvMap.get("parent");
 		assertEquals(Node.class.getName(), lvMapParent.get("class"));
 		assertEquals(lvNodeName, lvMapParent.get("name"));
 		o = lvMapParent.get(UniqueIdGenerator.UNIQUE_ID_PROPERTY);
@@ -82,7 +82,7 @@ public class ComplexBean2MapConversionTest extends TestCase {
 		Object lvResult = c.convert(n1);
 		assertNotNull(lvResult);
 		assertTrue(lvResult instanceof Map);
-		Map lvMap = (Map) lvResult;
+		Map<?, ?> lvMap = (Map<?, ?>) lvResult;
 		assertEquals(Node.class.getName(), lvMap.get("class"));
 		assertEquals(lvNodeName, lvMap.get("name"));
 		Object o = lvMap.get(UniqueIdGenerator.UNIQUE_ID_PROPERTY);
@@ -114,14 +114,14 @@ public class ComplexBean2MapConversionTest extends TestCase {
 		n1.getNamedChildren().put(lvNodeName2, n2);
 		Object lvResult = c.convert(n1);
 		assertNotNull(lvResult);
-		Map lvMap1 = (Map) lvResult;
+		Map<?, ?> lvMap1 = (Map<?, ?>) lvResult;
 		assertEquals(Node.class.getName(), lvMap1.get("class"));
 		assertEquals(lvNodeName, lvMap1.get("name"));
 		assertTrue(lvMap1.get("namedChildren") instanceof Map);
 		
-		Map lvMap = (Map) lvMap1.get("namedChildren");
+		Map<?, ?> lvMap = (Map<?, ?>) lvMap1.get("namedChildren");
 		Object o = lvMap.get(lvNodeName2);
-		Map lvMap2 = (Map) o;
+		Map<?, ?> lvMap2 = (Map<?, ?>) o;
 		assertEquals(Node.class.getName(), lvMap2.get("class"));
 		assertEquals(lvNodeName2, lvMap2.get("name"));		
 	}
@@ -140,14 +140,14 @@ public class ComplexBean2MapConversionTest extends TestCase {
 		n1.getNamedChildren().put(lvNodeName2, n2);
 		Object lvResult = c.convert(n1);
 		assertNotNull(lvResult);
-		Map lvMap1 = (Map) lvResult;
+		Map<?, ?> lvMap1 = (Map<?, ?>) lvResult;
 		assertEquals(Node.class.getName(), lvMap1.get("class"));
 		assertEquals(lvNodeName, lvMap1.get("name"));
 		assertTrue(lvMap1.get("namedChildren") instanceof Map);
 		
-		Map lvMap = (Map) lvMap1.get("namedChildren");
+		Map<?, ?> lvMap = (Map<?, ?>) lvMap1.get("namedChildren");
 		Object o = lvMap.get(lvNodeName2);
-		Map lvMap2 = (Map) o;
+		Map<?, ?> lvMap2 = (Map<?, ?>) o;
 		assertEquals(Node.class.getName(), lvMap2.get("class"));
 		assertEquals(lvNodeName2, lvMap2.get("name"));		
 	}
@@ -176,19 +176,19 @@ public class ComplexBean2MapConversionTest extends TestCase {
 		Object lvResult = c.convert(n, Hashtable.class);
 		assertNotNull(lvResult);
 		assertTrue(lvResult instanceof Hashtable);
-		Hashtable lvHashtable = (Hashtable) lvResult;
+		Hashtable<?, ?> lvHashtable = (Hashtable<?, ?>) lvResult;
 		assertEquals(Node.class.getName(), lvHashtable.get("class"));
 		assertEquals("Node", lvHashtable.get("name"));
-		assertEquals(new Vector(), lvHashtable.get("children"));
+		assertEquals(new Vector<Object>(), lvHashtable.get("children"));
 		assertNull(lvHashtable.get("abc"));
 		
 		lvResult = c.convert(n, WeakHashMap.class);
 		assertNotNull(lvResult);
 		assertTrue(lvResult instanceof WeakHashMap);
-		WeakHashMap lvWeakHashMap = (WeakHashMap) lvResult;
+		WeakHashMap<?, ?> lvWeakHashMap = (WeakHashMap<?, ?>) lvResult;
 		assertEquals(Node.class.getName(), lvWeakHashMap.get("class"));
 		assertEquals("Node", lvWeakHashMap.get("name"));
-		assertEquals(new Vector(), lvWeakHashMap.get("children"));
+		assertEquals(new Vector<Object>(), lvWeakHashMap.get("children"));
 		assertNull(lvWeakHashMap.get("abc"));
 
 	}
@@ -199,11 +199,11 @@ public class ComplexBean2MapConversionTest extends TestCase {
 		c.addConversion(lvBean2MapConversion);
 		
 		Car lvCar = new Car("Audi");
-		Map lvMap = (Map) c.convert(lvCar);
+		Map<?, ?> lvMap = (Map<?, ?>) c.convert(lvCar);
 		assertEquals(6, lvMap.size());
 		
 		lvBean2MapConversion.setIgnoreNullValues(true);
-		lvMap = (Map) c.convert(lvCar);
+		lvMap = (Map<?, ?>) c.convert(lvCar);
 		assertEquals(3, lvMap.size());
 	}
 }

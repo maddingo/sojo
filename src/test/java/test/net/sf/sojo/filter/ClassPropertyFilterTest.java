@@ -175,7 +175,7 @@ public class ClassPropertyFilterTest extends TestCase {
 		
 		Car lvCar = new Car("a car");
 		lvCar.setBuild(new Date(12345678));
-		Map lvSimpe = (Map) lvObjectUtil.makeSimple(lvCar);
+		Map<?, ?> lvSimpe = (Map<?, ?>) lvObjectUtil.makeSimple(lvCar);
 		assertNotNull(lvSimpe.get("build"));
 		assertEquals(new Date(12345678), lvSimpe.get("build"));
 		
@@ -191,7 +191,7 @@ public class ClassPropertyFilterTest extends TestCase {
 		
 		Car lvCar = new Car("a car");
 		lvCar.setBuild(new Date(12345678));
-		Map lvSimpe = (Map) lvObjectUtil.makeSimple(lvCar);
+		Map<?, ?> lvSimpe = (Map<?, ?>) lvObjectUtil.makeSimple(lvCar);
 		assertNotNull(lvSimpe.get("build"));
 		assertEquals(new Date(12345678), lvSimpe.get("build"));
 		
@@ -207,7 +207,7 @@ public class ClassPropertyFilterTest extends TestCase {
 		
 		Car lvCar = new Car("a car");
 		lvCar.setBuild(new Date(12345678));
-		Map lvSimpe = (Map) lvObjectUtil.makeSimple(lvCar);
+		Map<?, ?> lvSimpe = (Map<?, ?>) lvObjectUtil.makeSimple(lvCar);
 		assertNotNull(lvSimpe.get("build"));
 		assertEquals(new Date(12345678), lvSimpe.get("build"));
 		
@@ -226,7 +226,7 @@ public class ClassPropertyFilterTest extends TestCase {
 		lvObjectUtil.setWithSimpleKeyMapper(false);
 		lvObjectUtil.setClassPropertyFilterHandler(new ClassPropertyFilterHandlerImpl(new ClassPropertyFilter(Map.class, new String [] { "4711" })));
 		
-		Map lvMap = new Hashtable();
+		Map<Comparable<?>, Comparable<?>> lvMap = new Hashtable<Comparable<?>, Comparable<?>>();
 		lvMap.put("foo", "foo");
 		Date lvDate = new Date();
 		lvMap.put(lvDate, new Date());
@@ -235,7 +235,7 @@ public class ClassPropertyFilterTest extends TestCase {
 		assertEquals(4, lvMap.size());
 		assertEquals(new Long(4711),lvMap.get(new Long(4711)));
 		
-		Map lvMapAfter = (Map) lvObjectUtil.makeSimple(lvMap);
+		Map<?, ?> lvMapAfter = (Map<?, ?>) lvObjectUtil.makeSimple(lvMap);
 		assertEquals(2, lvMapAfter.size());
 		assertFalse(lvMapAfter.containsKey(new Long(4711)));
 		assertTrue(lvMapAfter.containsKey("foo"));
@@ -288,7 +288,7 @@ public class ClassPropertyFilterTest extends TestCase {
 		Object lvSimple = lvObjectUtil.makeSimple(nRoot);
 		assertNotNull(lvSimple);
 		assertTrue("Is not a Map: " + lvSimple.getClass().getName(), lvSimple instanceof Map);
-		Map lvMap = (Map) lvSimple;
+		Map<?, ?> lvMap = (Map<?, ?>) lvSimple;
 		assertTrue(lvMap.containsKey("class"));
 		assertFalse(lvMap.containsKey("name"));
 		assertTrue(lvMap.containsKey(UniqueIdGenerator.UNIQUE_ID_PROPERTY));

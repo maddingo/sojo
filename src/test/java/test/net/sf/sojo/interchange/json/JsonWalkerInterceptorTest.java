@@ -108,16 +108,16 @@ public class JsonWalkerInterceptorTest extends TestCase {
 		JsonWalkerInterceptor lvInterceptor = new JsonWalkerInterceptor();
 		assertEquals("", lvInterceptor.getJsonString());
 		
-		lvInterceptor.visitIterateableElement(new HashMap(), -1, "", -1);
+		lvInterceptor.visitIterateableElement(new HashMap<Object, Object>(), -1, "", -1);
 		assertEquals("", lvInterceptor.getJsonString());
 
-		lvInterceptor.visitIterateableElement(new HashMap(), -1, "", Constants.ITERATOR_BEGIN);
+		lvInterceptor.visitIterateableElement(new HashMap<Object, Object>(), -1, "", Constants.ITERATOR_BEGIN);
 		assertEquals("", lvInterceptor.getJsonString());
 
-		lvInterceptor.visitIterateableElement(new HashMap(), Constants.ITERATOR_END, "", -1);
+		lvInterceptor.visitIterateableElement(new HashMap<Object, Object>(), Constants.ITERATOR_END, "", -1);
 		assertEquals("", lvInterceptor.getJsonString());
 				
-		lvInterceptor.visitIterateableElement(new HashMap(), -1, "", Constants.ITERATOR_END);
+		lvInterceptor.visitIterateableElement(new HashMap<Object, Object>(), -1, "", Constants.ITERATOR_END);
 		assertEquals("", lvInterceptor.getJsonString());
 	}
 
@@ -148,7 +148,7 @@ public class JsonWalkerInterceptorTest extends TestCase {
 	}
 
 	public void testEmptyJsonList() throws Exception {
-		List list = new ArrayList();
+		List<?> list = new ArrayList<Object>();
 		walker.walk(list);
 		assertEquals("[]", jsonInterceptor.getJsonString());
 	}
@@ -160,7 +160,7 @@ public class JsonWalkerInterceptorTest extends TestCase {
 	}
 	
 	public void testSimpleJsonList() throws Exception {
-		List list = new ArrayList();
+		List<String> list = new ArrayList<String>();
 		list.add( "first" );
 		list.add( "second" );
 
@@ -169,14 +169,14 @@ public class JsonWalkerInterceptorTest extends TestCase {
 	}
 
 	public void testEmptyJsonMap() throws Exception {
-		Map map = new HashMap();
+		Map<?, ?> map = new HashMap<Object, Object>();
 
 		walker.walk(map);
 		assertEquals("{}", jsonInterceptor.getJsonString());
 	}
 
 	public void __testSimpleJsonMap() throws Exception {
-		Map map = new HashMap();
+		Map<String, Object> map = new HashMap<String, Object>();
 		map.put( "name", "json" );
 		map.put( "bool", Boolean.TRUE );
 		map.put( "int", new Integer(1) );
@@ -196,7 +196,7 @@ public class JsonWalkerInterceptorTest extends TestCase {
 	}
 	
 	public void __testMapWithNullValue() throws Exception {
-		Map map = new HashMap();
+		Map<String, String> map = new HashMap<String, String>();
 		map.put( "name", "json" );
 		map.put( "null", null);
 
@@ -209,7 +209,7 @@ public class JsonWalkerInterceptorTest extends TestCase {
 	}
 
 	public void testMapWithOutNullValue() throws Exception {
-		Map map = new HashMap();
+		Map<String, String> map = new HashMap<String, String>();
 		map.put( "name", "json" );
 		map.put( "null", null);
 

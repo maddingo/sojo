@@ -10,10 +10,13 @@ public class TestWalkerInterceptor implements WalkerInterceptor {
 		whenThisObjectThanCancelWalk = pvWhenThisObjectThanCanelWalk;
 	}
 
+	@Override
 	public void startWalk(Object pvStartObject) { }
 	
+	@Override
 	public void endWalk() { }
 
+	@Override
 	public boolean visitElement(Object pvKey, int pvIndex, Object pvValue, int pvType, String pvPath, int pvNumberOfRecursion) {
 		if (whenThisObjectThanCancelWalk != null && whenThisObjectThanCancelWalk.equals(pvValue)) {
 			return true;
@@ -22,6 +25,7 @@ public class TestWalkerInterceptor implements WalkerInterceptor {
 		}
 	}
 	
+	@Override
 	public void visitIterateableElement(Object pvValue, int pvType, String pvPath, int pvBeginEnd) {
 		
 	}

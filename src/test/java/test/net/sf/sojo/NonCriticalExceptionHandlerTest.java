@@ -24,11 +24,13 @@ import net.sf.sojo.util.Util;
 
 public class NonCriticalExceptionHandlerTest extends TestCase {
 
+	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 		NonCriticalExceptionHandler.setNonCriticalExceptionHandlerEnabled(true);
 	}
 	
+	@Override
 	protected void tearDown() throws Exception {
 		super.tearDown();
 		NonCriticalExceptionHandler.setNonCriticalExceptionHandlerEnabled(false);

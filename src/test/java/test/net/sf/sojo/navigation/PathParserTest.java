@@ -29,7 +29,6 @@ import net.sf.sojo.navigation.PathAction;
 import net.sf.sojo.navigation.PathExecuter;
 import net.sf.sojo.navigation.PathParseException;
 import net.sf.sojo.navigation.PathParser;
-import test.net.sf.sojo.model.Address;
 import test.net.sf.sojo.model.Car;
 import test.net.sf.sojo.model.Customer;
 import test.net.sf.sojo.model.Node;
@@ -237,7 +236,7 @@ public class PathParserTest extends TestCase {
 		c.addConversion(new ComplexBean2MapConversion());
 		Object lvSimple = c.convert(lvCar);
 		assertNotNull(lvSimple);
-		Map lvMap = (Map) lvSimple;
+		Map<?, ?> lvMap = (Map<?, ?>) lvSimple;
 		assertEquals(lvCar.getName(), lvMap.get("name"));
 		Object lvResult = PathExecuter.getNestedProperty(lvSimple, lvAction[0]);
 		assertEquals(lvCar.getName(), lvResult);
@@ -248,7 +247,7 @@ public class PathParserTest extends TestCase {
 		lvAction.setIndex(0);
 		lvAction.setType(PathAction.ACTION_TYPE_INDEX);
 		
-		List lvList = new Vector();
+		List<String> lvList = new Vector<String>();
 		lvList.add("TestString_1");
 		Object lvResult = PathExecuter.getNestedProperty(lvList, lvAction);
 		assertEquals("TestString_1", lvResult);
@@ -280,7 +279,7 @@ public class PathParserTest extends TestCase {
 		lvAction.setIndex(0);
 		lvAction.setType(PathAction.ACTION_TYPE_INDEX);
 		
-		Set lvSet = new LinkedHashSet();
+		Set<String> lvSet = new LinkedHashSet<String>();
 		lvSet.add("TestString_1");
 		Object lvResult = PathExecuter.getNestedProperty(lvSet, lvAction);
 		assertEquals("TestString_1", lvResult);
@@ -312,7 +311,7 @@ public class PathParserTest extends TestCase {
 		lvAction.setKey("Key_1");
 		lvAction.setType(PathAction.ACTION_TYPE_KEY);
 		
-		Map lvMap = new HashMap();
+		Map<String, String> lvMap = new HashMap<String, String>();
 		lvMap.put("Key_1", "TestString_1");
 		Object lvResult = PathExecuter.getNestedProperty(lvMap, lvAction);
 		assertEquals("TestString_1", lvResult);

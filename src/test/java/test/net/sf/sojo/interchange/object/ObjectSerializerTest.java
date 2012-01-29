@@ -158,12 +158,12 @@ public class ObjectSerializerTest extends TestCase {
 
 	public void testDeSerializeWithOutRootClass() throws Exception {
 		Serializer lvSerializer = new ObjectSerializer();
-		Map lvMap = new HashMap();
+		Map<String, String> lvMap = new HashMap<String, String>();
 		lvMap.put("name", "BMW");
 		lvMap.put("description", "This BMW is my Car");
 		
 		Object o = lvSerializer.serialize(lvMap);
-		Map lvMapAfter = (Map) lvSerializer.deserialize(o);
+		Map<?, ?> lvMapAfter = (Map<?, ?>) lvSerializer.deserialize(o);
 		assertEquals("BMW", lvMapAfter.get("name"));
 		assertEquals("This BMW is my Car", lvMapAfter.get("description"));
 		assertFalse("Map don't contains class attribute", lvMap.containsKey("class"));
@@ -171,7 +171,7 @@ public class ObjectSerializerTest extends TestCase {
 	
 	public void testDeSerializeWithRootClass() throws Exception {
 		Serializer lvSerializer = new ObjectSerializer();
-		Map lvMap = new HashMap();
+		Map<String, String> lvMap = new HashMap<String, String>();
 		lvMap.put("name", "BMW");
 		lvMap.put("description", "This BMW is my Car");
 		
@@ -261,7 +261,7 @@ public class ObjectSerializerTest extends TestCase {
 		Object lvResult = lvSerializer.deserialize(lvTemp);
 		
 		assertTrue("Is not a Map: " + lvResult.getClass().getName(), lvResult instanceof Map);
-		Map lvMap = (Map) lvResult;
+		Map<?, ?> lvMap = (Map<?, ?>) lvResult;
 		assertFalse(lvMap.containsKey("class"));
 		assertFalse(lvMap.containsKey("build"));
 		assertTrue(lvMap.containsKey("name"));
@@ -285,7 +285,7 @@ public class ObjectSerializerTest extends TestCase {
 		Object lvResult = lvSerializer.deserialize(lvTemp, HashMap.class);
 		
 		assertTrue("Is not a Map: " + lvResult.getClass().getName(), lvResult instanceof Map);
-		Map lvMap = (Map) lvResult;
+		Map<?, ?> lvMap = (Map<?, ?>) lvResult;
 		assertFalse(lvMap.containsKey(UniqueIdGenerator.UNIQUE_ID_PROPERTY));
 		assertFalse(lvMap.containsKey("build"));
 		assertTrue(lvMap.containsKey("name"));

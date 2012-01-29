@@ -27,17 +27,17 @@ public class ClassPropertiesCacheTest extends TestCase {
 	
 	public void testAllClassPropertiesMap() throws Exception {
 		ClassPropertiesCache lvCache = new ClassPropertiesCache();
-		lvCache.addClassPropertiesMap(Node.class, new HashMap());
+		lvCache.addClassPropertiesMap(Node.class, new HashMap<Object, Object>());
 		assertEquals(1, lvCache.size());
 	}
 	
 		    
 	public void testGetClassPropertiesMapByClass() throws Exception {
 		ClassPropertiesCache lvCache = new ClassPropertiesCache();
-		lvCache.addClassPropertiesMap(Node.class, new HashMap());
+		lvCache.addClassPropertiesMap(Node.class, new HashMap<Object, Object>());
 		assertEquals(1, lvCache.size());
 		 
-		 Map lvMap = lvCache.getClassPropertiesMapByClass(Node.class);
+		 Map<?, ?> lvMap = lvCache.getClassPropertiesMapByClass(Node.class);
 		 assertNotNull(lvMap);
 		 assertEquals(0, lvMap.size());
 	}

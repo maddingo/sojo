@@ -23,16 +23,19 @@ public class TestConverterInterceptor implements ConverterInterceptor {
 	public int beforeConvert = 0;
 	public int onError = 0;
 
-	public Object afterConvert(Object pvResult, final Class pvToType) {
+	@Override
+	public Object afterConvert(Object pvResult, final Class<?> pvToType) {
 		afterConvert++;
 		return pvResult;
 	}
 
-	public Object beforeConvert(Object pvConvertObject, final Class pvToType) {
+	@Override
+	public Object beforeConvert(Object pvConvertObject, final Class<?> pvToType) {
 		beforeConvert++;
 		return pvConvertObject;
 	}
 
+	@Override
 	public void onError(Exception pvException) {
 		onError++;
 	}

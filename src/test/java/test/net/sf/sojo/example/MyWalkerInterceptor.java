@@ -22,15 +22,18 @@ public class MyWalkerInterceptor implements WalkerInterceptor {
 	
 	public int counter = 0;
 
+	@Override
 	public void startWalk(Object startObject) { 
 		System.out.println("Start the walking.");
 	}
 	
+	@Override
 	public void endWalk() { 
 		System.out.println("\nWalking is done.");
 	}
 
 
+	@Override
 	public boolean visitElement(Object key, int index, Object value, int type, String path, int numberOfRecursion) {
 		if (type == Constants.TYPE_SIMPLE || type == Constants.TYPE_NULL) {
 			System.out.print(path + ": " + value + ", ");	
@@ -38,6 +41,7 @@ public class MyWalkerInterceptor implements WalkerInterceptor {
 		return false;
 	}
 
+	@Override
 	public void visitIterateableElement(Object value, int type, String path, int typeBeginOrEnd) {
 		System.out.println(" " + path);
 		if (typeBeginOrEnd == Constants.ITERATOR_BEGIN) {

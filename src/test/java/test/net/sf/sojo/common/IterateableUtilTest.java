@@ -33,7 +33,7 @@ import test.net.sf.sojo.model.Primitive;
 public class IterateableUtilTest extends TestCase {
 	
 	public void testSortStringList() throws Exception {
-		List lvList = new ArrayList();
+		List<String> lvList = new ArrayList<String>(4);
 		lvList.add("BMW");
 		lvList.add("Mercedes");
 		lvList.add("Audi");
@@ -47,19 +47,19 @@ public class IterateableUtilTest extends TestCase {
 	}
 
 	public void testSortBeanList() throws Exception {
-		List lvList = new ArrayList();
+		List<Car> lvList = new ArrayList<Car>(3);
 		lvList.add(new Car("BMW"));
 		lvList.add(new Car("Audi"));
 		lvList.add(new Car("Ferrari"));
 
 		lvList = IterableUtil.sort(lvList);
-		assertEquals("Audi", ((Car) lvList.get(0)).getName());
-		assertEquals("BMW", ((Car) lvList.get(1)).getName());
-		assertEquals("Ferrari", ((Car) lvList.get(2)).getName());
+		assertEquals("Audi", lvList.get(0).getName());
+		assertEquals("BMW", lvList.get(1).getName());
+		assertEquals("Ferrari", lvList.get(2).getName());
 	}
 
 	public void testSortPrimitiveBeanList() throws Exception {
-		List lvList = new ArrayList();
+		List<Primitive> lvList = new ArrayList<Primitive>();
 		Primitive p1 = new Primitive();
 		p1.setLongValue(5);
 		Primitive p2 = new Primitive();
@@ -72,9 +72,9 @@ public class IterateableUtilTest extends TestCase {
 		lvList.add(p3);
 
 		lvList = IterableUtil.sort(lvList);
-		assertEquals(1, ((Primitive) lvList.get(0)).getLongValue());
-		assertEquals(3, ((Primitive) lvList.get(1)).getLongValue());
-		assertEquals(5, ((Primitive) lvList.get(2)).getLongValue());
+		assertEquals(1, lvList.get(0).getLongValue());
+		assertEquals(3, lvList.get(1).getLongValue());
+		assertEquals(5, lvList.get(2).getLongValue());
 	}
 
 	public void testSortBigDecimalArray() throws Exception {
@@ -112,33 +112,33 @@ public class IterateableUtilTest extends TestCase {
 	}
 
 	public void testSortBeanSet() throws Exception {
-		Set lvSet = new HashSet();
+		Set<Car> lvSet = new HashSet<Car>();
 		lvSet.add(new Car("BMW"));
 		lvSet.add(new Car("Audi"));
 		lvSet.add(new Car("Ferrari"));
 
 		lvSet = IterableUtil.sort(lvSet);
-		Iterator it = lvSet.iterator();
-		assertEquals("Audi", ((Car) it.next()).getName());
-		assertEquals("BMW", ((Car) it.next()).getName());
-		assertEquals("Ferrari", ((Car) it.next()).getName());
+		Iterator<Car> it = lvSet.iterator();
+		assertEquals("Audi", it.next().getName());
+		assertEquals("BMW", it.next().getName());
+		assertEquals("Ferrari", it.next().getName());
 	}
 
 	public void testSortBeanMap() throws Exception {
-		Map lvMap = new HashMap();
+		Map<Car, String> lvMap = new HashMap<Car, String>();
 		lvMap.put(new Car("BMW"), "Dummy1");
 		lvMap.put(new Car("Audi"), "Dummy2");
 		lvMap.put(new Car("Ferrari"), "Dummy3");
 
 		lvMap = IterableUtil.sort(lvMap);
-		Iterator it = lvMap.keySet().iterator();
-		assertEquals("Audi", ((Car) it.next()).getName());
-		assertEquals("BMW", ((Car) it.next()).getName());
-		assertEquals("Ferrari", ((Car) it.next()).getName());
+		Iterator<Car> it = lvMap.keySet().iterator();
+		assertEquals("Audi", it.next().getName());
+		assertEquals("BMW", it.next().getName());
+		assertEquals("Ferrari", it.next().getName());
 	}
 
 	public void testSortBeanSetWithCycle() throws Exception {
-		Set lvSet = new HashSet();
+		Set<Node> lvSet = new HashSet<Node>();
 		Node n0 = new Node("Node 0");
 		Node n1 = new Node("Node 1");
 		n1.setParent(n0);
@@ -154,8 +154,7 @@ public class IterateableUtilTest extends TestCase {
 
 		assertEquals(3, lvSet.size());
 
-		Set lvSetAfter = IterableUtil.sort(lvSet);
+		Set<Node> lvSetAfter = IterableUtil.sort(lvSet);
 		assertEquals(3, lvSetAfter.size());
 	}
-
 }
