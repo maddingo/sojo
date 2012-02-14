@@ -18,7 +18,6 @@ package test.net.sf.sojo.conversion;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -281,8 +280,8 @@ public class Iterateable2IterateableConversionTest extends TestCase {
 	public void testObjectArray2ArrayList2() throws Exception {
 		Converter c = new Converter();
 		c.addConversion(new Iterateable2IterateableConversion(ArrayList.class));
-		c.addConversion(new IterateableMap2MapConversion(Hashtable.class));
-		c.addConversion(new ComplexBean2MapConversion(Hashtable.class));
+		c.addConversion(new IterateableMap2MapConversion(HashMap.class));
+		c.addConversion(new ComplexBean2MapConversion(HashMap.class));
 		
 		Node n = new Node("Test-1");
 		Object o[] = new Object[] {n, "Test-2", n};

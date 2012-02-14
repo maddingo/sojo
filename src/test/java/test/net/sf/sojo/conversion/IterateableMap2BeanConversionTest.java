@@ -17,7 +17,6 @@ package test.net.sf.sojo.conversion;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
@@ -94,7 +93,7 @@ public class IterateableMap2BeanConversionTest extends TestCase {
 	
 	public void testMixedMapAndBeans() throws Exception {
 		Converter c = new Converter();	
-		c.addConversion(new IterateableMap2MapConversion(Hashtable.class));
+		c.addConversion(new IterateableMap2MapConversion(HashMap.class));
 		c.addConversion(new Iterateable2IterateableConversion());
 		c.addConversion(new ComplexBean2MapConversion());
 		c.addConversion(new IterateableMap2BeanConversion());
@@ -115,7 +114,7 @@ public class IterateableMap2BeanConversionTest extends TestCase {
 		
 		Map<?, ?> lvMapAfter = (Map<?, ?>) lvListAfter.get(0);
 		assertEquals(lvMap.get("1"), lvMapAfter.get("1"));
-		assertTrue(lvMapAfter instanceof Hashtable);
+		assertTrue(lvMapAfter instanceof HashMap);
 		
 		Node lvNodeAfter = (Node) lvListAfter.get(1);
 		assertEquals("Node", lvNodeAfter.getName());
@@ -141,7 +140,7 @@ public class IterateableMap2BeanConversionTest extends TestCase {
 			Converter c = new Converter();
 			c.addConversion(new IterateableMap2BeanConversion());
 
-			Map<String, Comparable<?>> lvMap = new Hashtable<String, Comparable<?>>();
+			Map<String, Comparable<?>> lvMap = new HashMap<String, Comparable<?>>();
 			lvMap.put("class", Node.class.getName());
 			lvMap.put("children", new Long(77));
 			

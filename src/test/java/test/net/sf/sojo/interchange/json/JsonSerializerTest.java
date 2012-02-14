@@ -25,7 +25,6 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -314,7 +313,7 @@ public class JsonSerializerTest extends TestCase {
 		Object lvResult = jsonSerializer.serialize(c);
 		lvResult = jsonSerializer.deserialize(lvResult);
 		assertEquals(c, lvResult);
-		assertEquals(c.iterator().next(), new Hashtable<Object, Object>());
+		assertEquals(c.iterator().next(), new HashMap<Object, Object>());
 	}
 	
 	public void testNestedMapInList() throws Exception {
@@ -511,7 +510,7 @@ public class JsonSerializerTest extends TestCase {
 	}
 
 	public void testMapWithKeyThatAreNotStrings() throws Exception {
-		Map<Comparable<?>, Comparable<?>> lvMap = new Hashtable<Comparable<?>, Comparable<?>>();
+		Map<Comparable<?>, Comparable<?>> lvMap = new HashMap<Comparable<?>, Comparable<?>>();
 		lvMap.put("foo", "foo");
 		lvMap.put(new Integer(4711), new Integer(4712));
 		
@@ -525,7 +524,7 @@ public class JsonSerializerTest extends TestCase {
 	}
 	
 	public void testMapWithKeyThatAreStrings() throws Exception {
-		Map<String, String> lvMap = new Hashtable<String, String>();
+		Map<String, String> lvMap = new HashMap<String, String>();
 		lvMap.put("foo", "foo");
 		lvMap.put("bar", "bar");
 		

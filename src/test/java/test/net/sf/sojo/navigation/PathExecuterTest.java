@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -77,7 +76,7 @@ public class PathExecuterTest extends TestCase {
 	}
 
 	public void testGetSimplePropertyMap() throws Exception {
-		Map<String, String> lvMap = new Hashtable<String, String>();
+		Map<String, String> lvMap = new HashMap<String, String>();
 		lvMap.put("name", "Test-Node");
 		Object lvResult = PathExecuter.getSimpleProperty(lvMap, "name");
 		assertNotNull(lvResult);
@@ -117,7 +116,7 @@ public class PathExecuterTest extends TestCase {
 	}
 
 	public void testSetSimplePropertyMap() throws Exception {
-		Map<?, ?> lvMap = new Hashtable<Object, Object>();
+		Map<?, ?> lvMap = new HashMap<Object, Object>();
 		assertNull(lvMap.get("name"));
 		PathExecuter.setSimpleProperty(lvMap, "name", "Test-Node");
 		assertEquals("Test-Node", lvMap.get("name"));
@@ -291,7 +290,7 @@ public class PathExecuterTest extends TestCase {
 	}
 	
 	public void testGetKeyPropertyFromMap() throws Exception {
-		Map<String, Node> lvMap = new Hashtable<String, Node>();
+		Map<String, Node> lvMap = new HashMap<String, Node>();
 		lvMap.put("N1", new Node("N1"));
 		lvMap.put("N2", new Node("N2"));
 		lvMap.put("N3", new Node("N3"));
@@ -321,7 +320,7 @@ public class PathExecuterTest extends TestCase {
 	}
 
 	public void testSetKeyPropertyToMap() throws Exception {
-		Map<String, Node> lvMap = new Hashtable<String, Node>();
+		Map<String, Node> lvMap = new HashMap<String, Node>();
 		lvMap.put("N1", new Node("N1"));
 		lvMap.put("N2", new Node("N2"));
 		assertEquals(2, lvMap.size());
@@ -505,7 +504,7 @@ public class PathExecuterTest extends TestCase {
 	}
 
 	public void testGetKeyPropertyWithBadKey() throws Exception {
-		Map<Double, String> lvMap = new Hashtable<Double, String>();
+		Map<Double, String> lvMap = new HashMap<Double, String>();
 		lvMap.put(new Double(12.34), "12.34");
 		assertEquals("12.34", PathExecuter.getKeyProperty(lvMap, new Double(12.34)));
 		assertNull(PathExecuter.getKeyProperty(lvMap, new Double(34.56)));
@@ -513,7 +512,7 @@ public class PathExecuterTest extends TestCase {
 	
 	public void testMapInList() throws Exception {
 		List<Map<String, String>> lvList = new ArrayList<Map<String, String>>();
-		Map<String, String> lvMap = new Hashtable<String, String>();
+		Map<String, String> lvMap = new HashMap<String, String>();
 		lvMap.put("key", "value");
 		lvList.add(lvMap);
 		

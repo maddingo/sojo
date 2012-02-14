@@ -18,7 +18,6 @@ package test.net.sf.sojo.interchange.json;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -286,7 +285,7 @@ public class JsonParserTest extends TestCase {
 		Object lvResult = new JsonParser().parse(s);
 		List<?> lvList = (List<?>) lvResult;
 		assertEquals(1, lvList.size());
-		assertEquals(new Hashtable<Object, Object>(), lvList.get(0));
+		assertEquals(new HashMap<Object, Object>(), lvList.get(0));
 	}
 
 

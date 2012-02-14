@@ -16,7 +16,7 @@
 package test.net.sf.sojo.conversion.interceptor;
 
 import java.util.Date;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Map;
 
 import junit.framework.TestCase;
@@ -70,9 +70,9 @@ public class SimpleKeyMapperInterceptorTest extends TestCase {
 		lvInterceptor.beforeConvertRecursion(lvContext);
 		
 		lvInterceptor = new SimpleKeyMapperInterceptor();
-		Hashtable<Object, String> lvHashtable = new Hashtable<Object, String>();
-		lvHashtable.put(lvContext.key, "result-key");
-		Map<?, ?> lvMap = (Map<?, ?>) lvInterceptor.beforeConvert(lvHashtable, null);
+		HashMap<Object, String> lvHashMap = new HashMap<Object, String>();
+		lvHashMap.put(lvContext.key, "result-key");
+		Map<?, ?> lvMap = (Map<?, ?>) lvInterceptor.beforeConvert(lvHashMap, null);
 		lvInterceptor.beforeConvertRecursion(lvContext);
 		assertEquals(lvMap.get("key"), "result-key");
 	}
@@ -86,15 +86,15 @@ public class SimpleKeyMapperInterceptorTest extends TestCase {
 		assertEquals("1~_-_~77~_-_~java.lang.Long", lvContext.key);
 		
 		lvInterceptor = new SimpleKeyMapperInterceptor();
-		Hashtable<Object, Long> lvHashtable = new Hashtable<Object, Long>();
-		lvHashtable.put(lvContext.key, new Long(55));
-		Map<?, ?> lvMap = (Map<?, ?>) lvInterceptor.beforeConvert(lvHashtable, null);
+		HashMap<Object, Long> lvHashMap = new HashMap<Object, Long>();
+		lvHashMap.put(lvContext.key, new Long(55));
+		Map<?, ?> lvMap = (Map<?, ?>) lvInterceptor.beforeConvert(lvHashMap, null);
 		lvInterceptor.beforeConvertRecursion(lvContext);
 		assertEquals(lvMap.get(new Long(77)), new Long(55));
 	}
 
 	public void __testResultOrderedMap() throws Exception {
-		Map<Comparable<?>, String> lvMap = new Hashtable<Comparable<?>, String>();
+		Map<Comparable<?>, String> lvMap = new HashMap<Comparable<?>, String>();
 		lvMap.put("key_1", "value_1");
 		lvMap.put("key_2", "value_2");
 		lvMap.put(new Double(12.89), "value_3");
@@ -117,7 +117,7 @@ public class SimpleKeyMapperInterceptorTest extends TestCase {
 
 	public void testResultOrderedMap2() throws Exception {
 		Date lvDate = new Date();
-		Map<Comparable<?>, String> lvMap = new Hashtable<Comparable<?>, String>();
+		Map<Comparable<?>, String> lvMap = new HashMap<Comparable<?>, String>();
 		lvMap.put("key_1", "value_1");
 		lvMap.put("key_2", "value_2");
 		lvMap.put(lvDate, "value_date");
@@ -142,7 +142,7 @@ public class SimpleKeyMapperInterceptorTest extends TestCase {
 	}
 
 	public void testResultOrderedMapInvalidKey() throws Exception {
-		Map<String, String> lvMap = new Hashtable<String, String>();
+		Map<String, String> lvMap = new HashMap<String, String>();
 		lvMap.put("key_1", "value_1");
 		lvMap.put("key_2", "value_2");
 		
@@ -172,7 +172,7 @@ public class SimpleKeyMapperInterceptorTest extends TestCase {
 	}
 
 	public void testResultOrderedMapInvalidKey2() throws Exception {
-		Map<String, String> lvMap = new Hashtable<String, String>();
+		Map<String, String> lvMap = new HashMap<String, String>();
 		lvMap.put("key_1", "value_1");
 		lvMap.put("key_2", "value_2");
 		
@@ -197,7 +197,7 @@ public class SimpleKeyMapperInterceptorTest extends TestCase {
 	}
 	
 	public void testResultOrderedMapInvalidKey3() throws Exception {
-		Map<Comparable<?>, String> lvMap = new Hashtable<Comparable<?>, String>();
+		Map<Comparable<?>, String> lvMap = new HashMap<Comparable<?>, String>();
 		lvMap.put("key_1", "value_1");
 		lvMap.put(new Integer(1), "value_2");
 		

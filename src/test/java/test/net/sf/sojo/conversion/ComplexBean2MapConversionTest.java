@@ -15,7 +15,7 @@
  */	
 package test.net.sf.sojo.conversion;
 
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 import java.util.WeakHashMap;
@@ -173,14 +173,14 @@ public class ComplexBean2MapConversionTest extends TestCase {
 		Converter c = new Converter();
 		c.addConversion(new ComplexBean2MapConversion());
 		Node n = new Node("Node");
-		Object lvResult = c.convert(n, Hashtable.class);
+		Object lvResult = c.convert(n, HashMap.class);
 		assertNotNull(lvResult);
-		assertTrue(lvResult instanceof Hashtable);
-		Hashtable<?, ?> lvHashtable = (Hashtable<?, ?>) lvResult;
-		assertEquals(Node.class.getName(), lvHashtable.get("class"));
-		assertEquals("Node", lvHashtable.get("name"));
-		assertEquals(new Vector<Object>(), lvHashtable.get("children"));
-		assertNull(lvHashtable.get("abc"));
+		assertTrue(lvResult instanceof HashMap);
+		HashMap<?, ?> lvHashMap = (HashMap<?, ?>) lvResult;
+		assertEquals(Node.class.getName(), lvHashMap.get("class"));
+		assertEquals("Node", lvHashMap.get("name"));
+		assertEquals(new Vector<Object>(), lvHashMap.get("children"));
+		assertNull(lvHashMap.get("abc"));
 		
 		lvResult = c.convert(n, WeakHashMap.class);
 		assertNotNull(lvResult);

@@ -69,12 +69,12 @@ public class SimpleKeyMapperInterceptor implements ConverterInterceptorRecursive
 			@SuppressWarnings("unchecked")
 			Map<Object,Object> lvMap = (Map<Object,Object>) pvConvertObject;
 			
-			Map<Object, Object> lvHashtable = new HashMap<Object, Object>(lvMap.size());
+			Map<Object, Object> lvHashMap = new HashMap<Object, Object>(lvMap.size());
 			Map<SimpleKeyComparator, Object> lvOrderedMap = map2SortedMap(lvMap);
 			for (Map.Entry<SimpleKeyComparator, Object> entry : lvOrderedMap.entrySet()) {
-				lvHashtable.put(entry.getKey().getKey(), entry.getValue());
+				lvHashMap.put(entry.getKey().getKey(), entry.getValue());
 			}
-			lvReturn = lvHashtable;
+			lvReturn = lvHashMap;
 		} else {
 			lvReturn = pvConvertObject;
 		}

@@ -28,7 +28,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -80,7 +79,7 @@ public class ReflectionHelperTest extends TestCase {
 		assertFalse(ReflectionHelper.isSimpleType(Vector.class));
 		assertFalse(ReflectionHelper.isSimpleType(Math.class));
 		
-		assertFalse(ReflectionHelper.isSimpleType(new Hashtable<Object, Object>()));
+		assertFalse(ReflectionHelper.isSimpleType(new HashMap<Object, Object>()));
 		assertFalse(ReflectionHelper.isSimpleType((Object) null));
 	}
 	
@@ -154,7 +153,6 @@ public class ReflectionHelperTest extends TestCase {
 	
 	
 	public void testIsMapTypeByClass() throws Exception {
-		assertTrue(ReflectionHelper.isMapType(Hashtable.class));
 		assertTrue(ReflectionHelper.isMapType(Map.class));
 		assertTrue(ReflectionHelper.isMapType(HashMap.class));
 		assertTrue(ReflectionHelper.isMapType(TreeMap.class));
@@ -178,7 +176,6 @@ public class ReflectionHelperTest extends TestCase {
 		assertTrue(ReflectionHelper.isIterateableType(HashSet.class));
 		assertTrue(ReflectionHelper.isIterateableType(BeanContext.class));
 		
-		assertFalse(ReflectionHelper.isIterateableType(Hashtable.class));
 		assertFalse(ReflectionHelper.isIterateableType(Map.class));
 		assertFalse(ReflectionHelper.isIterateableType(HashMap.class));
 		assertFalse(ReflectionHelper.isIterateableType(TreeMap.class));
@@ -193,7 +190,6 @@ public class ReflectionHelperTest extends TestCase {
 	public void testIsComplexTypeByClass() throws Exception {
 		assertTrue(ReflectionHelper.isComplexType(Node.class));
 		
-		assertFalse(ReflectionHelper.isComplexType(Hashtable.class));
 		assertFalse(ReflectionHelper.isComplexType(Map.class));
 		assertFalse(ReflectionHelper.isComplexType(HashMap.class));
 		
@@ -277,7 +273,7 @@ public class ReflectionHelperTest extends TestCase {
 	
 	public void testCreateBeanFromMapWithInvalidClass2() throws Exception {
 		try {
-			Map<String, String> lvMap = new Hashtable<String, String>();
+			Map<String, String> lvMap = new HashMap<String, String>();
 			lvMap.put("class", "NotValidClass");
 			ReflectionHelper.createBeanFromMap(lvMap, null);
 			fail("Long is not a Bean!");
@@ -288,7 +284,7 @@ public class ReflectionHelperTest extends TestCase {
 
 	public void testCreateBeanFromMapWithInvalidClass3() throws Exception {
 		try {
-			Map<String, String> lvMap = new Hashtable<String, String>();
+			Map<String, String> lvMap = new HashMap<String, String>();
 			lvMap.put("class", NotJavaBean.class.getName());
 			ReflectionHelper.createBeanFromMap(lvMap, null);
 			fail("Long is not a Bean!");
@@ -301,7 +297,7 @@ public class ReflectionHelperTest extends TestCase {
 		assertFalse(ReflectionHelper.isComplexMapType(null));
 		assertFalse(ReflectionHelper.isComplexMapType(String.class));
 		assertFalse(ReflectionHelper.isComplexMapType(Map.class));
-		assertFalse(ReflectionHelper.isComplexMapType(Hashtable.class));
+		assertFalse(ReflectionHelper.isComplexMapType(HashMap.class));
 		assertFalse(ReflectionHelper.isComplexMapType(Collection.class));
 		assertFalse(ReflectionHelper.isComplexMapType(List.class));
 		assertFalse(ReflectionHelper.isComplexMapType(Vector.class));

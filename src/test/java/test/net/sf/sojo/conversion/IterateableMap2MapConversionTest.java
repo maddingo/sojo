@@ -16,8 +16,8 @@
 package test.net.sf.sojo.conversion;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -31,50 +31,50 @@ import test.net.sf.sojo.model.Node;
 
 public class IterateableMap2MapConversionTest extends TestCase {
 	
-	public void testHashtable() throws Exception {
+	public void testHashMap() throws Exception {
 		Converter c = new Converter();
-		c.addConversion(new IterateableMap2MapConversion(Hashtable.class));
+		c.addConversion(new IterateableMap2MapConversion(HashMap.class));
 		Map<String, String> lvMap = new HashMap<String, String>();
 		lvMap.put("Test-1", "Test-1");
 		lvMap.put("Test-2", "Test-2");
 		Object lvResult = c.convert(lvMap);
 		assertNotNull(lvResult);
 		assertTrue(lvResult instanceof Map);
-		assertTrue(lvResult instanceof Hashtable);
+		assertTrue(lvResult instanceof HashMap);
 		Map<?, ?> lvMapAfter = (Map<?, ?>) lvResult;
 		assertEquals(lvMap.size(), lvMapAfter.size());		
 		assertEquals(lvMap.get("Test-1"), lvMapAfter.get("Test-1"));
 		assertEquals(lvMap.get("Test-2"), lvMapAfter.get("Test-2"));
 	}
 
-	public void testHashtableWithoutConversion() throws Exception {
+	public void testHashMapWithoutConversion() throws Exception {
 		Converter c = new Converter();
-		Map<String, String> lvMap = new Hashtable<String, String>();
+		Map<String, String> lvMap = new HashMap<String, String>();
 		lvMap.put("Test-1", "Test-1");
 		lvMap.put("Test-2", "Test-2");
 		Object lvResult = c.convert(lvMap);
 		assertNotNull(lvResult);
 		assertTrue(lvResult instanceof Map);
-		assertTrue(lvResult instanceof Hashtable);
+		assertTrue(lvResult instanceof HashMap);
 		Map<?, ?> lvMapAfter = (Map<?, ?>) lvResult;
 		assertEquals(lvMap.size(), lvMapAfter.size());		
 		assertEquals(lvMap.get("Test-1"), lvMapAfter.get("Test-1"));
 		assertEquals(lvMap.get("Test-2"), lvMapAfter.get("Test-2"));
 	}
 
-	public void testDoubleHashtable() throws Exception {
+	public void testDoubleHashMap() throws Exception {
 		Converter c = new Converter();
-		c.getConversionHandler().addConversion(new IterateableMap2MapConversion(Hashtable.class));
-		Map<String, Object> lvMap = new Hashtable<String, Object>();
+		c.getConversionHandler().addConversion(new IterateableMap2MapConversion(HashMap.class));
+		Map<String, Object> lvMap = new HashMap<String, Object>();
 		lvMap.put("Test-1", "Test-1");
-		Map<String, String> lvMap2 = new Hashtable<String, String>();
+		Map<String, String> lvMap2 = new HashMap<String, String>();
 		lvMap2.put("Test-2", "Test-2");
 		lvMap.put("map-2", lvMap2);
 		
 		Object lvResult = c.convert(lvMap);
 		assertNotNull(lvResult);
 		assertTrue(lvResult instanceof Map);
-		assertTrue(lvResult instanceof Hashtable);
+		assertTrue(lvResult instanceof HashMap);
 		Map<?, ?> lvMapAfter = (Map<?, ?>) lvResult;
 		assertEquals(lvMap.size(), lvMapAfter.size());		
 		assertEquals(lvMap.get("Test-1"), lvMapAfter.get("Test-1"));
@@ -89,7 +89,7 @@ public class IterateableMap2MapConversionTest extends TestCase {
 	public void testDefaultMapType() throws Exception {
 		Converter c = new Converter();
 		c.getConversionHandler().addConversion(new IterateableMap2MapConversion(null));
-		Map<String, String> lvMap = new Hashtable<String, String>();
+		Map<String, String> lvMap = new HashMap<String, String>();
 		lvMap.put("Test-1", "Test-1");
 		lvMap.put("Test-2", "Test-2");
 		Object lvResult = c.convert(lvMap);
@@ -133,8 +133,8 @@ public class IterateableMap2MapConversionTest extends TestCase {
 
 	public void testConvertBeansAsValue() throws Exception {
 		Converter c = new Converter();
-		c.addConversion(new IterateableMap2MapConversion(Hashtable.class));
-		c.addConversion(new ComplexBean2MapConversion(Hashtable.class));
+		c.addConversion(new IterateableMap2MapConversion(HashMap.class));
+		c.addConversion(new ComplexBean2MapConversion(HashMap.class));
 		
 		Map<String, Node> lvMap = new HashMap<String, Node>();
 		lvMap.put("Node_1", new Node("1"));
@@ -186,7 +186,7 @@ public class IterateableMap2MapConversionTest extends TestCase {
 		c.addConversion(new IterateableMap2MapConversion(LinkedHashMap.class));
 		c.addConversion(new ComplexBean2MapConversion(Hashtable.class));
 		
-		Map<Node, Node> lvMap = new HashMap<Node, Node>();
+		Map<Node, Node> lvMap = new Hashtable<Node, Node>();
 		Node n1 = new Node("1");
 		Node n2 = new Node("2");
 		lvMap.put(n1, n1);
@@ -223,13 +223,13 @@ public class IterateableMap2MapConversionTest extends TestCase {
 		Map<String, String> lvMap = new HashMap<String, String>();
 		lvMap.put("1", "1");
 		lvMap.put("2", "2");
-		Object lvResult = c.convert(lvMap, Hashtable.class);
+		Object lvResult = c.convert(lvMap, HashMap.class);
 		assertNotNull(lvResult);
-		assertTrue(lvResult instanceof Hashtable);
-		Hashtable<?, ?> lvHashtable = (Hashtable<?, ?>) lvResult;
-		assertEquals(lvMap.size(), lvHashtable.size());
-		assertEquals(lvMap.get("1"), lvHashtable.get("1"));
-		assertEquals(lvMap.get("2"), lvHashtable.get("2"));
+		assertTrue(lvResult instanceof HashMap);
+		HashMap<?, ?> lvHashMap = (HashMap<?, ?>) lvResult;
+		assertEquals(lvMap.size(), lvHashMap.size());
+		assertEquals(lvMap.get("1"), lvHashMap.get("1"));
+		assertEquals(lvMap.get("2"), lvHashMap.get("2"));
 	}
 
 	public void testToMapDirectWithComplexObjects() throws Exception {
@@ -240,14 +240,14 @@ public class IterateableMap2MapConversionTest extends TestCase {
 		Node n2 = new Node("2");
 		lvMap.put(n1, n1);
 		lvMap.put(n2, n2);
-		Object lvResult = c.convert(lvMap, Hashtable.class);
+		Object lvResult = c.convert(lvMap, HashMap.class);
 		
 		assertNotNull(lvResult);
-		assertTrue(lvResult instanceof Hashtable);
+		assertTrue(lvResult instanceof HashMap);
 		@SuppressWarnings("unchecked")
-		Hashtable<Node, Node> lvHashtable = (Hashtable<Node, Node>) lvResult;
-		assertEquals(lvMap.size(), lvHashtable.size());
-		Iterator<Map.Entry<Node, Node>> iter = lvHashtable.entrySet().iterator();
+		HashMap<Node, Node> lvHashMap = (HashMap<Node, Node>) lvResult;
+		assertEquals(lvMap.size(), lvHashMap.size());
+		Iterator<Map.Entry<Node, Node>> iter = lvHashMap.entrySet().iterator();
 		Map.Entry<Node, Node> lvEntry1 = iter.next();
 		Map.Entry<Node, Node> lvEntry2 = iter.next();
 		assertEquals(lvEntry1.getKey().getName(), lvEntry1.getValue().getName());
@@ -257,12 +257,12 @@ public class IterateableMap2MapConversionTest extends TestCase {
 
 	public void testMapWithKeyClass() throws Exception {
 		Converter c = new Converter();
-		c.addConversion(new ComplexBean2MapConversion(Hashtable.class));
+		c.addConversion(new ComplexBean2MapConversion(HashMap.class));
 		
 		Object lvResult = c.convert(new Node("TestNode"));
 		assertNotNull(lvResult);
 		assertTrue(lvResult instanceof Map);
-		assertTrue(lvResult instanceof Hashtable);
+		assertTrue(lvResult instanceof HashMap);
 		assertNotNull( ((Map<?, ?>) lvResult).get("class") );
 		
 		c = new Converter();
@@ -270,7 +270,7 @@ public class IterateableMap2MapConversionTest extends TestCase {
 		Object lvResult_2 = c.convert(lvResult);
 		assertTrue(lvResult_2 instanceof Map);
 		// IterateableMap2MapConversion is not assignalble, because the key class is in the Map 
-		assertTrue(lvResult_2 instanceof Hashtable);
+		assertTrue(lvResult_2 instanceof HashMap);
 		assertNotNull( ((Map<?, ?>) lvResult_2).get("class") );
 
 	}

@@ -27,7 +27,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -474,13 +473,13 @@ public class ObjectUtilTest extends TestCase {
 	}
 	
 	public void testEqualsMap() throws Exception {
-		Map<Comparable<?>, Comparable<?>> lvMap1 = new Hashtable<Comparable<?>, Comparable<?>>();
+		Map<Comparable<?>, Comparable<?>> lvMap1 = new HashMap<Comparable<?>, Comparable<?>>();
 		lvMap1.put("sojo", "sojo");
 		lvMap1.put(new Integer(4711), new Integer(4711));
 		lvMap1.put(new Double("47.11"), new Double("47.11"));
 		lvMap1.put(new Date(987654321), new Date(987654321));
 		
-		Map<Comparable<?>, Comparable<?>> lvMap2 = new Hashtable<Comparable<?>, Comparable<?>>();
+		Map<Comparable<?>, Comparable<?>> lvMap2 = new HashMap<Comparable<?>, Comparable<?>>();
 		lvMap2.put("sojo", "sojo");
 		lvMap2.put(new Integer(4711), new Integer(4711));
 		lvMap2.put(new Double("47.11"), new Double("47.11"));
@@ -491,13 +490,13 @@ public class ObjectUtilTest extends TestCase {
 	}
 
 	public void testEqualsMapDifferentIntegerKey() throws Exception {
-		Map<Comparable<?>, Comparable<?>> lvMap1 = new Hashtable<Comparable<?>, Comparable<?>>();
+		Map<Comparable<?>, Comparable<?>> lvMap1 = new HashMap<Comparable<?>, Comparable<?>>();
 		lvMap1.put("sojo", "sojo");
 		lvMap1.put(new Integer(471199), new Integer(4711));
 		lvMap1.put(new Double("47.11"), new Double("47.11"));
 		lvMap1.put(new Date(987654321), new Date(987654321));
 		
-		Map<Comparable<?>, Comparable<?>> lvMap2 = new Hashtable<Comparable<?>, Comparable<?>>();
+		Map<Comparable<?>, Comparable<?>> lvMap2 = new HashMap<Comparable<?>, Comparable<?>>();
 		lvMap2.put("sojo", "sojo");
 		lvMap2.put(new Integer(4711), new Integer(4711));
 		lvMap2.put(new Double("47.11"), new Double("47.11"));
@@ -508,13 +507,13 @@ public class ObjectUtilTest extends TestCase {
 	}
 
 	public void testEqualsMapDifferentDateValue() throws Exception {
-		Map<Comparable<?>, Comparable<?>> lvMap1 = new Hashtable<Comparable<?>, Comparable<?>>();
+		Map<Comparable<?>, Comparable<?>> lvMap1 = new HashMap<Comparable<?>, Comparable<?>>();
 		lvMap1.put("sojo", "sojo");
 		lvMap1.put(new Integer(4711), new Integer(4711));
 		lvMap1.put(new Double("47.11"), new Double("47.11"));
 		lvMap1.put(new Date(987654321), new Date(987654));
 		
-		Map<Comparable<?>, Comparable<?>> lvMap2 = new Hashtable<Comparable<?>, Comparable<?>>();
+		Map<Comparable<?>, Comparable<?>> lvMap2 = new HashMap<Comparable<?>, Comparable<?>>();
 		lvMap2.put("sojo", "sojo");
 		lvMap2.put(new Integer(4711), new Integer(4711));
 		lvMap2.put(new Double("47.11"), new Double("47.11"));

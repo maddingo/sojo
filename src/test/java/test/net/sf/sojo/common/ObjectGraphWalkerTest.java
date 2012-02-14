@@ -18,7 +18,6 @@ package test.net.sf.sojo.common;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -213,7 +212,7 @@ public class ObjectGraphWalkerTest extends TestCase {
 		assertEquals(1, lvInterceptor.getAllRecordedPaths().size());
 		
 		Object lvPathValue = PathExecuter.getNestedProperty(lvMap, "()");
-		assertEquals(new Hashtable<Object, Object>(), lvPathValue);
+		assertEquals(new HashMap<Object, Object>(), lvPathValue);
 	}
 	
 	public void testWalkEmptyListInMap() throws Exception {
@@ -371,7 +370,7 @@ public class ObjectGraphWalkerTest extends TestCase {
 			}
 			else if (lvEntry.getKey().equals("namedChildren()")) {
 				Object lvResult = PathExecuter.getNestedProperty(lvNode, lvEntry.getKey().toString());
-				assertEquals(new Hashtable<Object, Object>(), lvResult);
+				assertEquals(new HashMap<Object, Object>(), lvResult);
 			}
 			else if (lvEntry.getKey().equals("class")) {
 				Object lvResult = PathExecuter.getNestedProperty(lvNode, lvEntry.getKey().toString());
@@ -704,7 +703,7 @@ public class ObjectGraphWalkerTest extends TestCase {
 
 		Customer lvCustomer = new Customer();
 		lvCustomer.setLastName("Last-Name");
-		lvCustomer.setPartner(new Object[] { new Hashtable<Object, Object>() });
+		lvCustomer.setPartner(new Object[] { new HashMap<Object, Object>() });
 
 		lvWalker.walk(lvCustomer);
 		Map<?, ?> lvPathes = lvInterceptor.getAllRecordedPaths();
@@ -821,7 +820,7 @@ public class ObjectGraphWalkerTest extends TestCase {
 	}
 	
 	public void testWalkInterceptorByMap() throws Exception {
-		Map<String, String> lvMap = new Hashtable<String, String>();
+		Map<String, String> lvMap = new HashMap<String, String>();
 		lvMap.put("k-aaa", "v-aaa");
 		lvMap.put("k-bbb", "v-bbb");
 		

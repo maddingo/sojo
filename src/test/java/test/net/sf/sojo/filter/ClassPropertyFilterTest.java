@@ -17,7 +17,6 @@ package test.net.sf.sojo.filter;
 
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Map;
 
 import junit.framework.TestCase;
@@ -226,7 +225,7 @@ public class ClassPropertyFilterTest extends TestCase {
 		lvObjectUtil.setWithSimpleKeyMapper(false);
 		lvObjectUtil.setClassPropertyFilterHandler(new ClassPropertyFilterHandlerImpl(new ClassPropertyFilter(Map.class, new String [] { "4711" })));
 		
-		Map<Comparable<?>, Comparable<?>> lvMap = new Hashtable<Comparable<?>, Comparable<?>>();
+		Map<Comparable<?>, Comparable<?>> lvMap = new HashMap<Comparable<?>, Comparable<?>>();
 		lvMap.put("foo", "foo");
 		Date lvDate = new Date();
 		lvMap.put(lvDate, new Date());
