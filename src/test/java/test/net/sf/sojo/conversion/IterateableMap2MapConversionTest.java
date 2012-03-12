@@ -16,7 +16,6 @@
 package test.net.sf.sojo.conversion;
 
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -184,9 +183,9 @@ public class IterateableMap2MapConversionTest extends TestCase {
 	public void testConvertBeansWithSameKeyAndValue() throws Exception {
 		Converter c = new Converter();
 		c.addConversion(new IterateableMap2MapConversion(LinkedHashMap.class));
-		c.addConversion(new ComplexBean2MapConversion(Hashtable.class));
+		c.addConversion(new ComplexBean2MapConversion(HashMap.class));
 		
-		Map<Node, Node> lvMap = new Hashtable<Node, Node>();
+		Map<Node, Node> lvMap = new HashMap<Node, Node>();
 		Node n1 = new Node("1");
 		Node n2 = new Node("2");
 		lvMap.put(n1, n1);
