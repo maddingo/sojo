@@ -185,7 +185,7 @@ public class IterateableMap2MapConversionTest extends TestCase {
 		c.addConversion(new IterateableMap2MapConversion(LinkedHashMap.class));
 		c.addConversion(new ComplexBean2MapConversion(HashMap.class));
 		
-		Map<Node, Node> lvMap = new HashMap<Node, Node>();
+		Map<Node, Node> lvMap = new LinkedHashMap<Node, Node>();
 		Node n1 = new Node("1");
 		Node n2 = new Node("2");
 		lvMap.put(n1, n1);

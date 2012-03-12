@@ -17,6 +17,7 @@ package net.sf.sojo.core.conversion;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import net.sf.sojo.core.IConverter;
@@ -33,7 +34,7 @@ import net.sf.sojo.core.reflect.ReflectionHelper;
 public class IterateableMap2MapConversion extends IterableConversion {
 
 
-	public static final Class<?> DEFAULT_MAP_TYPE = HashMap.class;
+	public static final Class<?> DEFAULT_MAP_TYPE = LinkedHashMap.class;
 	
 	public IterateableMap2MapConversion () {
 		this(null, false);

@@ -26,6 +26,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -534,11 +535,13 @@ public class JsonSerializerTest extends TestCase {
 		
 		assertEquals("foo", lvMapAfter.get("foo"));
 		assertEquals("bar", lvMapAfter.get("bar"));
-		assertEquals(HashMap.class, lvMapAfter.getClass());
+		
+		// TODO shouldn't we just check that it is a Map? 
+		assertEquals(LinkedHashMap.class, lvMapAfter.getClass());
 	}
 
 	public void testMapWithKeyThatAreStringsWithNullValue() throws Exception {
-		Map<String, String> lvMap = new HashMap<String, String>();
+		Map<String, String> lvMap = new LinkedHashMap<String, String>();
 		lvMap.put("foo", "foo");
 		lvMap.put("null", null);
 		
@@ -550,11 +553,12 @@ public class JsonSerializerTest extends TestCase {
 		assertEquals("foo", lvMapAfter.get("foo"));
 		assertTrue(lvMapAfter.containsKey("null"));
 		assertNull(lvMapAfter.get("null"));
-		assertEquals(HashMap.class, lvMapAfter.getClass());
+		// TODO shouldn't we just check that it is a Map? 
+		assertEquals(LinkedHashMap.class, lvMapAfter.getClass());
 	}
 
 	public void testMapWithKeyThatAreStringsWithNoNullValue() throws Exception {
-		Map<String, String> lvMap = new HashMap<String, String>();
+		Map<String, String> lvMap = new LinkedHashMap<String, String>();
 		lvMap.put("foo", "foo");
 		lvMap.put("null", null);
 		
@@ -570,7 +574,8 @@ public class JsonSerializerTest extends TestCase {
 		assertEquals("foo", lvMapAfter.get("foo"));
 		assertFalse(lvMapAfter.containsKey("null"));
 		assertNull(lvMapAfter.get("null"));
-		assertEquals(HashMap.class, lvMapAfter.getClass());
+		// TODO shouldn't we just check that it is a Map? 
+		assertEquals(LinkedHashMap.class, lvMapAfter.getClass());
 	}
 		
 	public void testQuotationMarkEscapes() throws Exception {
