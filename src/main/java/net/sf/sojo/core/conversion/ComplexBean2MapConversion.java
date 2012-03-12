@@ -18,6 +18,7 @@ package net.sf.sojo.core.conversion;
 import java.lang.reflect.AccessibleObject;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import net.sf.sojo.core.ComplexConversion;
@@ -39,7 +40,7 @@ import net.sf.sojo.util.Util;
  */
 public class ComplexBean2MapConversion extends ComplexConversion {
 
-	public static final Class<?> DEFAULT_MAP_TYPE = HashMap.class;
+	public static final Class<?> DEFAULT_MAP_TYPE = LinkedHashMap.class;
 	
 	private Class<?> newBeanConversionType = null;
 	
