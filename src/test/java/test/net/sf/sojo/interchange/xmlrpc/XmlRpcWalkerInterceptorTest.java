@@ -209,8 +209,8 @@ public class XmlRpcWalkerInterceptorTest extends TestCase {
 						"<value><i4>7</i4></value>" +
 					"</param>" +
 					"<param><value><struct>" +
-						"<member><name>k2</name><value><double>1.00005</double></value></member>" +	
 						"<member><name>k1</name><value><string>v1</string></value></member>" +						
+						"<member><name>k2</name><value><double>1.00005</double></value></member>" +	
 					"</struct></value></param>" +
 					"<param><value><string>my-test-string</string></value>" +
 					"</param></params>";
