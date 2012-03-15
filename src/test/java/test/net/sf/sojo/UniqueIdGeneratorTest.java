@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import test.net.sf.sojo.model.Node;
 import net.sf.sojo.core.UniqueIdGenerator;
@@ -60,7 +59,7 @@ public class UniqueIdGeneratorTest extends TestCase {
 		UniqueIdGenerator lvIdGenerator = new UniqueIdGenerator();
 		assertNull(lvIdGenerator.getUniqueId(new ArrayList<Object>()));
 
-		List<Object> l = new Vector<Object>();
+		List<Object> l = new ArrayList<Object>();
 		l.add("aa");
 		l.add(new Double(0.07));
 		assertNull(lvIdGenerator.getUniqueId(l));

@@ -15,12 +15,12 @@
  */	
 package test.net.sf.sojo.navigation;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Vector;
 
 import junit.framework.TestCase;
 import net.sf.sojo.core.Converter;
@@ -247,7 +247,7 @@ public class PathParserTest extends TestCase {
 		lvAction.setIndex(0);
 		lvAction.setType(PathAction.ACTION_TYPE_INDEX);
 		
-		List<String> lvList = new Vector<String>();
+		List<String> lvList = new ArrayList<String>();
 		lvList.add("TestString_1");
 		Object lvResult = PathExecuter.getNestedProperty(lvList, lvAction);
 		assertEquals("TestString_1", lvResult);

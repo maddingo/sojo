@@ -15,11 +15,11 @@
  */	
 package test.net.sf.sojo.reflect;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Vector;
 
 import net.sf.sojo.core.reflect.ReflectionMethodHelper;
 
@@ -50,7 +50,7 @@ public class ReflectionMethodHelperTest extends TestCase {
 
 
 	public void testIsMethodSetterAndGetterCompliantList() throws Exception {
-		assertFalse(ReflectionMethodHelper.isMethodSetterAndGetterCompliant(Vector.class));
+		assertFalse(ReflectionMethodHelper.isMethodSetterAndGetterCompliant(ArrayList.class));
 		assertFalse(ReflectionMethodHelper.isMethodSetterAndGetterCompliant(HashMap.class));
 		
 		assertTrue(ReflectionMethodHelper.isMethodSetterAndGetterCompliant(List.class));

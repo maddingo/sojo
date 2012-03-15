@@ -22,7 +22,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Vector;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
@@ -522,7 +521,7 @@ public class PathExecuterTest extends TestCase {
 	
 	public void testListInList() throws Exception {
 		List<Object> lvList = new ArrayList<Object>();
-		List<String> lvList2 = new Vector<String>();
+		List<String> lvList2 = new ArrayList<String>();
 		lvList2.add("value1");
 		lvList2.add("value2");
 		lvList.add(lvList2);

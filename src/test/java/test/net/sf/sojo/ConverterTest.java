@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Vector;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
@@ -168,7 +167,7 @@ public class ConverterTest extends TestCase {
 	public void testConverterInterceptorRecursiveListWithCancel() throws Exception {
 		Converter c = new Converter();
 		c.addConversion(new Simple2SimpleConversion(String.class, Integer.class));
-		c.addConversion(new Iterateable2IterateableConversion(Vector.class));
+		c.addConversion(new Iterateable2IterateableConversion(ArrayList.class));
 		
 		List<String> lvList = new ArrayList<String>(2);
 		lvList.add("12");
@@ -177,7 +176,7 @@ public class ConverterTest extends TestCase {
 		assertNotNull(lvResult);
 		List<?> lvListAfter = (List<?>) lvResult;
 		assertEquals(lvList.size(), lvListAfter.size());
-		assertTrue(lvListAfter instanceof Vector);
+		assertTrue(lvListAfter instanceof ArrayList);
 		assertEquals(Integer.valueOf("12"), lvListAfter.get(0));
 		assertEquals(Integer.valueOf("34"), lvListAfter.get(1));
 		
@@ -218,7 +217,7 @@ public class ConverterTest extends TestCase {
 
 	public void testConverterInterceptorRecursiveListWithCancel2() throws Exception {
 		Converter c = new Converter();
-		Iterateable2IterateableConversion lvCollectionConversion = new Iterateable2IterateableConversion(Vector.class);
+		Iterateable2IterateableConversion lvCollectionConversion = new Iterateable2IterateableConversion(ArrayList.class);
 		lvCollectionConversion.getConverterInterceptorHandler().addConverterInterceptor(new ConverterInterceptorRecursive() {
 
 			@Override
@@ -249,7 +248,7 @@ public class ConverterTest extends TestCase {
 		assertNotNull(lvResult);
 		List<?> lvListAfter = (List<?>) lvResult;
 		assertEquals(0, lvListAfter.size());
-		assertTrue(lvListAfter instanceof Vector);
+		assertTrue(lvListAfter instanceof ArrayList);
 	}
 
 	
@@ -630,7 +629,7 @@ public class ConverterTest extends TestCase {
 		}
 	}
 
-	public void testMakeSimpleVector() throws Exception {
+	public void testMakeSimpleArrayList() throws Exception {
 		Node n1 = new Node("Node");
 		Node n2 = new Node("Node");
 		List<Node> lvListNodes = new ArrayList<Node>(2);
@@ -638,9 +637,9 @@ public class ConverterTest extends TestCase {
 		lvListNodes.add(n2);
 		
 		Converter c = new Converter();
-		c.addConversion(new Iterateable2IterateableConversion(Vector.class));
+		c.addConversion(new Iterateable2IterateableConversion(ArrayList.class));
 		c.addConversion(new ComplexBean2MapConversion());
-		Vector<?> lvVecNodes = (Vector<?>) c.convert(lvListNodes);
+		ArrayList<?> lvVecNodes = (ArrayList<?>) c.convert(lvListNodes);
 		
 		Map<?,?> lvNode1Map = (Map<?,?>) lvVecNodes.get(0);
 		assertEquals(n1.getName(), lvNode1Map.get("name"));
@@ -661,12 +660,12 @@ public class ConverterTest extends TestCase {
 		n1.getNamedChildren().put(n3.getName(), n3);
 		n2.setParent(n1);
 		n3.setParent(n1);
-		Vector<Node> v = new Vector<Node>();
+		ArrayList<Node> v = new ArrayList<Node>();
 		v.add(n2);
 		v.add(n3);
 
 		Converter c = new Converter();
-		c.addConversion(new Iterateable2IterateableConversion(Vector.class));
+		c.addConversion(new Iterateable2IterateableConversion(ArrayList.class));
 		c.addConversion(new ComplexBean2MapConversion());
 		c.addConversion(new IterateableMap2BeanConversion());
 		c.addConversion(new IterateableMap2MapConversion());
@@ -674,8 +673,8 @@ public class ConverterTest extends TestCase {
 		Object o = c.convert(v);
 		o = c.convert(o);
 		
-		assertTrue(o instanceof Vector);
-		v = (Vector<Node>) o;
+		assertTrue(o instanceof ArrayList);
+		v = (ArrayList<Node>) o;
 		assertEquals(v.size(), 2);
 		Node n22 = v.get(0);
 		Node n33 = v.get(1);
@@ -697,10 +696,10 @@ public class ConverterTest extends TestCase {
 		lvList.add("abc");
 
 		Converter c = new Converter();
-		c.addConversion(new Iterateable2IterateableConversion(Vector.class));
+		c.addConversion(new Iterateable2IterateableConversion(ArrayList.class));
 		
 		List<?> lvComplexList = (List<?>) c.convert(lvList);
-		assertTrue(lvComplexList instanceof Vector);
+		assertTrue(lvComplexList instanceof ArrayList);
 		assertTrue(lvComplexList.size() == 2);
 		assertEquals(lvComplexList.get(0), Integer.valueOf(5));
 		assertEquals(lvComplexList.get(1), "abc");
@@ -765,7 +764,7 @@ public class ConverterTest extends TestCase {
 	
 	public void testArrayWithNodes() throws Exception {
 		Converter c = new Converter();
-		c.addConversion(new Iterateable2IterateableConversion(Vector.class));
+		c.addConversion(new Iterateable2IterateableConversion(ArrayList.class));
 		c.addConversion(new ComplexBean2MapConversion());
 		
 		Node lvNodes[] = new Node[3];
@@ -776,7 +775,7 @@ public class ConverterTest extends TestCase {
 		
 		Object lvResult = c.convert(lvNodes);
 		assertNotNull(lvResult);
-		Vector<?> v = (Vector<?>) lvResult;
+		ArrayList<?> v = (ArrayList<?>) lvResult;
 		assertEquals(3, v.size());	
 		assertEquals("Node_1", ((Map<?,?>) v.get(0)).get("name"));
 		assertEquals(UniqueIdGenerator.UNIQUE_ID_PROPERTY + "0", v.get(1));
@@ -785,7 +784,7 @@ public class ConverterTest extends TestCase {
 
 	public void testArrayWithNodesAndBackToArray() throws Exception {
 		Converter c = new Converter();
-		c.addConversion(new Iterateable2IterateableConversion(Vector.class));
+		c.addConversion(new Iterateable2IterateableConversion(ArrayList.class));
 		c.addConversion(new ComplexBean2MapConversion());
 		c.addConversion(new IterateableMap2BeanConversion());
 		
@@ -810,7 +809,7 @@ public class ConverterTest extends TestCase {
 	@SuppressWarnings("unchecked")
   public void testArrayWithNodesWithNullValue() throws Exception {
 		Converter c = new Converter();
-		Iterateable2IterateableConversion lvConversion = new Iterateable2IterateableConversion(Vector.class);
+		Iterateable2IterateableConversion lvConversion = new Iterateable2IterateableConversion(ArrayList.class);
 		lvConversion.setIgnoreNullValues(true);
 		c.addConversion(lvConversion);
 		
@@ -823,7 +822,7 @@ public class ConverterTest extends TestCase {
 		Object lvResult = c.convert(lvNodes);
 		assertNotNull(lvResult);
 		
-		Vector<Node> v = (Vector<Node>) lvResult;
+		ArrayList<Node> v = (ArrayList<Node>) lvResult;
 		assertEquals(2, v.size());
 		assertEquals("Node_1", v.get(0).getName());
 		assertEquals("Node_2", v.get(1).getName());
@@ -831,7 +830,7 @@ public class ConverterTest extends TestCase {
 		c.addConversion(new NullConversion("~Null~Value~"));
 		lvResult = c.convert(lvNodes);
 		assertNotNull(lvResult);
-		v = (Vector<Node>) lvResult;
+		v = (ArrayList<Node>) lvResult;
 		assertEquals(3, v.size());
 		assertEquals("Node_1", v.get(0).getName());
 		assertEquals("~Null~Value~", v.get(1));
@@ -841,7 +840,7 @@ public class ConverterTest extends TestCase {
 
 	public void testConvertArrayAndBackToArray() throws Exception {
 		Converter c = new Converter();
-		c.addConversion(new Iterateable2IterateableConversion(Vector.class));
+		c.addConversion(new Iterateable2IterateableConversion(ArrayList.class));
 
 		Object lvArray = new Object[] { new Integer(7), "JUnit-Test-String", new Date(123456789L) };
 		
@@ -858,17 +857,17 @@ public class ConverterTest extends TestCase {
 	
 	public void testConvertArrayAndBackToArrayWithNull() throws Exception {
 		Converter c = new Converter();
-		c.addConversion(new Iterateable2IterateableConversion(Vector.class));
+		c.addConversion(new Iterateable2IterateableConversion(ArrayList.class));
 
 		Object lvArray = new Object[] { new Integer(7), "JUnit-Test-String", new Date(123456789), null };
 		
 		Object lvResult = c.convert(lvArray);
-		Vector<?> v = (Vector<?>) lvResult;
+		ArrayList<?> v = (ArrayList<?>) lvResult;
 		assertEquals(4, v.size());
 
 		// convert back
 		c.getConversionHandler().clear();
-		c.addConversion(new Iterateable2IterateableConversion(Vector.class));
+		c.addConversion(new Iterateable2IterateableConversion(ArrayList.class));
 		lvResult = c.convert(lvResult, Object[].class);
 		assertNotNull(lvResult);
 		Object lvArrayAfter[] = (Object[]) lvResult;
@@ -883,7 +882,7 @@ public class ConverterTest extends TestCase {
 
 	public void testConvertArrayAndBackToArrayWithNullValue() throws Exception {
 		Converter c = new Converter();
-		Iterateable2IterateableConversion lvConversion = new Iterateable2IterateableConversion(Vector.class);
+		Iterateable2IterateableConversion lvConversion = new Iterateable2IterateableConversion(ArrayList.class);
 		lvConversion.setIgnoreNullValues(true);
 		c.addConversion(lvConversion);
 
@@ -901,7 +900,7 @@ public class ConverterTest extends TestCase {
 		
 		
 		c.getConversionHandler().clear();
-		c.addConversion(new Iterateable2IterateableConversion(Vector.class));
+		c.addConversion(new Iterateable2IterateableConversion(ArrayList.class));
 		
 		lvResult = c.convert(lvArray);
 		// convert back
@@ -938,9 +937,9 @@ public class ConverterTest extends TestCase {
 		assertFalse(lvByteArray[1] == 0);
 		
 		Converter c = new Converter();
-		c.addConversion(new Iterateable2IterateableConversion(Vector.class));
+		c.addConversion(new Iterateable2IterateableConversion(ArrayList.class));
 
-		Vector<?> v = (Vector<?>) c.convert(lvByteArray);
+		ArrayList<?> v = (ArrayList<?>) c.convert(lvByteArray);
 		assertEquals(lvByteArray[0], ((Byte) v.get(0)).byteValue());
 		assertEquals(lvByteArray[1], ((Byte) v.get(1)).byteValue());
 		
@@ -1213,12 +1212,12 @@ public class ConverterTest extends TestCase {
 		c.addConversion(new IterateableMap2MapConversion());
 		c.addConversion(new IterateableMap2BeanConversion());
 		c.addConversion(new ComplexBean2MapConversion());
-		Iterateable2IterateableConversion lvConversion = new Iterateable2IterateableConversion(Vector.class);
+		Iterateable2IterateableConversion lvConversion = new Iterateable2IterateableConversion(ArrayList.class);
 		lvConversion.setIgnoreNullValues(true);
 		c.addConversion(lvConversion);
 
 
-		List<Object> l = new Vector<Object>();
+		List<Object> l = new ArrayList<Object>();
 		Customer lvCustomer = new Customer("Junit-Test-Kunde");
 		Object lvSimple = c.convert(lvCustomer);
 		
@@ -1320,11 +1319,11 @@ public class ConverterTest extends TestCase {
 		c.addConversion(new IterateableMap2MapConversion());
 		c.addConversion(new IterateableMap2BeanConversion());
 		c.addConversion(new ComplexBean2MapConversion());
-		c.addConversion(new Iterateable2IterateableConversion(Vector.class));
+		c.addConversion(new Iterateable2IterateableConversion(ArrayList.class));
 
 		Object lvSimple = c.convert(ar);
 		
-		List<Object> l = new Vector<Object>();
+		List<Object> l = new ArrayList<Object>();
 		// swap the order of the array
 		l.add(((List<?>) lvSimple).get(1));
 		l.add(((List<?>) lvSimple).get(0));
@@ -1496,7 +1495,7 @@ public class ConverterTest extends TestCase {
 		ObjectUtil lvUtil = new ObjectUtil();
 		
 		Customer lvCustomer = new Customer("Junit-Test-Kunde");
-		List<Customer> l = new Vector<Customer>();
+		List<Customer> l = new ArrayList<Customer>();
 		l.add(lvCustomer);
 		l.add(null);
 		l.add(lvCustomer);

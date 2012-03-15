@@ -18,10 +18,10 @@ package test.net.sf.sojo.util;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Vector;
 
 import test.net.sf.sojo.model.Node;
 
@@ -226,8 +226,8 @@ public class CycleDetectorTest extends TestCase {
 	public void testNestedListInMapWithCycle() throws Exception {
 		Map lvMap = new HashMap();
 		List lvList1 = new ArrayList();
-		List lvList2 = new Vector();
-		List lvList3 = new Vector();
+		List lvList2 = new LinkedList();
+		List lvList3 = new ArrayList();
 		lvMap.put("l1", lvList1);
 		lvMap.put("l2", lvList2);
 		lvMap.put("l3", lvList3);

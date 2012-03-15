@@ -32,7 +32,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.Vector;
 
 import junit.framework.TestCase;
 import net.sf.sojo.core.reflect.ReflectionHelper;
@@ -76,7 +75,7 @@ public class ReflectionHelperTest extends TestCase {
 	}
 	
 	public void testIsNotSimpleDataType() throws Exception {
-		assertFalse(ReflectionHelper.isSimpleType(Vector.class));
+		assertFalse(ReflectionHelper.isSimpleType(ArrayList.class));
 		assertFalse(ReflectionHelper.isSimpleType(Math.class));
 		
 		assertFalse(ReflectionHelper.isSimpleType(new HashMap<Object, Object>()));
@@ -139,15 +138,15 @@ public class ReflectionHelperTest extends TestCase {
 	}
 	
 	public void testFindConstructorByParameterTypes() throws Exception {
-		Constructor<?> lvConstructor = ReflectionHelper.findConstructorByParameterTypes(Vector.class, new Class [] { int.class });
+		Constructor<?> lvConstructor = ReflectionHelper.findConstructorByParameterTypes(ArrayList.class, new Class [] { int.class });
 		assertNotNull(lvConstructor);
 		assertEquals(1, lvConstructor.getParameterTypes().length);
 		assertEquals(int.class, lvConstructor.getParameterTypes()[0]);
-		assertEquals(new Vector<Object>(), lvConstructor.newInstance(new Object[] { Integer.valueOf("0") }));
+		assertEquals(new ArrayList<Object>(), lvConstructor.newInstance(new Object[] { Integer.valueOf("0") }));
 	}
 
 	public void testNotFindConstructorByParameterTypes() throws Exception {
-		Constructor<?> lvConstructor = ReflectionHelper.findConstructorByParameterTypes(Vector.class, new Class [] { String.class });
+		Constructor<?> lvConstructor = ReflectionHelper.findConstructorByParameterTypes(ArrayList.class, new Class [] { String.class });
 		assertNull(lvConstructor);
 	}
 	
@@ -159,7 +158,7 @@ public class ReflectionHelperTest extends TestCase {
 		assertTrue(ReflectionHelper.isMapType(AbstractMap.class));
 		
 		assertFalse(ReflectionHelper.isMapType(List.class));
-		assertFalse(ReflectionHelper.isMapType(Vector.class));
+		assertFalse(ReflectionHelper.isMapType(ArrayList.class));
 		
 		assertFalse(ReflectionHelper.isMapType(null));
 		assertFalse(ReflectionHelper.isMapType(String.class));
@@ -169,7 +168,7 @@ public class ReflectionHelperTest extends TestCase {
 	
 	public void testIsIterateableTypeByClass() throws Exception {
 		assertTrue(ReflectionHelper.isIterateableType(List.class));
-		assertTrue(ReflectionHelper.isIterateableType(Vector.class));
+		assertTrue(ReflectionHelper.isIterateableType(ArrayList.class));
 		assertTrue(ReflectionHelper.isIterateableType(ArrayList.class));
 		assertTrue(ReflectionHelper.isIterateableType(Collection.class));
 		assertTrue(ReflectionHelper.isIterateableType(Set.class));
@@ -194,7 +193,7 @@ public class ReflectionHelperTest extends TestCase {
 		assertFalse(ReflectionHelper.isComplexType(HashMap.class));
 		
 		assertFalse(ReflectionHelper.isComplexType(List.class));
-		assertFalse(ReflectionHelper.isComplexType(Vector.class));
+		assertFalse(ReflectionHelper.isComplexType(ArrayList.class));
 		
 		assertFalse(ReflectionHelper.isComplexType(null));
 		assertFalse(ReflectionHelper.isComplexType(String.class));
@@ -300,7 +299,6 @@ public class ReflectionHelperTest extends TestCase {
 		assertFalse(ReflectionHelper.isComplexMapType(HashMap.class));
 		assertFalse(ReflectionHelper.isComplexMapType(Collection.class));
 		assertFalse(ReflectionHelper.isComplexMapType(List.class));
-		assertFalse(ReflectionHelper.isComplexMapType(Vector.class));
 		assertFalse(ReflectionHelper.isComplexMapType(Set.class));
 		assertFalse(ReflectionHelper.isComplexMapType(HashSet.class));
 		

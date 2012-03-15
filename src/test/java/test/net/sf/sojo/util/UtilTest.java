@@ -18,16 +18,14 @@ package test.net.sf.sojo.util;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
-import java.util.Vector;
 
 import junit.framework.TestCase;
 import net.sf.sojo.util.Util;
@@ -171,7 +169,7 @@ public class UtilTest extends TestCase {
 		lvType = Util.getArrayType(new Object[] {new Long(1), "c"});
 		assertEquals(lvType, Object.class);		
 		
-		Vector<Object> v = new Vector<Object>();
+		List<Object> v = new ArrayList<Object>();
 		lvType = Util.getArrayType(v);
 		assertEquals(lvType, Object.class);
 		
@@ -186,17 +184,17 @@ public class UtilTest extends TestCase {
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void testArrayType_Collection() throws Exception {
-		Vector v = new Vector<Object>();
+		List v = new ArrayList<Object>();
 		v.add("a");
 		v.add("b");
 		Class<?> lvType = Util.getArrayType(v);
 		assertEquals(lvType, String.class);			
-		v = new Vector<Long>();
+		v = new ArrayList<Long>();
 		v.add(new Long (1));
 		v.add(new Long (2));
 		lvType = Util.getArrayType(v);
 		assertEquals(lvType, Long.class);			
-		v = new Vector();
+		v = new ArrayList();
 		v.add(new Long (1));
 		v.add("b");
 		lvType = Util.getArrayType(v);
