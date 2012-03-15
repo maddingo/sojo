@@ -226,7 +226,7 @@ public final class ReflectionMethodHelper {
 			lvReturn = true;
 		}
 
-		// if is a class and is from java package (java.util.Vector) and not a interface (case before)
+		// if is a class and is from java package (java.util.List) and not a interface (case before)
 		// it is a bad case
 		else if (pvClass.getName().startsWith("java.util.")) {
 			lvReturn = false;

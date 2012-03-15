@@ -4,6 +4,9 @@
 /.project
 /.settings
 *.log
+**/*.log
 *.bak
+**/*.bak
 .DS_Store
+**/.DS_Store
 /bin

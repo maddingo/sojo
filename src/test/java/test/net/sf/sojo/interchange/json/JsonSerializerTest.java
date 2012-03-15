@@ -31,7 +31,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import java.util.Vector;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
@@ -269,7 +268,7 @@ public class JsonSerializerTest extends TestCase {
 		c.add(new Car("MyCar"));
 		Map<String, String> m = new HashMap<String, String>();
 		m.put("k1", "v1");
-		List<Object> lvList2 = new Vector<Object>();
+		List<Object> lvList2 = new ArrayList<Object>();
 		lvList2.add(c);
 		lvList2.add(m);
 		Object lvResult = jsonSerializer.serialize(lvList2);
@@ -289,7 +288,7 @@ public class JsonSerializerTest extends TestCase {
 		Set<?> s = new HashSet<Object>();
 		Object lvResult = jsonSerializer.serialize(s);
 		lvResult = jsonSerializer.deserialize(lvResult);
-		assertEquals(new Vector<Object>(), lvResult);
+		assertEquals(new ArrayList<Object>(), lvResult);
 	}
 
 	public void testEmptyMapAndBack() throws Exception {
@@ -300,8 +299,8 @@ public class JsonSerializerTest extends TestCase {
 	}
 	
 	public void testMapContainsEmptyListAndBack() throws Exception {
-		Map<String, Vector<?>> m = new HashMap<String, Vector<?>>();
-		m.put("empty-list", new Vector<Object>());
+		Map<String, List<?>> m = new HashMap<String, List<?>>();
+		m.put("empty-list", new ArrayList<Object>());
 		Object lvResult = jsonSerializer.serialize(m);
 		lvResult = jsonSerializer.deserialize(lvResult);
 		assertEquals(m, lvResult);

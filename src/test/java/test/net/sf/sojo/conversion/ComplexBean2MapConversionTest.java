@@ -15,9 +15,9 @@
  */	
 package test.net.sf.sojo.conversion;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Vector;
 import java.util.WeakHashMap;
 
 import junit.framework.TestCase;
@@ -154,8 +154,8 @@ public class ComplexBean2MapConversionTest extends TestCase {
 
 	public void testConversionWithBadTotype() throws Exception {
 		try {
-			new ComplexBean2MapConversion(Vector.class);
-			fail("Vector ist not assignable to Map!");
+			new ComplexBean2MapConversion(ArrayList.class);
+			fail("ArrayList ist not assignable to Map!");
 		} catch (IllegalArgumentException e) {
 			assertNotNull(e);
 		}
@@ -179,7 +179,7 @@ public class ComplexBean2MapConversionTest extends TestCase {
 		HashMap<?, ?> lvHashMap = (HashMap<?, ?>) lvResult;
 		assertEquals(Node.class.getName(), lvHashMap.get("class"));
 		assertEquals("Node", lvHashMap.get("name"));
-		assertEquals(new Vector<Object>(), lvHashMap.get("children"));
+		assertEquals(new ArrayList<Object>(), lvHashMap.get("children"));
 		assertNull(lvHashMap.get("abc"));
 		
 		lvResult = c.convert(n, WeakHashMap.class);
@@ -188,7 +188,7 @@ public class ComplexBean2MapConversionTest extends TestCase {
 		WeakHashMap<?, ?> lvWeakHashMap = (WeakHashMap<?, ?>) lvResult;
 		assertEquals(Node.class.getName(), lvWeakHashMap.get("class"));
 		assertEquals("Node", lvWeakHashMap.get("name"));
-		assertEquals(new Vector<Object>(), lvWeakHashMap.get("children"));
+		assertEquals(new ArrayList<Object>(), lvWeakHashMap.get("children"));
 		assertNull(lvWeakHashMap.get("abc"));
 
 	}

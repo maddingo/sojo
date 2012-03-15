@@ -19,7 +19,7 @@ import java.math.BigDecimal;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Vector;
+import java.util.List;
 
 import test.net.sf.sojo.model.Node;
 
@@ -321,19 +321,19 @@ public class Simple2SimpleConversionTest extends TestCase {
 		}
 	}
 
-	public void testArrayList2VectorDirect() throws Exception {
+	public void testArrayList2ListDirect() throws Exception {
 		Converter c = new Converter();
 		c.addConversion(new Iterateable2IterateableConversion());
 		ArrayList<String> lvList = new ArrayList<String>();
 		lvList.add("111");
 		lvList.add("222");
-		Object lvResult = c.convert(lvList, Vector.class);
+		Object lvResult = c.convert(lvList, ArrayList.class);
 		assertNotNull(lvResult);
-		assertTrue(lvResult instanceof Vector);
-		Vector<?> lvVector = (Vector<?>) lvResult;
-		assertEquals(lvList.size(), lvVector.size());
-		assertEquals(lvList.get(0), lvVector.get(0));
-		assertEquals(lvList.get(1), lvVector.get(1));
+		assertTrue(lvResult instanceof List);
+		List<?> newList = (List<?>) lvResult;
+		assertEquals(lvList.size(), newList.size());
+		assertEquals(lvList.get(0), newList.get(0));
+		assertEquals(lvList.get(1), newList.get(1));
 	}
 
 	public void testNotString2ValidCharacter() throws Exception {

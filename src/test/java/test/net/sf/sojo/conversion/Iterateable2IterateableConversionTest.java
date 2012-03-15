@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.Vector;
 
 import junit.framework.TestCase;
 import net.sf.sojo.core.Converter;
@@ -37,77 +36,76 @@ import test.net.sf.sojo.model.Node;
 
 public class Iterateable2IterateableConversionTest extends TestCase {
 
-	public void testVector() throws Exception {
+	public void testList() throws Exception {
 		Converter c = new Converter();
-		c.getConversionHandler().addConversion(new Iterateable2IterateableConversion(Vector.class));
+		c.getConversionHandler().addConversion(new Iterateable2IterateableConversion(ArrayList.class));
 		List<String> lvList = new ArrayList<String>();
 		lvList.add("Test-1");
 		lvList.add("Test-2");
 		Object lvResult = c.convert(lvList);
 		assertNotNull(lvResult);
 		assertTrue(lvResult instanceof List);
-		assertTrue(lvResult instanceof Vector);
 		List<?> lvListAfter = (List<?>) lvResult;
 		assertEquals(lvList.size(), lvListAfter.size());		
 		assertEquals(lvList.get(0), lvListAfter.get(0));
 		assertEquals(lvList.get(1), lvListAfter.get(1));
 	}
 	
-	public void testMakeSimpleConverterWithVectorWithNotAddNullElement() throws Exception {
+	public void testMakeSimpleConverterWithListWithNotAddNullElement() throws Exception {
 		List<?> v = new ArrayList<Object>();
 		v.add(null);
 
 		Converter c = new Converter();
-		Iterateable2IterateableConversion lvConversion = new Iterateable2IterateableConversion(Vector.class);
+		Iterateable2IterateableConversion lvConversion = new Iterateable2IterateableConversion(ArrayList.class);
 		lvConversion.setIgnoreNullValues(true);
 		c.addConversion(lvConversion);
 
 		Object lvResult = c.convert(v);
 		assertNotNull(lvResult);
-		assertTrue(lvResult instanceof Vector);
-		Vector<?> v2 = (Vector<?>) lvResult;
+		assertTrue(lvResult instanceof List);
+		List<?> v2 = (List<?>) lvResult;
 		assertEquals(v2.size(), 0);
 	}
 	
-	public void testMakeSimpleConverterWithVectorWithAddNullElement() throws Exception {
+	public void testMakeSimpleConverterWithListWithAddNullElement() throws Exception {
 		List<?> v = new ArrayList<Object>();
 		v.add(null);
 
 		Converter c = new Converter();
-		c.addConversion(new Iterateable2IterateableConversion(Vector.class));
+		c.addConversion(new Iterateable2IterateableConversion(ArrayList.class));
 
 		Object lvResult = c.convert(v);
 		assertNotNull(lvResult);
-		assertTrue(lvResult instanceof Vector);
-		Vector<?> v2 = (Vector<?>) lvResult;
+		assertTrue(lvResult instanceof List);
+		List<?> v2 = (List<?>) lvResult;
 		assertEquals(v2.size(), 1);
 	}
 
-	public void testMakeSimpleConverterWithVectorWithNullElement() throws Exception {
+	public void testMakeSimpleConverterWithListWithNullElement() throws Exception {
 		List<?> v = new ArrayList<Object>();
 		v.add(null);
 
 		Converter c = new Converter();
-		c.addConversion(new Iterateable2IterateableConversion(Vector.class));
+		c.addConversion(new Iterateable2IterateableConversion(ArrayList.class));
 		c.addConversion(new NullConversion("~my~null~value~"));
 
 		Object lvResult = c.convert(v);
 		assertNotNull(lvResult);
-		assertTrue(lvResult instanceof Vector);
-		Vector<?> v2 = (Vector<?>) lvResult;
+		assertTrue(lvResult instanceof List);
+		List<?> v2 = (List<?>) lvResult;
 		assertEquals(v2.size(), 1);
 		assertEquals("~my~null~value~", v2.get(0));
 		
 		lvResult = c.convert(lvResult);
 		assertNotNull(lvResult);
-		assertTrue(lvResult instanceof Vector);
-		v2 = (Vector<?>) lvResult;
+		assertTrue(lvResult instanceof List);
+		v2 = (List<?>) lvResult;
 		assertEquals(v2.size(), 1);
 		assertNull(v2.get(0));
 	}
 
 
-	public void testVectorWithoutConversion() throws Exception {
+	public void testListWithoutConversion() throws Exception {
 		Converter c = new Converter();
 		List<String> lvList = new ArrayList<String>();
 		lvList.add("Test-1");
@@ -122,9 +120,9 @@ public class Iterateable2IterateableConversionTest extends TestCase {
 		assertEquals(lvList.get(1), lvListAfter.get(1));
 	}
 
-	public void testDoubleVector() throws Exception {
+	public void testDoubleList() throws Exception {
 		Converter c = new Converter();
-		c.getConversionHandler().addConversion(new Iterateable2IterateableConversion(Vector.class));
+		c.getConversionHandler().addConversion(new Iterateable2IterateableConversion(List.class));
 		List<Object> lvList = new ArrayList<Object>();
 		lvList.add("Test-1");
 		List<String> lvList2 = new ArrayList<String>();
@@ -134,14 +132,13 @@ public class Iterateable2IterateableConversionTest extends TestCase {
 		Object lvResult = c.convert(lvList);
 		assertNotNull(lvResult);
 		assertTrue(lvResult instanceof List);
-		assertTrue(lvResult instanceof Vector);
 		List<?> lvListAfter = (List<?>) lvResult;
 		assertEquals(lvList.size(), lvListAfter.size());		
 		assertEquals(lvList.get(0), lvListAfter.get(0));
-		assertTrue(lvListAfter.get(1) instanceof Vector);
+		assertTrue(lvListAfter.get(1) instanceof List);
 		assertEquals(lvList.get(1), lvListAfter.get(1));
 		
-		Vector<?> v = (Vector<?>) lvListAfter.get(1);
+		List<?> v = (List<?>) lvListAfter.get(1);
 		assertEquals(lvList2.size(), v.size());
 		assertEquals(lvList2.get(0), v.get(0));
 	}
@@ -149,13 +146,12 @@ public class Iterateable2IterateableConversionTest extends TestCase {
 	public void testDefaultCollectionType() throws Exception {
 		Converter c = new Converter();
 		c.getConversionHandler().addConversion(new Iterateable2IterateableConversion());
-		List<String> lvList = new Vector<String>();
+		List<String> lvList = new ArrayList<String>();
 		lvList.add("Test-1");
 		lvList.add("Test-2");
 		Object lvResult = c.convert(lvList);
 		assertNotNull(lvResult);
 		assertTrue(lvResult instanceof List);
-		assertTrue(lvResult instanceof ArrayList);
 		List<?> lvListAfter = (List<?>) lvResult;
 		assertEquals(lvList.size(), lvListAfter.size());		
 		assertEquals(lvList.get(0), lvListAfter.get(0));
@@ -249,14 +245,13 @@ public class Iterateable2IterateableConversionTest extends TestCase {
 		}
 	}
 
-	public void testArray2Vector() throws Exception {
+	public void testArrayList() throws Exception {
 		Converter c = new Converter();
-		c.getConversionHandler().addConversion(new Iterateable2IterateableConversion(Vector.class));
+		c.getConversionHandler().addConversion(new Iterateable2IterateableConversion(ArrayList.class));
 		String s[] = new String[] {"Test-1", "Test-2"};
 		Object lvResult = c.convert(s);
 		assertNotNull(lvResult);
 		assertTrue(lvResult instanceof List);
-		assertTrue(lvResult instanceof Vector);
 		List<?> lvListAfter = (List<?>) lvResult;
 		assertEquals(s.length, lvListAfter.size());		
 		assertEquals(s[0], lvListAfter.get(0));
@@ -306,29 +301,30 @@ public class Iterateable2IterateableConversionTest extends TestCase {
 	public void testToCollectionDirect() throws Exception {
 		Converter c = new Converter();
 		c.addConversion(new Iterateable2IterateableConversion());
-		Vector<String> lvVector = new Vector<String>();
-		lvVector.add("1");
-		lvVector.add("2");
-		Object lvResult = c.convert(lvVector, LinkedList.class);
+		List<String> lvList = new ArrayList<String>();
+		lvList.add("1");
+		lvList.add("2");
+		Object lvResult = c.convert(lvList, LinkedList.class);
 		assertNotNull(lvResult);
 		assertTrue(lvResult instanceof LinkedList);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void testIgnoreNullValues() throws Exception {
 		Converter c = new Converter();
 		Iterateable2IterateableConversion lvConversion = new Iterateable2IterateableConversion();
 		c.addConversion(lvConversion);
 		
-		Vector<String> lvVector = new Vector<String>();
-		lvVector.add("1");
-		lvVector.add(null);
-		lvVector.add("3");
-		List<?> lvList = (List<?>) c.convert(lvVector);
+		List<String> lvList = new ArrayList<String>();
+		lvList.add("1");
+		lvList.add(null);
+		lvList.add("3");
+		List<?> newList = (List<?>) c.convert(lvList);
 		assertEquals(3, lvList.size());
 		
 		lvConversion.setIgnoreNullValues(true);
-		lvList = (List<?>) c.convert(lvList);
-		assertEquals(2, lvList.size());
+		lvList = (List<String>) c.convert(lvList);
+		assertEquals(2, newList.size());
 	}
 
 }

@@ -16,12 +16,12 @@
 package test.net.sf.sojo.interchange.json;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Vector;
 
 import junit.framework.TestCase;
 import net.sf.sojo.common.ObjectGraphWalker;
@@ -277,7 +277,7 @@ public class JsonParserTest extends TestCase {
 		Object lvResult = new JsonParser().parse(s);
 		Map<?, ?> lvMap = (Map<?, ?>) lvResult;
 		assertEquals(1, lvMap.size());
-		assertEquals(new Vector<Object>(), lvMap.get("empty"));
+		assertEquals(Collections.emptyList(), lvMap.get("empty"));
 	}
 
 	public void testEmptyObjectInListIn() throws Exception {
