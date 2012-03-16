@@ -122,7 +122,7 @@ public class Iterateable2IterateableConversionTest extends TestCase {
 
 	public void testDoubleList() throws Exception {
 		Converter c = new Converter();
-		c.getConversionHandler().addConversion(new Iterateable2IterateableConversion(List.class));
+		c.getConversionHandler().addConversion(new Iterateable2IterateableConversion(ArrayList.class));
 		List<Object> lvList = new ArrayList<Object>();
 		lvList.add("Test-1");
 		List<String> lvList2 = new ArrayList<String>();
@@ -320,11 +320,11 @@ public class Iterateable2IterateableConversionTest extends TestCase {
 		lvList.add(null);
 		lvList.add("3");
 		List<?> newList = (List<?>) c.convert(lvList);
-		assertEquals(3, lvList.size());
+		assertEquals(3, newList.size());
 		
 		lvConversion.setIgnoreNullValues(true);
-		lvList = (List<String>) c.convert(lvList);
-		assertEquals(2, newList.size());
+		List<?> newNullList = (List<String>) c.convert(lvList);
+		assertEquals(2, newNullList.size());
 	}
 
 }
