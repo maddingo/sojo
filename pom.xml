@@ -152,11 +152,7 @@
   <developers>
     <developer>
       <id>linkemario</id>
-      <name>
-          <![CDATA[
-          Mario &nbsp;Linke
-          ]]>
-		</name>
+      <name>Mario Linke</name>
       <email>linkemario@users.sourceforge.net</email>
       <roles>
         <role>Architect</role>
@@ -171,6 +167,11 @@
   		<name>Martin Goldhahn</name>
   		<timezone>+1</timezone>
   		<url>https://github.com/maddingo</url>
+  	</contributor>
+  	<contributor>
+  		<name>Wiehann Matthysen</name>
+  		<timezone>+2</timezone>
+ 		<url>https://github.com/wcmatthysen</url>
   	</contributor>
   </contributors>
   
