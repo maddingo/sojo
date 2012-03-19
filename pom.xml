@@ -7,10 +7,8 @@
   <name>SOJO</name>
   <url>http://sojo.sourceforge.net</url>
 
-  <description>
-  	Simplified Old Java Objects.
-  	This is a refactored version of the original sojo at http://sojo.sf.net for Java 1.6+. 
-  </description>
+  <description>Simplified Old Java Objects.
+This is a refactored version of the original sojo at http://sojo.sf.net for Java 1.6+.</description>
 
   <parent>
     <groupId>org.sonatype.oss</groupId>
@@ -20,7 +18,7 @@
   
   <scm>
   	<url>http://github.com/maddingo/sojo</url>
-    <connection>scm:git:http://github.com/maddingo/sojo</connection>
+    <connection>scm:git:http://github.com/maddingo/sojo.git</connection>
     <developerConnection>scm:git:git@github.com:maddingo/sojo.git</developerConnection>
   </scm>
   
@@ -209,11 +207,11 @@
   <distributionManagement>
 	<repository>
 		<id>sonatype-nexus-staging</id>
-		<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+		<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
 	</repository>
 	<snapshotRepository>
 		<id>sonatype-nexus-snapshots</id>
-		<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+		<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
 	</snapshotRepository>
   </distributionManagement>
 
