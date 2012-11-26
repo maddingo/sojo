@@ -1,5 +1,6 @@
 SOJO - Simple Old Java Objects
 ==============================
+[![Build Status](https://travis-ci.org/maddingo/sojo.png)](https://travis-ci.org/maddingo/sojo)
 
 This repository was copied from revision 257 of the SOJO subversion repository trunk 
 at https://sojo.svn.sourceforge.net/svnroot/sojo/trunk/
