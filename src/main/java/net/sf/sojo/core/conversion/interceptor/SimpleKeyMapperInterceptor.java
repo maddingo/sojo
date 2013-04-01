@@ -18,8 +18,9 @@ package net.sf.sojo.core.conversion.interceptor;
 import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.SortedMap;
 import java.util.TreeMap;
 
 import net.sf.sojo.core.ConversionContext;
@@ -69,10 +70,10 @@ public class SimpleKeyMapperInterceptor implements ConverterInterceptorRecursive
 			@SuppressWarnings("unchecked")
 			Map<Object,Object> lvMap = (Map<Object,Object>) pvConvertObject;
 			
-			Map<Object, Object> lvHashMap = new HashMap<Object, Object>(lvMap.size());
-			Map<SimpleKeyComparator, Object> lvOrderedMap = map2SortedMap(lvMap);
-			for (Map.Entry<SimpleKeyComparator, Object> entry : lvOrderedMap.entrySet()) {
-				lvHashMap.put(entry.getKey().getKey(), entry.getValue());
+			Map<Object, Object> lvHashMap = new LinkedHashMap<Object, Object>(lvMap.size());
+			SortedMap<SimpleKeyComparator, Object> lvOrderedMap = map2SortedMap(lvMap);
+			for (SimpleKeyComparator skc : lvOrderedMap.keySet()) {
+				lvHashMap.put(skc.getKey(), lvOrderedMap.get(skc));
 			}
 			lvReturn = lvHashMap;
 		} else {
@@ -133,8 +134,8 @@ public class SimpleKeyMapperInterceptor implements ConverterInterceptorRecursive
 		return new SimpleKeyComparator(lvPos, lvKey);
 	}
 	
-	protected Map<SimpleKeyComparator, Object> map2SortedMap (Map<?,?> pvMap) {
-		Map<SimpleKeyComparator, Object> lvTreeMap = new TreeMap<SimpleKeyComparator, Object>(new SimpleKeyComparator());
+	protected SortedMap<SimpleKeyComparator, Object> map2SortedMap (Map<?,?> pvMap) {
+		SortedMap<SimpleKeyComparator, Object> lvTreeMap = new TreeMap<SimpleKeyComparator, Object>(new SimpleKeyComparator());
 		for (Map.Entry<?,?> entry : pvMap.entrySet()) {
 			SimpleKeyComparator skc = toComplex(entry.getKey());
 			lvTreeMap.put(skc, entry.getValue());
@@ -181,11 +182,11 @@ public class SimpleKeyMapperInterceptor implements ConverterInterceptorRecursive
 		public int compare(SimpleKeyComparator pvO1, SimpleKeyComparator pvO2) {
 			int res = pvO1.getPos() - pvO2.getPos();
 			if (res > 0) {
-				return -1;
+				return 1;
 			} else if (res == 0) {
 				return 0;
 			} else {
-				return 1;
+				return -1;
 			}
 		}
 	}

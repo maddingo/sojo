@@ -18,6 +18,7 @@ package test.net.sf.sojo.reflect;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
@@ -111,7 +112,9 @@ public class ReflectionFieldHelperTest extends TestCase {
 	
 	public void testFieldFilter() throws Exception {
 		Map<?, ?> lvFieldMap = ReflectionFieldHelper.getAllSetFieldMapsByClass(DefaultMutableTreeNode.class, null);
-		assertEquals(5, lvFieldMap.size());
+		// Java7 adds the serialVersionUID property
+		int expectedValue = System.getProperty("java.specification.version", "").equals("1.7") ? 6 : 5;
+		assertEquals(expectedValue, lvFieldMap.size());
 		
 		// add class
 		ReflectionFieldHelper.addAllFields2MapByClass(DefaultMutableTreeNode.class, null);

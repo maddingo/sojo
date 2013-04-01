@@ -143,7 +143,7 @@ public final class Converter implements IConverter {
 	 * @see net.sf.sojo.core.Converter#convert(Object)
 	 * 
 	 * @param pvObject the (root) source object.
-	 * @param pvToType Type from target object, if for this type no Conversion ist register.
+	 * @param pvToType Type from target object, if for this type no Conversion is registered.
 	 * @return The (converted) target object. 
 	 */
 	@Override
@@ -181,23 +181,23 @@ public final class Converter implements IConverter {
 			if (lvConversion != null && lvContext.cancelConvert == false) {
 				
 				lvReturn = lvConversion.getConverterInterceptorHandler().fireBeforeConvert(lvReturn, pvToType);
-					if (lvConversion instanceof SimpleConversion) {
-						SimpleConversion lvSimpleConversion = (SimpleConversion) lvConversion;
-						lvReturn = lvSimpleConversion.convert(lvReturn, pvToType);
-					}					
-					else if (lvConversion instanceof IterableConversion) {
-						IterableConversion lvIterateableConversion = (IterableConversion) lvConversion;
-						lvIterateableConversion.setClassPropertyFilterHandler(classPropertyFilterHandler);
-						lvReturn = lvIterateableConversion.convert(lvReturn, pvToType, new InternalRecursiveConverterExtension(this));
-					}
-					else if (lvConversion instanceof ComplexConversion) {
-						ComplexConversion lvComplexConversion = (ComplexConversion) lvConversion;
-						lvComplexConversion.setClassPropertyFilterHandler(classPropertyFilterHandler);
-						lvReturn = lvComplexConversion.convert(lvReturn, pvToType, new InternalRecursiveConverterExtension(this));
-					}
-					else {
-						handleException("Not supported conversion type: " + lvConversion + " and object: " + lvReturn);
-					}				
+				if (lvConversion instanceof SimpleConversion) {
+					SimpleConversion lvSimpleConversion = (SimpleConversion) lvConversion;
+					lvReturn = lvSimpleConversion.convert(lvReturn, pvToType);
+				}					
+				else if (lvConversion instanceof IterableConversion) {
+					IterableConversion lvIterateableConversion = (IterableConversion) lvConversion;
+					lvIterateableConversion.setClassPropertyFilterHandler(classPropertyFilterHandler);
+					lvReturn = lvIterateableConversion.convert(lvReturn, pvToType, new InternalRecursiveConverterExtension(this));
+				}
+				else if (lvConversion instanceof ComplexConversion) {
+					ComplexConversion lvComplexConversion = (ComplexConversion) lvConversion;
+					lvComplexConversion.setClassPropertyFilterHandler(classPropertyFilterHandler);
+					lvReturn = lvComplexConversion.convert(lvReturn, pvToType, new InternalRecursiveConverterExtension(this));
+				}
+				else {
+					handleException("Not supported conversion type: " + lvConversion + " and object: " + lvReturn);
+				}				
 				lvReturn = lvConversion.getConverterInterceptorHandler().fireAfterConvert(lvReturn, pvToType);
 
 				
@@ -242,7 +242,12 @@ public final class Converter implements IConverter {
 		@Override
 		public Object convert(final Object pvObject, final Class<?> pvToType) {
 			Object lvReturn = null;
-			if (ReflectionHelper.isSimpleType(pvObject)) {
+			if (isUniqueIdValue(pvObject)) {
+				lvReturn = getObjectByUniqueId(pvObject.toString().substring(UniqueIdGenerator.UNIQUE_ID_PROPERTY.length()));
+				if (lvReturn == null) {
+					throw new ConversionException("No object found for unique id: " + pvObject);
+				}
+			} else if (ReflectionHelper.isSimpleType(pvObject)) {
 				lvReturn = converter.convertInternal(pvObject, pvToType);
 			} else {
 				if (converter.uniqueIdGenerator.isKnownObject(pvObject)) {
@@ -254,6 +259,13 @@ public final class Converter implements IConverter {
 			}
 			return lvReturn;
 		}		
+
+		private boolean isUniqueIdValue(Object pvObject) {
+			if (pvObject instanceof String) {
+				return pvObject.toString().startsWith(UniqueIdGenerator.UNIQUE_ID_PROPERTY) && pvObject.toString().length() > UniqueIdGenerator.UNIQUE_ID_PROPERTY.length();
+			}
+			return false;
+		}
 
 		@Override
 		public final String getUniqueId(Object pvObject) {

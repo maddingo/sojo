@@ -94,7 +94,7 @@ public abstract class ConversionIterator extends AbstractConversion {
 	 * @param pvSourceObject The old Collection, Array or Map, where object (from iterator) ought to read.
 	 * @param pvNewTargetObject The new Collection, Array, Map or Bean, where object (from iterator) ought to added.
 	 * @param pvIterator The iterator him self.
-	 * @param pvConverter Instance of Converter, for reursive execution.
+	 * @param pvConverter Instance of Converter, for recursive execution.
 	 * @return The new Collection, Array or Map, where all object (from iterator) has added.
 	 */
 	protected final Object iterate(final Object pvSourceObject, final Object pvNewTargetObject, final Iterator<?> pvIterator, final IConverterExtension pvConverter) {
@@ -102,7 +102,7 @@ public abstract class ConversionIterator extends AbstractConversion {
 		
 		// cycle detection for Collections
 		if (getWithCycleDetection() && cycleDetector.cycleDetection(pvSourceObject)) {
-			throw new ConversionException("Detec cycle in Collection.");
+			throw new ConversionException("Detected cycle in Collection.");
 		}
 
 		Iterator<?> iter = pvIterator;
@@ -115,13 +115,13 @@ public abstract class ConversionIterator extends AbstractConversion {
 				if (!lvContext.cancelConvert) {
 					lvKeyValue = doConvert(pvSourceObject, pvNewTargetObject, lvContext.key, lvContext.value, pvConverter);
 					Object lvValue = lvKeyValue[1];
-					if (lvValue != null && lvValue.toString() != null && lvValue.toString().startsWith(UniqueIdGenerator.UNIQUE_ID_PROPERTY)) {
-						String lvKey = lvValue.toString().substring(UniqueIdGenerator.UNIQUE_ID_PROPERTY.length());
-						Object o = pvConverter.getObjectByUniqueId(lvKey);
-						if (o != null) {
-							lvKeyValue[1] = o;						
-						} 
-					}
+//					if (lvValue != null && lvValue.toString() != null && lvValue.toString().startsWith(UniqueIdGenerator.UNIQUE_ID_PROPERTY)) {
+//						String lvKey = lvValue.toString().substring(UniqueIdGenerator.UNIQUE_ID_PROPERTY.length());
+//						Object o = pvConverter.getObjectByUniqueId(lvKey);
+//						if (o != null) {
+//							lvKeyValue[1] = o;						
+//						}
+//					}
 				}
 				
 				lvContext = fireAfterConvertRecursion(lvContext, lvKeyValue[0], lvKeyValue[1]);
@@ -134,7 +134,7 @@ public abstract class ConversionIterator extends AbstractConversion {
 		}
 		return pvNewTargetObject;
 	}
-	
+		
 	/**
 	 * Create a new ConversionContext and fire "before convert recursion" event.
 	 *  

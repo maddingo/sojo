@@ -17,7 +17,9 @@ package net.sf.sojo.core;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * If the converter find a repeated (known) object (by cycles in a object graph), than exchange
@@ -88,19 +90,16 @@ public class UniqueIdGenerator {
 	}
 
 	public Object getObjectByUniqueId (String pvUniqueId) {
-//		Iterator iter = uniqueIdObjectMap.entrySet().iterator();
-//		while (iter.hasNext()) {
-//			Map.Entry lvEntry = (Entry) iter.next();
-//			if (lvEntry.getKey().equals(pvUniqueId)) {
-//				return lvEntry.getValue();
-//			}
-//		}
-//		return null;
-		return uniqueIdObjectMap.get(pvUniqueId);
+		for (Entry<Object, Object> entry : uniqueIdObjectMap.entrySet()) {
+			if (entry.getValue().equals(pvUniqueId)) {
+				return entry.getKey();
+			}
+		}
+		return null;
 	}
 	
 	public final Object addObject(String pvUniqueId, Object pvObject) {
-		return uniqueIdObjectMap.put(pvUniqueId, pvObject);
+		return uniqueIdObjectMap.put(pvObject, pvUniqueId);
 	}
 
 	public void clear() {

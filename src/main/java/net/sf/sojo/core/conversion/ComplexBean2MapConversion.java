@@ -88,7 +88,7 @@ public class ComplexBean2MapConversion extends ComplexConversion {
 			
 
 			Iterator<?> it = lvGetterMap.entrySet().iterator();
-     	lvBeanMap = (Map<Object,Object>) super.iterate(pvObject, lvBeanMap, it, pvConverter);
+			lvBeanMap = (Map<Object,Object>) super.iterate(pvObject, lvBeanMap, it, pvConverter);
 		} catch (Exception e) {
 			if (NonCriticalExceptionHandler.isNonCriticalExceptionHandlerEnabled()) {
 				NonCriticalExceptionHandler.handleException(ComplexBean2MapConversion.class, e, "Problem by conver bean to map: " + e);

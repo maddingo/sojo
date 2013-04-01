@@ -23,12 +23,16 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 
 import javax.swing.tree.DefaultMutableTreeNode;
+
+import org.hamcrest.CoreMatchers;
+import org.junit.Assert;
 
 import junit.framework.TestCase;
 import net.sf.sojo.common.ObjectUtil;
@@ -185,21 +189,21 @@ public class ConverterTest extends TestCase {
 		c.addConverterInterceptor(new ConverterInterceptorRecursive() {
 
 			@Override
-      public void afterConvertRecursion(ConversionContext pvContext) { }
+			public void afterConvertRecursion(ConversionContext pvContext) { }
 
 			@Override
-      public void beforeConvertRecursion(ConversionContext pvContext) {
+			public void beforeConvertRecursion(ConversionContext pvContext) {
 				pvContext.cancelConvert = true;
 			}
 
 			@Override
-      public Object afterConvert(Object pvResult, Class<?> pvToType) { return pvResult; }
+			public Object afterConvert(Object pvResult, Class<?> pvToType) { return pvResult; }
 			
 			@Override
-      public Object beforeConvert(Object pvConvertObject, Class<?> pvToType) { return pvConvertObject; }
+			public Object beforeConvert(Object pvConvertObject, Class<?> pvToType) { return pvConvertObject; }
 			
 			@Override
-      public void onError(Exception pvException) { }
+			public void onError(Exception pvException) { }
 			
 		});
 
@@ -221,21 +225,21 @@ public class ConverterTest extends TestCase {
 		lvCollectionConversion.getConverterInterceptorHandler().addConverterInterceptor(new ConverterInterceptorRecursive() {
 
 			@Override
-      public void afterConvertRecursion(ConversionContext pvContext) { }
+			public void afterConvertRecursion(ConversionContext pvContext) { }
 
 			@Override
-      public void beforeConvertRecursion(ConversionContext pvContext) {
+			public void beforeConvertRecursion(ConversionContext pvContext) {
 				pvContext.cancelConvert = true;
 			}
 
 			@Override
-      public Object afterConvert(Object pvResult, Class<?> pvToType) { return pvResult; }
+			public Object afterConvert(Object pvResult, Class<?> pvToType) { return pvResult; }
 			
 			@Override
-      public Object beforeConvert(Object pvConvertObject, Class<?> pvToType) { return pvConvertObject; }
+			public Object beforeConvert(Object pvConvertObject, Class<?> pvToType) { return pvConvertObject; }
 			
 			@Override
-      public void onError(Exception pvException) { }
+			public void onError(Exception pvException) { }
 		}
 
 		);
@@ -1380,6 +1384,7 @@ public class ConverterTest extends TestCase {
 		c.addConversion(new ComplexBean2MapConversion());
 		c.addConversion(new Iterateable2IterateableConversion());
 
+		// prepare test objects
 		Customer lvCustomer = new Customer("Test-Kunde");
 		Address a = new Address();
 		a.setCity("Hier");
@@ -1389,21 +1394,28 @@ public class ConverterTest extends TestCase {
 		lvMap.put("KEY_1", a);
 		lvMap.put("KEY_2", lvCustomer);
 		
+		// convert 
 		Object lvSimple = c.convert(lvMap);
+		Assert.assertThat(lvSimple, CoreMatchers.instanceOf(Map.class));
+		Map<?,?> lvSimpleMap = (Map<?, ?>)lvSimple;
+		Assert.assertThat(lvSimpleMap.get("1~_-_~KEY_2"), CoreMatchers.instanceOf(LinkedHashMap.class));
+		Assert.assertThat(lvSimpleMap.get("2~_-_~KEY_1"), CoreMatchers.is((Object)"~unique-id~1"));
 		
 		lvInterceptor.setMakeSimple(false);
 		Object lvComplex = c.convert(lvSimple);
 		
-		assertNotNull(lvComplex);
-		assertTrue(lvComplex instanceof Map);
+		Assert.assertThat(lvComplex, CoreMatchers.is(CoreMatchers.notNullValue()));
+		Assert.assertThat(lvComplex, CoreMatchers.instanceOf(Map.class));
 		Map<?,?> lvMapAfter = (Map<?,?>) lvComplex;
-		assertEquals(2, lvMapAfter.size());
+		Assert.assertThat(lvMapAfter.size(), CoreMatchers.is(2));
+		Assert.assertThat(lvMapAfter.get("KEY_1"), CoreMatchers.instanceOf(Address.class));
 		Address aAfter = (Address) lvMapAfter.get("KEY_1");
-		Customer kAfter = (Customer) lvMapAfter.get("KEY_2");
-		assertEquals("Hier", aAfter.getCity());
-		assertEquals("Test-Kunde", kAfter.getLastName());
-		assertEquals(1, kAfter.getAddresses().size());
-		assertEquals(aAfter, kAfter.getAddresses().iterator().next());
+		Assert.assertThat(lvMapAfter.get("KEY_2"), CoreMatchers.instanceOf(Customer.class));
+		Customer cAfter = (Customer)lvMapAfter.get("KEY_2");
+		Assert.assertThat(aAfter.getCity(), CoreMatchers.is("Hier"));
+		Assert.assertThat(cAfter.getLastName(), CoreMatchers.is("Test-Kunde"));
+		Assert.assertThat(cAfter.getAddresses().size(), CoreMatchers.is(1));
+		Assert.assertThat(cAfter.getAddresses().iterator().next(), CoreMatchers.is((Object)aAfter));
 	}
 
 	public void testObjectFoundForHashCodeByMakeComplex_2() throws Exception {
