@@ -112,7 +112,7 @@ public class UtilTest extends TestCase {
 	}
 	
 	/** 
-	 * This test is just to demostracte that timestamp formatted strings 
+	 * This test is just to demonstrate that timestamp formatted strings 
 	 * with 2 digits in the fractional seconds are not parsed correctly.
 	 * If this test fails, it means the bug was fixed and we can remove the
 	 * special timestamp pass (2nd pass in {@link Util#string2Date(String)}.
@@ -120,7 +120,6 @@ public class UtilTest extends TestCase {
 	 * @throws Exception
 	 */
 	public void testTimestamp3() throws Exception {
-	  
 	  // none of these formats work
 	  List<SimpleDateFormat> formatList = Arrays.asList(
 	    new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss.S")
@@ -129,14 +128,16 @@ public class UtilTest extends TestCase {
       , new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss.SSSS")
       , new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss.SSSSS")
 	  );
+	  
+	  long offset = TimeZone.getDefault().getOffset(1175188856390L) - TimeZone.getTimeZone("CET").getOffset(1175188856390L);
 	  for (SimpleDateFormat df : formatList) {
-  	  // 3 digits work fine
-  	  Date date = df.parse("2007-03-29 19:20:56.390");
-  	  assertEquals(1175188856390L, date.getTime());
-  	  
-  	  // 2 digits fail, notice the last 3 digts 039 vs. 390
-  	  date = df.parse("2007-03-29 19:20:56.39");
-      assertEquals(1175188856039L, date.getTime());
+		  // 3 digits work fine
+		  Date date = df.parse("2007-03-29 19:20:56.390");
+		  assertEquals(1175188856390L+offset, date.getTime());
+
+		  // 2 digits fail, notice the last 3 digits 039 vs. 390
+		  date = df.parse("2007-03-29 19:20:56.39");
+		  assertEquals(1175188856039L+offset, date.getTime());
 		}
 	}
 	
