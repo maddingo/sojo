@@ -129,7 +129,7 @@ public class UtilTest extends TestCase {
       , new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss.SSSSS")
 	  );
 	  
-	  long offset = TimeZone.getDefault().getOffset(1175188856390L) - TimeZone.getTimeZone("CET").getOffset(1175188856390L);
+	  long offset = TimeZone.getTimeZone("CET").getOffset(1175188856390L) - TimeZone.getDefault().getOffset(1175188856390L);
 	  for (SimpleDateFormat df : formatList) {
 		  // 3 digits work fine
 		  Date date = df.parse("2007-03-29 19:20:56.390");
