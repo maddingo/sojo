@@ -22,6 +22,9 @@ import java.util.Map.Entry;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import org.hamcrest.CoreMatchers;
+import org.junit.Assert;
+
 import net.sf.sojo.core.reflect.ReflectionFieldHelper;
 
 import test.net.sf.sojo.model.Car;
@@ -112,9 +115,8 @@ public class ReflectionFieldHelperTest extends TestCase {
 	
 	public void testFieldFilter() throws Exception {
 		Map<?, ?> lvFieldMap = ReflectionFieldHelper.getAllSetFieldMapsByClass(DefaultMutableTreeNode.class, null);
-		// Java7 adds the serialVersionUID property
-		int expectedValue = System.getProperty("java.specification.version", "").equals("1.7") ? 6 : 5;
-		assertEquals(expectedValue, lvFieldMap.size());
+		// The number of properties depends on the Jvm
+		Assert.assertThat(Integer.valueOf(lvFieldMap.size()), CoreMatchers.anyOf(CoreMatchers.is(5), CoreMatchers.is(6)));
 		
 		// add class
 		ReflectionFieldHelper.addAllFields2MapByClass(DefaultMutableTreeNode.class, null);
