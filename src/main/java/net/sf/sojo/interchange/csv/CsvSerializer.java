@@ -56,6 +56,13 @@ public class CsvSerializer extends AbstractSerializer {
 	public boolean getWithPropertyNamesInFirstLine() {
 		return csvWalkerInterceptor.getWithColumnNames();
 	}
+
+	public void setDelimiter(String pvDelimiter) {
+		csvWalkerInterceptor.getTable().setDelimiter(pvDelimiter);
+	}
+	public String getDelimiter() {
+		return csvWalkerInterceptor.getTable().getDelimiter();
+	}
 	
 	@Override
 	public Object serialize(Object pvRootObject) {
