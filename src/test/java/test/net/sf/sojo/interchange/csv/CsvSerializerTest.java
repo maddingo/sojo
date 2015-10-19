@@ -506,6 +506,13 @@ public class CsvSerializerTest extends TestCase {
 		csvSerializer.setWithPropertyNamesInFirstLine(true);
 		assertTrue(csvSerializer.getWithPropertyNamesInFirstLine());
 	}
+
+	public void testDelimiter() throws Exception {
+		assertEquals(",", csvSerializer.getDelimiter());
+
+		csvSerializer.setDelimiter("|");
+		assertEquals("|", csvSerializer.getDelimiter());
+	}
 	
 	@SuppressWarnings("unchecked")
 	public void __testDeSerializeListWithAddresses() throws Exception {
