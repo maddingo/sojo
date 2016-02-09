@@ -20,13 +20,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import junit.framework.TestCase;
 import net.sf.sojo.common.ObjectGraphWalker;
 import net.sf.sojo.core.Constants;
 import net.sf.sojo.interchange.SerializerException;
 import net.sf.sojo.interchange.json.JsonWalkerInterceptor;
+import org.junit.Test;
 
-public class JsonWalkerInterceptorTest extends TestCase {
+import static org.junit.Assert.*;
+
+public class JsonWalkerInterceptorTest {
 
 	ObjectGraphWalker walker = new ObjectGraphWalker();
 	JsonWalkerInterceptor jsonInterceptor = new JsonWalkerInterceptor();
@@ -35,6 +37,7 @@ public class JsonWalkerInterceptorTest extends TestCase {
 		walker.addInterceptor(jsonInterceptor);	
 	}
 
+	@Test
 	public void testReplaceDoubleQuoteWithDoubleQuoteAndBackslash() throws Exception {
 		assertEquals("\"\"", JsonWalkerInterceptor.object2StringWithDoubleQuote(""));
 		assertEquals("\"aaa\"", JsonWalkerInterceptor.object2StringWithDoubleQuote("aaa"));
@@ -42,7 +45,8 @@ public class JsonWalkerInterceptorTest extends TestCase {
 		assertEquals("\"aa\na\"", JsonWalkerInterceptor.object2StringWithDoubleQuote("aa\na"));
 		assertEquals("4711", JsonWalkerInterceptor.object2StringWithDoubleQuote(new Integer(4711)));
 	}
-	
+
+	@Test
 	public void testHandleControlCharacter() throws Exception {
 		assertNull(JsonWalkerInterceptor.handleControlCharacter(null));
 		assertEquals("", JsonWalkerInterceptor.handleControlCharacter(""));
@@ -58,7 +62,8 @@ public class JsonWalkerInterceptorTest extends TestCase {
 		assertEquals("aa \\\\\\/ cc", JsonWalkerInterceptor.handleControlCharacter("aa \\/ cc"));
 		assertEquals("aa \\\\\\\\\\/ cc", JsonWalkerInterceptor.handleControlCharacter("aa \\\\/ cc"));
 	}
-	
+
+	@Test
 	public void testHandleControlCharacterBack() throws Exception {
 		assertNull(JsonWalkerInterceptor.handleControlCharacterBack(null));
 		assertEquals("", JsonWalkerInterceptor.handleControlCharacterBack(""));
@@ -78,7 +83,8 @@ public class JsonWalkerInterceptorTest extends TestCase {
 		assertEquals("aa / cc", JsonWalkerInterceptor.handleControlCharacterBack("aa \\/ cc"));
 		assertEquals("aa \\/ cc", JsonWalkerInterceptor.handleControlCharacterBack("aa \\\\/ cc"));
 	}
-	
+
+	@Test
 	public void testHandleControlCharacterAndBack() throws Exception {
 		String lvOrigString = "aa \b cc";
 		Object lvResult = JsonWalkerInterceptor.handleControlCharacter(lvOrigString);
@@ -96,14 +102,15 @@ public class JsonWalkerInterceptorTest extends TestCase {
 		lvString = JsonWalkerInterceptor.handleControlCharacterBack(lvResult.toString());
 		assertEquals("aa \\/ cc", lvString);
 	}
-	
 
+	@Test
 	public void testHandleJsonValue() throws Exception {
 		assertEquals("", JsonWalkerInterceptor.handleJsonValue(null));
 		assertEquals("\"aa \\t a\"", JsonWalkerInterceptor.handleJsonValue("aa \t a"));
 		assertEquals("4711", JsonWalkerInterceptor.handleJsonValue(new Integer(4711)));
 	}
-	
+
+	@Test
 	public void testJsonWalkerInterceptor() throws Exception {
 		JsonWalkerInterceptor lvInterceptor = new JsonWalkerInterceptor();
 		assertEquals("", lvInterceptor.getJsonString());
@@ -121,18 +128,21 @@ public class JsonWalkerInterceptorTest extends TestCase {
 		assertEquals("", lvInterceptor.getJsonString());
 	}
 
+	@Test
 	public void testSimpleJsonString() throws Exception {
 		String s = "my test string";
 		walker.walk(s);
 		assertEquals("\"" + s + "\"", jsonInterceptor.getJsonString());
 	}
-	
+
+	@Test
 	public void testSimpleJsonLong() throws Exception {
 		Long l = new Long(4711);
 		walker.walk(l);
 		assertEquals(l.toString(), jsonInterceptor.getJsonString());
 	}
 
+	@Test
 	public void testSimpleJsonBoolean() throws Exception {
 		walker.walk(Boolean.TRUE);
 		assertEquals(Boolean.TRUE.toString(), jsonInterceptor.getJsonString());
@@ -141,24 +151,28 @@ public class JsonWalkerInterceptorTest extends TestCase {
 		assertEquals(Boolean.FALSE.toString(), jsonInterceptor.getJsonString());
 	}
 
+	@Test
 	public void testSimpleJsonDouble() throws Exception {
 		Double d = new Double("47.115");
 		walker.walk(d);
 		assertEquals(d.toString(), jsonInterceptor.getJsonString());
 	}
 
+	@Test
 	public void testEmptyJsonList() throws Exception {
 		List<?> list = new ArrayList<Object>();
 		walker.walk(list);
 		assertEquals("[]", jsonInterceptor.getJsonString());
 	}
 
+	@Test
 	public void testSimpleJsonArray() throws Exception {
 		boolean[] boolArray = new boolean[]{true,false,true};
 		walker.walk(boolArray);
 		assertEquals("[true,false,true]", jsonInterceptor.getJsonString());
 	}
-	
+
+	@Test
 	public void testSimpleJsonList() throws Exception {
 		List<String> list = new ArrayList<String>();
 		list.add( "first" );
@@ -168,6 +182,7 @@ public class JsonWalkerInterceptorTest extends TestCase {
 		assertEquals("[\"first\",\"second\"]", jsonInterceptor.getJsonString());
 	}
 
+	@Test
 	public void testEmptyJsonMap() throws Exception {
 		Map<?, ?> map = new HashMap<Object, Object>();
 
@@ -175,6 +190,7 @@ public class JsonWalkerInterceptorTest extends TestCase {
 		assertEquals("{}", jsonInterceptor.getJsonString());
 	}
 
+	@Test
 	public void __testSimpleJsonMap() throws Exception {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put( "name", "json" );
@@ -187,6 +203,7 @@ public class JsonWalkerInterceptorTest extends TestCase {
 		assertEquals(s, jsonInterceptor.getJsonString());
 	}
 
+	@Test
 	public void testWithNullValuesInMap() throws Exception {
 		JsonWalkerInterceptor lvInterceptor = new JsonWalkerInterceptor();
 		assertFalse(lvInterceptor.getWithNullValuesInMap());
@@ -194,7 +211,8 @@ public class JsonWalkerInterceptorTest extends TestCase {
 		lvInterceptor.setWithNullValuesInMap(true);
 		assertTrue(lvInterceptor.getWithNullValuesInMap());
 	}
-	
+
+	@Test
 	public void __testMapWithNullValue() throws Exception {
 		Map<String, String> map = new HashMap<String, String>();
 		map.put( "name", "json" );
@@ -208,6 +226,7 @@ public class JsonWalkerInterceptorTest extends TestCase {
 		assertEquals(s, jsonInterceptor.getJsonString());
 	}
 
+	@Test
 	public void testMapWithOutNullValue() throws Exception {
 		Map<String, String> map = new HashMap<String, String>();
 		map.put( "name", "json" );
@@ -220,6 +239,7 @@ public class JsonWalkerInterceptorTest extends TestCase {
 		assertEquals(s, jsonInterceptor.getJsonString());
 	}
 
+	@Test
 	public void testNullValue() throws Exception {
 		jsonInterceptor.setWithNullValuesInMap(true); 
 		walker.walk(null);
@@ -227,13 +247,15 @@ public class JsonWalkerInterceptorTest extends TestCase {
 		assertEquals("null", jsonInterceptor.getJsonString());
 	}
 
+	@Test
 	public void testVisitElement() throws Exception {
 		JsonWalkerInterceptor lvInterceptor = new JsonWalkerInterceptor();
 		lvInterceptor.visitElement("Test-String", Constants.INVALID_INDEX, "value", Constants.TYPE_MAP, "(0)", 1);
 		
 		assertEquals("\"Test-String\":", lvInterceptor.getJsonString());
 	}
-	
+
+	@Test
 	public void testVisitElementWithNoStringKey() throws Exception {
 		JsonWalkerInterceptor lvInterceptor = new JsonWalkerInterceptor();
 		try {

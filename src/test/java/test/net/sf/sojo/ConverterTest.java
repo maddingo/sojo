@@ -34,7 +34,6 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 
-import junit.framework.TestCase;
 import net.sf.sojo.common.ObjectUtil;
 import net.sf.sojo.core.Conversion;
 import net.sf.sojo.core.ConversionContext;
@@ -60,7 +59,9 @@ import test.net.sf.sojo.model.Customer;
 import test.net.sf.sojo.model.Node;
 import test.net.sf.sojo.model.Primitive;
 
-public class ConverterTest extends TestCase {
+import static org.junit.Assert.*;
+
+public class ConverterTest {
 	
 	public void testOrderOfFindConversion() throws Exception {
 		Converter c = new Converter();

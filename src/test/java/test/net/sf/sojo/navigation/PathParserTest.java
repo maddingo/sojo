@@ -22,25 +22,29 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import junit.framework.TestCase;
 import net.sf.sojo.core.Converter;
 import net.sf.sojo.core.conversion.ComplexBean2MapConversion;
 import net.sf.sojo.navigation.PathAction;
 import net.sf.sojo.navigation.PathExecuter;
 import net.sf.sojo.navigation.PathParseException;
 import net.sf.sojo.navigation.PathParser;
+import org.junit.Test;
 import test.net.sf.sojo.model.Car;
 import test.net.sf.sojo.model.Customer;
 import test.net.sf.sojo.model.Node;
 
-public class PathParserTest extends TestCase {
-	
+import static org.junit.Assert.*;
+
+public class PathParserTest {
+
+	@Test
 	public void testParseWithNullPath() throws Exception {
 		PathAction lvAction[] = PathParser.parse(null);
 		assertNotNull(lvAction);
 		assertEquals(0, lvAction.length);
 	}
-	
+
+	@Test
 	public void testParseWithEmptyPath() throws Exception {
 		PathAction lvAction[] = PathParser.parse("");
 		assertNotNull(lvAction);
@@ -50,7 +54,8 @@ public class PathParserTest extends TestCase {
 		assertNotNull(lvAction);
 		assertEquals(0, lvAction.length);
 	}
-	
+
+	@Test
 	public void testParseWithEmptyPathButOnePoint() throws Exception {
 		PathAction lvAction[] = PathParser.parse(".");
 		assertNotNull(lvAction);
@@ -60,7 +65,8 @@ public class PathParserTest extends TestCase {
 		assertNotNull(lvAction);
 		assertEquals(0, lvAction.length);
 	}
-	
+
+	@Test
 	public void testParseWithSimpleAction() throws Exception {
 		PathAction lvAction[] = PathParser.parse("name");
 		assertNotNull(lvAction);
@@ -71,6 +77,7 @@ public class PathParserTest extends TestCase {
 		assertEquals(PathAction.ACTION_TYPE_SIMPLE, lvAction[0].getType());
 	}
 
+	@Test
 	public void testParseWithMoreThanOneBracketKey() throws Exception {
 		try {
 			PathParser.parse("fail(aa(1)");
@@ -94,7 +101,8 @@ public class PathParserTest extends TestCase {
 		PathAction lvAction[] = PathParser.parse("long(2).path(1).name");
 		assertEquals(3, lvAction.length);
 	}
-	
+
+	@Test
 	public void testParseWithMoreThanOneBracketIndex() throws Exception {
 		try {
 			PathParser.parse("fail[aa[1]");
@@ -119,7 +127,7 @@ public class PathParserTest extends TestCase {
 		assertEquals(3, lvAction.length);
 	}
 
-
+	@Test
 	public void testParseWithIndexAction() throws Exception {
 		PathAction lvAction[] = PathParser.parse("address[0].city");
 		assertNotNull(lvAction);
@@ -134,7 +142,8 @@ public class PathParserTest extends TestCase {
 		assertNull(lvAction[1].getKey());
 		assertEquals(PathAction.ACTION_TYPE_SIMPLE, lvAction[1].getType());
 	}
-	
+
+	@Test
 	public void testParseWithIndexActionInValid() throws Exception {
 		try {
 			PathParser.parse("address0].city");
@@ -144,7 +153,7 @@ public class PathParserTest extends TestCase {
 		}
 	}
 
-
+	@Test
 	public void testParseWithKeyAction() throws Exception {
 		PathAction lvAction[] = PathParser.parse("address(London).postcode");
 		assertNotNull(lvAction);
@@ -159,7 +168,8 @@ public class PathParserTest extends TestCase {
 		assertNull(lvAction[1].getKey());
 		assertEquals(PathAction.ACTION_TYPE_SIMPLE, lvAction[1].getType());
 	}
-	
+
+	@Test
 	public void testParseWithKeyActionInValid() throws Exception {
 		try {
 			PathParser.parse("addressLondon).postcode");
@@ -169,6 +179,7 @@ public class PathParserTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testIndexIsNotInteger() throws Exception {
 		try {
 			PathParser.parse("get[a]");
@@ -178,6 +189,7 @@ public class PathParserTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testIndexIsEmpty() throws Exception {
 		PathAction[] lvActions = PathParser.parse("get[]");
 		assertEquals(1, lvActions.length);
@@ -187,7 +199,8 @@ public class PathParserTest extends TestCase {
 		assertEquals(PathAction.ACTION_TYPE_INDEX, lvActions[0].getType());
 		assertNull(lvActions[0].getKey());
 	}
-	
+
+	@Test
 	public void testIndexWithWhitespaces() throws Exception {
 		PathAction[] lvActions = PathParser.parse("get[ 1 ]");
 		assertEquals(1, lvActions.length);
@@ -197,8 +210,8 @@ public class PathParserTest extends TestCase {
 		assertEquals(PathAction.ACTION_TYPE_INDEX, lvActions[0].getType());
 		assertNull(lvActions[0].getKey());		
 	}
-	
-		
+
+	@Test
 	public void testKeyIsEmpty() throws Exception {
 		PathAction[] lvActions = PathParser.parse("get()");
 		assertEquals(1, lvActions.length);
@@ -208,7 +221,8 @@ public class PathParserTest extends TestCase {
 		assertEquals(PathAction.ACTION_TYPE_KEY, lvActions[0].getType());
 		assertEquals("", lvActions[0].getKey());
 	}
-	
+
+	@Test
 	public void testKeyWithWhitespaces() throws Exception {
 		PathAction[] lvActions = PathParser.parse("get( 1 )");
 		assertEquals(1, lvActions.length);
@@ -218,8 +232,8 @@ public class PathParserTest extends TestCase {
 		assertEquals(PathAction.ACTION_TYPE_KEY, lvActions[0].getType());
 		assertEquals(" 1 ", lvActions[0].getKey());		
 	}
-	
-	
+
+	@Test
 	public void testExceuteSimpleFromObject() throws Exception {
 		PathAction lvAction[] = PathParser.parse("name");
 		Car lvCar = new Car("Ferrari");
@@ -227,7 +241,7 @@ public class PathParserTest extends TestCase {
 		assertEquals(lvCar.getName(), lvResult);
 	}
 
-	
+	@Test
 	public void testExceuteSimpleFromConvertedObject() throws Exception {
 		PathAction lvAction[] = PathParser.parse("name");
 		Car lvCar = new Car("Ferrari");
@@ -242,6 +256,7 @@ public class PathParserTest extends TestCase {
 		assertEquals(lvCar.getName(), lvResult);
 	}
 
+	@Test
 	public void testExceuteIndexFromList() throws Exception {
 		PathAction lvAction = new PathAction();
 		lvAction.setIndex(0);
@@ -259,6 +274,7 @@ public class PathParserTest extends TestCase {
 		assertEquals("TestString_3", lvResult);
 	}
 
+	@Test
 	public void testExceuteIndexFromListWithPropertyName() throws Exception {
 		PathAction lvAction[] = PathParser.parse("children[0]");
 		Node lvNode = new Node("Node");
@@ -273,7 +289,8 @@ public class PathParserTest extends TestCase {
 		lvResult = PathExecuter.getNestedProperty(lvNode, lvAction[0]);
 		assertEquals("TestString_4", lvResult);
 	}
-	
+
+	@Test
 	public void testExceuteIndexFromSet() throws Exception {
 		PathAction lvAction = new PathAction();
 		lvAction.setIndex(0);
@@ -290,7 +307,8 @@ public class PathParserTest extends TestCase {
 		lvResult = PathExecuter.getNestedProperty(lvSet, lvAction);
 		assertEquals("TestString_3", lvResult);
 	}
-	
+
+	@Test
 	public void testExceuteIndexFromSetWithPropertyName() throws Exception {
 		PathAction lvAction[] = PathParser.parse("addresses[0]");
 		Customer c = new Customer();
@@ -306,6 +324,7 @@ public class PathParserTest extends TestCase {
 		assertEquals("TestString_3", lvResult);
 	}
 
+	@Test
 	public void testExceuteKey() throws Exception {
 		PathAction lvAction = new PathAction();
 		lvAction.setKey("Key_1");
@@ -323,6 +342,7 @@ public class PathParserTest extends TestCase {
 		assertEquals("TestString_3", lvResult);
 	}
 
+	@Test
 	public void testExceuteKeyWithPropertyName() throws Exception {
 		PathAction lvAction[] = PathParser.parse("namedChildren(Key_1)");
 		Node lvNode = new Node();
@@ -336,7 +356,8 @@ public class PathParserTest extends TestCase {
 		lvResult = PathExecuter.getNestedProperty(lvNode, lvAction[0]);
 		assertEquals("Test_String_3", lvResult);
 	}
-	
+
+	@Test
 	public void testExceuteKeyWithNestedPropertyNames() throws Exception {
 		Node lvNode = new Node("Node_1");
 		lvNode.getNamedChildren().put("Key_1", lvNode);
@@ -356,6 +377,7 @@ public class PathParserTest extends TestCase {
 
 	}
 
+	@Test
 	public void testWithOutPropertyName() throws Exception {
 		PathAction pa = PathParser.getActionByPath("(1)");
 		assertNull(pa.getProperty());
@@ -364,6 +386,7 @@ public class PathParserTest extends TestCase {
 		assertEquals("1", pa.getKey());
 	}
 
+	@Test
 	public void testWithOutPropertyName2() throws Exception {
 		PathAction pa = PathParser.getActionByPath("[1]");
 		assertNull(pa.getProperty());

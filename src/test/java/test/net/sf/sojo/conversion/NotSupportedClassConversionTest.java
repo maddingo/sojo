@@ -15,13 +15,16 @@
  */	
 package test.net.sf.sojo.conversion;
 
-import junit.framework.TestCase;
 import net.sf.sojo.core.ConversionException;
 import net.sf.sojo.core.Converter;
 import net.sf.sojo.core.conversion.NotSupportedClassConversion;
+import org.junit.Test;
 
-public class NotSupportedClassConversionTest extends TestCase {
-	
+import static org.junit.Assert.*;
+
+public class NotSupportedClassConversionTest {
+
+	@Test
 	public void testObjectNotSupported() throws Exception {
 		Converter c = new Converter();
 		c.addConversion(new NotSupportedClassConversion(new Class[] { Object.class }));
@@ -33,6 +36,7 @@ public class NotSupportedClassConversionTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testObjectAndStringNotSupported() throws Exception {
 		Converter c = new Converter();
 		c.addConversion(new NotSupportedClassConversion(new Class[] { Object.class, String.class }));
@@ -52,6 +56,7 @@ public class NotSupportedClassConversionTest extends TestCase {
 		
 	}
 
+	@Test
 	public void testNullNotSupported() throws Exception {
 		Converter c = new Converter();
 		c.addConversion(new NotSupportedClassConversion(new Class[] { null }));
@@ -67,8 +72,8 @@ public class NotSupportedClassConversionTest extends TestCase {
 			assertNotNull(e);
 		}
 	}
-	
 
+	@Test
 	public void testNullParamNotSupported() throws Exception {
 		Converter c = new Converter();
 		c.addConversion(new NotSupportedClassConversion(null));
@@ -80,7 +85,8 @@ public class NotSupportedClassConversionTest extends TestCase {
 		lvResult = c.convert(null);
 		assertNull(lvResult);
 	}
-	
+
+	@Test
 	public void testNullParamNotSupported2() throws Exception {
 		Converter c = new Converter();
 		c.addConversion(new NotSupportedClassConversion());
@@ -93,7 +99,7 @@ public class NotSupportedClassConversionTest extends TestCase {
 		assertNull(lvResult);
 	}
 
-
+	@Test
 	public void testEmptyParamNotSupported() throws Exception {
 		Converter c = new Converter();
 		c.addConversion(new NotSupportedClassConversion(new Class[0]));

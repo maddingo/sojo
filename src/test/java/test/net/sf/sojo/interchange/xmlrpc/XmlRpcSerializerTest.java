@@ -30,7 +30,6 @@ import java.util.Properties;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import junit.framework.TestCase;
 import net.sf.sojo.core.ConversionException;
 import net.sf.sojo.core.UniqueIdGenerator;
 import net.sf.sojo.core.filter.ClassPropertyFilter;
@@ -42,6 +41,7 @@ import net.sf.sojo.interchange.xmlrpc.XmlRpcException;
 import net.sf.sojo.interchange.xmlrpc.XmlRpcParser;
 import net.sf.sojo.interchange.xmlrpc.XmlRpcSerializer;
 import net.sf.sojo.util.Util;
+import org.junit.Test;
 import test.net.sf.sojo.model.ABean;
 import test.net.sf.sojo.model.Address;
 import test.net.sf.sojo.model.BBean;
@@ -52,15 +52,19 @@ import test.net.sf.sojo.model.Node;
 import test.net.sf.sojo.model.Primitive;
 import test.net.sf.sojo.model.SpecialTypeBean;
 
-public class XmlRpcSerializerTest extends TestCase {
+import static org.junit.Assert.*;
+
+public class XmlRpcSerializerTest {
 
 	private XmlRpcSerializer xmlRpcSerializer = new XmlRpcSerializer();
-	
-	
+
+
+	@Test
 	public void testXmlRpcParserWithNullValue() throws Exception {
 		assertNull(new XmlRpcParser().parse(null));
 	}
-	
+
+	@Test
 	public void testXmlRpcParserWithNoXmlString() throws Exception {
 		try {
 			new XmlRpcParser().parse("No valid XML-String!");
@@ -69,11 +73,13 @@ public class XmlRpcSerializerTest extends TestCase {
 			assertNotNull(e);
 		}
 	}
-	
+
+	@Test
 	public void testDeserializeWithNullValue() throws Exception {
 		assertNull(xmlRpcSerializer.deserialize(null));
 	}
-	
+
+	@Test
 	public void testSimpleStringValueDeserialize() throws Exception {
 		String s = "<params><param><value>Simple String</value></param></params>";
 		Object lvResult = xmlRpcSerializer.deserialize(s);
@@ -89,7 +95,8 @@ public class XmlRpcSerializerTest extends TestCase {
 //		System.out.println(((List) lvResult).get(0));
 //		assertEquals("Simple String", ((List) lvResult).get(0));
 	}
-	
+
+	@Test
 	public void testSimpleIntValueDeserialize() throws Exception {
 		String s = "<params><param><value><i4>4711</i4></value></param></params>";
 		Object lvResult = xmlRpcSerializer.deserialize(s);
@@ -100,6 +107,7 @@ public class XmlRpcSerializerTest extends TestCase {
 		assertEquals(new Integer(4712), lvResult);
 	}
 
+	@Test
 	public void testSimpleBooleanValueDeserialize() throws Exception {
 		String s = "<params><param><value><boolean>1</boolean></value></param></params>";
 		Object lvResult = xmlRpcSerializer.deserialize(s);
@@ -118,6 +126,7 @@ public class XmlRpcSerializerTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testSimpleDoubleDeserialize() throws Exception {
 		String s = "<params><param><value><double>47.11</double></value></param></params>";
 		Object lvResult = xmlRpcSerializer.deserialize(s);
@@ -136,6 +145,7 @@ public class XmlRpcSerializerTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testSimpleDateDeserialize() throws Exception {
 		String s = "<params><param><value><dateTime.iso8601>20010330T13:54:55</dateTime.iso8601></value></param></params>";
 		Object lvResult = xmlRpcSerializer.deserialize(s);
@@ -152,7 +162,8 @@ public class XmlRpcSerializerTest extends TestCase {
 			assertNotNull(e);
 		}
 	}
-		
+
+	@Test
 	public void testExtensionsCalendar() throws Exception {
 		Calendar lvCalendar = Calendar.getInstance();
 		Date d = lvCalendar.getTime();
@@ -167,7 +178,8 @@ public class XmlRpcSerializerTest extends TestCase {
 		Calendar lvCalendarAfter = (Calendar) lvResult;
 		assertEquals(d, lvCalendarAfter.getTime());
 	}
-	
+
+	@Test
 	public void testExtensionsCalendarInValid() throws Exception {
 		String s = "<params><param><value><ex:dateTime>20010330 25:61:55.123</ex:dateTime></value></param></params>";
 		try {
@@ -178,7 +190,7 @@ public class XmlRpcSerializerTest extends TestCase {
 		}
 	}
 
-
+	@Test
 	public void testExtensionsBigDecimal() throws Exception {
 		BigDecimal bd = new BigDecimal("47.0011");
 		Object lvResult = xmlRpcSerializer.serialize(bd);
@@ -191,6 +203,7 @@ public class XmlRpcSerializerTest extends TestCase {
 		assertEquals(bd, bdAfter);
 	}
 
+	@Test
 	public void testExtensionsBigInteger() throws Exception {
 		BigInteger bi = new BigInteger("470011");
 		Object lvResult = xmlRpcSerializer.serialize(bi);
@@ -202,7 +215,8 @@ public class XmlRpcSerializerTest extends TestCase {
 		BigInteger biAfter = (BigInteger) lvResult;
 		assertEquals(bi, biAfter);
 	}
-	
+
+	@Test
 	public void testExtensionsNullValue() throws Exception {
 		Object lvResult = xmlRpcSerializer.serialize(null);
 		
@@ -212,7 +226,8 @@ public class XmlRpcSerializerTest extends TestCase {
 		lvResult = xmlRpcSerializer.deserialize(lvResult);
 		assertNull(lvResult);
 	}
-	
+
+	@Test
 	public void testDifferentValueDeserialize() throws Exception {
 		String s = 	"<params>" +
 						"<param><value><int>123</int></value></param>" +
@@ -229,6 +244,7 @@ public class XmlRpcSerializerTest extends TestCase {
 		assertEquals("MyString 222", lvList.get(3));
 	}
 
+	@Test
 	public void testStringArray() throws Exception {
 		String s = "<params><param><value><array><data>" +
 						"<value><string>aaA</string></value>" +
@@ -239,7 +255,8 @@ public class XmlRpcSerializerTest extends TestCase {
 		assertEquals("aaA", lvList.get(0));
 		assertEquals("bBb", lvList.get(1));
 	}
-	
+
+	@Test
 	public void testMixedTypeArray() throws Exception {
 		String s = "<params><param><value><array><data>" +
 						"<value>aaA</value>" +
@@ -255,6 +272,7 @@ public class XmlRpcSerializerTest extends TestCase {
 		assertEquals(new Double("0.123"), lvList.get(3));
 	}
 
+	@Test
 	public void testMixedTypeNestedArray() throws Exception {
 		String s = "<params><param><value><array><data>" +
 						"<value>text</value>" +
@@ -273,6 +291,7 @@ public class XmlRpcSerializerTest extends TestCase {
 		assertEquals(new Double("0.123"), lvList2.get(1));
 	}
 
+	@Test
 	public void testStringStructure() throws Exception {
 		String s = "<params><param><value><struct>" +
 						"<member><name>key 1</name><value><string>value 1</string></value></member>" +
@@ -284,7 +303,8 @@ public class XmlRpcSerializerTest extends TestCase {
 		assertEquals("value 1", lvMap.get("key 1"));
 		assertEquals("value 2", lvMap.get("key 2"));
 	}
-	
+
+	@Test
 	public void testMixedTypeStructure() throws Exception {
 		String s = "<params><param><value><struct>" +
 						"<member><name>symbol</name><value><string>RHAT</string></value></member>" +
@@ -301,6 +321,7 @@ public class XmlRpcSerializerTest extends TestCase {
 		assertEquals(Boolean.FALSE, lvMap.get("boolean"));
 	}
 
+	@Test
 	public void testNestedStructure() throws Exception {
 		String s = "<params><param><value><struct>" +
 				"<member><name>symbol</name><value><string>RHAT</string></value></member>" +
@@ -321,7 +342,8 @@ public class XmlRpcSerializerTest extends TestCase {
 		assertEquals("v2", lvMap2.get("k2"));
 		assertEquals(Boolean.TRUE, lvMap.get("boolean"));
 	}
-	
+
+	@Test
 	public void testNestedStructureInArray() throws Exception {
 		String s = "<params><param><value><array><data>" +
 						"<value>text</value>" +
@@ -339,7 +361,8 @@ public class XmlRpcSerializerTest extends TestCase {
 		assertEquals("v1", lvMap.get("k1"));
 		assertEquals("v2", lvMap.get("k2"));
 	}
-	
+
+	@Test
 	public void testSerializeSimpleBean() throws Exception {
 		Car lvCar = new Car("MyCar");
 		
@@ -349,7 +372,8 @@ public class XmlRpcSerializerTest extends TestCase {
 		Car lvCarAfter = (Car) lvResult;
 		assertEquals(lvCar.getName(), lvCarAfter.getName());
 	}
-	
+
+	@Test
 	public void testSerializeSimpleBean2() throws Exception {
 		Car lvCar = new Car("MyCar");
 		lvCar.setDescription("this is my car");
@@ -363,7 +387,8 @@ public class XmlRpcSerializerTest extends TestCase {
 		assertEquals(lvCar.getDescription(), lvCarAfter.getDescription());
 		assertEquals(lvCar.getBuild(), lvCarAfter.getBuild());
 	}
-	
+
+	@Test
 	public void testSerializeSimpleBeanWithProperties() throws Exception {
 		Car lvCar = new Car("MyCar");
 		lvCar.setProperties(new Properties());
@@ -382,7 +407,8 @@ public class XmlRpcSerializerTest extends TestCase {
 		assertEquals("v1", lvProperties.get("k1"));
 		assertEquals("v2", lvProperties.get("k2"));
 	}
-	
+
+	@Test
 	public void testSerializeComplexBean() throws Exception {
 		Customer lvCustomer = new Customer();
 		lvCustomer.setLastName("LastName");
@@ -422,6 +448,7 @@ public class XmlRpcSerializerTest extends TestCase {
 
 	}
 
+	@Test
 	public void testSerializeComplexBeanWithArray() throws Exception {
 		Customer lvCustomer = new Customer();
 		lvCustomer.setLastName("LastName");
@@ -448,7 +475,8 @@ public class XmlRpcSerializerTest extends TestCase {
 		assertEquals("MyCity 2", aArray[1].getCity());
 		assertEquals("54321", aArray[1].getPostcode());	
 	}
-	
+
+	@Test
 	public void testPrimitive() throws Exception {
 		Primitive p = Primitive.createPrimitiveExample();
 		
@@ -458,7 +486,8 @@ public class XmlRpcSerializerTest extends TestCase {
 
 		assertEquals(p.getBooleanValue(), pAfter.getBooleanValue());
 	}
-	
+
+	@Test
 	public void testBeanWithCycle() throws Exception {
 		Node n = new Node("ROOT");
 		Node n1 = new Node("N1");
@@ -479,6 +508,7 @@ public class XmlRpcSerializerTest extends TestCase {
 		assertEquals("N1", n1After.getName());
 	}
 
+	@Test
 	public void testFault() throws Exception {
 
 		String s = "<fault><value><struct>" +
@@ -493,7 +523,8 @@ public class XmlRpcSerializerTest extends TestCase {
 		assertEquals("Unknown stock symbol ABCD", lvMap.get("faultString"));
 		xmlRpcSerializer.setReturnValueAsList(true);
 	}
-	
+
+	@Test
 	public void testFaultAndThrow() throws Exception {
 
 		String s = "<fault><value><struct>" +
@@ -515,7 +546,7 @@ public class XmlRpcSerializerTest extends TestCase {
 		xmlRpcSerializer.setConvertResult2XmlRpcExceptionAndThrow(false);
 	}
 
-
+	@Test
 	public void testMethodWithSimpleStringValueDeserialize() throws Exception {
 		String s = "<methodCall><methodName>myMethod</methodName>" +
 						"<params><param><value>Simple String</value></param></params>" +
@@ -524,7 +555,8 @@ public class XmlRpcSerializerTest extends TestCase {
 		assertEquals("Simple String", lvResult);
 		assertEquals("myMethod", xmlRpcSerializer.getMethodName());				
 	}
-	
+
+	@Test
 	public void testRespons() throws Exception {
 		String s = "<methodResponse>" +
 						"<params><param><value>Simple String</value></param></params>" +
@@ -534,6 +566,7 @@ public class XmlRpcSerializerTest extends TestCase {
 		assertNull(xmlRpcSerializer.getMethodName());				
 	}
 
+	@Test
 	public void testCompleteXmlRpcRequest() throws Exception {
 		String lvResult = xmlRpcSerializer.serializeXmlRpcRequest("echo", "my echo string");
 		String s = "<?xml version='1.0' encoding='UTF-8'?>" +
@@ -543,6 +576,7 @@ public class XmlRpcSerializerTest extends TestCase {
 		assertEquals(s, lvResult);
 	}
 
+	@Test
 	public void testCompleteXmlRpcRequestWithOutmethodName() throws Exception {
 		try {
 			xmlRpcSerializer.serializeXmlRpcRequest("", "my echo string");
@@ -558,6 +592,7 @@ public class XmlRpcSerializerTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testCompleteXmlRpcResponse() throws Exception {
 		String lvResult = xmlRpcSerializer.serializeXmlRpcResponse("my echo string");
 		String s = "<?xml version='1.0' encoding='UTF-8'?><methodResponse>" +
@@ -566,6 +601,7 @@ public class XmlRpcSerializerTest extends TestCase {
 		assertEquals(s, lvResult);
 	}
 
+	@Test
 	public void testEmptyString() throws Exception {
 		Object lvResult = xmlRpcSerializer.serialize("");
 		String s = "<params><param><value><string></string></value></param></params>";
@@ -575,7 +611,8 @@ public class XmlRpcSerializerTest extends TestCase {
 		s = "<params><param><value><string> </string></value></param></params>";
 		assertEquals(s, lvResult);
 	}
-	
+
+	@Test
 	public void testThrownXmlRpcException() throws Exception {
 		Object lvResult = xmlRpcSerializer.serialize("aa");
 		String s = "<params><param><value><string>aa</string></value></param></params>";
@@ -603,7 +640,8 @@ public class XmlRpcSerializerTest extends TestCase {
 		assertEquals(new Integer("23"), lvMap.get("faultCode"));
 		assertEquals("Unknown stock symbol ABCD", lvMap.get("faultString"));
 	}
-	
+
+	@Test
 	public void testThrownXmlRpcExceptionNotXmlRpcString() throws Exception {
 		String s = "<no-xml-rpc><param><value><string>aa</string></value></param></no-xml-rpc>";
 		try {
@@ -614,7 +652,8 @@ public class XmlRpcSerializerTest extends TestCase {
 		}
 		
 	}
-	
+
+	@Test
 	public void testSpecialXmlChars() throws Exception {
 		Object lvResult = xmlRpcSerializer.serialize("test < -- > string");
 		String s = "<params><param><value><string>test &lt; -- &gt; string</string></value></param></params>";
@@ -622,8 +661,8 @@ public class XmlRpcSerializerTest extends TestCase {
 		
 //		lvResult = xmlRpcSerializer.deserialize(lvResult);
 	}
-	
-	
+
+	@Test
 	public void testSerializeWithClassPathFilter() throws Exception {
 		Serializer lvSerializer = new XmlRpcSerializer(false);
 		ClassPropertyFilter lvFilter = ClassPropertyFilterHelper.createClassPropertyFilterByClass(Car.class).removeProperty("build").removeProperty("description");
@@ -641,6 +680,7 @@ public class XmlRpcSerializerTest extends TestCase {
 		assertEquals("This is my car", lvCarAfter.getDescription());
 	}
 
+	@Test
 	public void testDeSerializeWithOutRootClass() throws Exception {
 		Car lvCar = new Car("BMW");
 		lvCar.setDescription("This BMW is my Car");
@@ -657,6 +697,7 @@ public class XmlRpcSerializerTest extends TestCase {
 		assertFalse("Map don't contains class attribute", lvMap.containsKey("class"));
 	}
 
+	@Test
 	public void testDeSerializeWithRootClass() throws Exception {
 		Car lvCar = new Car("BMW");
 		lvCar.setDescription("This BMW is my Car");
@@ -672,6 +713,7 @@ public class XmlRpcSerializerTest extends TestCase {
 		assertEquals("This BMW is my Car", lvCarAfter.getDescription());
 	}
 
+	@Test
 	public void testDeSerializeException() throws Exception {
 		Serializer lvSerializer = new XmlRpcSerializer();
 		Exception lvException = new ConversionException("JUnit-Test-Exception");
@@ -681,7 +723,8 @@ public class XmlRpcSerializerTest extends TestCase {
 		assertNull(e.getCause());
 		assertTrue(5 < e.getStackTrace().length);
 	}
-	
+
+	@Test
 	public void testDeSerializeNestedException() throws Exception {
 		Serializer lvSerializer = new XmlRpcSerializer();
 		Exception lvException = new ConversionException("JUnit-Test-Exception", new NullPointerException("Nested"));
@@ -695,7 +738,7 @@ public class XmlRpcSerializerTest extends TestCase {
 		assertTrue(5 < lvNestedExc.getStackTrace().length);
 	}
 
-	
+	@Test
 	public void testSerializeWithPropertyFilter() throws Exception {
 		Car lvCar = new Car("BMW");
 		lvCar.setBuild(new Date());
@@ -711,7 +754,8 @@ public class XmlRpcSerializerTest extends TestCase {
 		assertEquals(lvCar.getDescription(), lvCarAfter.getDescription());
 		assertNull(lvCarAfter.getBuild());
 	}
-	
+
+	@Test
 	public void testSerializeWithPropertyFilterAndFilteringClass() throws Exception {
 		Car lvCar = new Car("BMW");
 		lvCar.setBuild(new Date());
@@ -736,6 +780,7 @@ public class XmlRpcSerializerTest extends TestCase {
 		assertNull(lvCarAfter.getBuild());
 	}
 
+	@Test
 	public void testSerializeWithPropertyFilterAndFilteringUniqueId() throws Exception {
 		Car lvCar = new Car("BMW");
 		lvCar.setBuild(new Date());
@@ -761,6 +806,7 @@ public class XmlRpcSerializerTest extends TestCase {
 		assertNull(lvCarAfter.getBuild());
 	}
 
+	@Test
 	public void testSerializeURLpropety() throws Exception {
 		SpecialTypeBean lvBean = new SpecialTypeBean();
 		String lvUrlStr = "http://myurl.net";
@@ -776,6 +822,7 @@ public class XmlRpcSerializerTest extends TestCase {
 		assertNull(lvBeanAfter.getObject());
 	}
 
+	@Test
 	public void testSerializeObject2FloatProperty() throws Exception {
 		SpecialTypeBean lvBean = new SpecialTypeBean();
 		Float lvValue = new Float(47.11);
@@ -790,7 +837,8 @@ public class XmlRpcSerializerTest extends TestCase {
 		assertEquals(lvValue, lvBeanAfter.getObject());
 		assertNull(lvBeanAfter.getUrl());
 	}
-	
+
+	@Test
 	public void testRenameKeyWordClass() throws Exception {
 		Util.setKeyWordClass("clazz");
 		assertEquals("clazz", Util.getKeyWordClass());
@@ -807,6 +855,7 @@ public class XmlRpcSerializerTest extends TestCase {
 		assertEquals(Util.DEFAULT_KEY_WORD_CLASS, Util.getKeyWordClass());
 	}
 
+	@Test
 	public void testMultipleReferences() throws Exception {
 	    BBean b = new BBean();
 	    ABean a = new ABean();
@@ -827,8 +876,9 @@ public class XmlRpcSerializerTest extends TestCase {
 	    assertTrue (ades.getThirdRef() == bBeanAfter);
 	    assertTrue (ades.getFourthRef() != null);
 	    assertTrue (ades.getFourthRef() == bBeanAfter);
-	} 
+	}
 
+	@Test
 	public void testTransformDefaultMutableTreeNode() throws Exception {
 		String lvFilter[] = new String [] {"class", "parent", "children", "userObject", "allowsChildren"};
 		ReflectionFieldHelper.addAllFields2MapByClass(DefaultMutableTreeNode.class, lvFilter);

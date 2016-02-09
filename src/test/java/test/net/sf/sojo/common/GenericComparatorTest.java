@@ -18,13 +18,16 @@ package test.net.sf.sojo.common;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.junit.Test;
 import test.net.sf.sojo.model.Node;
 import net.sf.sojo.common.GenericComparator;
 import net.sf.sojo.common.IterableUtil;
-import junit.framework.TestCase;
 
-public class GenericComparatorTest extends TestCase {
+import static org.junit.Assert.*;
 
+public class GenericComparatorTest {
+
+	@Test
 	public void testComapreNull() throws Exception {
 		GenericComparator lvComparator = new GenericComparator();
 		try {
@@ -50,6 +53,7 @@ public class GenericComparatorTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testComapreSimpleString() throws Exception {
 		GenericComparator lvComparator = new GenericComparator();
 		int lvCompareResult = lvComparator.compare("Node1", "Node1");
@@ -62,6 +66,7 @@ public class GenericComparatorTest extends TestCase {
 		assertEquals(1, lvCompareResult);
 	}
 
+	@Test
 	public void testComapreSimpleLongGetUnEqualsByEquals() throws Exception {
 		GenericComparator lvComparator = new GenericComparator();
 		int lvCompareResult = lvComparator.compare(new Long("-1"), new Long("-1"));
@@ -77,6 +82,7 @@ public class GenericComparatorTest extends TestCase {
 
 	}
 
+	@Test
 	public void testComapreSimpleLong() throws Exception {
 		GenericComparator lvComparator = new GenericComparator();
 		int lvCompareResult = lvComparator.compare(new Long("-1"), new Long("-1"));
@@ -89,6 +95,7 @@ public class GenericComparatorTest extends TestCase {
 		assertEquals(1, lvCompareResult);
 	}
 
+	@Test
 	public void testComapreSimpleDouble() throws Exception {
 		GenericComparator lvComparator = new GenericComparator();
 		int lvCompareResult = lvComparator.compare(new Double("4711"), new Double("4711"));
@@ -101,6 +108,7 @@ public class GenericComparatorTest extends TestCase {
 		assertEquals(1, lvCompareResult);
 	}
 
+	@Test
 	public void testComapreNodeBean() throws Exception {
 		Node n1 = new Node("Node1");
 		Node n2 = new Node("Node2");
@@ -119,6 +127,7 @@ public class GenericComparatorTest extends TestCase {
 		assertEquals(1, lvCompareResult);
 	}
 
+	@Test
 	public void testComapreNodeBeanWithCycle() throws Exception {
 		Node n0 = new Node("Node0");
 		Node n1 = new Node("Node1");
@@ -141,7 +150,8 @@ public class GenericComparatorTest extends TestCase {
 		lvCompareResult = lvComparator.compare(n2, n1);
 		assertEquals(1, lvCompareResult);
 	}
-	
+
+	@Test
 	public void testSortedSet() throws Exception {
 		Node n0 = new Node("Node0");
 		Node n1 = new Node("Node1");

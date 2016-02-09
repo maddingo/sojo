@@ -20,18 +20,21 @@ import java.util.Map;
 
 import net.sf.sojo.core.reflect.ClassPropertiesCache;
 
+import org.junit.Test;
 import test.net.sf.sojo.model.Node;
-import junit.framework.TestCase;
 
-public class ClassPropertiesCacheTest extends TestCase {
-	
+import static org.junit.Assert.*;
+
+public class ClassPropertiesCacheTest {
+
+	@Test
 	public void testAllClassPropertiesMap() throws Exception {
 		ClassPropertiesCache lvCache = new ClassPropertiesCache();
 		lvCache.addClassPropertiesMap(Node.class, new HashMap<Object, Object>());
 		assertEquals(1, lvCache.size());
 	}
-	
-		    
+
+	@Test
 	public void testGetClassPropertiesMapByClass() throws Exception {
 		ClassPropertiesCache lvCache = new ClassPropertiesCache();
 		lvCache.addClassPropertiesMap(Node.class, new HashMap<Object, Object>());

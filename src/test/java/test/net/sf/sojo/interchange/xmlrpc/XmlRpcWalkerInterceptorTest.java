@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.junit.Test;
 import test.net.sf.sojo.model.Car;
 import test.net.sf.sojo.model.Customer;
 
@@ -28,9 +29,10 @@ import net.sf.sojo.common.ObjectGraphWalker;
 import net.sf.sojo.core.Constants;
 import net.sf.sojo.interchange.xmlrpc.XmlRpcException;
 import net.sf.sojo.interchange.xmlrpc.XmlRpcWalkerInterceptor;
-import junit.framework.TestCase;
 
-public class XmlRpcWalkerInterceptorTest extends TestCase {
+import static org.junit.Assert.*;
+
+public class XmlRpcWalkerInterceptorTest {
 
 	private ObjectGraphWalker walker = new ObjectGraphWalker();
 	private XmlRpcWalkerInterceptor xmlRpcWalker = new XmlRpcWalkerInterceptor();
@@ -38,7 +40,9 @@ public class XmlRpcWalkerInterceptorTest extends TestCase {
 	public XmlRpcWalkerInterceptorTest() {
 		walker.addInterceptor(xmlRpcWalker);
 	}
-	
+
+
+	@Test
 	public void testXmlRpcWalkerInterceptor() throws Exception {
 		XmlRpcWalkerInterceptor lvInterceptor = new XmlRpcWalkerInterceptor();
 		assertEquals("", lvInterceptor.getXmlRpcString());
@@ -52,19 +56,22 @@ public class XmlRpcWalkerInterceptorTest extends TestCase {
 		lvInterceptor.visitIterateableElement(new HashMap<Object, Object>(), -1, "", Constants.ITERATOR_END);
 		assertEquals("", lvInterceptor.getXmlRpcString());
 	}
-	
+
+	@Test
 	public void testSimpleString() throws Exception {
 		walker.walk("MyTestString");
 		String s = "<params><param><value><string>MyTestString</string></value></param></params>";
 		assertEquals(s, xmlRpcWalker.getXmlRpcString());
 	}
-	
+
+	@Test
 	public void testSimpleInteger() throws Exception {
 		walker.walk(new Integer(4711));
 		String s = "<params><param><value><i4>4711</i4></value></param></params>";
 		assertEquals(s, xmlRpcWalker.getXmlRpcString());
 	}
-	
+
+	@Test
 	public void testSimpleBoolean() throws Exception {
 		walker.walk(Boolean.TRUE);
 		String s = "<params><param><value><boolean>1</boolean></value></param></params>";
@@ -75,6 +82,7 @@ public class XmlRpcWalkerInterceptorTest extends TestCase {
 		assertEquals(s, xmlRpcWalker.getXmlRpcString());
 	}
 
+	@Test
 	public void testSimpleDouble() throws Exception {
 		walker.walk(new Double(4711));
 		String s = "<params><param><value><double>4711.0</double></value></param></params>";
@@ -86,6 +94,7 @@ public class XmlRpcWalkerInterceptorTest extends TestCase {
 
 	}
 
+	@Test
 	public void testSimpleDate() throws Exception {
                 Calendar calendar = Calendar.getInstance();
                 calendar.set(1970, 0, 9, 3, 26, 40);
@@ -93,7 +102,8 @@ public class XmlRpcWalkerInterceptorTest extends TestCase {
 		String s = "<params><param><value><dateTime.iso8601>19700109T03:26:40</dateTime.iso8601></value></param></params>";
 		assertEquals(s, xmlRpcWalker.getXmlRpcString());
 	}
-	
+
+	@Test
 	public void testArrayWithSimpleStringElements() throws Exception {
 		walker.walk(new Object[] { "sojo"});
 		String s = "<params><param><value><string>sojo</string></value></param></params>";
@@ -107,6 +117,7 @@ public class XmlRpcWalkerInterceptorTest extends TestCase {
 		assertEquals(s, xmlRpcWalker.getXmlRpcString());
 	}
 
+	@Test
 	public void testArrayWithSimpleMixedElements() throws Exception {
 		walker.walk(new Object[] { Boolean.TRUE, new Double ("56.12") });
 		String s = "<params>" +
@@ -125,6 +136,7 @@ public class XmlRpcWalkerInterceptorTest extends TestCase {
 		assertEquals(s, xmlRpcWalker.getXmlRpcString());
 	}
 
+	@Test
 	public void __testMapWithStringElements() throws Exception {
 		Map<String, String> lvMap = new HashMap<String, String>();
 		lvMap.put("key", "value");
@@ -143,7 +155,8 @@ public class XmlRpcWalkerInterceptorTest extends TestCase {
 			"</struct></value></param></params>";
 		assertEquals(s, xmlRpcWalker.getXmlRpcString());
 	}
-	
+
+	@Test
 	public void __testMapWithDifferentsElements() throws Exception {
 		Map<String, Comparable<?>> lvMap = new HashMap<String, Comparable<?>>();
 		lvMap.put("key-int", new Integer(1234));
@@ -170,7 +183,8 @@ public class XmlRpcWalkerInterceptorTest extends TestCase {
 			"</struct></value></param></params>";
 		assertEquals(s, xmlRpcWalker.getXmlRpcString());
 	}
-	
+
+	@Test
 	public void testKeyIsNotFromTypeString() throws Exception {
 		Map<Integer, Integer> lvMap = new HashMap<Integer, Integer>();
 		lvMap.put(new Integer(1), new Integer(1234));
@@ -181,7 +195,8 @@ public class XmlRpcWalkerInterceptorTest extends TestCase {
 			assertNotNull(e);
 		}
 	}
-	
+
+	@Test
 	public void __testSimpleBean() throws Exception {
 		Car lvCar = new Car();
 		lvCar.setName("BMW");
@@ -195,7 +210,8 @@ public class XmlRpcWalkerInterceptorTest extends TestCase {
 		
 		assertEquals(s, xmlRpcWalker.getXmlRpcString());
 	}
-	
+
+	@Test
 	public void testMapInArray() throws Exception {
 		Map<String, Comparable<?>> lvMap = new LinkedHashMap<String, Comparable<?>>();
 		lvMap.put("k1", "v1");
@@ -218,12 +234,14 @@ public class XmlRpcWalkerInterceptorTest extends TestCase {
 		assertEquals(s, xmlRpcWalker.getXmlRpcString());
 	}
 
+	@Test
 	public void testEmptyArray() throws Exception {
 		walker.walk(new Object[] {});
 		String s = "<params></params>";
 		assertEquals(s, xmlRpcWalker.getXmlRpcString());
 	}
 
+	@Test
 	public void testEmptyArrayInMap() throws Exception {
 		Map<String, Object[]> lvMap = new HashMap<String, Object[]>();
 		lvMap.put("emptyArray", new Object[] {} );
@@ -237,12 +255,14 @@ public class XmlRpcWalkerInterceptorTest extends TestCase {
 		assertEquals(s, xmlRpcWalker.getXmlRpcString());
 	}
 
+	@Test
 	public void testEmptyMap() throws Exception {
 		walker.walk(new HashMap<Object, Object>());
 		String s = "<params><param><value><struct></struct></value></param></params>";
 		assertEquals(s, xmlRpcWalker.getXmlRpcString());
 	}
 
+	@Test
 	public void testArrayInArray() throws Exception {
 		Object lvArray = new Object[] { new Object[] { "string", Boolean.TRUE, new Double("12.009") } };
 		walker.walk(lvArray);
@@ -253,7 +273,8 @@ public class XmlRpcWalkerInterceptorTest extends TestCase {
 					"</data></array></value></param></params>";
 		assertEquals(s, xmlRpcWalker.getXmlRpcString());
 	}
-	
+
+	@Test
 	public void testArrayInArrayAndSimpleElements() throws Exception {
 		Object lvArray = new Object[] { new Integer(23), 
 										new Object[] { "string", Boolean.TRUE, new Double("12.009") },
@@ -272,6 +293,7 @@ public class XmlRpcWalkerInterceptorTest extends TestCase {
 		assertEquals(s, xmlRpcWalker.getXmlRpcString());
 	}
 
+	@Test
 	public void __testBeansInArray() throws Exception {
 		Object lvArray = new Object[] { new Car("MyCar"), 
 										new Object[] { "string", Boolean.TRUE, new Double("12.009") } , 

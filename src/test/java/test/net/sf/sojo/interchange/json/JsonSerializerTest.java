@@ -34,7 +34,6 @@ import java.util.Set;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import junit.framework.TestCase;
 import net.sf.sojo.core.ConversionException;
 import net.sf.sojo.core.UniqueIdGenerator;
 import net.sf.sojo.core.conversion.Simple2SimpleConversion;
@@ -47,6 +46,7 @@ import net.sf.sojo.interchange.Serializer;
 import net.sf.sojo.interchange.SerializerException;
 import net.sf.sojo.interchange.json.JsonSerializer;
 import net.sf.sojo.util.Util;
+import org.junit.Test;
 import test.net.sf.sojo.model.ABean;
 import test.net.sf.sojo.model.BBean;
 import test.net.sf.sojo.model.Bean;
@@ -56,10 +56,13 @@ import test.net.sf.sojo.model.Node;
 import test.net.sf.sojo.model.Primitive;
 import test.net.sf.sojo.model.SpecialTypeBean;
 
-public class JsonSerializerTest extends TestCase {
+import static org.junit.Assert.*;
+
+public class JsonSerializerTest {
 
 	private JsonSerializer jsonSerializer = new JsonSerializer();
-	
+
+	@Test
 	public void testSimpleStringAndBack() throws Exception {
 		String s = "MyTestString";
 		Object lvResult = jsonSerializer.serialize(s);
@@ -67,6 +70,8 @@ public class JsonSerializerTest extends TestCase {
 		assertEquals(s, lvResult);
 	}
 
+
+	@Test
 	public void testSimpleStringAndBack2() throws Exception {
 		String s = "\"MyTestString\"";
 		Object lvResult = jsonSerializer.serialize(s);
@@ -74,6 +79,8 @@ public class JsonSerializerTest extends TestCase {
 		assertEquals("\"MyTestString\"", lvResult);
 	}
 
+
+	@Test
 	public void testSimpleStringAndBackWithSpecialCharacter() throws Exception {
 		String s = "My\nTest\tString";
 		Object lvResult = jsonSerializer.serialize(s);
@@ -82,7 +89,8 @@ public class JsonSerializerTest extends TestCase {
 		lvResult = jsonSerializer.deserialize(lvResult);
 		assertEquals("My\nTest\tString", lvResult);
 	}
-	
+
+	@Test
 	public void testSimpleBooleanAndBack() throws Exception {
 		Object lvResult = jsonSerializer.serialize(Boolean.TRUE);
 		lvResult = jsonSerializer.deserialize(lvResult);
@@ -93,6 +101,7 @@ public class JsonSerializerTest extends TestCase {
 		assertEquals(Boolean.FALSE, lvResult);
 	}
 
+	@Test
 	public void testSimpleDoubleAndBack() throws Exception {
 		Double d = new Double("19.0000000001");
 		Object lvResult = jsonSerializer.serialize(d);
@@ -100,13 +109,15 @@ public class JsonSerializerTest extends TestCase {
 		assertEquals(d, lvResult);
 	}
 
+	@Test
 	public void testSimpleBigDecimalAndBack() throws Exception {
 		BigDecimal bd = new BigDecimal("19.0000000001");
 		Object lvResult = jsonSerializer.serialize(bd);
 		lvResult = jsonSerializer.deserialize(lvResult);
 		assertEquals(new Double("19.0000000001"), lvResult);
 	}
-	
+
+	@Test
 	public void testSimpleByteAndBack() throws Exception {
 		Byte b = new Byte("20");
 		Object lvResult = jsonSerializer.serialize(b);
@@ -114,6 +125,7 @@ public class JsonSerializerTest extends TestCase {
 		assertEquals(new Long("20"), lvResult);
 	}
 
+	@Test
 	public void testSimpleByteArrayAndBack2LongList() throws Exception {
 		byte b[] = new byte[] { 2, 4, 9 };
 		Object lvResult = jsonSerializer.serialize(b);
@@ -125,6 +137,7 @@ public class JsonSerializerTest extends TestCase {
 		assertEquals(l, lvResult);
 	}
 
+	@Test
 	public void testSimpleByteArrayAndBack() throws Exception {
 		byte b[] = new byte[] { 2, 4, 9 };
 		Object lvResult = jsonSerializer.serialize(b);
@@ -137,6 +150,7 @@ public class JsonSerializerTest extends TestCase {
 		assertEquals(b[2], bAfter[2]);
 	}
 
+	@Test
 	public void testArrayWithIntegerAndDoubleValue() throws Exception {
 		Object o[] = new Object[] { "2", "4.5", "9" };
 		Object lvResult = jsonSerializer.serialize(o);
@@ -148,6 +162,7 @@ public class JsonSerializerTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testByteArrayAndBack() throws Exception {
 		Byte b[] = new Byte[] { new Byte("2"), new Byte("4"), new Byte("9") };
 		Object lvResult = jsonSerializer.serialize(b);
@@ -160,6 +175,7 @@ public class JsonSerializerTest extends TestCase {
 		assertEquals(b[2], bAfter[2]);
 	}
 
+	@Test
 	public void testByteWithNullValueArrayAndBack() throws Exception {
 		Byte b[] = new Byte[] { new Byte("2"), null, new Byte("9") };
 		Object lvResult = jsonSerializer.serialize(b);
@@ -172,6 +188,7 @@ public class JsonSerializerTest extends TestCase {
 		assertEquals(b[2], bAfter[2]);
 	}
 
+	@Test
 	public void testByteArray2SimpeBack() throws Exception {
 		Byte b[] = new Byte[] { new Byte("2"), new Byte("4"), new Byte("9") };
 		Object lvResult = jsonSerializer.serialize(b);
@@ -184,6 +201,7 @@ public class JsonSerializerTest extends TestCase {
 		assertEquals(b[2].byteValue(), bAfter[2]);
 	}
 
+	@Test
 	public void testMixedArrayAndBack() throws Exception {
 		Object b[] = new Object[] { new Byte("2"), new Integer(4), new Long(9) };
 		Object lvResult = jsonSerializer.serialize(b);
@@ -196,6 +214,7 @@ public class JsonSerializerTest extends TestCase {
 		assertEquals(b[2].toString(), bAfter[2].toString());
 	}
 
+	@Test
 	public void testSimpleIntArray2SimpleInt() throws Exception {
 		int i[] = new int[] { 2, 4, 9 };
 		Object lvResult = jsonSerializer.serialize(i);
@@ -208,6 +227,7 @@ public class JsonSerializerTest extends TestCase {
 		assertEquals(i[2], iAfter[2]);
 	}
 
+	@Test
 	public void testSimpleIntArray2Integer() throws Exception {
 		int i[] = new int[] { 2, 4, 9 };
 		Object lvResult = jsonSerializer.serialize(i);
@@ -219,7 +239,8 @@ public class JsonSerializerTest extends TestCase {
 		assertEquals(i[1], iAfter[1].intValue());
 		assertEquals(i[2], iAfter[2].intValue());
 	}
-	
+
+	@Test
 	public void testByteArrayAsProperty() throws Exception {
 		Customer lvCustomer = new Customer("customer");
 		byte b[] = new byte[] { 2, 4, 9 };
@@ -237,6 +258,7 @@ public class JsonSerializerTest extends TestCase {
 		assertEquals(b[2], lvCustomerAfter.getBytes()[2]);
 	}
 
+	@Test
 	public void testMapWithByteArray() throws Exception {
 		Map<String, Object> lvMap = new HashMap<String, Object>();
 		lvMap.put("a", "a");
@@ -253,7 +275,8 @@ public class JsonSerializerTest extends TestCase {
 		assertEquals(new Long(4), l.get(1));
 		assertEquals(new Long(9), l.get(2));
 	}
-	
+
+	@Test
 	public void testEmptyListAndBack() throws Exception {
 		Collection<?> c = new ArrayList<Object>();
 		Object lvResult = jsonSerializer.serialize(c);
@@ -261,6 +284,7 @@ public class JsonSerializerTest extends TestCase {
 		assertEquals(c, lvResult);
 	}
 
+	@Test
 	public void testListAndBack() throws Exception {
 		Collection<Object> c = new ArrayList<Object>();
 		c.add("text");
@@ -284,6 +308,7 @@ public class JsonSerializerTest extends TestCase {
 		assertEquals(m, lvListAfter.get(1));
 	}
 
+	@Test
 	public void testEmptySetAndBack() throws Exception {
 		Set<?> s = new HashSet<Object>();
 		Object lvResult = jsonSerializer.serialize(s);
@@ -291,13 +316,15 @@ public class JsonSerializerTest extends TestCase {
 		assertEquals(new ArrayList<Object>(), lvResult);
 	}
 
+	@Test
 	public void testEmptyMapAndBack() throws Exception {
 		Map<?, ?> m = new HashMap<Object, Object>();
 		Object lvResult = jsonSerializer.serialize(m);
 		lvResult = jsonSerializer.deserialize(lvResult);
 		assertEquals(m, lvResult);
 	}
-	
+
+	@Test
 	public void testMapContainsEmptyListAndBack() throws Exception {
 		Map<String, List<?>> m = new HashMap<String, List<?>>();
 		m.put("empty-list", new ArrayList<Object>());
@@ -307,6 +334,7 @@ public class JsonSerializerTest extends TestCase {
 		assertEquals(m.get("empty-list"), new ArrayList<Object>());
 	}
 
+	@Test
 	public void testListContainsEmptyMapAndBack() throws Exception {
 		Collection<HashMap<?, ?>> c = new ArrayList<HashMap<?, ?>>();
 		c.add(new HashMap<Object, Object>());
@@ -315,7 +343,8 @@ public class JsonSerializerTest extends TestCase {
 		assertEquals(c, lvResult);
 		assertEquals(c.iterator().next(), new HashMap<Object, Object>());
 	}
-	
+
+	@Test
 	public void testNestedMapInList() throws Exception {
 		List<Object> l = new ArrayList<Object>();
 		Map<String, Object> m = new HashMap<String, Object>();
@@ -341,11 +370,13 @@ public class JsonSerializerTest extends TestCase {
 		assertEquals(((Set<?>) m.get("set")).iterator().next(), ((Set<?>) mAfter.get("set")).iterator().next());
 	}
 
+	@Test
 	public void testDeserializeNullValue() throws Exception {
 		Object lvResult = jsonSerializer.deserialize(null);
 		assertNull(lvResult);
 	}
 
+	@Test
 	public void testSimpleBean() throws Exception {
 		Car lvCar = new Car("MyCar");
 		Object lvResult = jsonSerializer.serialize(lvCar);
@@ -354,6 +385,7 @@ public class JsonSerializerTest extends TestCase {
 		assertEquals("MyCar", lvCarAfter.getName());
 	}
 
+	@Test
 	public void testBeanWithProperties() throws Exception {
 		Car lvCar = new Car("TheCar");
 		Date d = new Date(980859295000l);
@@ -371,7 +403,8 @@ public class JsonSerializerTest extends TestCase {
 		assertEquals("v1", lvCarAfter.getProperties().get("k1"));
 		assertEquals("v2", lvCarAfter.getProperties().get("k2"));
 	}
-	
+
+	@Test
 	public void testBeanWithChilds() throws Exception {
 		Node n = new Node("N");
 		Node n1 = new Node("N1");
@@ -391,6 +424,7 @@ public class JsonSerializerTest extends TestCase {
 		assertEquals("N2", ((Node) nAfter.getChildren().get(1)).getName());
 	}
 
+	@Test
 	public void testBeanWithNamedChilds() throws Exception {
 		Node n = new Node("N");
 		Node n1 = new Node("N1");
@@ -410,6 +444,7 @@ public class JsonSerializerTest extends TestCase {
 		assertEquals("N2", ((Node) nAfter.getNamedChildren().get("N2")).getName());
 	}
 
+	@Test
 	public void testBeanWithChildsWithCycles() throws Exception {
 		Node n = new Node("N");
 		Node n1 = new Node("N1");
@@ -433,6 +468,7 @@ public class JsonSerializerTest extends TestCase {
 		assertEquals(nAfter, n2After.getParent());
 	}
 
+	@Test
 	public void testBeanWithNamedChildsWithCycles() throws Exception {
 		Node n = new Node("N");
 		Node n1 = new Node("N1");
@@ -456,7 +492,8 @@ public class JsonSerializerTest extends TestCase {
 		assertEquals("N", n1After.getParent().getName());
 		assertEquals(nAfter, n1After.getParent());
 	}
-	
+
+	@Test
 	public void testPrimitive() throws Exception {
 		Primitive lvPrimitive = Primitive.createPrimitiveExample();
 		Object lvResult = jsonSerializer.serialize(lvPrimitive);
@@ -473,6 +510,7 @@ public class JsonSerializerTest extends TestCase {
 		assertEquals(lvPrimitive.getShortValue(), lvPrimitiveAfter.getShortValue());
 	}
 
+	@Test
 	public void testWithSimpleKeyMapper() throws Exception {
 		Map<String, String> lvMap = new HashMap<String, String>();
 		lvMap.put("k1", "v1");
@@ -488,7 +526,8 @@ public class JsonSerializerTest extends TestCase {
 			assertNotNull(e);
 		}
 	}
-	
+
+	@Test
 	public void testSerializeWithClassPathFilter() throws Exception {
 		Serializer lvSerializer = new JsonSerializer();
 		assertNull(lvSerializer.getClassPropertyFilterHandler());
@@ -509,6 +548,7 @@ public class JsonSerializerTest extends TestCase {
 		assertNotNull(lvSerializer.getClassPropertyFilterHandler());
 	}
 
+	@Test
 	public void testMapWithKeyThatAreNotStrings() throws Exception {
 		Map<Comparable<?>, Comparable<?>> lvMap = new HashMap<Comparable<?>, Comparable<?>>();
 		lvMap.put("foo", "foo");
@@ -522,7 +562,8 @@ public class JsonSerializerTest extends TestCase {
 			assertNotNull(e);
 		}
 	}
-	
+
+	@Test
 	public void testMapWithKeyThatAreStrings() throws Exception {
 		Map<String, String> lvMap = new HashMap<String, String>();
 		lvMap.put("foo", "foo");
@@ -539,6 +580,7 @@ public class JsonSerializerTest extends TestCase {
 		assertEquals(LinkedHashMap.class, lvMapAfter.getClass());
 	}
 
+	@Test
 	public void testMapWithKeyThatAreStringsWithNullValue() throws Exception {
 		Map<String, String> lvMap = new LinkedHashMap<String, String>();
 		lvMap.put("foo", "foo");
@@ -556,6 +598,7 @@ public class JsonSerializerTest extends TestCase {
 		assertEquals(LinkedHashMap.class, lvMapAfter.getClass());
 	}
 
+	@Test
 	public void testMapWithKeyThatAreStringsWithNoNullValue() throws Exception {
 		Map<String, String> lvMap = new LinkedHashMap<String, String>();
 		lvMap.put("foo", "foo");
@@ -576,7 +619,8 @@ public class JsonSerializerTest extends TestCase {
 		// TODO shouldn't we just check that it is a Map? 
 		assertEquals(LinkedHashMap.class, lvMapAfter.getClass());
 	}
-		
+
+	@Test
 	public void testQuotationMarkEscapes() throws Exception {
 		Serializer lvSerializer = new JsonSerializer();
 		Object o = lvSerializer.serialize("this is an \"quoted string\"");
@@ -592,12 +636,14 @@ public class JsonSerializerTest extends TestCase {
 
 	}
 
+	@Test
 	public void testDoNotIgnoreOneBackSlash() throws Exception {
 		Serializer lvSerializer = new JsonSerializer();
 		Object o = lvSerializer.serialize("this is one\\");
 		assertEquals("\"this is one\\\\\"", o);
 	}
 
+	@Test
 	public void testSlashMarkEscapesAndIgnoreOneBackSlash() throws Exception {
 		Serializer lvSerializer = new JsonSerializer();
 		Object o = lvSerializer.serialize("this is an /slash string/");
@@ -615,6 +661,7 @@ public class JsonSerializerTest extends TestCase {
 		assertEquals("{\"ke\\/y\":\"val\\/ue\"}", o);
 	}
 
+	@Test
 	public void testBackSlashMarkEscapes() throws Exception {
 		Serializer lvSerializer = new JsonSerializer();
 		Object o = lvSerializer.serialize("this is an \\slash string\\");
@@ -629,6 +676,7 @@ public class JsonSerializerTest extends TestCase {
 		assertEquals("{\"ke\\\\\\\\y\":\"va\\\\\\\\lue\"}", o);
 	}
 
+	@Test
 	public void testEscapeQuotaInBean() throws Exception {
 		Car lvCar = new Car("BMW");
 		String lvDescription = "This BMW \" is my Car";
@@ -644,6 +692,7 @@ public class JsonSerializerTest extends TestCase {
 		assertEquals(lvDescription, lvCarAfter.getDescription());
 	}
 
+	@Test
 	public void testEscapeSimpleQuotaInBean() throws Exception {
 		Car lvCar = new Car("BMW");
 		String lvDescription = "This BMW ' is my Car";
@@ -659,6 +708,7 @@ public class JsonSerializerTest extends TestCase {
 		assertEquals(lvDescription, lvCarAfter.getDescription());
 	}
 
+	@Test
 	public void testDeSerializeWithOutRootClass() throws Exception {
 		Car lvCar = new Car("BMW");
 		lvCar.setDescription("This BMW is my Car");
@@ -672,6 +722,7 @@ public class JsonSerializerTest extends TestCase {
 		assertFalse("Map don't contains class attribute", lvMap.containsKey("class"));
 	}
 
+	@Test
 	public void testDeSerializeWithRootClass() throws Exception {
 		Car lvCar = new Car("BMW");
 		lvCar.setDescription("This BMW is my Car");
@@ -684,6 +735,7 @@ public class JsonSerializerTest extends TestCase {
 		assertEquals("This BMW is my Car", lvCarAfter.getDescription());
 	}
 
+	@Test
 	public void testDeSerializeException() throws Exception {
 		Serializer lvSerializer = new JsonSerializer();
 		Exception lvException = new ConversionException("JUnit-Test-Exception");
@@ -693,7 +745,8 @@ public class JsonSerializerTest extends TestCase {
 		assertNull(e.getCause());
 		assertTrue(5 < e.getStackTrace().length);
 	}
-	
+
+	@Test
 	public void testDeSerializeNestedException() throws Exception {
 		Serializer lvSerializer = new JsonSerializer();
 		Exception lvException = new ConversionException("JUnit-Test-Exception", new NullPointerException("Nested"));
@@ -707,6 +760,7 @@ public class JsonSerializerTest extends TestCase {
 		assertTrue(5 < lvNestedExc.getStackTrace().length);
 	}
 
+	@Test
 	public void __testWithDateFormat() throws Exception {
 		Car lvCar = new Car("Ferrari");
 		Date lvDate = new Date(82800000);
@@ -722,7 +776,8 @@ public class JsonSerializerTest extends TestCase {
 		assertEquals(lvCar.getDescription(), lvCarAfter.getDescription());
 		assertEquals(lvCar.getBuild(), lvCarAfter.getBuild());
 	}
-	
+
+	@Test
 	public void testBeanTimestamp() throws Exception {
 		JsonSerializer serializer = new JsonSerializer();
 		Bean bean = new Bean();
@@ -734,6 +789,7 @@ public class JsonSerializerTest extends TestCase {
 		assertEquals(lvTimestamp, bean.getTimestamp());
 	}
 
+	@Test
 	public void testTimestamp() throws Exception {
 		JsonSerializer serializer = new JsonSerializer();
 		serializer.getObjectUtil().getConverter().addConversion(new Simple2SimpleConversion(String.class, Timestamp.class));
@@ -743,6 +799,7 @@ public class JsonSerializerTest extends TestCase {
 		assertEquals(lvTime, ((Timestamp) o).getTime());
 	}
 
+	@Test
 	public void testBeanSqlDate() throws Exception {
 		JsonSerializer serializer = new JsonSerializer();
 		Bean bean = new Bean();
@@ -762,6 +819,7 @@ public class JsonSerializerTest extends TestCase {
                 assertEquals(cal.get(Calendar.DAY_OF_MONTH), cal2.get(Calendar.DAY_OF_MONTH));
 	}
 
+	@Test
 	public void testSqlDate() throws Exception {
 		JsonSerializer serializer = new JsonSerializer();
 		serializer.getObjectUtil().getConverter().addConversion(new Simple2SimpleConversion(String.class, java.sql.Date.class));
@@ -781,6 +839,7 @@ public class JsonSerializerTest extends TestCase {
                 assertEquals(cal.get(Calendar.DAY_OF_MONTH), cal2.get(Calendar.DAY_OF_MONTH));
 	}
 
+	@Test
 	public void testRepeatedEscapesWithSlash() throws Exception {
 		final String str = "{\"key\":\"\\/path\"}";
 		JsonSerializer lvSerializer = new JsonSerializer();
@@ -798,7 +857,8 @@ public class JsonSerializerTest extends TestCase {
 		lvResult = lvSerializer.serialize(lvResult);
 		assertEquals(str, lvResult);
 	}
-	
+
+	@Test
 	public void testRepeatedEscapesWithNewLine() throws Exception {
 		final String str = "{\"key\":\"\n path\"}";
 		JsonSerializer lvSerializer = new JsonSerializer();
@@ -822,6 +882,7 @@ public class JsonSerializerTest extends TestCase {
 		assertEquals("{\"key\":\"\\n path\"}", lvResult);
 	}
 
+	@Test
 	public void testRepeatedEscapesWithSolidus() throws Exception {
 		final String str = "{\"key\":\"\\/ path\"}";
 		JsonSerializer lvSerializer = new JsonSerializer();
@@ -845,6 +906,7 @@ public class JsonSerializerTest extends TestCase {
 		assertEquals("{\"key\":\"\\/ path\"}", lvResult);
 	}
 
+	@Test
 	public void testSerializeWithPropertyFilter() throws Exception {
 		Car lvCar = new Car("BMW");
 		lvCar.setBuild(new Date());
@@ -860,7 +922,8 @@ public class JsonSerializerTest extends TestCase {
 		assertEquals(lvCar.getDescription(), lvCarAfter.getDescription());
 		assertNull(lvCarAfter.getBuild());
 	}
-	
+
+	@Test
 	public void testSerializeWithPropertyFilterAndFilteringClass() throws Exception {
 		Car lvCar = new Car("BMW");
 		lvCar.setBuild(new Date());
@@ -885,6 +948,7 @@ public class JsonSerializerTest extends TestCase {
 		assertNull(lvCarAfter.getBuild());
 	}
 
+	@Test
 	public void testSerializeWithPropertyFilterAndFilteringUniqueId() throws Exception {
 		Car lvCar = new Car("BMW");
 		lvCar.setBuild(new Date());
@@ -910,6 +974,7 @@ public class JsonSerializerTest extends TestCase {
 		assertNull(lvCarAfter.getBuild());
 	}
 
+	@Test
 	public void testPrivateProperty() throws Exception {
 		Bean lvBean = new Bean("Test Property");
 		Object lvResult = jsonSerializer.serialize(lvBean);
@@ -917,7 +982,8 @@ public class JsonSerializerTest extends TestCase {
 		Bean lvBeanAfter = (Bean) jsonSerializer.deserialize(lvResult);
 		assertEquals(lvBean.getMyProp(), lvBeanAfter.getMyProp());
 	}
-	
+
+	@Test
 	public void testEmptyString() throws Exception {
 		Map<String, String> map = new HashMap<String, String>();  
 		map.put("name", "" );
@@ -928,7 +994,8 @@ public class JsonSerializerTest extends TestCase {
 		Map<?, ?> mapAfter = (Map<?, ?>) new JsonSerializer().deserialize(result);
 		assertEquals(map, mapAfter);
 	}
-	
+
+	@Test
 	/** Solve Bug 1755893 */
 	public void testSerializeMapWithBeanValue() throws Exception {
 		JsonSerializer lvSerializer = new JsonSerializer();
@@ -958,7 +1025,8 @@ public class JsonSerializerTest extends TestCase {
                 assertEquals(cal.get(Calendar.MONTH), cal2.get(Calendar.MONTH));
                 assertEquals(cal.get(Calendar.DAY_OF_MONTH), cal2.get(Calendar.DAY_OF_MONTH));
 	}
-	
+
+	@Test
 	/** Solve Bug 1958512 empty string serialized to JSON */
 	public void testEscapingEmptyStringByMap2Json() {
 		Map<String, String> object = new HashMap<String, String>();
@@ -969,7 +1037,8 @@ public class JsonSerializerTest extends TestCase {
 
 		assertEquals("Correctly escaped", "{\"emptyString\":\"\"}", serializedValue);
 	}
-	
+
+	@Test
 	/** Solve Bug 1958512 empty string serialized to JSON */
 	public void testEscapingEmptyStringByJson2Map() {
 		String jsonStr = "{\"emptyString\":\"\"}";
@@ -980,6 +1049,7 @@ public class JsonSerializerTest extends TestCase {
 		assertEquals("Expected empty String and NOT:" + lvExpectedValue, lvExpectedValue , "");
 	}
 
+	@Test
 	public void __testSerializeURLproperty() throws Exception {
 		SpecialTypeBean lvBean = new SpecialTypeBean();
 		String lvUrlStr = "http://myurl.net";
@@ -988,13 +1058,14 @@ public class JsonSerializerTest extends TestCase {
 		JsonSerializer lvSerializer = new JsonSerializer();
 		String lvJsonStr = (String) lvSerializer.serialize(lvBean);
 		assertEquals("{\"~unique-id~\":\"0\",\"class\":\"test.net.sf.sojo.model.SpecialTypeBean\",\"url\":\"http:\\/\\/myurl.net\"}", lvJsonStr);
-		
+
 		SpecialTypeBean lvBeanAfter = (SpecialTypeBean) lvSerializer.deserialize(lvJsonStr);
 		assertEquals(lvBean.getUrl(), lvBeanAfter.getUrl());
 		assertEquals(lvUrlStr, lvBeanAfter.getUrl().toString());
 		assertNull(lvBeanAfter.getObject());
 	}
-	
+
+	@Test
 	public void __testSerializeObject2DoubeProperty() throws Exception {
 		SpecialTypeBean lvBean = new SpecialTypeBean();
 		Double lvValue = new Double(47.11);
@@ -1010,6 +1081,7 @@ public class JsonSerializerTest extends TestCase {
 		assertNull(lvBeanAfter.getUrl());
 	}
 
+	@Test
 	public void __testRenameKeyWordClass() throws Exception {
 		Util.setKeyWordClass("clazzz");
 		assertEquals("clazzz", Util.getKeyWordClass());
@@ -1021,7 +1093,8 @@ public class JsonSerializerTest extends TestCase {
 		// !!! reset key word to class !!!
 		Util.resetKeyWordClass();
 	}
-	
+
+	@Test
 	public void testMultipleReferences() throws Exception {
 	    BBean b = new BBean();
 	    ABean a = new ABean();
@@ -1042,8 +1115,9 @@ public class JsonSerializerTest extends TestCase {
 	    assertTrue (ades.getThirdRef() == bBeanAfter);
 	    assertTrue (ades.getFourthRef() != null);
 	    assertTrue (ades.getFourthRef() == bBeanAfter);
-	} 
+	}
 
+	@Test
 	public void testTransformDefaultMutableTreeNode() throws Exception {
 		String lvFilter[] = new String [] {"class", "parent", "children", "userObject", "allowsChildren"};
 		ReflectionFieldHelper.addAllFields2MapByClass(DefaultMutableTreeNode.class, lvFilter);
