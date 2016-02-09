@@ -24,19 +24,22 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Map.Entry;
 
-import junit.framework.TestCase;
 import net.sf.sojo.common.ObjectGraphWalker;
 import net.sf.sojo.common.ObjectUtil;
 import net.sf.sojo.common.PathRecordWalkerInterceptor;
 import net.sf.sojo.core.UniqueIdGenerator;
 import net.sf.sojo.navigation.PathExecuter;
+import org.junit.Test;
 import test.net.sf.sojo.model.Address;
 import test.net.sf.sojo.model.Car;
 import test.net.sf.sojo.model.Customer;
 import test.net.sf.sojo.model.Node;
 
-public class ObjectGraphWalkerTest extends TestCase {
+import static org.junit.Assert.*;
 
+public class ObjectGraphWalkerTest {
+
+	@Test
 	public void testInterceptor() throws Exception {
 		ObjectGraphWalker lvWalker = new ObjectGraphWalker();
 		PathRecordWalkerInterceptor lvInterceptor = new PathRecordWalkerInterceptor();
@@ -48,7 +51,8 @@ public class ObjectGraphWalkerTest extends TestCase {
 		lvWalker.removeInterceptorByNumber(0);
 		assertEquals(0, lvWalker.getInterceptorSize());
 	}
-	
+
+	@Test
 	public void testWalkSimpleString() throws Exception {
 		ObjectGraphWalker lvWalker = new ObjectGraphWalker();
 		PathRecordWalkerInterceptor lvInterceptor = new PathRecordWalkerInterceptor();
@@ -62,7 +66,8 @@ public class ObjectGraphWalkerTest extends TestCase {
 		Object lvResult = PathExecuter.getNestedProperty(s, lvSearchPath);
 		assertEquals(s, lvResult);
 	}
-	
+
+	@Test
 	public void testWalkSimpleInteger() throws Exception {
 		ObjectGraphWalker lvWalker = new ObjectGraphWalker();
 		PathRecordWalkerInterceptor lvInterceptor = new PathRecordWalkerInterceptor();
@@ -77,6 +82,7 @@ public class ObjectGraphWalkerTest extends TestCase {
 		assertEquals(i, lvResult);
 	}
 
+	@Test
 	public void testWalkSimpleDouble() throws Exception {
 		ObjectGraphWalker lvWalker = new ObjectGraphWalker();
 		PathRecordWalkerInterceptor lvInterceptor = new PathRecordWalkerInterceptor();
@@ -90,7 +96,8 @@ public class ObjectGraphWalkerTest extends TestCase {
 		Object lvResult = PathExecuter.getNestedProperty(d, lvSearchPath);
 		assertEquals(d, lvResult);
 	}
-	
+
+	@Test
 	public void testWalkSimpleDate() throws Exception {
 		ObjectGraphWalker lvWalker = new ObjectGraphWalker();
 		PathRecordWalkerInterceptor lvInterceptor = new PathRecordWalkerInterceptor();
@@ -104,7 +111,8 @@ public class ObjectGraphWalkerTest extends TestCase {
 		Object lvResult = PathExecuter.getNestedProperty(lvDate, lvSearchPath);
 		assertEquals(lvDate, lvResult);
 	}
-	
+
+	@Test
 	public void testWalkNull() throws Exception {
 		ObjectGraphWalker lvWalker = new ObjectGraphWalker();
 		PathRecordWalkerInterceptor lvInterceptor = new PathRecordWalkerInterceptor();
@@ -118,8 +126,7 @@ public class ObjectGraphWalkerTest extends TestCase {
 		assertNull(lvResult);
 	}
 
-
-
+	@Test
 	public void testWalkEmptyList() throws Exception {
 		ObjectGraphWalker lvWalker = new ObjectGraphWalker();
 		PathRecordWalkerInterceptor lvInterceptor = new PathRecordWalkerInterceptor();
@@ -132,6 +139,7 @@ public class ObjectGraphWalkerTest extends TestCase {
 		assertEquals(new ArrayList<Object>(), lvPathValue);		
 	}
 
+	@Test
 	public void testWalkList() throws Exception {
 		ObjectGraphWalker lvWalker = new ObjectGraphWalker();
 		PathRecordWalkerInterceptor lvInterceptor = new PathRecordWalkerInterceptor();
@@ -154,6 +162,7 @@ public class ObjectGraphWalkerTest extends TestCase {
 		assertEquals(3, lvInterceptor.getAllRecordedPaths().size());
 	}
 
+	@Test
 	public void testWalkObjectArray() throws Exception {
 		ObjectGraphWalker lvWalker = new ObjectGraphWalker();
 		PathRecordWalkerInterceptor lvInterceptor = new PathRecordWalkerInterceptor();
@@ -178,6 +187,7 @@ public class ObjectGraphWalkerTest extends TestCase {
 		assertEquals(o, lvPathValue);
 	}
 
+	@Test
 	public void testWalkStringArray() throws Exception {
 		ObjectGraphWalker lvWalker = new ObjectGraphWalker();
 		PathRecordWalkerInterceptor lvInterceptor = new PathRecordWalkerInterceptor();
@@ -201,6 +211,7 @@ public class ObjectGraphWalkerTest extends TestCase {
 		assertEquals(s, lvPathValue);
 	}
 
+	@Test
 	public void testWalkEmptyMap() throws Exception {
 		ObjectGraphWalker lvWalker = new ObjectGraphWalker();
 		PathRecordWalkerInterceptor lvInterceptor = new PathRecordWalkerInterceptor();
@@ -214,7 +225,8 @@ public class ObjectGraphWalkerTest extends TestCase {
 		Object lvPathValue = PathExecuter.getNestedProperty(lvMap, "()");
 		assertEquals(new HashMap<Object, Object>(), lvPathValue);
 	}
-	
+
+	@Test
 	public void testWalkEmptyListInMap() throws Exception {
 		ObjectGraphWalker lvWalker = new ObjectGraphWalker();
 		PathRecordWalkerInterceptor lvInterceptor = new PathRecordWalkerInterceptor();
@@ -229,7 +241,8 @@ public class ObjectGraphWalkerTest extends TestCase {
 		Object lvPathValue = PathExecuter.getNestedProperty(lvMap, "(empty)");
 		assertEquals(new ArrayList<Object>(), lvPathValue);
 	}
-	
+
+	@Test
 	public void testWalkEmptyMapInList() throws Exception {
 		ObjectGraphWalker lvWalker = new ObjectGraphWalker();
 		PathRecordWalkerInterceptor lvInterceptor = new PathRecordWalkerInterceptor();
@@ -245,8 +258,7 @@ public class ObjectGraphWalkerTest extends TestCase {
 		assertEquals(new HashMap<Object, Object>(), lvPathValue);
 	}
 
-
-
+	@Test
 	public void testWalkMap() throws Exception {
 		ObjectGraphWalker lvWalker = new ObjectGraphWalker();
 		PathRecordWalkerInterceptor lvInterceptor = new PathRecordWalkerInterceptor();
@@ -269,6 +281,7 @@ public class ObjectGraphWalkerTest extends TestCase {
 		assertEquals(lvMap, lvPathValue);
 	}
 
+	@Test
 	public void testWalkNestedListInMap() throws Exception {
 		ObjectGraphWalker lvWalker = new ObjectGraphWalker();
 		PathRecordWalkerInterceptor lvInterceptor = new PathRecordWalkerInterceptor();
@@ -304,6 +317,7 @@ public class ObjectGraphWalkerTest extends TestCase {
 		assertEquals("bbb", lvPathValue);
 	}
 
+	@Test
 	public void testWalkNestedMapInList() throws Exception {
 		ObjectGraphWalker lvWalker = new ObjectGraphWalker();
 		PathRecordWalkerInterceptor lvInterceptor = new PathRecordWalkerInterceptor();
@@ -342,8 +356,7 @@ public class ObjectGraphWalkerTest extends TestCase {
 		assertEquals("val2", lvPathValue);
 	}
 
-
-	
+	@Test
 	public void testWalkBeanSimple() throws Exception {
 		Node lvNode = new Node("Test-Node");
 		ObjectGraphWalker lvWalker = new ObjectGraphWalker();
@@ -386,7 +399,8 @@ public class ObjectGraphWalkerTest extends TestCase {
 			}
 		}
 	}
-	
+
+	@Test
 	public void testWalkBeanSimpleNumberOfPropertiesNode() throws Exception {
 		Node lvNode = new Node("Test-Node");
 		ObjectGraphWalker lvWalker = new ObjectGraphWalker();
@@ -405,7 +419,8 @@ public class ObjectGraphWalkerTest extends TestCase {
 		Object lvResult = PathExecuter.getNestedProperty(lvNode, lvPath);
 		assertEquals("Test-Node", lvResult);		
 	}
-	
+
+	@Test
 	public void testWalkBeanSimpleNumberOfPropertiesCustomer() throws Exception {
 		Customer lvCustomer = new Customer("Test-Name");
 		ObjectGraphWalker lvWalker = new ObjectGraphWalker();
@@ -420,6 +435,7 @@ public class ObjectGraphWalkerTest extends TestCase {
 		assertEquals(lvPathes.size() + 3, lvCustomerMap.size());
 	}
 
+	@Test
 	public void testWalkBeanSimpleInList() throws Exception {
 		Node lvNode1 = new Node("Test-Node-1");
 		lvNode1.getChildren().add("child-1");
@@ -465,6 +481,7 @@ public class ObjectGraphWalkerTest extends TestCase {
 		assertEquals("value-1", lvResult);
 	}
 
+	@Test
 	public void testWalkBeanComplex() throws Exception {
 		Node lvNode = new Node("Test-Node");
 		Node lvNodeParent = new Node("Test-Node-Parent");
@@ -503,7 +520,8 @@ public class ObjectGraphWalkerTest extends TestCase {
 		lvResult = PathExecuter.getNestedProperty(lvNode, "namedChildren(key-not-found)");
 		assertNull(lvResult);
 	}
-	
+
+	@Test
 	public void testWalkBeanComplexWihLongWay() throws Exception {
 		Node lvNode = new Node("Test-Node");
 		Node lvNodeParent = new Node("Test-Node-Parent");
@@ -574,7 +592,7 @@ public class ObjectGraphWalkerTest extends TestCase {
 		assertEquals("Test-Node-Parent", lvResult);
 	}
 
-	
+	@Test
 	public void testLongWayByCustomer() throws Exception {
 		ObjectGraphWalker lvWalker = new ObjectGraphWalker();
 		PathRecordWalkerInterceptor lvInterceptor = new PathRecordWalkerInterceptor();
@@ -662,6 +680,7 @@ public class ObjectGraphWalkerTest extends TestCase {
 		assertEquals("city 2", lvResult);
 	}
 
+	@Test
 	public void testEmptyArrayByCustomer() throws Exception {
 		ObjectGraphWalker lvWalker = new ObjectGraphWalker();
 		PathRecordWalkerInterceptor lvInterceptor = new PathRecordWalkerInterceptor();
@@ -696,6 +715,7 @@ public class ObjectGraphWalkerTest extends TestCase {
 		assertEquals(new ArrayList<Object>(), lvResult);
 	}
 
+	@Test
 	public void testEmptyMapByCustomer() throws Exception {
 		ObjectGraphWalker lvWalker = new ObjectGraphWalker();
 		PathRecordWalkerInterceptor lvInterceptor = new PathRecordWalkerInterceptor();
@@ -714,7 +734,7 @@ public class ObjectGraphWalkerTest extends TestCase {
 		assertEquals(new HashMap<Object, Object>(), lvResult);
 	}
 
-
+	@Test
 	public void testBeanCar() throws Exception {
 		ObjectGraphWalker lvWalker = new ObjectGraphWalker();
 		PathRecordWalkerInterceptor lvInterceptor = new PathRecordWalkerInterceptor();
@@ -760,6 +780,7 @@ public class ObjectGraphWalkerTest extends TestCase {
 
 	}
 
+	@Test
 	public void testSimpleNumberOfRecursion() throws Exception {
 		ObjectGraphWalker lvWalker = new ObjectGraphWalker();
 		assertEquals(0, lvWalker.getNumberOfRecursion());
@@ -767,6 +788,7 @@ public class ObjectGraphWalkerTest extends TestCase {
 		assertEquals(1, lvWalker.getNumberOfRecursion());
 	}
 
+	@Test
 	public void testNullNumberOfRecursion() throws Exception {
 		ObjectGraphWalker lvWalker = new ObjectGraphWalker();
 		assertEquals(0, lvWalker.getNumberOfRecursion());
@@ -774,6 +796,7 @@ public class ObjectGraphWalkerTest extends TestCase {
 		assertEquals(1, lvWalker.getNumberOfRecursion());
 	}
 
+	@Test
 	public void testBeanNumberOfRecursion() throws Exception {
 		Car lvCar = new Car("MyCar");	
 		ObjectGraphWalker lvWalker = new ObjectGraphWalker();
@@ -781,7 +804,8 @@ public class ObjectGraphWalkerTest extends TestCase {
 		lvWalker.walk(lvCar);
 		assertEquals(5, lvWalker.getNumberOfRecursion());
 	}
-	
+
+	@Test
 	public void testListNumberOfRecursion() throws Exception {
 		List<Comparable<?>> lvList = new ArrayList<Comparable<?>>();
 		lvList.add("aa");
@@ -797,7 +821,7 @@ public class ObjectGraphWalkerTest extends TestCase {
 		assertEquals(4, lvWalker.getNumberOfRecursion());
 	}
 
-
+	@Test
 	public void testWalkInterceptorByList() throws Exception {
 		List<String> lvList = new ArrayList<String>();
 		lvList.add("aaa");
@@ -818,7 +842,8 @@ public class ObjectGraphWalkerTest extends TestCase {
 		assertNotNull(lvInterceptor);
 		assertEquals(lvList, lvInterceptor.getWhenThisObjectThanCanelWalk());
 	}
-	
+
+	@Test
 	public void testWalkInterceptorByMap() throws Exception {
 		Map<String, String> lvMap = new HashMap<String, String>();
 		lvMap.put("k-aaa", "v-aaa");

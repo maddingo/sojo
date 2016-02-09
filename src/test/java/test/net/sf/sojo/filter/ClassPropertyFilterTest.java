@@ -19,7 +19,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import junit.framework.TestCase;
 import net.sf.sojo.common.ObjectUtil;
 import net.sf.sojo.core.Converter;
 import net.sf.sojo.core.UniqueIdGenerator;
@@ -29,11 +28,15 @@ import net.sf.sojo.core.filter.ClassPropertyFilter;
 import net.sf.sojo.core.filter.ClassPropertyFilterHandlerImpl;
 import net.sf.sojo.core.filter.ClassPropertyFilterHelper;
 import net.sf.sojo.optional.filter.attributes.ClassPropertyFilterHanlderForAttributes;
+import org.junit.Test;
 import test.net.sf.sojo.model.Car;
 import test.net.sf.sojo.model.Node;
 
-public class ClassPropertyFilterTest extends TestCase {
+import static org.junit.Assert.*;
 
+public class ClassPropertyFilterTest {
+
+	@Test
 	public void testSetClassName() throws Exception {
 		ClassPropertyFilter lvFilter = new ClassPropertyFilter(Long.class);
 		assertEquals(Long.class,lvFilter.getFilterClass());
@@ -41,7 +44,8 @@ public class ClassPropertyFilterTest extends TestCase {
 		lvFilter = new ClassPropertyFilter(Car.class);
 		assertEquals(Car.class, lvFilter.getFilterClass());
 	}
-	
+
+	@Test
 	public void testSetPropertiesWithConstructor() throws Exception {
 		ClassPropertyFilter lvFilter = new ClassPropertyFilter(null, null);
 		assertEquals(0, lvFilter.getPropertySize());
@@ -51,6 +55,7 @@ public class ClassPropertyFilterTest extends TestCase {
 		assertEquals(String.class, lvFilter.getFilterClass());
 	}
 
+	@Test
 	public void testSetPropertiesWithConstructor2() throws Exception {
 		ClassPropertyFilter lvFilter = new ClassPropertyFilter(String.class, new String[0]);
 		assertEquals(0, lvFilter.getPropertySize());
@@ -65,7 +70,8 @@ public class ClassPropertyFilterTest extends TestCase {
 		assertEquals(1, lvFilter.getPropertySize());
 		assertFalse(lvFilter.isKnownProperty("bar"));
 	}
-	
+
+	@Test
 	public void testGetAllProperties() throws Exception {
 		ClassPropertyFilter lvFilter = new ClassPropertyFilter();
 		assertEquals(0, lvFilter.getAllProperties().length);
@@ -76,23 +82,27 @@ public class ClassPropertyFilterTest extends TestCase {
 		lvFilter = ClassPropertyFilterHelper.createClassPropertyFilterByClass(Car.class);
 		assertEquals(4, lvFilter.getAllProperties().length);
 	}
-	
+
+	@Test
 	public void testCreateClassPropertyFilterByClass() throws Exception {
 		ClassPropertyFilter lvClassPropertyFilter = ClassPropertyFilterHelper.createClassPropertyFilterByClass(Car.class);
 		assertEquals(Car.class,lvClassPropertyFilter.getFilterClass());
 		assertEquals(4, lvClassPropertyFilter.getPropertySize());		
 	}
-	
+
+	@Test
 	public void testCreateClassPropertyFilterByClassAndRemoveOneProperty() throws Exception {
 		ClassPropertyFilter lvClassPropertyFilter = ClassPropertyFilterHelper.createClassPropertyFilterByClass(Car.class).removeProperty("build");
 		assertEquals(3, lvClassPropertyFilter.getPropertySize());		
 	}
 
+	@Test
 	public void testCreateClassPropertyFilterByClassAndAddOneProperty() throws Exception {
 		ClassPropertyFilter lvClassPropertyFilter = ClassPropertyFilterHelper.createClassPropertyFilterByClass(Car.class).addProperty("xyz");
 		assertEquals(5, lvClassPropertyFilter.getPropertySize());		
 	}
-	
+
+	@Test
 	public void testConvertWithClassPropertyFilter() throws Exception {
 		Converter lvConverter = new Converter();
 		ClassPropertyFilterHandlerImpl lvHandler = new ClassPropertyFilterHandlerImpl();
@@ -121,7 +131,8 @@ public class ClassPropertyFilterTest extends TestCase {
 		assertNotNull(lvCarAfter.getBuild());
 
 	}
-	
+
+	@Test
 	public void testConvertWithObjectUtilAndWithClassPropertyFilter() throws Exception {
 		ObjectUtil lvObjectUtil = new ObjectUtil();
 
@@ -138,12 +149,14 @@ public class ClassPropertyFilterTest extends TestCase {
 		assertEquals("BMW", lvCarAfter.getName());
 		assertNull(lvCarAfter.getBuild());
 	}
-	
+
+	@Test
 	public void testValidateClassPropertyFilterWithNull() throws Exception {
 		String lvMessage = ClassPropertyFilterHelper.validateClassPropertyFilter(null);
 		assertNull(lvMessage);
 	}
-	
+
+	@Test
 	public void testValidateClassPropertyFilterNotValidProperty() throws Exception {
 		ClassPropertyFilter lvFilter = ClassPropertyFilterHelper.createClassPropertyFilterByClass(Car.class);
 		String lvMessage = ClassPropertyFilterHelper.validateClassPropertyFilter(lvFilter);
@@ -154,13 +167,15 @@ public class ClassPropertyFilterTest extends TestCase {
 		assertNotNull(lvMessage);
 		assertTrue(lvMessage.indexOf("not a valid property") > 0);
 	}
-	
+
+	@Test
 	public void testValidateClassPropertyFilterNotValidClassName() throws Exception {
 		ClassPropertyFilter lvFilter = ClassPropertyFilterHelper.createClassPropertyFilterByClass(Car.class);
 		String lvMessage = ClassPropertyFilterHelper.validateClassPropertyFilter(lvFilter);
 		assertNull(lvMessage);
 	}
 
+	@Test
 	public void testRemovePropertyClass() throws Exception {
 		ClassPropertyFilter lvFilter = ClassPropertyFilterHelper.createClassPropertyFilterByClass(Car.class);
 		assertEquals(4, lvFilter.getPropertySize());
@@ -169,6 +184,7 @@ public class ClassPropertyFilterTest extends TestCase {
 		assertEquals(4, lvFilter.getPropertySize());
 	}
 
+	@Test
 	public void testFilterPropertiesByHashMap() throws Exception {
 		ObjectUtil lvObjectUtil = new ObjectUtil();
 		
@@ -184,7 +200,8 @@ public class ClassPropertyFilterTest extends TestCase {
 		assertNull(lvCarAfter.getBuild());
 		assertEquals("a car", lvCarAfter.getName());
 	}
-	
+
+	@Test
 	public void testFilterPropertiesByInterfaceMap() throws Exception {
 		ObjectUtil lvObjectUtil = new ObjectUtil();
 		
@@ -201,6 +218,7 @@ public class ClassPropertyFilterTest extends TestCase {
 		assertEquals("a car", lvCarAfter.getName());
 	}
 
+	@Test
 	public void testFilterPropertiesByInterfaceMapWithAssignableFilterClassesEqualsFalse() throws Exception {
 		ObjectUtil lvObjectUtil = new ObjectUtil();
 		
@@ -220,6 +238,7 @@ public class ClassPropertyFilterTest extends TestCase {
 		assertEquals("a car", lvCarAfter.getName());
 	}
 
+	@Test
 	public void testFilterPropertiesWithMapAndKeysAreNotStrings() throws Exception {
 		ObjectUtil lvObjectUtil = new ObjectUtil();
 		lvObjectUtil.setWithSimpleKeyMapper(false);
@@ -241,6 +260,7 @@ public class ClassPropertyFilterTest extends TestCase {
 		assertTrue(lvMapAfter.containsKey(lvDate));
 	}
 
+	@Test
 	public void testPropertyFilterPattern() throws Exception {
 		ObjectUtil lvObjectUtil = new ObjectUtil();
 		lvObjectUtil.setWithSimpleKeyMapper(false);
@@ -261,11 +281,13 @@ public class ClassPropertyFilterTest extends TestCase {
 		assertNull(lvCarAfter.getName());
 	}
 
+	@Test
 	public void testClassPropertyFilterHelperWithNullKey() throws Exception {
 		boolean b = ClassPropertyFilterHelper.isPropertyToFiltering(new ClassPropertyFilterHanlderForAttributes(), Car.class, null);
 		assertFalse(b);
 	}
-	
+
+	@Test
 	public void testCycleWithUniqueId() throws Exception {
 		ClassPropertyFilterHandlerImpl lvHandler = new ClassPropertyFilterHandlerImpl();
 		ClassPropertyFilter lvClassPropertyFilter = new ClassPropertyFilter(Node.class)

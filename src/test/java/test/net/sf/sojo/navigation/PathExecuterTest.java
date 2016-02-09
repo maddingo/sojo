@@ -25,25 +25,29 @@ import java.util.Set;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import junit.framework.TestCase;
 import net.sf.sojo.core.reflect.ReflectionFieldHelper;
 import net.sf.sojo.navigation.PathAction;
 import net.sf.sojo.navigation.PathExecuteException;
 import net.sf.sojo.navigation.PathExecuter;
 import net.sf.sojo.navigation.PathParser;
+import org.junit.Test;
 import test.net.sf.sojo.model.Car;
 import test.net.sf.sojo.model.Customer;
 import test.net.sf.sojo.model.Node;
 
-public class PathExecuterTest extends TestCase {
-	
+import static org.junit.Assert.*;
+
+public class PathExecuterTest {
+
+	@Test
 	public void testGetSimplePropertyBean() throws Exception {
 		Node lvNode = new Node("Test-Node");
 		Object lvResult = PathExecuter.getSimpleProperty(lvNode, "name");
 		assertNotNull(lvResult);
 		assertEquals("Test-Node", lvResult);
 	}
-	
+
+	@Test
 	public void testGetSimplePropertyFromNullValue() throws Exception {
 		try {
 			PathExecuter.getSimpleProperty(null, null);
@@ -53,6 +57,7 @@ public class PathExecuterTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testGetSimplePropertyFromBadObject() throws Exception {
 		try {
 			PathExecuter.getSimpleProperty("", "chars");
@@ -62,6 +67,7 @@ public class PathExecuterTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testGetSimplePropertyWithPathNoLength() throws Exception {
 		Object lvResult = PathExecuter.getSimpleProperty("Test-String", "");
 		assertNotNull(lvResult);
@@ -74,6 +80,7 @@ public class PathExecuterTest extends TestCase {
 		assertSame(lvNode, lvResult);
 	}
 
+	@Test
 	public void testGetSimplePropertyMap() throws Exception {
 		Map<String, String> lvMap = new HashMap<String, String>();
 		lvMap.put("name", "Test-Node");
@@ -82,13 +89,15 @@ public class PathExecuterTest extends TestCase {
 		assertEquals("Test-Node", lvResult);
 	}
 
+	@Test
 	public void testSetSimplePropertyBeanString() throws Exception {
 		Node lvNode = new Node();
 		assertNull(lvNode.getName());
 		PathExecuter.setSimpleProperty(lvNode, "name", "Test-Node");
 		assertEquals("Test-Node", lvNode.getName());
 	}
-	
+
+	@Test
 	public void testSetSimplePropertyWithException() throws Exception {
 		try {
 			PathExecuter.setSimpleProperty("bla bla", null, "abc");
@@ -98,6 +107,7 @@ public class PathExecuterTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testSetSimplePropertyBeanWithNoPath() throws Exception {
 		Node lvNode = new Node();
 		assertNull(lvNode.getName());
@@ -106,7 +116,7 @@ public class PathExecuterTest extends TestCase {
 		assertSame(lvNode, lvNode);
 	}
 
-
+	@Test
 	public void testSetSimplePropertyBean() throws Exception {
 		Car lvCar = new Car();
 		assertNull(lvCar.getBuild());
@@ -114,13 +124,15 @@ public class PathExecuterTest extends TestCase {
 		assertEquals(new Date(987654321), lvCar.getBuild());
 	}
 
+	@Test
 	public void testSetSimplePropertyMap() throws Exception {
 		Map<?, ?> lvMap = new HashMap<Object, Object>();
 		assertNull(lvMap.get("name"));
 		PathExecuter.setSimpleProperty(lvMap, "name", "Test-Node");
 		assertEquals("Test-Node", lvMap.get("name"));
 	}
-	
+
+	@Test
 	public void testGetIndexPropertyFromList() throws Exception {
 		List<Node> lvList = new ArrayList<Node>();
 		lvList.add(new Node("N1"));
@@ -135,7 +147,8 @@ public class PathExecuterTest extends TestCase {
 		assertNotNull(lvResult);
 		assertEquals("N3", ((Node) lvResult).getName());
 	}
-	
+
+	@Test
 	public void testGetIndexPropertyFromListWithinValidIndex() throws Exception {
 		Set<Node> lvSet = new HashSet<Node>();
 		lvSet.add(new Node("N1"));
@@ -143,7 +156,7 @@ public class PathExecuterTest extends TestCase {
 		PathExecuter.getIndexProperty(lvSet, 2);
 	}
 
-	
+	@Test
 	public void testGetIndexPropertyFromBean() throws Exception {
 		Node lvNode = new Node("Test-Node");
 		lvNode.getChildren().add("Test_1");
@@ -158,7 +171,8 @@ public class PathExecuterTest extends TestCase {
 		assertNotNull(lvResult);
 		assertEquals("Test_3", lvResult);
 	}
-	
+
+	@Test
 	public void testSetIndexPropertyToList() throws Exception {
 		List<Node> lvList = new ArrayList<Node>();
 		lvList.add(new Node("N1"));
@@ -172,7 +186,8 @@ public class PathExecuterTest extends TestCase {
 		assertNotNull(lvResult);
 		assertEquals("N3", ((Node) lvResult).getName());
 	}
-	
+
+	@Test
 	public void testSetIndexPropertyToSet() throws Exception {
 		Set<String> lvSet = new HashSet<String>();
 		lvSet.add("N1");
@@ -183,6 +198,7 @@ public class PathExecuterTest extends TestCase {
 		assertEquals(3, lvSet.size());
 	}
 
+	@Test
 	public void testSetIndexPropertyFromBean() throws Exception {
 		Node lvNode = new Node("Test-Node");
 		lvNode.getChildren().add("Test_1");
@@ -218,6 +234,7 @@ public class PathExecuterTest extends TestCase {
 		assertEquals("N1-List", ((Node) lvNode.getChildren().get(6)).getName());
 	}
 
+	@Test
 	public void testGetIndexPropertyArray() throws Exception {
 		Object lvArray[] = new Object[] { "Obj1" , new Integer(2), "Obj3" };
 		Object lvResult = PathExecuter.getIndexProperty(lvArray, 1);
@@ -225,7 +242,8 @@ public class PathExecuterTest extends TestCase {
 		lvResult = PathExecuter.getNestedProperty(lvArray, "[0]");
 		assertEquals("Obj1", lvResult);
 	}
-	
+
+	@Test
 	public void testSetKeyPropertyMap() throws Exception {
 		Map<String, String> lvMap = new HashMap<String, String>();
 		lvMap.put("k1", "v1");
@@ -246,7 +264,8 @@ public class PathExecuterTest extends TestCase {
 		assertEquals("v2", lvMap.get("k2"));
 		assertEquals("New", lvMap.get("k-New"));
 	}
-	
+
+	@Test
 	public void testSetIndexPropertyArray() throws Exception {
 		Object lvArray[] = new Object[] { "Obj1" , new Integer(2), "Obj3" };
 		assertEquals("Obj3", lvArray[2]);
@@ -273,6 +292,7 @@ public class PathExecuterTest extends TestCase {
 
 	}
 
+	@Test
 	public void testSetIndexPropertyListAddElement() throws Exception {
 		List<Comparable<?>> lvList = new ArrayList<Comparable<?>>();
 		lvList.add("Obj-1");
@@ -287,7 +307,8 @@ public class PathExecuterTest extends TestCase {
 		assertEquals(4, lvList.size());
 		assertEquals("New-Obj", lvList.get(3));
 	}
-	
+
+	@Test
 	public void testGetKeyPropertyFromMap() throws Exception {
 		Map<String, Node> lvMap = new HashMap<String, Node>();
 		lvMap.put("N1", new Node("N1"));
@@ -303,6 +324,7 @@ public class PathExecuterTest extends TestCase {
 		assertEquals("N3", ((Node) lvResult).getName());
 	}
 
+	@Test
 	public void testKeyIndexPropertyFromBean() throws Exception {
 		Node lvNode = new Node("Test-Node");
 		lvNode.getNamedChildren().put("N1", new Node("N1"));
@@ -318,6 +340,7 @@ public class PathExecuterTest extends TestCase {
 		assertEquals("N3", ((Node) lvResult).getName());
 	}
 
+	@Test
 	public void testSetKeyPropertyToMap() throws Exception {
 		Map<String, Node> lvMap = new HashMap<String, Node>();
 		lvMap.put("N1", new Node("N1"));
@@ -332,6 +355,7 @@ public class PathExecuterTest extends TestCase {
 		assertEquals("N3", ((Node) lvResult).getName());
 	}
 
+	@Test
 	public void testSetKeyPropertyToBean() throws Exception {
 		Node lvNode = new Node("Test-Node");
 		lvNode.getNamedChildren().put("N1", new Node("N1"));
@@ -346,7 +370,8 @@ public class PathExecuterTest extends TestCase {
 		assertNotNull(lvResult);
 		assertEquals("N3", ((Node) lvResult).getName());
 	}
-	
+
+	@Test
 	public void testSetNestedSimplePropertyWithList() throws Exception {
 		Node lvNode = new Node ("root-node");
 		Node lvNodeChild1 = new Node ("node-1");
@@ -373,6 +398,7 @@ public class PathExecuterTest extends TestCase {
 		assertEquals("new-root-node-second", lvNode.getName());
 	}
 
+	@Test
 	public void testSetNestedSimplePropertyWithMap() throws Exception {
 		Node lvNode = new Node ("root-node");
 		Node lvNodeChild1 = new Node ("node-1");
@@ -399,6 +425,7 @@ public class PathExecuterTest extends TestCase {
 		assertEquals("new-root-node-second", lvNode.getName());
 	}
 
+	@Test
 	public void testSetNestedSimplePropertyWithMapWithKeyTypeNotString() throws Exception {
 		Node lvNode = new Node ("root-node");
 		Node lvNodeChild1 = new Node("node-1");
@@ -420,6 +447,7 @@ public class PathExecuterTest extends TestCase {
 		assertEquals("new-root-node", lvNode.getName());
 	}
 
+	@Test
 	public void testSetNestedPropertyWithInvalidType() throws Exception {
 		try {
 			PathExecuter.setNestedProperty("Dummy", new PathAction(-1), "Dummy-Value");
@@ -428,7 +456,8 @@ public class PathExecuterTest extends TestCase {
 			assertNotNull(e);
 		}
 	}
-	
+
+	@Test
 	public void testGetNestedPropertyWithInvalidType() throws Exception {
 		try {
 			PathExecuter.getNestedProperty("Dummy", new PathAction(-1));
@@ -438,7 +467,7 @@ public class PathExecuterTest extends TestCase {
 		}
 	}
 
-	
+	@Test
 	public void testGetSimplePropertyWithFail() throws Exception {
 		try {
 			PathExecuter.getSimpleProperty(new Node(), "bad-path");
@@ -447,7 +476,8 @@ public class PathExecuterTest extends TestCase {
 			assertNotNull(e);
 		}		
 	}
-	
+
+	@Test
 	public void testSetSimplePropertyWithFail() throws Exception {
 		try {
 			PathExecuter.setSimpleProperty(new Node(), "bad-path", "dummy-value");
@@ -456,7 +486,8 @@ public class PathExecuterTest extends TestCase {
 			assertNotNull(e);
 		}		
 	}
-	
+
+	@Test
 	public void testSetSimplePropertyWithFail2() throws Exception {
 		try {
 			PathExecuter.setSimpleProperty(new Node(), "name", new Long(1));
@@ -466,6 +497,7 @@ public class PathExecuterTest extends TestCase {
 		}		
 	}
 
+	@Test
 	public void testGetIndexPropertyWithFail() throws Exception {
 		try {
 			PathExecuter.getIndexProperty(new Node(), 0);
@@ -475,6 +507,7 @@ public class PathExecuterTest extends TestCase {
 		}				
 	}
 
+	@Test
 	public void testSetIndexPropertyWithFail() throws Exception {
 		try {
 			PathExecuter.setIndexProperty(new Node(), 0, "dummy-value");
@@ -484,6 +517,7 @@ public class PathExecuterTest extends TestCase {
 		}				
 	}
 
+	@Test
 	public void testGetKeyPropertyWithFail() throws Exception {
 		try {
 			PathExecuter.getKeyProperty(new Node(), "dummy-key");
@@ -493,6 +527,7 @@ public class PathExecuterTest extends TestCase {
 		}				
 	}
 
+	@Test
 	public void testSetKeyPropertyWithFail() throws Exception {
 		try {
 			PathExecuter.setKeyProperty(new Node(), "dummy-key", "dummy-value");
@@ -502,13 +537,15 @@ public class PathExecuterTest extends TestCase {
 		}				
 	}
 
+	@Test
 	public void testGetKeyPropertyWithBadKey() throws Exception {
 		Map<Double, String> lvMap = new HashMap<Double, String>();
 		lvMap.put(new Double(12.34), "12.34");
 		assertEquals("12.34", PathExecuter.getKeyProperty(lvMap, new Double(12.34)));
 		assertNull(PathExecuter.getKeyProperty(lvMap, new Double(34.56)));
 	}
-	
+
+	@Test
 	public void testMapInList() throws Exception {
 		List<Map<String, String>> lvList = new ArrayList<Map<String, String>>();
 		Map<String, String> lvMap = new HashMap<String, String>();
@@ -518,7 +555,8 @@ public class PathExecuterTest extends TestCase {
 		Object lvValue = PathExecuter.getNestedProperty(lvList, "[0].(key)");
 		assertEquals("value", lvValue);
 	}
-	
+
+	@Test
 	public void testListInList() throws Exception {
 		List<Object> lvList = new ArrayList<Object>();
 		List<String> lvList2 = new ArrayList<String>();
@@ -535,6 +573,7 @@ public class PathExecuterTest extends TestCase {
 		assertEquals("value0", lvValue);
 	}
 
+	@Test
 	public void testSetSimplePropertyBeanWithFieldProperty() throws Exception {
 		DefaultMutableTreeNode lvNode = new DefaultMutableTreeNode();
 		assertNull(lvNode.getUserObject());
@@ -546,6 +585,7 @@ public class PathExecuterTest extends TestCase {
 		ReflectionFieldHelper.removePropertiesByClass(DefaultMutableTreeNode.class);
 	}
 
+	@Test
 	public void testGetSimplePropertyBeanWithFieldProperty() throws Exception {
 		DefaultMutableTreeNode lvNode = new DefaultMutableTreeNode("Root");
 		assertEquals("Root", lvNode.getUserObject());
@@ -557,6 +597,7 @@ public class PathExecuterTest extends TestCase {
 		ReflectionFieldHelper.removePropertiesByClass(DefaultMutableTreeNode.class);
 	}
 
+	@Test
 	public void testGetNestedPropertyBeanWithFieldProperty() throws Exception {
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode("Root");
 		DefaultMutableTreeNode child = new DefaultMutableTreeNode("Child");
@@ -571,6 +612,7 @@ public class PathExecuterTest extends TestCase {
 		ReflectionFieldHelper.removePropertiesByClass(DefaultMutableTreeNode.class);
 	}
 
+	@Test
 	public void testSetNestedPropertyBeanWithFieldProperty() throws Exception {
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode("Root");
 		DefaultMutableTreeNode child = new DefaultMutableTreeNode("Child");

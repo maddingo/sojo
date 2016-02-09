@@ -19,20 +19,24 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import junit.framework.TestCase;
 import net.sf.sojo.core.ConversionContext;
 import net.sf.sojo.core.ConversionException;
 import net.sf.sojo.core.Converter;
 import net.sf.sojo.core.conversion.IterateableMap2MapConversion;
 import net.sf.sojo.core.conversion.interceptor.SimpleKeyMapperInterceptor;
+import org.junit.Test;
 
-public class SimpleKeyMapperInterceptorTest extends TestCase {
+import static org.junit.Assert.*;
 
+public class SimpleKeyMapperInterceptorTest {
+
+	@Test
 	public void testOnError() throws Exception {
 		SimpleKeyMapperInterceptor lvInterceptor = new SimpleKeyMapperInterceptor(true);
 		lvInterceptor.onError(null);
 	}
-	
+
+	@Test
 	public void testToSimpleAsString() throws Exception {
 		SimpleKeyMapperInterceptor lvInterceptor = new SimpleKeyMapperInterceptor(true);
 		ConversionContext lvContext = new ConversionContext();
@@ -46,7 +50,8 @@ public class SimpleKeyMapperInterceptorTest extends TestCase {
 		lvInterceptor.beforeConvertRecursion(lvContext);
 		assertEquals(lvStrKey, lvContext.key);
 	}
-	
+
+	@Test
 	public void testToSimpleAsLong() throws Exception {
 		SimpleKeyMapperInterceptor lvInterceptor = new SimpleKeyMapperInterceptor(true);
 		ConversionContext lvContext = new ConversionContext();
@@ -62,6 +67,7 @@ public class SimpleKeyMapperInterceptorTest extends TestCase {
 		assertEquals(lvStrKey, lvContext.key);
 	}
 
+	@Test
 	public void testToComplexAsString() throws Exception {
 		SimpleKeyMapperInterceptor lvInterceptor = new SimpleKeyMapperInterceptor(true);
 		ConversionContext lvContext = new ConversionContext();
@@ -76,7 +82,8 @@ public class SimpleKeyMapperInterceptorTest extends TestCase {
 		lvInterceptor.beforeConvertRecursion(lvContext);
 		assertEquals(lvMap.get("key"), "result-key");
 	}
-	
+
+	@Test
 	public void testToComplexAsLong() throws Exception {
 		SimpleKeyMapperInterceptor lvInterceptor = new SimpleKeyMapperInterceptor(true);
 		ConversionContext lvContext = new ConversionContext();
@@ -93,28 +100,7 @@ public class SimpleKeyMapperInterceptorTest extends TestCase {
 		assertEquals(lvMap.get(new Long(77)), new Long(55));
 	}
 
-	public void __testResultOrderedMap() throws Exception {
-		Map<Comparable<?>, String> lvMap = new HashMap<Comparable<?>, String>();
-		lvMap.put("key_1", "value_1");
-		lvMap.put("key_2", "value_2");
-		lvMap.put(new Double(12.89), "value_3");
-		
-		Converter c = new Converter();
-		IterateableMap2MapConversion lvConversion = new IterateableMap2MapConversion();
-		SimpleKeyMapperInterceptor lvInterceptor = new SimpleKeyMapperInterceptor(true);
-		lvConversion.getConverterInterceptorHandler().addConverterInterceptor(lvInterceptor); 
-		c.addConversion(lvConversion);
-
-		Map<?, ?> lvResultMap = (Map<?, ?>) c.convert(lvMap);
-
-		lvInterceptor.setMakeSimple(false);
-		lvResultMap = (Map<?, ?>) c.convert(lvResultMap);
-
-		assertEquals(lvMap.get("key_1"), lvResultMap.get("key_1"));
-    assertEquals(lvMap.get("key_2"), lvResultMap.get("key_2"));
-    assertEquals(lvMap.get(new Double(12.89)), lvResultMap.get(new Double(12.89)));
-	}
-
+	@Test
 	public void testResultOrderedMap2() throws Exception {
 		Date lvDate = new Date();
 		Map<Comparable<?>, String> lvMap = new HashMap<Comparable<?>, String>();
@@ -141,6 +127,7 @@ public class SimpleKeyMapperInterceptorTest extends TestCase {
 		assertEquals("value_4", lvResultMap.get("key_4"));
 	}
 
+	@Test
 	public void testResultOrderedMapInvalidKey() throws Exception {
 		Map<String, String> lvMap = new HashMap<String, String>();
 		lvMap.put("key_1", "value_1");
@@ -171,6 +158,7 @@ public class SimpleKeyMapperInterceptorTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testResultOrderedMapInvalidKey2() throws Exception {
 		Map<String, String> lvMap = new HashMap<String, String>();
 		lvMap.put("key_1", "value_1");
@@ -195,7 +183,8 @@ public class SimpleKeyMapperInterceptorTest extends TestCase {
 			assertTrue(e.getCause() instanceof IllegalArgumentException);
 		}
 	}
-	
+
+	@Test
 	public void testResultOrderedMapInvalidKey3() throws Exception {
 		Map<Comparable<?>, String> lvMap = new HashMap<Comparable<?>, String>();
 		lvMap.put("key_1", "value_1");

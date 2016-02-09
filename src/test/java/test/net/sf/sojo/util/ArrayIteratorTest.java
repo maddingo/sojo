@@ -20,11 +20,14 @@ import java.util.NoSuchElementException;
 
 import net.sf.sojo.util.ArrayIterator;
 
+import org.junit.Test;
 import test.net.sf.sojo.model.Node;
-import junit.framework.TestCase;
 
-public class ArrayIteratorTest extends TestCase {
+import static org.junit.Assert.*;
 
+public class ArrayIteratorTest {
+
+	@Test
 	public void testIterateWithLength0() throws Exception {
 		String s[] = new String[] {};
 		ArrayIterator lvIterator = new ArrayIterator(s);
@@ -34,6 +37,7 @@ public class ArrayIteratorTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testIterateStringArray() throws Exception {
 		String s[] = new String[] {"1", "2", "3"};
 		ArrayIterator lvIterator = new ArrayIterator(s);
@@ -42,7 +46,8 @@ public class ArrayIteratorTest extends TestCase {
 			assertEquals(lvIterator.next(), Integer.toString(pos++));
 		}
 	}
-	
+
+	@Test
 	public void testIterateNodeArray() throws Exception {
 		Node s[] = new Node[] {new Node( "1"), new Node("2"), new Node("3") };
 		ArrayIterator lvIterator = new ArrayIterator(s);
@@ -53,6 +58,7 @@ public class ArrayIteratorTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testIterateObjectArray() throws Exception {
 		Object s[] = new Object[] {"1", new BigDecimal("2"), new Long("3") };
 		ArrayIterator lvIterator = new ArrayIterator(s);
@@ -62,6 +68,7 @@ public class ArrayIteratorTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testIterateNullArray() throws Exception {
 		try {
 			new ArrayIterator(null);
@@ -71,6 +78,7 @@ public class ArrayIteratorTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testIterateInvalidArray() throws Exception {
 		try {
 			new ArrayIterator("");
@@ -79,21 +87,24 @@ public class ArrayIteratorTest extends TestCase {
 			assertNotNull(e);
 		}
 	}
-	
+
+	@Test
 	public void testPos() throws Exception {
 		ArrayIterator lvArrayIterator = new ArrayIterator(new String[] { "1" });
 		assertEquals(0, lvArrayIterator.getPos());
 		lvArrayIterator.next();
 		assertEquals(1, lvArrayIterator.getPos());
 	}
-	
+
+	@Test
 	public void testRemove() throws Exception {
 		ArrayIterator lvArrayIterator = new ArrayIterator(new String[] { "1" });
 		assertEquals(1, lvArrayIterator.getLength());
 		lvArrayIterator.remove();
 		assertEquals(1, lvArrayIterator.getLength());
 	}
-	
+
+	@Test
 	public void testNextAfterLastPosition() throws Exception {
 		ArrayIterator lvArrayIterator = new ArrayIterator(new String[] { "1" });
 		assertEquals("1",lvArrayIterator.next());

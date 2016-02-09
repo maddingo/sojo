@@ -20,24 +20,28 @@ import java.lang.reflect.Method;
 
 import net.sf.sojo.core.reflect.Property;
 
+import org.junit.Test;
 import test.net.sf.sojo.model.Car;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.*;
 
-public class PropertyTest extends TestCase {
-	
+public class PropertyTest {
+
+	@Test
 	public void testConstructorMethod() throws Exception {
 		Method lvMethod = Car.class.getMethod("setName", new Class [] { String.class});
 		Property lvProperty = new Property(lvMethod);
 		assertEquals(Property.PROPERTY_TYPE_METHOD, lvProperty.getPropertyType());
 	}
 
+	@Test
 	public void testConstructorField() throws Exception {
 		Field lvField = Car.class.getDeclaredField("name");
 		Property lvProperty = new Property(lvField);
 		assertEquals(Property.PROPERTY_TYPE_FIELD, lvProperty.getPropertyType());
 	}
 
+	@Test
 	public void testConstructorInvalidObject() throws Exception {
 		try {
 			new Property(Car.class.getConstructor());
@@ -47,6 +51,7 @@ public class PropertyTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testExecuteSetPropertyMethod() throws Exception {
 		Method lvMethod = Car.class.getMethod("setName", new Class [] { String.class});
 		Property lvProperty = new Property(lvMethod);
@@ -55,6 +60,7 @@ public class PropertyTest extends TestCase {
 		assertEquals("BMW", lvCar.getName());
 	}
 
+	@Test
 	public void testExecuteSetPropertyField() throws Exception {
 		Field lvField = Car.class.getDeclaredField("name");
 		Property lvProperty = new Property(lvField);
@@ -63,6 +69,7 @@ public class PropertyTest extends TestCase {
 		assertEquals("Audi", lvCar.getName());
 	}
 
+	@Test
 	public void testExecuteGetPropertyMethod() throws Exception {
 		Method lvMethod = Car.class.getMethod("getName");
 		Property lvProperty = new Property(lvMethod);
@@ -70,6 +77,7 @@ public class PropertyTest extends TestCase {
 		assertEquals("Trabant", lvValue);
 	}
 
+	@Test
 	public void testExecuteGetPropertyField() throws Exception {
 		Field lvField = Car.class.getDeclaredField("name");
 		Property lvProperty = new Property(lvField);
@@ -77,7 +85,7 @@ public class PropertyTest extends TestCase {
 		assertEquals("Jaguar", lvValue);
 	}
 
-	
+	@Test
 	public void testGetParameterTypesMethod() throws Exception {
 		Method lvMethod = Car.class.getMethod("getName");
 		Property lvProperty = new Property(lvMethod);
@@ -88,6 +96,7 @@ public class PropertyTest extends TestCase {
 		assertEquals(String.class, lvProperty.getParameterType());
 	}
 
+	@Test
 	public void testGetParameterTypesField() throws Exception {
 		Field lvField = Car.class.getDeclaredField("name");
 		Property lvProperty = new Property(lvField);
