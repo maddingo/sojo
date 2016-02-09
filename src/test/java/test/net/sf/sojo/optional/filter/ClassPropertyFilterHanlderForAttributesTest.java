@@ -17,7 +17,6 @@ package test.net.sf.sojo.optional.filter;
 
 import java.util.Date;
 
-import junit.framework.TestCase;
 import net.sf.sojo.common.ObjectUtil;
 import net.sf.sojo.core.filter.ClassPropertyFilter;
 import net.sf.sojo.interchange.Serializer;
@@ -25,18 +24,23 @@ import net.sf.sojo.interchange.json.JsonSerializer;
 import net.sf.sojo.interchange.object.ObjectSerializer;
 import net.sf.sojo.interchange.xmlrpc.XmlRpcSerializer;
 import net.sf.sojo.optional.filter.attributes.ClassPropertyFilterHanlderForAttributes;
+import org.junit.Test;
 import test.net.sf.sojo.model.Customer;
 import test.net.sf.sojo.optional.filter.model.Account;
 
-public class ClassPropertyFilterHanlderForAttributesTest extends TestCase {
+import static org.junit.Assert.*;
+
+public class ClassPropertyFilterHanlderForAttributesTest {
 
 	private ClassPropertyFilterHanlderForAttributes filterHanlder = new ClassPropertyFilterHanlderForAttributes();
-	
+
+	@Test
 	public void testfindFilterClass() throws Exception {
 		ClassPropertyFilter lvFilter = filterHanlder.getClassPropertyFilterByClass(Account.class);
 		assertEquals(Account.class, lvFilter.getFilterClass());
 	}
-	
+
+	@Test
 	public void testFindFilterProperties() throws Exception {
 		ClassPropertyFilter lvFilter = filterHanlder.getClassPropertyFilterByClass(Account.class);
 		assertEquals(3, lvFilter.getPropertySize());
@@ -45,7 +49,8 @@ public class ClassPropertyFilterHanlderForAttributesTest extends TestCase {
 		assertTrue(lvFilter.isKnownProperty("aAccountNumber"));
 		assertTrue(lvFilter.isKnownProperty("createDate"));
 	}
-	
+
+	@Test
 	public void testFindFilterByClassWithoutAnnotaions() throws Exception {
 		ClassPropertyFilter lvFilter = filterHanlder.getClassPropertyFilterByClass(Customer.class);
 		assertNull(lvFilter);
@@ -55,6 +60,7 @@ public class ClassPropertyFilterHanlderForAttributesTest extends TestCase {
 		assertNull(lvFilter);
 	}
 
+	@Test
 	public void testFilterPropertiesWithObjectUtil() throws Exception {
 		ObjectUtil lvUtil = new ObjectUtil(); 
 		Account lvAccount = new Account();
@@ -88,6 +94,7 @@ public class ClassPropertyFilterHanlderForAttributesTest extends TestCase {
 		assertEquals(lvDate, lvAccountAfter.getCreateDate());
 	}
 
+	@Test
 	public void testFilterPropertiesWithJsonSerializer() throws Exception {
 		Serializer  lvSerializer = new JsonSerializer();
 		Account lvAccount = new Account();
@@ -115,6 +122,7 @@ public class ClassPropertyFilterHanlderForAttributesTest extends TestCase {
 		assertEquals(47.11, lvAccountAfter.getAmount(), 0.0);
 	}
 
+	@Test
 	public void testFilterPropertiesWithXmlRpcSerializer() throws Exception {
 		XmlRpcSerializer  lvSerializer = new XmlRpcSerializer();
 		lvSerializer.setReturnValueAsList(false);
@@ -137,6 +145,7 @@ public class ClassPropertyFilterHanlderForAttributesTest extends TestCase {
 		assertEquals(0.0, lvAccountAfter.getAmount(), 0.0);
 	}
 
+	@Test
 	public void testFilterPropertiesWithObjectSerializer() throws Exception {
 		Serializer  lvSerializer = new ObjectSerializer();
 		Account lvAccount = new Account();
@@ -157,6 +166,7 @@ public class ClassPropertyFilterHanlderForAttributesTest extends TestCase {
 		assertEquals(0.0, lvAccountAfter.getAmount(), 0.0);
 	}
 
+	@Test
 	public void testRemoveFilterProperties() throws Exception {
 		ClassPropertyFilter lvFilter = filterHanlder.getClassPropertyFilterByClass(Account.class);
 		assertEquals(3, lvFilter.getPropertySize());

@@ -23,19 +23,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.junit.Test;
 import test.net.sf.sojo.model.Node;
 
-import junit.framework.TestCase;
 import net.sf.sojo.util.CycleDetector;
 
-public class CycleDetectorTest extends TestCase {
+import static org.junit.Assert.*;
+
+public class CycleDetectorTest {
 	
 	private CycleDetector cycleDetector = new CycleDetector();
 
+	@Test
 	public void testNull() throws Exception {
 		assertFalse(cycleDetector.cycleDetection(null));
 	}
 
+	@Test
 	public void testSimpleCycleInList() throws Exception {
 		List<List<?>> lvList1 = new ArrayList<List<?>>();
 		assertFalse(cycleDetector.cycleDetection(lvList1));
@@ -44,6 +48,7 @@ public class CycleDetectorTest extends TestCase {
 		assertTrue(cycleDetector.cycleDetection(lvList1));
 	}
 
+	@Test
 	public void testNoCycleInList() throws Exception {
 		List<List<String>> lvList1 = new ArrayList<List<String>>();
 		List<String> lvList2 = new ArrayList<String>();
@@ -52,7 +57,8 @@ public class CycleDetectorTest extends TestCase {
 		lvList1.add(lvList2);
 		assertFalse(cycleDetector.cycleDetection(lvList1));
 	}
-	
+
+	@Test
 	public void testNestedCycleInList() throws Exception {
 		List<Object> lvList1 = new ArrayList<Object>();
 		List<List<List>> lvList2 = new ArrayList<List<List>>();
@@ -67,7 +73,8 @@ public class CycleDetectorTest extends TestCase {
 		assertTrue(cycleDetector.cycleDetection(lvList2));
 		assertTrue(cycleDetector.cycleDetection(lvList3));
 	}
-	
+
+	@Test
 	public void testNestedCycleInList2() throws Exception {
 		List<List<List<List<List>>>> lvList1 = new ArrayList<List<List<List<List>>>>();
 		List<List<List<List>>> lvList2 = new ArrayList<List<List<List>>>();
@@ -91,7 +98,7 @@ public class CycleDetectorTest extends TestCase {
 		assertTrue(cycleDetector.cycleDetection(lvList3));
 	}
 
-	
+	@Test
 	public void testNoCycleOverBeanInList() throws Exception {
 		List<Node> lvList1 = new ArrayList<Node>();
 		Node n = new Node("N");
@@ -106,7 +113,8 @@ public class CycleDetectorTest extends TestCase {
 		assertEquals(2, lvList1.size());
 		assertFalse(cycleDetector.cycleDetection(lvList1));
 	}
-	
+
+	@Test
 	public void testSimpleCycleInMap() throws Exception {
 		Map<Object, Object> lvMap = new HashMap<Object, Object>();
 		assertFalse(cycleDetector.cycleDetection(lvMap));
@@ -123,6 +131,7 @@ public class CycleDetectorTest extends TestCase {
 		assertTrue(cycleDetector.cycleDetection(lvMap));
 	}
 
+	@Test
 	public void testNoCycleInMap() throws Exception {
 		Map<String, Map<?, ?>> lvMap1 = new HashMap<String, Map<?, ?>>();
 		Map<?, ?> lvMap2 = new HashMap<Object, Object>();
@@ -130,6 +139,8 @@ public class CycleDetectorTest extends TestCase {
 		lvMap1.put("map2-1", lvMap2);
 		assertFalse(cycleDetector.cycleDetection(lvMap1));
 	}
+
+	@Test
 	public void testCycleInMap() throws Exception {
 		Map<String, Object> lvMap1 = new HashMap<String, Object>();
 		Map<String, Map> lvMap2 = new HashMap<String, Map>();
@@ -139,6 +150,7 @@ public class CycleDetectorTest extends TestCase {
 		assertTrue(cycleDetector.cycleDetection(lvMap1));
 	}
 
+	@Test
 	public void testNestedCycleInMap() throws Exception {
 		Map<String, Object> lvMap1 = new HashMap<String, Object>();
 		Map<String, Map<String, Map>> lvMap2 = new HashMap<String, Map<String, Map>>();
@@ -154,6 +166,7 @@ public class CycleDetectorTest extends TestCase {
 		assertTrue(cycleDetector.cycleDetection(lvMap3));
 	}
 
+	@Test
 	public void testNestedCycleInMap2() throws Exception {
 		Map<String, Map<String, Map<String, Map<String, Map>>>> lvMap1 = new HashMap<String, Map<String, Map<String, Map<String, Map>>>>();
 		Map<String, Map<String, Map<String, Map>>> lvMap2 = new HashMap<String, Map<String, Map<String, Map>>>();
@@ -177,6 +190,7 @@ public class CycleDetectorTest extends TestCase {
 		assertTrue(cycleDetector.cycleDetection(lvMap3));
 	}
 
+	@Test
 	public void testNoCycleOverBeanInMap() throws Exception {
 		Map<String, Node> lvMap1 = new HashMap<String, Node>();
 		Node n = new Node("N");
@@ -191,7 +205,8 @@ public class CycleDetectorTest extends TestCase {
 		assertEquals(2, lvMap1.size());
 		assertFalse(cycleDetector.cycleDetection(lvMap1));
 	}
-	
+
+	@Test
 	public void testSetInMapWithCycle() throws Exception {
 		Map<String, Set<Set>> lvMap = new HashMap<String, Set<Set>>();
 		Set<Set> lvSet = new HashSet<Set>();
@@ -207,6 +222,7 @@ public class CycleDetectorTest extends TestCase {
 		assertEquals(100, cycleDetector.getCounter());
 	}
 
+	@Test
 	public void testMapInSetWithCycle() throws Exception {
 		Map<String, Map> lvMap = new HashMap<String, Map>();
 		Set<Map<String, Map>> lvSet = new HashSet<Map<String, Map>>();
@@ -221,7 +237,8 @@ public class CycleDetectorTest extends TestCase {
 		assertFalse(cycleDetector.cycleDetection(lvSet));
 		assertEquals(100, cycleDetector.getCounter());
 	}
-	
+
+	@Test
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void testNestedListInMapWithCycle() throws Exception {
 		Map lvMap = new HashMap();

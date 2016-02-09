@@ -18,19 +18,23 @@ package test.net.sf.sojo.util;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
+import org.junit.Test;
 import test.net.sf.sojo.model.Test2Exception;
 
-import junit.framework.TestCase;
 import net.sf.sojo.util.StackTraceElementWrapper;
 import net.sf.sojo.util.ThrowableWrapper;
 
-public class ThrowableWrapperTest extends TestCase {
+import static org.junit.Assert.*;
 
+public class ThrowableWrapperTest {
+
+	@Test
 	public void testMessage() throws Exception {
 		ThrowableWrapper lvWrapper = new ThrowableWrapper(new Exception("JUnit-Test"));
 		assertEquals("JUnit-Test", lvWrapper.getMessage());
 	}
-	
+
+	@Test
 	public void testCauseWrapper() throws Exception {
 		ThrowableWrapper lvWrapper = new ThrowableWrapper(new Exception("JUnit-Test"));
 		assertNull(lvWrapper.getCauseWrapper());
@@ -41,6 +45,7 @@ public class ThrowableWrapperTest extends TestCase {
 		assertNull(lvWrapper.getCauseWrapper().getCauseWrapper());
 	}
 
+	@Test
 	public void testExceptionClassName() throws Exception {
 		ThrowableWrapper lvWrapper = new ThrowableWrapper(new Exception("JUnit-Test"));
 		assertEquals(Exception.class.getName(), lvWrapper.getExceptionClassName());
@@ -49,12 +54,14 @@ public class ThrowableWrapperTest extends TestCase {
 		assertEquals(Error.class.getName(), lvWrapper.getExceptionClassName());
 	}
 
+	@Test
 	public void testStackTraceElementWrapperList() throws Exception {
 		ThrowableWrapper lvWrapper = new ThrowableWrapper(new Exception("JUnit-Test"));
 		StackTraceElementWrapper element[] = lvWrapper.getStackTraceElementWrapperList();
 		assertTrue(1 < element.length);
 	}
-	
+
+	@Test
 	public void testPrintStackTrace() throws Exception {
 		PrintStream lvErr = System.err;
 		System.setErr(new PrintStream(new ByteArrayOutputStream(0)));
@@ -62,7 +69,8 @@ public class ThrowableWrapperTest extends TestCase {
 		lvWrapper.printStackTrace();
 		System.setErr(lvErr);
 	}
-	
+
+	@Test
 	public void testInvalidConstructorCall() throws Exception {
 		try {
 			new ThrowableWrapper((Throwable) null);
@@ -71,7 +79,8 @@ public class ThrowableWrapperTest extends TestCase {
 			assertNotNull(e);
 		}
 	}
-	
+
+	@Test
 	public void testStackTraceElementWrapper() throws Exception {
 		StackTraceElementWrapper lvStackTraceElementWrapper = new StackTraceElementWrapper();
 		assertFalse(lvStackTraceElementWrapper.isNativeMethod());
@@ -81,8 +90,8 @@ public class ThrowableWrapperTest extends TestCase {
 		assertTrue(lvStackTraceElementWrapper.isNativeMethod());
 		assertTrue(lvStackTraceElementWrapper.getNativeMethod());
 	}
-	
-	
+
+	@Test
 	public void testTryToCreateStackTraceElement() throws Exception {
 		StackTraceElementWrapper lvElementWrapper = new StackTraceElementWrapper();
 		lvElementWrapper.setClassName(this.getClass().getName());
@@ -96,7 +105,8 @@ public class ThrowableWrapperTest extends TestCase {
 		assertEquals(23, lvElement.getLineNumber());
 		assertEquals("testTryToCreateStackTraceElement", lvElement.getMethodName());
 	}
-	
+
+	@Test
 	public void testThrowableIWrapperWithDoubleNestedException() throws Exception {
 		ThrowableWrapper lvWrapper = new ThrowableWrapper(new Test2Exception("JUnit-Message", 
 															new Exception("Cause", 

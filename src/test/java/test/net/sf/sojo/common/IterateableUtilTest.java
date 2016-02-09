@@ -24,14 +24,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import junit.framework.TestCase;
 import net.sf.sojo.common.IterableUtil;
+import org.junit.Test;
 import test.net.sf.sojo.model.Car;
 import test.net.sf.sojo.model.Node;
 import test.net.sf.sojo.model.Primitive;
 
-public class IterateableUtilTest extends TestCase {
-	
+import static org.junit.Assert.*;
+
+public class IterateableUtilTest {
+
+	@Test
 	public void testSortStringList() throws Exception {
 		List<String> lvList = new ArrayList<String>(4);
 		lvList.add("BMW");
@@ -46,6 +49,7 @@ public class IterateableUtilTest extends TestCase {
 		assertEquals("Mercedes", lvList.get(3));
 	}
 
+	@Test
 	public void testSortBeanList() throws Exception {
 		List<Car> lvList = new ArrayList<Car>(3);
 		lvList.add(new Car("BMW"));
@@ -58,6 +62,7 @@ public class IterateableUtilTest extends TestCase {
 		assertEquals("Ferrari", lvList.get(2).getName());
 	}
 
+	@Test
 	public void testSortPrimitiveBeanList() throws Exception {
 		List<Primitive> lvList = new ArrayList<Primitive>();
 		Primitive p1 = new Primitive();
@@ -77,6 +82,7 @@ public class IterateableUtilTest extends TestCase {
 		assertEquals(5, lvList.get(2).getLongValue());
 	}
 
+	@Test
 	public void testSortBigDecimalArray() throws Exception {
 		Object lvObjArray[] = new Object [] { new BigDecimal("47.11"),  new BigDecimal("0.07"), new BigDecimal("08.15") } ;
 
@@ -86,6 +92,7 @@ public class IterateableUtilTest extends TestCase {
 		assertEquals(new BigDecimal("47.11"), lvObjArray[2]);
 	}
 
+	@Test
 	public void testSortBeanArray() throws Exception {
 		Car cars[] = new Car [] { new Car("Ferrari"), new Car("Audi"), new Car("BMW") } ;
 
@@ -95,6 +102,7 @@ public class IterateableUtilTest extends TestCase {
 		assertEquals("Ferrari", cars[2].getName());
 	}
 
+	@Test
 	public void testSortPrimitiveBeanArray() throws Exception {
 		Primitive p1 = new Primitive();
 		p1.setLongValue(5);
@@ -111,6 +119,7 @@ public class IterateableUtilTest extends TestCase {
 		assertEquals(5, ((Primitive) lvObjArray[2]).getLongValue());
 	}
 
+	@Test
 	public void testSortBeanSet() throws Exception {
 		Set<Car> lvSet = new HashSet<Car>();
 		lvSet.add(new Car("BMW"));
@@ -124,6 +133,7 @@ public class IterateableUtilTest extends TestCase {
 		assertEquals("Ferrari", it.next().getName());
 	}
 
+	@Test
 	public void testSortBeanMap() throws Exception {
 		Map<Car, String> lvMap = new HashMap<Car, String>();
 		lvMap.put(new Car("BMW"), "Dummy1");
@@ -137,6 +147,7 @@ public class IterateableUtilTest extends TestCase {
 		assertEquals("Ferrari", it.next().getName());
 	}
 
+	@Test
 	public void testSortBeanSetWithCycle() throws Exception {
 		Set<Node> lvSet = new HashSet<Node>();
 		Node n0 = new Node("Node 0");

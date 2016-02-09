@@ -15,6 +15,7 @@
  */	
 package test.net.sf.sojo;
 
+import org.junit.Test;
 import test.net.sf.sojo.model.Node;
 import net.sf.sojo.core.Conversion;
 import net.sf.sojo.core.ConversionHandler;
@@ -22,10 +23,12 @@ import net.sf.sojo.core.Converter;
 import net.sf.sojo.core.conversion.NullConversion;
 import net.sf.sojo.core.conversion.Simple2SimpleConversion;
 import net.sf.sojo.core.conversion.SimpleFormatConversion;
-import junit.framework.TestCase;
 
-public class ConversionHandlerTest extends TestCase {
-	
+import static org.junit.Assert.*;
+
+public class ConversionHandlerTest {
+
+	@Test
 	public void testAddConversionWithNullValue() throws Exception {
 		ConversionHandler lvConversionHandler = new ConversionHandler();
 		try {
@@ -35,13 +38,15 @@ public class ConversionHandlerTest extends TestCase {
 			assertNotNull(e);
 		}
 	}
-	
+
+	@Test
 	public void testAddConversion() throws Exception {
 		ConversionHandler lvConversionHandler = new ConversionHandler();
 		lvConversionHandler.addConversion(new Simple2SimpleConversion(String.class));
 		assertNull(lvConversionHandler.getConversion("TEST", Node.class));
 	}
 
+	@Test
 	public void testConversion() throws Exception {
 		ConversionHandler lvConversionHandler = new ConversionHandler();
 		assertEquals(0, lvConversionHandler.size());
@@ -57,7 +62,7 @@ public class ConversionHandlerTest extends TestCase {
 		assertEquals(0, lvConversionHandler.size());
 	}
 
-
+	@Test
 	public void testReplaceConversion() throws Exception {
 		ConversionHandler lvConversionHandler = new ConversionHandler();
 		assertEquals(0, lvConversionHandler.size());
@@ -75,6 +80,7 @@ public class ConversionHandlerTest extends TestCase {
 		assertSame(lvConversion, lvSimple2SimpleConversion);
 	}
 
+	@Test
 	public void testReplaceConversion2() throws Exception {
 		ConversionHandler lvConversionHandler = new ConversionHandler();
 		assertEquals(0, lvConversionHandler.size());
@@ -98,6 +104,7 @@ public class ConversionHandlerTest extends TestCase {
 		assertNotSame(lvConversion, lvSimple2SimpleConversionNew);
 	}
 
+	@Test
 	public void testReplaceAllConversion() throws Exception {
 		ConversionHandler lvConversionHandler = new ConversionHandler();
 		assertEquals(0, lvConversionHandler.size());
@@ -121,6 +128,7 @@ public class ConversionHandlerTest extends TestCase {
 		assertSame(lvConversion, lvSimple2SimpleConversionNew);
 	}
 
+	@Test
 	public void testRemoveConversion() throws Exception {
 		Converter lvConverter = new Converter();
 		assertEquals(0, lvConverter.getConversionHandler().size());
@@ -144,6 +152,7 @@ public class ConversionHandlerTest extends TestCase {
 		assertNull(lvConversion);
 	}
 
+	@Test
 	public void testDoubleConversion() throws Exception {
 		ConversionHandler lvConversionHandler = new ConversionHandler();
 		assertEquals(0, lvConversionHandler.size());
@@ -162,7 +171,8 @@ public class ConversionHandlerTest extends TestCase {
 		assertEquals(2, lvConversionHandler.size());
 		assertTrue(lvConversionHandler.containsConversion(lvSimple2SimpleConversion));
 	}
-	
+
+	@Test
 	public void testSimpleFormatConversion() throws Exception {
 		SimpleFormatConversion lvConversion = new SimpleFormatConversion();
 		Object o = lvConversion.convert("47.11", Double.class);

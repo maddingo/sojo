@@ -19,13 +19,14 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
-import junit.framework.TestCase;
 import net.sf.sojo.util.Table;
+import org.junit.Test;
 
-public class TableTest extends TestCase {
+import static org.junit.Assert.*;
 
-	
-	
+public class TableTest {
+
+	@Test
 	public void testColumnNumber() throws Exception {
 		Table lvTable = new Table();
 		assertEquals(1, lvTable.getCurrentRowNumber());
@@ -36,6 +37,7 @@ public class TableTest extends TestCase {
 		assertEquals(0, lvTable.getCurrentColumnNumber());
 	}
 
+	@Test
 	public void testRowNumber() throws Exception {
 		Table lvTable = new Table();
 		assertEquals(1, lvTable.getCurrentRowNumber());
@@ -45,6 +47,7 @@ public class TableTest extends TestCase {
 		assertEquals(2, lvTable.getCurrentRowNumber());
 	}
 
+	@Test
 	public void testAddValue2CurrentRow() throws Exception {
 		Table lvTable = new Table();
 		assertEquals(1, lvTable.getCurrentRowNumber());
@@ -54,7 +57,8 @@ public class TableTest extends TestCase {
 		assertEquals(1, lvTable.getCurrentRowNumber());
 		assertEquals(0, lvTable.getCurrentColumnNumber());
 	}
-	
+
+	@Test
 	public void testAddValue2NewRow() throws Exception {
 		Table lvTable = new Table();
 		assertEquals(1, lvTable.getCurrentRowNumber());
@@ -65,6 +69,7 @@ public class TableTest extends TestCase {
 		assertEquals(0, lvTable.getCurrentColumnNumber());
 	}
 
+	@Test
 	public void testColumnNames() throws Exception {
 		Table lvTable = new Table();
 		lvTable.addValue2CurrentRow("Name", "Mario");
@@ -74,6 +79,7 @@ public class TableTest extends TestCase {
 		assertEquals("Name,Age", s);
 	}
 
+	@Test
 	public void testColumnValues() throws Exception {
 		Table lvTable = new Table();
 		lvTable.addValue2CurrentRow("Name", "Mario");
@@ -83,7 +89,8 @@ public class TableTest extends TestCase {
 		String s = lvTable.row2String(0);
 		assertEquals("Mario,27", s);
 	}
-	
+
+	@Test
 	public void testColumnValuesInList() throws Exception {
 		Table lvTable = new Table();
 		lvTable.addValue2CurrentRow("Name", "Mario");
@@ -103,7 +110,8 @@ public class TableTest extends TestCase {
 		lvTable.clear();
 		assertEquals(0, lvTable.getCurrentRowNumber());
 	}
-	
+
+	@Test
 	public void testCurrentColumnNumber() throws Exception {
 		Table lvTable = new Table();
 		assertEquals(-1, lvTable.getCurrentColumnNumber());
@@ -115,6 +123,7 @@ public class TableTest extends TestCase {
 		assertEquals(1, lvTable.getCurrentColumnNumber());
 	}
 
+	@Test
 	public void testChangeDelimiter() throws Exception {
 		Table lvTable = new Table();
 		lvTable.setDelimiter(";");
@@ -126,6 +135,7 @@ public class TableTest extends TestCase {
 		assertEquals("Mario;27", s);
 	}
 
+	@Test
 	public void testChangeDelimiterWithMoreThanOneCharacter() throws Exception {
 		Table lvTable = new Table();
 		lvTable.setDelimiter("@#");
@@ -141,7 +151,8 @@ public class TableTest extends TestCase {
 		s = lvTable.row2String(1);
 		assertEquals("Ilka@#7", s);
 	}
-	
+
+	@Test
 	public void testGetRows() throws Exception {
 		Table lvTable = new Table();
 		Date d = new Date();
@@ -172,7 +183,8 @@ public class TableTest extends TestCase {
 		assertEquals("27", lvLastRow.get(2).toString());
 		assertEquals("29", lvLastRow.get(1).toString());
 	}
-	
+
+	@Test
 	public void testNotSameNumberOfColumnsByAllRows() throws Exception {
 		Table lvTable = new Table();
 		lvTable.addValue2CurrentRow("1");
@@ -187,6 +199,7 @@ public class TableTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testSameNumberOfColumnsByAllRows() throws Exception {
 		Table lvTable = new Table();
 		lvTable.addValue2CurrentRow("");

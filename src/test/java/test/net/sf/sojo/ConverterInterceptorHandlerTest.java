@@ -18,10 +18,13 @@ package test.net.sf.sojo;
 import net.sf.sojo.core.ConversionContext;
 import net.sf.sojo.core.ConversionException;
 import net.sf.sojo.core.ConverterInterceptorHandler;
-import junit.framework.TestCase;
+import org.junit.Test;
 
-public class ConverterInterceptorHandlerTest extends TestCase {
-	
+import static org.junit.Assert.*;
+
+public class ConverterInterceptorHandlerTest {
+
+	@Test
 	public void testAddConverterInterceptor() throws Exception {
 		ConverterInterceptorHandler lvHandler = new ConverterInterceptorHandler ();
 		try {
@@ -31,7 +34,8 @@ public class ConverterInterceptorHandlerTest extends TestCase {
 			assertNotNull(e);
 		}
 	}
-	
+
+	@Test
 	public void testFireOnError() throws Exception {
 		TestConverterInterceptorRecursive lvInterceptor = new TestConverterInterceptorRecursive();
 		ConverterInterceptorHandler lvHandler = new ConverterInterceptorHandler ();
@@ -46,6 +50,7 @@ public class ConverterInterceptorHandlerTest extends TestCase {
 		assertEquals(1, lvInterceptor.onError);
 	}
 
+	@Test
 	public void testFireBeforeAndAfterConvertRecursion() throws Exception {
 		TestConverterInterceptor lvInterceptor = new TestConverterInterceptor();
 		ConverterInterceptorHandler lvHandler = new ConverterInterceptorHandler ();

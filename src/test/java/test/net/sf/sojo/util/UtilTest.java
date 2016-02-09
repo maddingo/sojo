@@ -27,11 +27,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
-import junit.framework.TestCase;
 import net.sf.sojo.util.Util;
+import org.junit.Test;
 
-public class UtilTest extends TestCase {
+import static org.junit.Assert.*;
 
+public class UtilTest {
+
+	@Test
 	public void testString2Date() throws Exception {
 		Date lvDate = Util.string2Date("1234567");
 		assertEquals(new Date(1234567), lvDate);
@@ -54,13 +57,15 @@ public class UtilTest extends TestCase {
 			assertTrue(true); 
 		}	
 	}
-	
+
+	@Test
 	public void testString2Date2() throws Exception {
 		Date lvDate = new Date();
 		Date lvDate2 = Util.string2Date(Long.toString(lvDate.getTime()));
 		assertEquals(lvDate2, lvDate);
 	}
 
+	@Test
 	public void testString2SqlDate() throws Exception {
 		String formatString = "yyyy-mm-dd";
 		Util.registerDateFormat(formatString);
@@ -85,6 +90,7 @@ public class UtilTest extends TestCase {
 		
 	}
 
+	@Test
 	public void testString2Timpstamp() throws Exception {
 	  
 	  Map<String, DateFormat> oldFormats = new HashMap<String, DateFormat>();
@@ -103,6 +109,7 @@ public class UtilTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testString2Timpstamp2() throws Exception {
 	  
 		long lvTime = 1175188856390L;
@@ -119,6 +126,8 @@ public class UtilTest extends TestCase {
 	 * 
 	 * @throws Exception
 	 */
+
+	@Test
 	public void testTimestamp3() throws Exception {
 	  // none of these formats work
 	  List<SimpleDateFormat> formatList = Arrays.asList(
@@ -140,8 +149,9 @@ public class UtilTest extends TestCase {
 		  assertEquals(1175188856039L+offset, date.getTime());
 		}
 	}
-	
+
 	/** Tue Mar 01 20:23:55 CET 2005 - 1109705105302 */
+	@Test
 	public void testString2DateCET() throws Exception {
 		Date d = new Date(1109705105302l);
 		Date d2 = Util.string2Date(d.toString());
@@ -149,12 +159,15 @@ public class UtilTest extends TestCase {
 	}
 
 	/** Sat Oct 01 20:25:34 CEST 2005 -- 1128191134214 */
+	@Test
 	public void testString2DateCEST() throws Exception {
 		Date d = new Date(1128191134214l);
 		Date d2 = Util.string2Date(d.toString());
 		assertEquals(d2.toString(), d.toString());
 	}
-	
+
+
+	@Test
 	@SuppressWarnings("rawtypes")
 	public void testArrayType_Array() throws Exception {
 		Class lvType = Util.getArrayType(null);
@@ -182,7 +195,8 @@ public class UtilTest extends TestCase {
 		lvType = Util.getArrayType(lvMap);
 		assertEquals(lvType, Object.class);
 	}
-	
+
+	@Test
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void testArrayType_Collection() throws Exception {
 		List v = new ArrayList<Object>();
@@ -201,7 +215,8 @@ public class UtilTest extends TestCase {
 		lvType = Util.getArrayType(v);
 		assertEquals(lvType, Object.class);
 	}
-	
+
+	@Test
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void testArrayType_Map() throws Exception {
 		Map lvMap = new HashMap();
@@ -211,7 +226,7 @@ public class UtilTest extends TestCase {
 		assertEquals(lvType, Object.class);			
 	}
 
-	
+	@Test
 	public void testDelLastComma() throws Exception {
 		StringBuffer sb = new StringBuffer("123,");
 		Util.delLastComma(sb);
@@ -225,7 +240,8 @@ public class UtilTest extends TestCase {
 		Util.delLastComma(sb);
 		assertEquals("12,3", sb.toString());
 	}
-	
+
+	@Test
 	public void testIsStringInArray() throws Exception {
 		String lvArray[] = new String[] { "aa", "bb", "cc" };
 		boolean lvResult = Util.isStringInArray(lvArray, "aa");
@@ -243,7 +259,8 @@ public class UtilTest extends TestCase {
 		lvResult = Util.isStringInArray(lvArray, "zz");
 		assertFalse(lvResult);
 	}
-	
+
+	@Test
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void testname() throws Exception {
 		Map lvMap = new HashMap();
@@ -268,7 +285,8 @@ public class UtilTest extends TestCase {
 		lvResultMap = Util.filterMapByKeys(lvMap, lvArray);
 		assertEquals(lvMap, lvResultMap);
 	}
-	
+
+	@Test
 	public void testUSformatFail() throws Exception {
 		try {
 			Date dt = Util.string2Date("Sat Oct 01 20:25:34 ABC 2005");
@@ -282,6 +300,8 @@ public class UtilTest extends TestCase {
 	/**
 	 * For this to work properly, we have to choose a date without DST. Because it is not given that the JVM implementation supports historical DST data. 
 	 */
+
+	@Test
 	public void testUSformatOk() throws Exception {
 
 		Date lvDate = Util.string2Date("Sat Dec 01 20:25:34 PST 2005");
@@ -296,6 +316,8 @@ public class UtilTest extends TestCase {
 		assertEquals(cal.getTime().getTime(), lvDate.getTime());
 	}
 
+
+	@Test
 	public void testKeyWordClass() throws Exception {
 		Util.setKeyWordClass(null);
 		assertEquals(Util.getKeyWordClass(), Util.DEFAULT_KEY_WORD_CLASS);

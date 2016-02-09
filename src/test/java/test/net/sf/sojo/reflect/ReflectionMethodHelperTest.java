@@ -23,7 +23,7 @@ import java.util.Set;
 
 import net.sf.sojo.core.reflect.ReflectionMethodHelper;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 import test.net.sf.sojo.model.BadJavaBean;
 import test.net.sf.sojo.model.Bean;
 import test.net.sf.sojo.model.Car;
@@ -31,8 +31,11 @@ import test.net.sf.sojo.model.Node;
 import test.net.sf.sojo.model.NotJavaBean;
 import test.net.sf.sojo.model.SubNode;
 
-public class ReflectionMethodHelperTest extends TestCase {
-	
+import static org.junit.Assert.*;
+
+public class ReflectionMethodHelperTest {
+
+	@Test
 	public void testIsMethodSetterAndGetterCompliantSimpleType() throws Exception {
 		assertTrue(ReflectionMethodHelper.isMethodSetterAndGetterCompliant(String.class));
 		assertTrue(ReflectionMethodHelper.isMethodSetterAndGetterCompliant(Long.class));
@@ -43,12 +46,13 @@ public class ReflectionMethodHelperTest extends TestCase {
 		assertTrue(ReflectionMethodHelper.isMethodSetterAndGetterCompliant(java.sql.Date.class));
 		assertTrue(ReflectionMethodHelper.isMethodSetterAndGetterCompliant(java.sql.Time.class));
 	}
-	
+
+	@Test
 	public void testIsMethodSetterAndGetterCompliantBean() throws Exception {
 		assertTrue(ReflectionMethodHelper.isMethodSetterAndGetterCompliant(Node.class));
 	}
 
-
+	@Test
 	public void testIsMethodSetterAndGetterCompliantList() throws Exception {
 		assertFalse(ReflectionMethodHelper.isMethodSetterAndGetterCompliant(ArrayList.class));
 		assertFalse(ReflectionMethodHelper.isMethodSetterAndGetterCompliant(HashMap.class));
@@ -56,7 +60,8 @@ public class ReflectionMethodHelperTest extends TestCase {
 		assertTrue(ReflectionMethodHelper.isMethodSetterAndGetterCompliant(List.class));
 		assertTrue(ReflectionMethodHelper.isMethodSetterAndGetterCompliant(Set.class));
 	}
-	
+
+	@Test
 	public void testGetAllSetterMethodWithCache() throws Exception {
 		Map<?, ?> lvMap = ReflectionMethodHelper.getAllSetterMethodWithCache(Node.class, null);
 		assertNotNull(lvMap);
@@ -66,7 +71,8 @@ public class ReflectionMethodHelperTest extends TestCase {
 		assertNotNull(lvMap);
 		assertTrue(lvMap.size() > 1);
 	}
-	
+
+	@Test
 	public void testGetAllNotEqualsGetterAndSetterAndRemoveThisProperties() throws Exception {
 		Map<Object, Object> lvMapSetter = ReflectionMethodHelper.getAllSetterMethod(SubNode.class);
 		Map<Object, Object> lvMapGetter = ReflectionMethodHelper.getAllGetterMethod(SubNode.class);
@@ -93,12 +99,14 @@ public class ReflectionMethodHelperTest extends TestCase {
 		assertTrue(lvMapSetter.containsKey("ohterWithOutGetMethod"));
 	}
 
+	@Test
 	public void testGetAllGetterAndSetterMethod() throws Exception {
 		Map<?, ?> lvMap = ReflectionMethodHelper.getAllGetterAndSetterMethod(Node.class, -7);
 		assertNotNull(lvMap);
 		assertEquals(0, lvMap.size());
 	}
-	
+
+	@Test
 	public void testIsMethodSetterAndGetterCompliant() throws Exception {
 		boolean lvComplaint = ReflectionMethodHelper.isMethodSetterAndGetterCompliant(Node.class);
 		assertTrue(lvComplaint);
@@ -112,7 +120,8 @@ public class ReflectionMethodHelperTest extends TestCase {
 		lvComplaint = ReflectionMethodHelper.isMethodSetterAndGetterCompliant(ReflectionMethodHelper.class);
 		assertFalse(lvComplaint);
 	}
-	
+
+	@Test
 	public void testTryToModifyGetterMap() throws Exception {
 		Map<?, ?> lvMap = ReflectionMethodHelper.getAllGetterAndSetterMethod(Car.class, ReflectionMethodHelper.GET_METHOD);
 		try {
@@ -123,6 +132,7 @@ public class ReflectionMethodHelperTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testTryToModifySetterMap() throws Exception {
 		Map<?, ?> lvMap = ReflectionMethodHelper.getAllGetterAndSetterMethod(Car.class, ReflectionMethodHelper.SET_METHOD);
 		try {
@@ -134,6 +144,7 @@ public class ReflectionMethodHelperTest extends TestCase {
 		
 	}
 
+	@Test
 	public void testTryToModifyGetterMapFromCache() throws Exception {
 		Map<?, ?> lvMap = ReflectionMethodHelper.getAllGetterMethodWithCache(Car.class, null);
 		try {
@@ -143,7 +154,8 @@ public class ReflectionMethodHelperTest extends TestCase {
 			assertNotNull(e);
 		}
 	}
-	
+
+	@Test
 	public void testTryToModifySetterMapFromCache() throws Exception {
 		Map<?, ?> lvMap = ReflectionMethodHelper.getAllGetterMethodWithCache(Car.class, null);
 		try {
@@ -154,18 +166,21 @@ public class ReflectionMethodHelperTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testGetAllGetterAndSetterMethodFromBadJavaBeanForGet() throws Exception {
 		Map<?, ?> lvMap = ReflectionMethodHelper.getAllGetterAndSetterMethod(BadJavaBean.class, ReflectionMethodHelper.GET_METHOD);
 		assertEquals(1, lvMap.size());
 		assertEquals(BadJavaBean.class.getName(), lvMap.get("class"));
 	}
 
+	@Test
 	public void testGetAllGetterAndSetterMethodFromBadJavaBeanForSet() throws Exception {
 		Map<?, ?> lvMap = ReflectionMethodHelper.getAllGetterAndSetterMethod(BadJavaBean.class, ReflectionMethodHelper.SET_METHOD);
 		assertEquals(0, lvMap.size());
 		assertFalse(lvMap.containsKey("class"));
 	}
-	
+
+	@Test
 	public void testBeanBooleanIsProperty() throws Exception {
 		Map<?, ?> lvMap = ReflectionMethodHelper.getAllGetterAndSetterMethod(Bean.class, ReflectionMethodHelper.SET_METHOD);
 		assertEquals(4, lvMap.size());

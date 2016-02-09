@@ -34,7 +34,6 @@ import java.util.Properties;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import junit.framework.TestCase;
 import net.sf.sojo.common.CompareResult;
 import net.sf.sojo.common.ObjectUtil;
 import net.sf.sojo.core.ConversionException;
@@ -47,6 +46,7 @@ import net.sf.sojo.core.reflect.ReflectionFieldHelper;
 import net.sf.sojo.optional.filter.attributes.ClassPropertyFilterHanlderForAttributes;
 import net.sf.sojo.util.StackTraceElementWrapper;
 import net.sf.sojo.util.Util;
+import org.junit.Test;
 import test.net.sf.sojo.model.Address;
 import test.net.sf.sojo.model.Bean;
 import test.net.sf.sojo.model.Car;
@@ -57,8 +57,11 @@ import test.net.sf.sojo.optional.filter.model.Account;
 import test.net.sf.sojo.optional.filter.model.MyAnnotationClass;
 import test.net.sf.sojo.optional.filter.model.Person;
 
-public class ObjectUtilTest extends TestCase {
+import static org.junit.Assert.*;
 
+public class ObjectUtilTest {
+
+	@Test
 	public void testCopySimple() throws Exception {
 		Object lvResult = new ObjectUtil().copy("Test-Copy-String");
 		assertEquals("Test-Copy-String", lvResult);
@@ -70,7 +73,8 @@ public class ObjectUtilTest extends TestCase {
 		lvResult = new ObjectUtil().copy(lvDate);
 		assertEquals(lvDate, lvResult);
 	}
-	
+
+	@Test
 	public void testCopyBean_Node() throws Exception {
 		Node lvNode = new Node("Test-Node");
 		Node lvNodeCopy = (Node) new ObjectUtil().copy(lvNode);
@@ -80,7 +84,8 @@ public class ObjectUtilTest extends TestCase {
 		assertNull(lvNodeCopy.getParent());
 		
 	}
-	
+
+	@Test
 	public void testCopyBean_NodeWithParent() throws Exception {
 		Node lvNode = new Node("Test-Node");
 		Node lvNodeParent = new Node("Parent-Node");
@@ -92,7 +97,8 @@ public class ObjectUtilTest extends TestCase {
 		assertEquals(new HashMap<Object, Object>(), lvNodeCopy.getParent().getNamedChildren());
 		
 	}
-	
+
+	@Test
 	public void testCopyBean_NodeWithChildren() throws Exception {
 		Node lvNode = new Node("Test-Node");
 		Node lvNodeChild1 = new Node("Test-Node-Child1");
@@ -108,7 +114,7 @@ public class ObjectUtilTest extends TestCase {
 		assertEquals(lvNodeCopy, lvNodeCopy.getChildren().get(2));
 	}
 
-
+	@Test
 	public void testCopyBean_Customer() throws Exception {
 		Customer lvCustomer = new Customer("MyName");
 		Date lvDate = new Date();
@@ -124,13 +130,15 @@ public class ObjectUtilTest extends TestCase {
 		assertEquals(lvCustomerCopy, lvCustomerCopy.getPartner()[1]);
 		assertSame(lvCustomerCopy, lvCustomerCopy.getPartner()[1]);
 	}
-	
+
+	@Test
 	public void testEqualsWithNullValue() throws Exception {
 		assertFalse(new ObjectUtil().equals(null, "String-Other"));
 		assertFalse(new ObjectUtil().equals("String", null));
 		assertFalse(new ObjectUtil().equals(null, null));
 	}
-	
+
+	@Test
 	public void testEqualsSimple() throws Exception {
 		assertTrue(new ObjectUtil().equals("String", "String"));
 		assertTrue(new ObjectUtil().equals(new Integer(2), new Integer(2)));
@@ -145,12 +153,14 @@ public class ObjectUtilTest extends TestCase {
 		assertFalse(new ObjectUtil().equals(new Node(), new Integer(2)));
 		assertFalse(new ObjectUtil().equals(new Double(23.45), new Double(98.76)));
 	}
-	
+
+	@Test
 	public void testEqualsSimpleSameNodeBean() throws Exception {
 		Node lvNode = new Node("Test-Node");
 		assertTrue(new ObjectUtil().equals(lvNode, lvNode));
 	}
 
+	@Test
 	public void testEqualsBeanWithFilter() throws Exception {
 		ObjectUtil lvObjectUtil = new ObjectUtil();
 		
@@ -167,7 +177,7 @@ public class ObjectUtilTest extends TestCase {
 		assertTrue(lvObjectUtil.equals(lvCar2, lvCar1));
 	}
 
-
+	@Test
 	public void testEqualsSimpleDifferrentCarBeanWithDiffNumberProperties() throws Exception {
 		ObjectUtil lvObjectUtil = new ObjectUtil();
 		
@@ -180,6 +190,7 @@ public class ObjectUtilTest extends TestCase {
 		assertFalse(lvObjectUtil.equals(lvCar1, lvCar2));
 	}
 
+	@Test
 	public void testEqualsSimpleDifferrentCarBeanWithEqualsNumberProperties() throws Exception {
 		ObjectUtil lvObjectUtil = new ObjectUtil();
 		
@@ -194,6 +205,7 @@ public class ObjectUtilTest extends TestCase {
 		assertFalse(lvObjectUtil.equals(lvCar1, lvCar2));
 	}
 
+	@Test
 	public void testComapreAllSimpleDifferrentCarBeanWithDiffNumberProperties() throws Exception {
 		ObjectUtil lvObjectUtil = new ObjectUtil();
 		
@@ -215,6 +227,7 @@ public class ObjectUtilTest extends TestCase {
 		assertNull(cr[0].differentValue2);
 	}
 
+	@Test
 	public void testComapreAllSimpleDifferrentCarBeanWithEqualsNumberProperties() throws Exception {
 		ObjectUtil lvObjectUtil = new ObjectUtil();
 		
@@ -238,6 +251,7 @@ public class ObjectUtilTest extends TestCase {
 		assertNull(cr[0].differentValue2);
 	}
 
+	@Test
 	public void testEqualsDifferrentNodeBean() throws Exception {
 		Node lvNode1 = new Node("Test-Node");
 		lvNode1.setParent(lvNode1);
@@ -245,19 +259,21 @@ public class ObjectUtilTest extends TestCase {
 		assertFalse(new ObjectUtil().equals(lvNode1, lvNode2));
 	}
 
+	@Test
 	public void testEqualsSimpleDifferrentNodeBean() throws Exception {
 		Node lvNode1 = new Node("Test-Node");
 		Node lvNode2 = new Node("Test-Node");
 		assertTrue(new ObjectUtil().equals(lvNode1, lvNode2));
 	}
-	
+
+	@Test
 	public void testEqualsSimpleDifferrentNodeBeanWithPathAndValues() throws Exception {
 		Node lvNode1 = new Node("Test-Node");
 		Node lvNode2 = new Node("Test-Node-OTHER");
 		assertFalse(new ObjectUtil().equals(lvNode1, lvNode2));
 	}
 
-	
+	@Test
 	public void testEqualsSimpleDifferrentNodeBeanWithChildren() throws Exception {
 		Node lvNode1 = new Node("Test-Node");
 		lvNode1.getChildren().add(new Node("child-1"));
@@ -269,6 +285,7 @@ public class ObjectUtilTest extends TestCase {
 		assertTrue(new ObjectUtil().equals(lvNode1, lvNode2));
 	}
 
+	@Test
 	public void testNotEqualsSimpleDifferrentNodeBeanWithChildren() throws Exception {
 		Node lvNode1 = new Node("Test-Node");
 		lvNode1.getChildren().add(new Node("child-1"));
@@ -280,6 +297,7 @@ public class ObjectUtilTest extends TestCase {
 		assertFalse(new ObjectUtil().equals(lvNode1, lvNode2));
 	}
 
+	@Test
 	public void testNotEqualsSimpleDifferrentNodeBeanWithChildren2() throws Exception {
 		Node lvNode1 = new Node("Test-Node");
 		lvNode1.getChildren().add(new Node("child-1"));
@@ -299,6 +317,7 @@ public class ObjectUtilTest extends TestCase {
 		assertTrue(new ObjectUtil().equals(lvNode2, lvNode2));
 	}
 
+	@Test
 	public void testNotEqualsSimpleDifferrentNodeBeanWithChildren3() throws Exception {
 		Node lvNode1 = new Node("Test-Node");
 		lvNode1.getChildren().add(new Node("child-1"));
@@ -311,6 +330,7 @@ public class ObjectUtilTest extends TestCase {
 		assertFalse(new ObjectUtil().equals(lvNode2, lvNode1));
 	}
 
+	@Test
 	public void testNotEqualsSimpleDifferrentNodeBeanWithChildren4() throws Exception {
 		Node lvNode1 = new Node("Test-Node");
 		lvNode1.getChildren().add(new Node("child-1"));
@@ -323,7 +343,8 @@ public class ObjectUtilTest extends TestCase {
 		assertFalse(new ObjectUtil().equals(lvNode1, lvNode2));
 		assertFalse(new ObjectUtil().equals(lvNode2, lvNode1));
 	}
-	
+
+	@Test
 	public void testEqualsCar() throws Exception {
 		Car lvCar1 = new Car();
 		lvCar1.setDescription("Description");
@@ -337,6 +358,7 @@ public class ObjectUtilTest extends TestCase {
 		assertTrue(new ObjectUtil().equals(lvCar2, lvCar1));
 	}
 
+	@Test
 	public void testEqualsCar2() throws Exception {
 		Car lvCar1 = new Car();
 		lvCar1.setDescription("Description");
@@ -356,6 +378,7 @@ public class ObjectUtilTest extends TestCase {
 		assertTrue(new ObjectUtil().equals(lvCar2, lvCar1));
 	}
 
+	@Test
 	public void testEqualsDifferentCar() throws Exception {
 		Car lvCar1 = new Car();
 		lvCar1.setDescription("Description");
@@ -369,6 +392,7 @@ public class ObjectUtilTest extends TestCase {
 		assertFalse(new ObjectUtil().equals(lvCar2, lvCar1));
 	}
 
+	@Test
 	public void testEqualsDifferentCar2() throws Exception {
 		Car lvCar1 = new Car();
 		lvCar1.setDescription("Description");
@@ -387,7 +411,8 @@ public class ObjectUtilTest extends TestCase {
 		assertFalse(new ObjectUtil().equals(lvCar1, lvCar2));
 		assertFalse(new ObjectUtil().equals(lvCar2, lvCar1));
 	}
-	
+
+	@Test
 	public void testEqualsList() throws Exception {
 		List<Comparable<?>> lvList1 = new ArrayList<Comparable<?>>();
 		lvList1.add("Sojo");
@@ -408,7 +433,8 @@ public class ObjectUtilTest extends TestCase {
 		assertTrue(new ObjectUtil().equals(lvList1, lvList2));
 		assertTrue(new ObjectUtil().equals(lvList2, lvList1));
 	}
-	
+
+	@Test
 	public void testEqualsDifferrentListBoolean() throws Exception {
 		List<Comparable<?>> lvList1 = new ArrayList<Comparable<?>>();
 		lvList1.add("Sojo");
@@ -430,6 +456,7 @@ public class ObjectUtilTest extends TestCase {
 		assertFalse(new ObjectUtil().equals(lvList2, lvList1));
 	}
 
+	@Test
 	public void testEqualsDifferrentListCharacter() throws Exception {
 		List<Comparable<?>> lvList1 = new ArrayList<Comparable<?>>();
 		lvList1.add("Sojo");
@@ -451,6 +478,7 @@ public class ObjectUtilTest extends TestCase {
 		assertFalse(new ObjectUtil().equals(lvList2, lvList1));
 	}
 
+	@Test
 	public void testEqualsDifferrentListDouble() throws Exception {
 		List<Comparable<?>> lvList1 = new ArrayList<Comparable<?>>();
 		lvList1.add("Sojo");
@@ -471,7 +499,8 @@ public class ObjectUtilTest extends TestCase {
 		assertFalse(new ObjectUtil().equals(lvList1, lvList2));
 		assertFalse(new ObjectUtil().equals(lvList2, lvList1));
 	}
-	
+
+	@Test
 	public void testEqualsMap() throws Exception {
 		Map<Comparable<?>, Comparable<?>> lvMap1 = new HashMap<Comparable<?>, Comparable<?>>();
 		lvMap1.put("sojo", "sojo");
@@ -489,6 +518,7 @@ public class ObjectUtilTest extends TestCase {
 		assertTrue(new ObjectUtil().equals(lvMap2, lvMap1));
 	}
 
+	@Test
 	public void testEqualsMapDifferentIntegerKey() throws Exception {
 		Map<Comparable<?>, Comparable<?>> lvMap1 = new HashMap<Comparable<?>, Comparable<?>>();
 		lvMap1.put("sojo", "sojo");
@@ -506,6 +536,7 @@ public class ObjectUtilTest extends TestCase {
 		assertFalse(new ObjectUtil().equals(lvMap2, lvMap1));
 	}
 
+	@Test
 	public void testEqualsMapDifferentDateValue() throws Exception {
 		Map<Comparable<?>, Comparable<?>> lvMap1 = new HashMap<Comparable<?>, Comparable<?>>();
 		lvMap1.put("sojo", "sojo");
@@ -523,6 +554,7 @@ public class ObjectUtilTest extends TestCase {
 		assertFalse(new ObjectUtil().equals(lvMap2, lvMap1));
 	}
 
+	@Test
 	public void testCompareSimpe() throws Exception {
 		CompareResult lvResult = new ObjectUtil().compare("aaa", "aaa");
 		assertNull(lvResult);
@@ -534,7 +566,8 @@ public class ObjectUtilTest extends TestCase {
 		assertEquals("bbb", lvResult.differentValue2);
 		assertEquals(1, lvResult.numberOfRecursion);
 	}
-	
+
+	@Test
 	public void testCompareSimpleNodeBean() throws Exception {
 		Node lvNode1 = new Node("Test-Node");
 		Node lvNode2 = new Node("Test-Node");
@@ -549,7 +582,8 @@ public class ObjectUtilTest extends TestCase {
 		assertEquals("Test-Node-OTHER", lvResult.differentValue2);
 		assertEquals(2, lvResult.numberOfRecursion);
 	}
-	
+
+	@Test
 	public void testCompareSimpleCarBean() throws Exception {
 		Car lvCar1 = new Car("BMW");
 		lvCar1.setBuild(new Date(987654321));
@@ -580,6 +614,7 @@ public class ObjectUtilTest extends TestCase {
 		assertEquals(5, lvResult.numberOfRecursion);
 	}
 
+	@Test
 	public void testCompareAllSimpleCarBean() throws Exception {
 		Car lvCar1 = new Car("BMW");
 		lvCar1.setBuild(new Date(987654321));
@@ -609,7 +644,8 @@ public class ObjectUtilTest extends TestCase {
 		assertEquals("value", lvResult[0].differentValue2);
 		assertEquals(5, lvResult[0].numberOfRecursion);
 	}
-	
+
+	@Test
 	public void testCompareAllSimpleCarBeanWithMoreDifferents() throws Exception {
 		Car lvCar1 = new Car("Audi");
 		lvCar1.setBuild(new Date(987654321));
@@ -634,6 +670,7 @@ public class ObjectUtilTest extends TestCase {
 		assertEquals("BMW", lvResult[1].differentValue2);
 	}
 
+	@Test
 	public void testCompareAllSimpleCarBeanWithMoreDifferentsInverse() throws Exception {
 		Car lvCar1 = new Car("Audi");
 		lvCar1.setBuild(new Date(987654321));
@@ -659,6 +696,7 @@ public class ObjectUtilTest extends TestCase {
 		assertEquals("Audi", lvResult[1].differentValue2);
 	}
 
+	@Test
 	public void testCompareAllSimpleCarBeanWithMoreDifferentsInverseBug() throws Exception {
 		Node lvNode1 = new Node();
 		lvNode1.setName("Node 1");
@@ -687,6 +725,7 @@ public class ObjectUtilTest extends TestCase {
 		assertEquals("Node 1", lvResult[1].differentValue2);
 	}
 
+	@Test
 	public void testCompareNullAndNull() throws Exception {
 		CompareResult lvResult = new ObjectUtil().compare(null, null);
 		assertNull(lvResult);
@@ -695,6 +734,7 @@ public class ObjectUtilTest extends TestCase {
 		assertNull(lvResults);
 	}
 
+	@Test
 	public void testChangeWithSimpleKeyMapper() throws Exception {
 		ObjectUtil lvUtil = new ObjectUtil();
 		Map<String, String> lvMap = new HashMap<String, String>();
@@ -726,7 +766,8 @@ public class ObjectUtilTest extends TestCase {
 		lvMapAfter = (Map<?, ?>) lvUtil.makeComplex(lvMap);
 		assertEquals(lvMap, lvMapAfter);
 	}
-	
+
+	@Test
 	public void testWithCycleDetection() throws Exception {
 		ObjectUtil lvUtil = new ObjectUtil();
 		assertEquals(5, lvUtil.getConverter().getConversionHandler().size());
@@ -740,6 +781,7 @@ public class ObjectUtilTest extends TestCase {
 		assertFalse(lvUtil.getWithCycleDetection());
 	}
 
+	@Test
 	public void testCycleDetectionInSimpleList() throws Exception {
 		ObjectUtil lvUtil = new ObjectUtil();
 		assertFalse(lvUtil.getWithCycleDetection());
@@ -763,7 +805,8 @@ public class ObjectUtilTest extends TestCase {
 			assertNotNull(e);
 		}
 	}
-	
+
+	@Test
 	public void testCycleDetectionInNestedList() throws Exception {
 		ObjectUtil lvUtil = new ObjectUtil();
 		lvUtil.setWithCycleDetection(true);
@@ -785,7 +828,8 @@ public class ObjectUtilTest extends TestCase {
 			assertNotNull(e);
 		}
 	}
-	
+
+	@Test
 	public void testCycleDetectionInSimpleMap() throws Exception {
 		ObjectUtil lvUtil = new ObjectUtil();
 		lvUtil.setWithCycleDetection(true);
@@ -801,7 +845,8 @@ public class ObjectUtilTest extends TestCase {
 			assertNotNull(e);
 		}
 	}
-	
+
+	@Test
 	public void testCycleDetectionInNestedMap() throws Exception {
 		ObjectUtil lvUtil = new ObjectUtil();
 		lvUtil.setWithCycleDetection(true);
@@ -823,7 +868,8 @@ public class ObjectUtilTest extends TestCase {
 			assertNotNull(e);
 		}
 	}
-	
+
+	@Test
 	public void testTwiceCollections() throws Exception {
 		ObjectUtil lvUtil = new ObjectUtil();
 		
@@ -852,7 +898,8 @@ public class ObjectUtilTest extends TestCase {
 		assertEquals(n1After.getChildren().size(), n2After.getChildren().size());
 		assertTrue(n1After.getChildren() != n2After.getChildren());
 	}
-	
+
+	@Test
 	public void testDoubleCallFromMakeSimple() throws Exception {
 		ObjectUtil lvUtil = new ObjectUtil();
 		
@@ -878,7 +925,8 @@ public class ObjectUtilTest extends TestCase {
 		assertTrue(lvMap.containsKey("class"));
 		assertEquals(Car.class.getName(), lvMap.get("class"));
 	}
-	
+
+	@Test
 	public void testFilterUniqueID() throws Exception {
 		ObjectUtil lvObjectUtil = new ObjectUtil();
 		lvObjectUtil.setWithSimpleKeyMapper(false);
@@ -905,7 +953,8 @@ public class ObjectUtilTest extends TestCase {
 		assertFalse(lvMap.containsKey(UniqueIdGenerator.UNIQUE_ID_PROPERTY ));
 		assertNull(lvMap.get(UniqueIdGenerator.UNIQUE_ID_PROPERTY ));
 	}
-	
+
+	@Test
 	public void testFilterUniqueIDByCommonAttributes() throws Exception {
 		ObjectUtil lvObjectUtil = new ObjectUtil();
 		lvObjectUtil.setWithSimpleKeyMapper(false);
@@ -932,6 +981,7 @@ public class ObjectUtilTest extends TestCase {
 		assertEquals("0", lvMap.get(UniqueIdGenerator.UNIQUE_ID_PROPERTY ));
 	}
 
+	@Test
 	public void testFilterClassProperty() throws Exception {
 		ObjectUtil lvObjectUtil = new ObjectUtil();
 		lvObjectUtil.setWithSimpleKeyMapper(false);
@@ -957,6 +1007,7 @@ public class ObjectUtilTest extends TestCase {
 		assertFalse(lvMap.containsKey("class"));
 	}
 
+	@Test
 	public void testFilterClassPropertyByCommonAttributes() throws Exception {
 		ObjectUtil lvObjectUtil = new ObjectUtil();
 		lvObjectUtil.setWithSimpleKeyMapper(false);
@@ -977,7 +1028,8 @@ public class ObjectUtilTest extends TestCase {
 		assertEquals("My Annotation", lvMap.get("name"));
 		assertEquals(1, lvMap.size());
 	}
-	
+
+	@Test
 	public void testMakeComplexWithoutClassInSimpleRepresentation() throws Exception {
 		Map<String, String> lvMap = new HashMap<String, String>();
 		lvMap.put("name", "My Car");
@@ -992,6 +1044,7 @@ public class ObjectUtilTest extends TestCase {
 		assertNull(lvCar.getBuild());
 	}
 
+	@Test
 	public void testMakeComplexWithoutClassInSimpleRepresentationMoreComplexExample() throws Exception {
 		Map<String, Object> lvMapNode = new HashMap<String, Object>();
 		lvMapNode.put("name", "Node");
@@ -1007,6 +1060,7 @@ public class ObjectUtilTest extends TestCase {
 		assertEquals("Parent", lvNode.getParent().getName());
 	}
 
+	@Test
 	public void testMakeComplexWithoutClassInSimpleRepresentationIncompatibleProperty() throws Exception {
 		Map<String, String> lvMap = new HashMap<String, String>();
 		lvMap.put("name", "Node");
@@ -1020,6 +1074,7 @@ public class ObjectUtilTest extends TestCase {
 		assertNull(lvNode.getParent());
 	}
 
+	@Test
 	public void testIgnoreAllNullValues() throws Exception {
 		ObjectUtil lvObjectUtil = new ObjectUtil();
 		lvObjectUtil.setWithSimpleKeyMapper(false);
@@ -1043,7 +1098,8 @@ public class ObjectUtilTest extends TestCase {
 		assertEquals("MyCar", lvMap.get("name"));
 		assertFalse(lvMap.containsKey("description"));
 	}
-	
+
+	@Test
 	public void testIgonoreNullValuesInCollection() throws Exception {
 		Customer lvCustomer = new Customer("LastName");
 		Address lvAddress = new Address();
@@ -1071,7 +1127,8 @@ public class ObjectUtilTest extends TestCase {
 		assertFalse(lvMapAddress.containsKey("postcode"));
 		assertEquals("Nuernberg", lvMapAddress.get("city"));
 	}
-	
+
+	@Test
 	public void testIgnoreAllNullValuesSimpe() throws Exception {
 		ObjectUtil lvUtil = new ObjectUtil();
 		assertFalse(lvUtil.getIgnoreAllNullValues());
@@ -1079,7 +1136,8 @@ public class ObjectUtilTest extends TestCase {
 		lvUtil.setIgnoreAllNullValues(true);
 		assertTrue(lvUtil.getIgnoreAllNullValues());
 	}
-	
+
+	@Test
 	public void testTransformThrowable2ThrowableWrapper() throws Exception {
 		ObjectUtil lvUtil = new ObjectUtil();
 		Object o = lvUtil.makeSimple(new ConversionException("JUnit-Test-ConversionException"));
@@ -1098,7 +1156,8 @@ public class ObjectUtilTest extends TestCase {
 		assertEquals(Boolean.FALSE, lvStackTraceElementMap.get("nativeMethod"));
 		assertEquals("testTransformThrowable2ThrowableWrapper", lvStackTraceElementMap.get("methodName"));
 	}
-	
+
+	@Test
 	public void testTransformThrowable2ThrowableWrapperAndBack() throws Exception {
 		ObjectUtil lvUtil = new ObjectUtil();
 		Object o = lvUtil.makeSimple(new ConversionException("JUnit-Test-ConversionException"));
@@ -1108,6 +1167,7 @@ public class ObjectUtilTest extends TestCase {
 		assertEquals("JUnit-Test-ConversionException", ((ConversionException) o).getMessage());
 	}
 
+	@Test
 	public void testTransformThrowable2ThrowableWrapperAndBackWithTwiceCallMakeSimple() throws Exception {
 		ObjectUtil lvUtil = new ObjectUtil();
 		Object o = lvUtil.makeSimple(new ConversionException("JUnit-Test-ConversionException"));
@@ -1118,7 +1178,8 @@ public class ObjectUtilTest extends TestCase {
 		assertEquals("JUnit-Test-ConversionException", lvExceptionMap.get("message"));
 		assertEquals(ConversionException.class.getName(), lvExceptionMap.get("exceptionClassName"));
 	}
-	
+
+	@Test
 	public void testTransformError() throws Exception {
 		ObjectUtil lvUtil = new ObjectUtil();
 		Object o = lvUtil.makeSimple(new Error("JUnit-Test-Error"));
@@ -1126,6 +1187,7 @@ public class ObjectUtilTest extends TestCase {
 		assertEquals("JUnit-Test-Error", lvError.getMessage());
 	}
 
+	@Test
 	public void testTransformThrowable2OtherException() throws Exception {
 		ObjectUtil lvUtil = new ObjectUtil();
 		Object o = lvUtil.makeSimple(new ConversionException("JUnit-Test-ConversionException"));
@@ -1133,6 +1195,7 @@ public class ObjectUtilTest extends TestCase {
 		assertEquals("JUnit-Test-ConversionException", lvThrowable.getMessage());
 	}
 
+	@Test
 	public void testTransformError2OtherException() throws Exception {
 		ObjectUtil lvUtil = new ObjectUtil();
 		Object o = lvUtil.makeSimple(new Error("JUnit-Test-Error"));
@@ -1140,7 +1203,7 @@ public class ObjectUtilTest extends TestCase {
 		assertEquals("JUnit-Test-Error", lvThrowable.getMessage());
 	}
 
-
+	@Test
 	public void testTransformWithDateFormat() throws Exception {
 		SimpleFormatConversion lvConversion = new SimpleFormatConversion();
 		SimpleDateFormat lvDateFormat = new SimpleDateFormat("dd-MM-yyyy");
@@ -1161,6 +1224,7 @@ public class ObjectUtilTest extends TestCase {
 		assertEquals(lvDate, lvDateAfter);
 	}
 
+	@Test
 	public void testTransformBadWithDateFormat() throws Exception {
 		SimpleFormatConversion lvConversion = new SimpleFormatConversion();
 		SimpleDateFormat lvDateFormat = new SimpleDateFormat("dd-MM-yyyy");
@@ -1177,7 +1241,8 @@ public class ObjectUtilTest extends TestCase {
 			assertNotNull(e);
 		}
 	}
-	
+
+	@Test
 	public void testAddAndRemoveFormatterForType() throws Exception {
 		ObjectUtil lvObjectUtil = new ObjectUtil();
 		int lvSize = lvObjectUtil.getConverter().getConversionHandler().size();
@@ -1197,6 +1262,7 @@ public class ObjectUtilTest extends TestCase {
 		assertEquals(lvSizeAfterRemove, lvSize);
 	}
 
+	@Test
 	public void testTransformWithNumberFormat() throws Exception {
 		SimpleFormatConversion lvConversion = new SimpleFormatConversion();
 		lvConversion.addFormatter(Double.class, NumberFormat.getInstance(Locale.GERMAN));
@@ -1212,6 +1278,7 @@ public class ObjectUtilTest extends TestCase {
 		assertEquals(lvDouble, lvDoubleAfter);
 	}
 
+	@Test
 	public void testTransformBadWithDateFormatButDoubleAsInput() throws Exception {
 		SimpleFormatConversion lvConversion = new SimpleFormatConversion();
 		SimpleDateFormat lvDateFormat = new SimpleDateFormat("dd-MM-yyyy");
@@ -1227,7 +1294,8 @@ public class ObjectUtilTest extends TestCase {
 		lvDoubleStr = lvObjectUtil.makeComplex("4711.007");
 		assertEquals("4711.007", lvDoubleStr);
 	}
-	
+
+	@Test
 	public void testTransformWithInvalidToType() throws Exception {
 		ObjectUtil lvObjectUtil = new ObjectUtil();
 		lvObjectUtil.addFormatterForType(SimpleDateFormat.getDateInstance(), Date.class);
@@ -1237,23 +1305,27 @@ public class ObjectUtilTest extends TestCase {
 		assertEquals("01.04.2007", o);
 	}
 
+	@Test
 	public void testHashCodeWithNullValue() throws Exception {
 		int lvHashCode = new ObjectUtil().hashCode(null);
 		assertEquals(17, lvHashCode);
 	}
-	
+
+	@Test
 	public void testHashCodeByString() throws Exception {
 		String lvString = "My String";
 		int lvHashCode = new ObjectUtil().hashCode(lvString);
 		assertEquals((17 * 37 + lvString.hashCode()), lvHashCode);
 	}
-	
+
+	@Test
 	public void testHashCodeByLong() throws Exception {
 		Long lvLong = new Long(47711);
 		int lvHashCode = new ObjectUtil().hashCode(lvLong);
 		assertEquals((17 * 37 + lvLong.hashCode()), lvHashCode);
 	}
 
+	@Test
 	public void testHashCodeByCollection() throws Exception {
 		Long lvLong = new Long(47711);
 		String lvString = "My String";
@@ -1267,6 +1339,7 @@ public class ObjectUtilTest extends TestCase {
 		assertEquals(lvCalcHashCode, lvHashCode);
 	}
 
+	@Test
 	public void testHashCodeByCollectionWithNullValue() throws Exception {
 		Long lvLong = new Long(47711);
 		String lvString = "My String";
@@ -1281,6 +1354,7 @@ public class ObjectUtilTest extends TestCase {
 		assertEquals(lvCalcHashCode, lvHashCode);
 	}
 
+	@Test
 	public void testHashCodeByMap() throws Exception {
 		Long lvLong = new Long(47711);
 		String lvString = "My String";
@@ -1294,6 +1368,7 @@ public class ObjectUtilTest extends TestCase {
 		assertEquals(lvCalcHashCode, lvHashCode);
 	}
 
+	@Test
 	public void testHashCodeByMapWithNullValue() throws Exception {
 		Long lvLong = new Long(47711);
 		String lvString = "My String";
@@ -1307,7 +1382,8 @@ public class ObjectUtilTest extends TestCase {
 		lvCalcHashCode = lvCalcHashCode * 37 + lvString.hashCode();
 		assertEquals(lvCalcHashCode, lvHashCode);
 	}
-	
+
+	@Test
 	public void testHashCodeByBean() throws Exception {
 		Date lvDate = new Date();
 		String lvName = "MyCar";
@@ -1321,7 +1397,8 @@ public class ObjectUtilTest extends TestCase {
 		lvCalcHashCode = lvCalcHashCode * 37 + lvName.hashCode();
 		assertEquals(lvCalcHashCode, lvHashCode);
 	}
-	
+
+	@Test
 	public void testHashCodeByBeanWithFilter() throws Exception {
 		Date lvDate = new Date();
 		String lvName = "MyCar";
@@ -1337,6 +1414,7 @@ public class ObjectUtilTest extends TestCase {
 		assertEquals(lvCalcHashCode, lvHashCode);
 	}
 
+	@Test
 	public void testHashCodeByBeanWithFilterForClass() throws Exception {
 		Date lvDate = new Date();
 		String lvName = "MyCar";
@@ -1355,7 +1433,7 @@ public class ObjectUtilTest extends TestCase {
 		assertEquals(lvCalcHashCode, lvHashCode);
 	}
 
-
+	@Test
 	public void testCompareToByString() throws Exception {
 		String s1 = "MyString 1";
 		String s2 = "MyString 2";
@@ -1365,6 +1443,7 @@ public class ObjectUtilTest extends TestCase {
 		assertEquals(s1.compareTo(s2), new ObjectUtil().compareTo(s1, s2));
 	}
 
+	@Test
 	public void testCompareToByLong() throws Exception {
 		Long l1 = new Long("6");
 		Long l2 = new Long("3");
@@ -1374,6 +1453,7 @@ public class ObjectUtilTest extends TestCase {
 		assertEquals(l1.compareTo(l2), new ObjectUtil().compareTo(l1, l2));
 	}
 
+	@Test
 	public void testCompareToByDate() throws Exception {
 		Date d1 = new Date(987654321);
 		Date d2 = new Date(987654355);
@@ -1384,6 +1464,7 @@ public class ObjectUtilTest extends TestCase {
 		assertEquals(d1.compareTo(d2), new ObjectUtil().compareTo(d1, d2));
 	}
 
+	@Test
 	public void testCompareToByBigDecimal() throws Exception {
 		BigDecimal bd1 = new BigDecimal("47.11");
 		BigDecimal bd2 = new BigDecimal("47.12");
@@ -1392,7 +1473,8 @@ public class ObjectUtilTest extends TestCase {
 		bd1 = bd2;
 		assertEquals(bd1.compareTo(bd2), new ObjectUtil().compareTo(bd1, bd2));
 	}
-	
+
+	@Test
 	public void testCompareToByBeanWithOneProperty() throws Exception {
 		Car c1 = new Car("Car 1");
 		Car c2 = new Car("Car 2");
@@ -1404,6 +1486,7 @@ public class ObjectUtilTest extends TestCase {
 		assertEquals(0, new ObjectUtil().compareTo(c1, c2));
 	}
 
+	@Test
 	public void testCompareToByBeanWithTwoProperty() throws Exception {
 		Car c1 = new Car("Car 1");
 		c1.setDescription("Desc 2");
@@ -1417,13 +1500,15 @@ public class ObjectUtilTest extends TestCase {
 		assertEquals(0, new ObjectUtil().compareTo(c1, c2));
 	}
 
+	@Test
 	public void testCompareResult() throws Exception {
 		CompareResult cr = new CompareResult();
 		cr.differentValue1 = new Node("N1");
 		cr.differentValue2 = new Node("N2");
 		assertEquals(0, cr.getCompareToValue());
 	}
-	
+
+	@Test
 	public void testMakeSimpleWithPropertyFilter() throws Exception {
 		Car lvCar = new Car("BMW");
 		lvCar.setBuild(new Date());
@@ -1440,12 +1525,14 @@ public class ObjectUtilTest extends TestCase {
 		assertNull(lvCarAfter.getBuild());
 	}
 
+	@Test
 	public void testMakeSimpleWithPropertyFilterAndObjectIsNull() throws Exception {
 		ObjectUtil lvObjectUtil = new ObjectUtil();
 		Object lvTemp = lvObjectUtil.makeSimple(null, new String[] { "build" });
 		assertNull(lvTemp);
 	}
 
+	@Test
 	public void testMakeSimpleWithPropertyFilterAndPropertiesAreNull() throws Exception {
 		Car lvCar = new Car("BMW");
 		Date d = new Date(1);
@@ -1462,6 +1549,7 @@ public class ObjectUtilTest extends TestCase {
 		assertEquals(d, lvCarAfter.getBuild());
 	}
 
+	@Test
 	public void testSerializeWithPropertyFilterAndFilteringClass() throws Exception {
 		Car lvCar = new Car("BMW");
 		lvCar.setBuild(new Date());
@@ -1485,7 +1573,8 @@ public class ObjectUtilTest extends TestCase {
 		assertEquals(lvCar.getDescription(), lvCarAfter.getDescription());
 		assertNull(lvCarAfter.getBuild());
 	}
-	
+
+	@Test
 	public void testSaveNullClassPropertyFilterHandler() throws Exception {
 		ObjectUtil lvObjectUtil = new ObjectUtil(false);
 		assertNull(lvObjectUtil.getClassPropertyFilterHandler());
@@ -1498,6 +1587,7 @@ public class ObjectUtilTest extends TestCase {
 		assertNull(lvObjectUtil.getClassPropertyFilterHandler());
 	}
 
+	@Test
 	public void testSaveClassPropertyFilterHandler() throws Exception {
 		ObjectUtil lvObjectUtil = new ObjectUtil(false);
 		ClassPropertyFilter lvClassPropertyFilter = new ClassPropertyFilter (Car.class);
@@ -1518,6 +1608,7 @@ public class ObjectUtilTest extends TestCase {
 		assertSame(lvFilterHandler, lvObjectUtil.getClassPropertyFilterHandler());
 	}
 
+	@Test
 	public void testStringArray2DoubleArray() throws Exception {
 		ObjectUtil lvObjectUtil = new ObjectUtil();
 		String lvStringArray[] = new String[] { "1", "2.3", "0.07"};
@@ -1529,7 +1620,8 @@ public class ObjectUtilTest extends TestCase {
 		assertEquals(new Double(2.3), d[1]);
 		assertEquals(new Double(0.07), d[2]);
 	}
-	
+
+	@Test
 	public void testTryConvertStringArray2DoubleArray() throws Exception {
 		ObjectUtil lvObjectUtil = new ObjectUtil();
 		String lvStringArray[] = new String[] { "1", "A", "0.07"};
@@ -1542,6 +1634,7 @@ public class ObjectUtilTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testConvertURLpropety() throws Exception {
 		SpecialTypeBean lvBean = new SpecialTypeBean();
 		String lvUrlStr = "http://myurl.net";
@@ -1558,7 +1651,8 @@ public class ObjectUtilTest extends TestCase {
 		assertEquals(lvBean.getUrl(), lvBeanAfter.getUrl());
 		assertNull(lvBeanAfter.getObject());
 	}
-	
+
+	@Test
 	public void testConvertObjectWithStringValuepropety() throws Exception {
 		SpecialTypeBean lvBean = new SpecialTypeBean();
 		String lvTestString = "A Test-String";
@@ -1576,7 +1670,8 @@ public class ObjectUtilTest extends TestCase {
 		assertEquals(lvTestString, lvBeanAfter.getObject());
 		assertNull(lvBeanAfter.getUrl());
 	}
-	
+
+	@Test
 	public void testConvertObjectWithLongValuepropety() throws Exception {
 		SpecialTypeBean lvBean = new SpecialTypeBean();
 		Long lvTestLong = new Long(4711);
@@ -1595,6 +1690,7 @@ public class ObjectUtilTest extends TestCase {
 		assertNull(lvBeanAfter.getUrl());
 	}
 
+	@Test
 	public void testConvertObjectWithDateValuepropety() throws Exception {
 		SpecialTypeBean lvBean = new SpecialTypeBean();
 		Date lvTestDate = new Date();
@@ -1613,6 +1709,7 @@ public class ObjectUtilTest extends TestCase {
 		assertNull(lvBeanAfter.getUrl());
 	}
 
+	@Test
 	public void testConvertObjectWithBigDecimalValuepropety() throws Exception {	
 		SpecialTypeBean lvBean = new SpecialTypeBean();
 		BigDecimal lvValue = new BigDecimal("47.11");
@@ -1631,6 +1728,7 @@ public class ObjectUtilTest extends TestCase {
 		assertNull(lvBeanAfter.getUrl());
 	}
 
+	@Test
 	public void testNewKeyWordClass() throws Exception {
 		Util.setKeyWordClass("clazz");
 		assertEquals("clazz", Util.getKeyWordClass());
@@ -1652,7 +1750,8 @@ public class ObjectUtilTest extends TestCase {
 		Util.resetKeyWordClass();
 		assertEquals(Util.DEFAULT_KEY_WORD_CLASS, Util.getKeyWordClass());
 	}
-	
+
+	@Test
 	public void testTransformDefaultMutableTreeNodeWithLoseChild() throws Exception {
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode("ROOT");
 		DefaultMutableTreeNode child = new DefaultMutableTreeNode("Child");
@@ -1666,7 +1765,8 @@ public class ObjectUtilTest extends TestCase {
 		// expected 1 child, but the count is 0, the property access over method lack
 		assertEquals(0, rootAfter.getChildCount());
 	}
-	
+
+	@Test
 	public void testTransformDefaultMutableTreeNode() throws Exception {
 		String lvFilter[] = new String [] {"class", "parent", "children", "userObject", "allowsChildren"};
 		ReflectionFieldHelper.addAllFields2MapByClass(DefaultMutableTreeNode.class, lvFilter);

@@ -20,12 +20,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.Test;
 import test.net.sf.sojo.model.Node;
 import net.sf.sojo.core.UniqueIdGenerator;
-import junit.framework.TestCase;
 
-public class UniqueIdGeneratorTest extends TestCase {
+import static org.junit.Assert.*;
 
+public class UniqueIdGeneratorTest {
+
+	@Test
 	public void testMinimalUniqueID() throws Exception {
 		UniqueIdGenerator lvIdGenerator = new UniqueIdGenerator();
 		assertEquals(UniqueIdGenerator.MINIMAL_UNIQUE_ID, lvIdGenerator.getMinimalUniqueID());
@@ -33,7 +36,8 @@ public class UniqueIdGeneratorTest extends TestCase {
 		lvIdGenerator.setMinimalUniqueID(-1);
 		assertEquals(-1, lvIdGenerator.getMinimalUniqueID());
 	}
-	
+
+	@Test
 	public void testithHashCodeInUniqueId() throws Exception {
 		UniqueIdGenerator lvIdGenerator = new UniqueIdGenerator();
 		assertFalse(lvIdGenerator.getWithHashCodeInUniqueId());
@@ -46,7 +50,8 @@ public class UniqueIdGeneratorTest extends TestCase {
 		lvId = lvIdGenerator.getUniqueId(n);
 		assertEquals("1-" + n.hashCode(), lvId);
 	}
-	
+
+	@Test
 	public void testUniqueId() throws Exception {
 		UniqueIdGenerator lvIdGenerator = new UniqueIdGenerator();
 		assertNull(lvIdGenerator.getUniqueId(null));
@@ -54,7 +59,8 @@ public class UniqueIdGeneratorTest extends TestCase {
 		assertNotNull(lvIdGenerator.getUniqueId("--"));
 		assertEquals("0", lvIdGenerator.getUniqueId("--"));
 	}
-	
+
+	@Test
 	public void testUniqueIdOfCollection() throws Exception {
 		UniqueIdGenerator lvIdGenerator = new UniqueIdGenerator();
 		assertNull(lvIdGenerator.getUniqueId(new ArrayList<Object>()));
@@ -65,7 +71,8 @@ public class UniqueIdGeneratorTest extends TestCase {
 		assertNull(lvIdGenerator.getUniqueId(l));
 		assertEquals(0, lvIdGenerator.getCurrentUniqueID());
 	}
-	
+
+	@Test
 	public void testUniqueIdOfMap() throws Exception {
 		UniqueIdGenerator lvIdGenerator = new UniqueIdGenerator();
 		assertNull(lvIdGenerator.getUniqueId(new HashMap<Object, Object>()));
