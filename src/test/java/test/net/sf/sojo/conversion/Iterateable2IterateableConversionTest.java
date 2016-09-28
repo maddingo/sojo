@@ -25,17 +25,20 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import junit.framework.TestCase;
 import net.sf.sojo.core.Converter;
 import net.sf.sojo.core.UniqueIdGenerator;
 import net.sf.sojo.core.conversion.ComplexBean2MapConversion;
 import net.sf.sojo.core.conversion.Iterateable2IterateableConversion;
 import net.sf.sojo.core.conversion.IterateableMap2MapConversion;
 import net.sf.sojo.core.conversion.NullConversion;
+import org.junit.Test;
 import test.net.sf.sojo.model.Node;
 
-public class Iterateable2IterateableConversionTest extends TestCase {
+import static org.junit.Assert.*;
 
+public class Iterateable2IterateableConversionTest {
+
+	@Test
 	public void testList() throws Exception {
 		Converter c = new Converter();
 		c.getConversionHandler().addConversion(new Iterateable2IterateableConversion(ArrayList.class));
@@ -50,7 +53,8 @@ public class Iterateable2IterateableConversionTest extends TestCase {
 		assertEquals(lvList.get(0), lvListAfter.get(0));
 		assertEquals(lvList.get(1), lvListAfter.get(1));
 	}
-	
+
+	@Test
 	public void testMakeSimpleConverterWithListWithNotAddNullElement() throws Exception {
 		List<?> v = new ArrayList<Object>();
 		v.add(null);
@@ -66,7 +70,8 @@ public class Iterateable2IterateableConversionTest extends TestCase {
 		List<?> v2 = (List<?>) lvResult;
 		assertEquals(v2.size(), 0);
 	}
-	
+
+	@Test
 	public void testMakeSimpleConverterWithListWithAddNullElement() throws Exception {
 		List<?> v = new ArrayList<Object>();
 		v.add(null);
@@ -81,6 +86,7 @@ public class Iterateable2IterateableConversionTest extends TestCase {
 		assertEquals(v2.size(), 1);
 	}
 
+	@Test
 	public void testMakeSimpleConverterWithListWithNullElement() throws Exception {
 		List<?> v = new ArrayList<Object>();
 		v.add(null);
@@ -104,7 +110,7 @@ public class Iterateable2IterateableConversionTest extends TestCase {
 		assertNull(v2.get(0));
 	}
 
-
+	@Test
 	public void testListWithoutConversion() throws Exception {
 		Converter c = new Converter();
 		List<String> lvList = new ArrayList<String>();
@@ -120,6 +126,7 @@ public class Iterateable2IterateableConversionTest extends TestCase {
 		assertEquals(lvList.get(1), lvListAfter.get(1));
 	}
 
+	@Test
 	public void testDoubleList() throws Exception {
 		Converter c = new Converter();
 		c.getConversionHandler().addConversion(new Iterateable2IterateableConversion(ArrayList.class));
@@ -143,6 +150,7 @@ public class Iterateable2IterateableConversionTest extends TestCase {
 		assertEquals(lvList2.get(0), v.get(0));
 	}
 
+	@Test
 	public void testDefaultCollectionType() throws Exception {
 		Converter c = new Converter();
 		c.getConversionHandler().addConversion(new Iterateable2IterateableConversion());
@@ -158,6 +166,7 @@ public class Iterateable2IterateableConversionTest extends TestCase {
 		assertEquals(lvList.get(1), lvListAfter.get(1));
 	}
 
+	@Test
 	public void testHashSet() throws Exception {
 		Converter c = new Converter();
 		c.getConversionHandler().addConversion(new Iterateable2IterateableConversion(HashSet.class));
@@ -174,7 +183,8 @@ public class Iterateable2IterateableConversionTest extends TestCase {
 		assertEquals(lvList.get(0), s[0]);
 		assertEquals(lvList.get(1), s[1]);
 	}
-	
+
+	@Test
 	public void testHashSet2() throws Exception {
 		Converter c = new Converter();
 		c.getConversionHandler().addConversion(new Iterateable2IterateableConversion(HashSet.class));
@@ -196,7 +206,7 @@ public class Iterateable2IterateableConversionTest extends TestCase {
 		assertEquals(node[1], nodesAfter[1]);
 	}
 
-
+	@Test
 	public void testTreeSet() throws Exception {
 		Converter c = new Converter();
 		c.getConversionHandler().addConversion(new Iterateable2IterateableConversion(TreeSet.class));
@@ -216,7 +226,7 @@ public class Iterateable2IterateableConversionTest extends TestCase {
 		assertEquals(iter.next(), iterAfter.next());
 	}
 
-
+	@Test
 	public void testNullValueForBean() throws Exception {
 		Converter c = new Converter();
 		c.addConversion(new Iterateable2IterateableConversion(HashSet.class));
@@ -225,6 +235,7 @@ public class Iterateable2IterateableConversionTest extends TestCase {
 		assertNull(lvResult);
 	}
 
+	@Test
 	public void testInvalidCollectionType() throws Exception {
 		try {
 			Converter c = new Converter();
@@ -235,6 +246,7 @@ public class Iterateable2IterateableConversionTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testInvalidCollectionImplType() throws Exception {
 		try {
 			Converter c = new Converter();
@@ -245,6 +257,7 @@ public class Iterateable2IterateableConversionTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testArrayList() throws Exception {
 		Converter c = new Converter();
 		c.getConversionHandler().addConversion(new Iterateable2IterateableConversion(ArrayList.class));
@@ -258,6 +271,7 @@ public class Iterateable2IterateableConversionTest extends TestCase {
 		assertEquals(s[1], lvListAfter.get(1));
 	}
 
+	@Test
 	public void testObjectArray2ArrayList() throws Exception {
 		Converter c = new Converter();
 		c.getConversionHandler().addConversion(new Iterateable2IterateableConversion(ArrayList.class));
@@ -272,6 +286,7 @@ public class Iterateable2IterateableConversionTest extends TestCase {
 		assertEquals(o[1], lvListAfter.get(1));
 	}
 
+	@Test
 	public void testObjectArray2ArrayList2() throws Exception {
 		Converter c = new Converter();
 		c.addConversion(new Iterateable2IterateableConversion(ArrayList.class));
@@ -297,7 +312,7 @@ public class Iterateable2IterateableConversionTest extends TestCase {
 		assertEquals(UniqueIdGenerator.UNIQUE_ID_PROPERTY + lvUniqueId, lvUniqueId2);
 	}
 
-	
+	@Test
 	public void testToCollectionDirect() throws Exception {
 		Converter c = new Converter();
 		c.addConversion(new Iterateable2IterateableConversion());
@@ -308,7 +323,8 @@ public class Iterateable2IterateableConversionTest extends TestCase {
 		assertNotNull(lvResult);
 		assertTrue(lvResult instanceof LinkedList);
 	}
-	
+
+	@Test
 	@SuppressWarnings("unchecked")
 	public void testIgnoreNullValues() throws Exception {
 		Converter c = new Converter();

@@ -18,25 +18,27 @@ package test.net.sf.sojo;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
-import junit.framework.TestCase;
 import net.sf.sojo.core.NonCriticalExceptionHandler;
 import net.sf.sojo.util.Util;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
-public class NonCriticalExceptionHandlerTest extends TestCase {
+import static org.junit.Assert.*;
 
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
+public class NonCriticalExceptionHandlerTest {
+
+	@BeforeClass
+	public static void setUp() throws Exception {
 		NonCriticalExceptionHandler.setNonCriticalExceptionHandlerEnabled(true);
 	}
-	
-	@Override
-	protected void tearDown() throws Exception {
-		super.tearDown();
+
+	@AfterClass
+	public static void tearDown() throws Exception {
 		NonCriticalExceptionHandler.setNonCriticalExceptionHandlerEnabled(false);
 	}
-	
-	
+
+	@Test
 	public void testDefaultNonCriticalExceptionHandler() throws Exception {
 		PrintStream lvOut = System.out;
 		System.setOut(new PrintStream(new ByteArrayOutputStream(0)));
@@ -46,13 +48,15 @@ public class NonCriticalExceptionHandlerTest extends TestCase {
 		System.setOut(lvOut);
 	}
 
+	@Test
 	public void testIsNonCriticalExceptionHandlerEnabled() throws Exception {
 		assertTrue(NonCriticalExceptionHandler.isNonCriticalExceptionHandlerEnabled());
 		
 		NonCriticalExceptionHandler.setNonCriticalExceptionHandlerEnabled(false);
 		assertFalse(NonCriticalExceptionHandler.isNonCriticalExceptionHandlerEnabled());
 	}
-	
+
+	@Test
 	public void testname() throws Exception {
 		TestNonCriticalExceptionHandler lvCriticalExceptionHandler = new TestNonCriticalExceptionHandler();
 		NonCriticalExceptionHandler.setNonCriticalExceptionHandler(lvCriticalExceptionHandler);
@@ -70,7 +74,8 @@ public class NonCriticalExceptionHandlerTest extends TestCase {
 		assertEquals(Util.class, lvCriticalExceptionHandler.getThrownClasses());
 		assertEquals(lvException, lvCriticalExceptionHandler.getException());
 	}
-	
+
+	@Test
 	public void testGetNonCriticalExceptionHandler() throws Exception {
 		TestNonCriticalExceptionHandler lvCriticalExceptionHandler = new TestNonCriticalExceptionHandler();
 		NonCriticalExceptionHandler.setNonCriticalExceptionHandler(lvCriticalExceptionHandler);

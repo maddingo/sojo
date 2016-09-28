@@ -15,13 +15,16 @@
  */	
 package test.net.sf.sojo.common;
 
-import junit.framework.TestCase;
 import net.sf.sojo.common.PathRecordWalkerInterceptor;
 import net.sf.sojo.core.Constants;
 import net.sf.sojo.core.UniqueIdGenerator;
+import org.junit.Test;
 
-public class PathRecordWalkerInterceptorTest extends TestCase {
+import static org.junit.Assert.*;
 
+public class PathRecordWalkerInterceptorTest {
+
+	@Test
 	public void testFilterUniqueIdProperty() throws Exception {
 		PathRecordWalkerInterceptor lvInterceptor = new PathRecordWalkerInterceptor();
 		lvInterceptor.setFilterUniqueIdProperty(true);
@@ -33,7 +36,8 @@ public class PathRecordWalkerInterceptorTest extends TestCase {
 			assertNotNull(e);
 		}
 	}
-	
+
+	@Test
 	public void testAddToPathesOnlySimple() throws Exception {
 		PathRecordWalkerInterceptor lvInterceptor = new PathRecordWalkerInterceptor();
 		assertFalse(lvInterceptor.getOnlySimpleProperties());
@@ -70,7 +74,8 @@ public class PathRecordWalkerInterceptorTest extends TestCase {
 		assertEquals(false, lvInterceptor.addToPaths(Constants.TYPE_NULL, null));
 		assertEquals(true, lvInterceptor.addToPaths(Constants.TYPE_SIMPLE, null));
 	}
-	
+
+	@Test
 	public void testAddToPathesFilterUniqueIdProperty() throws Exception {
 		PathRecordWalkerInterceptor lvInterceptor = new PathRecordWalkerInterceptor();
 		assertFalse(lvInterceptor.getOnlySimpleProperties());

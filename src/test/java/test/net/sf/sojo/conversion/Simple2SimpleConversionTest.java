@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.junit.Test;
 import test.net.sf.sojo.model.Node;
 
 import net.sf.sojo.core.ConversionContext;
@@ -31,10 +32,11 @@ import net.sf.sojo.core.conversion.Iterateable2IterateableConversion;
 import net.sf.sojo.core.conversion.NullConversion;
 import net.sf.sojo.core.conversion.Simple2SimpleConversion;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.*;
 
-public class Simple2SimpleConversionTest extends TestCase {
+public class Simple2SimpleConversionTest {
 
+	@Test
 	public void testSimpleNull() throws Exception {
 		Converter c = new Converter();
 		Object o = null;
@@ -42,6 +44,7 @@ public class Simple2SimpleConversionTest extends TestCase {
 		assertNull(lvResult);
 	}
 
+	@Test
 	public void testSimpleConversionNull() throws Exception {
 		Converter c = new Converter();
 		c.getConversionHandler().addConversion(new Simple2SimpleConversion(Integer.class, Integer.class));
@@ -51,6 +54,7 @@ public class Simple2SimpleConversionTest extends TestCase {
 		assertEquals(o, lvResult);		
 	}
 
+	@Test
 	public void testSimpleInteger() throws Exception {
 		Converter c = new Converter();
 		Object o = Integer.valueOf("57");
@@ -60,6 +64,7 @@ public class Simple2SimpleConversionTest extends TestCase {
 		assertEquals(o, lvResult);
 	}
 
+	@Test
 	public void testSimpleInteger2() throws Exception {
 		Converter c = new Converter();
 		c.addConversion(new Simple2SimpleConversion(Integer.class));
@@ -70,6 +75,7 @@ public class Simple2SimpleConversionTest extends TestCase {
 		assertEquals(o, lvResult);
 	}
 
+	@Test
 	public void testSimpleInteger3() throws Exception {
 		Converter c = new Converter();
 		c.addConversion(new NullConversion("---Null-Value-String---"));
@@ -81,6 +87,7 @@ public class Simple2SimpleConversionTest extends TestCase {
 		assertEquals(o, lvResult);
 	}
 
+	@Test
 	public void testSimpleMultiple() throws Exception {
 		Converter c = new Converter();
 		Object o = Integer.valueOf("57");
@@ -97,7 +104,7 @@ public class Simple2SimpleConversionTest extends TestCase {
 
 	}
 
-	
+	@Test
 	public void testSimpleConversionInterger2Integer() throws Exception {
 		Converter c = new Converter();
 		c.getConversionHandler().addConversion(new Simple2SimpleConversion(Integer.class, Integer.class));
@@ -108,6 +115,7 @@ public class Simple2SimpleConversionTest extends TestCase {
 		assertEquals(o, lvResult);		
 	}
 
+	@Test
 	public void testSimpleConversionLong2Integer() throws Exception {
 		Converter c = new Converter();
 		c.getConversionHandler().addConversion(new Simple2SimpleConversion(Long.class, Integer.class));
@@ -117,7 +125,8 @@ public class Simple2SimpleConversionTest extends TestCase {
 		assertEquals(Integer.class, lvResult.getClass());
 		assertEquals(Integer.valueOf("57"), lvResult);		
 	}
-	
+
+	@Test
 	public void testSimpleConversionLong2IntegerCancelConvert() throws Exception {
 		Converter c = new Converter();
 		c.addConverterInterceptor(new ConverterInterceptorRecursive () {
@@ -149,7 +158,7 @@ public class Simple2SimpleConversionTest extends TestCase {
 		assertEquals(new Long(57), lvResult);		
 	}
 
-
+	@Test
 	public void testSimpleConversionLong2String() throws Exception {
 		Converter c = new Converter();
 		c.getConversionHandler().addConversion(new Simple2SimpleConversion(Long.class, String.class));
@@ -157,9 +166,10 @@ public class Simple2SimpleConversionTest extends TestCase {
 		Object lvResult = c.convert(o);
 		assertNotNull(lvResult);
 		assertEquals(String.class, lvResult.getClass());
-		assertEquals("57", lvResult);		
+		assertEquals("57", lvResult);
 	}
 
+	@Test
 	public void testSimpleConversionLong2StringWithException() throws Exception {
 		Converter c = new Converter();
 		c.setThrowExceptionIfNoConversionFind(true);
@@ -173,6 +183,7 @@ public class Simple2SimpleConversionTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testDoubleSimpleConversionLong2String() throws Exception {
 		Converter c = new Converter();
 		c.getConversionHandler().addConversion(new Simple2SimpleConversion(Long.class, String.class));
@@ -184,6 +195,7 @@ public class Simple2SimpleConversionTest extends TestCase {
 		assertEquals("59", lvResult);		
 	}
 
+	@Test
 	public void testSimpleConversionCharacter2String() throws Exception {
 		Converter converter = new Converter();
 		converter.addConversion(new Simple2SimpleConversion(Character.class, String.class));
@@ -194,7 +206,7 @@ public class Simple2SimpleConversionTest extends TestCase {
 		assertEquals("A", lvResult);		
 	}
 
-	
+	@Test
 	public void testSimpleConversionString2Double() throws Exception {
 		Converter c = new Converter();
 		c.getConversionHandler().addConversion(new Simple2SimpleConversion(String.class, Double.class));
@@ -205,6 +217,7 @@ public class Simple2SimpleConversionTest extends TestCase {
 		assertEquals(new Double("123.456"), lvResult);		
 	}
 
+	@Test
 	public void testSimpleConversionLong2Date() throws Exception {
 		Converter c = new Converter();
 		c.getConversionHandler().addConversion(new Simple2SimpleConversion(Long.class, Date.class));
@@ -216,6 +229,7 @@ public class Simple2SimpleConversionTest extends TestCase {
 		assertEquals(new Date(lvDate), lvResult);		
 	}
 
+	@Test
 	public void testSimpleConversionDate2Long() throws Exception {
 		Converter c = new Converter();
 		c.getConversionHandler().addConversion(new Simple2SimpleConversion(Date.class, Long.class));
@@ -227,6 +241,7 @@ public class Simple2SimpleConversionTest extends TestCase {
 		assertEquals(new Long(lvDate), lvResult);		
 	}
 
+	@Test
 	public void testSimpleConversionTime2Long() throws Exception {
 		Converter c = new Converter();
 		c.getConversionHandler().addConversion(new Simple2SimpleConversion(Time.class, Long.class));
@@ -238,6 +253,7 @@ public class Simple2SimpleConversionTest extends TestCase {
 		assertEquals(new Long(lvDate), lvResult);		
 	}
 
+	@Test
 	public void testSimpleConversionTime2String() throws Exception {
 		Converter c = new Converter();
 		c.getConversionHandler().addConversion(new Simple2SimpleConversion(Time.class, String.class));
@@ -248,7 +264,8 @@ public class Simple2SimpleConversionTest extends TestCase {
 		assertEquals(String.class, lvResult.getClass());
 		assertEquals("" + lvDate, lvResult);		
 	}
-	
+
+	@Test
 	public void testSimpleConversionMultiple() throws Exception {
 		Converter c = new Converter();
 		c.getConversionHandler().addConversion(new Simple2SimpleConversion(Time.class, String.class));
@@ -268,6 +285,7 @@ public class Simple2SimpleConversionTest extends TestCase {
 
 	}
 
+	@Test
 	public void testString2LongDirect() throws Exception {
 		Converter c = new Converter();	
 		c.addConversion(new Simple2SimpleConversion(String.class, Long.class));
@@ -276,7 +294,8 @@ public class Simple2SimpleConversionTest extends TestCase {
 		assertTrue(lvResult instanceof Long);
 		assertEquals(lvResult, new Long("56"));
 	}
-	
+
+	@Test
 	public void testString2DoubleDirect() throws Exception {
 		Converter c = new Converter();		
 		c.addConversion(new Simple2SimpleConversion(String.class, Double.class));
@@ -286,7 +305,7 @@ public class Simple2SimpleConversionTest extends TestCase {
 		assertEquals(lvResult, new Double("56"));
 	}
 
-	
+	@Test
 	public void testString2DateDirect() throws Exception {
 		Converter c = new Converter();
 		c.addConversion(new Simple2SimpleConversion(String.class, Date.class));
@@ -305,6 +324,7 @@ public class Simple2SimpleConversionTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testString2NodeDirect() throws Exception {
 		Converter c = new Converter();		
 		Object lvResult = c.convert("Node-Name", Node.class);
@@ -321,6 +341,7 @@ public class Simple2SimpleConversionTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testArrayList2ListDirect() throws Exception {
 		Converter c = new Converter();
 		c.addConversion(new Iterateable2IterateableConversion());
@@ -336,6 +357,7 @@ public class Simple2SimpleConversionTest extends TestCase {
 		assertEquals(lvList.get(1), newList.get(1));
 	}
 
+	@Test
 	public void testNotString2ValidCharacter() throws Exception {
 		Converter c = new Converter();
 		c.addConversion(new Simple2SimpleConversion(String.class, Character.class));
@@ -345,13 +367,15 @@ public class Simple2SimpleConversionTest extends TestCase {
 		lvResult = c.convert("");
 		assertEquals(new Character('0'), (Character) lvResult);
 	}
-	
+
+	@Test
 	public void testFromAndToType() throws Exception {
 		Simple2SimpleConversion lvConversion = new Simple2SimpleConversion(String.class, Character.class);
 		assertEquals(String.class, lvConversion.getFromType());
 		assertEquals(Character.class, lvConversion.getToType());
 	}
-	
+
+	@Test
 	public void testIllegalArgumentException() throws Exception {
 		try {
 			new Simple2SimpleConversion(Node.class, Node.class);
@@ -360,7 +384,8 @@ public class Simple2SimpleConversionTest extends TestCase {
 			assertNotNull(e);
 		}
 	}
-	
+
+	@Test
 	public void testConverterInterceptorHandler() throws Exception {
 		Simple2SimpleConversion lvConversion = new Simple2SimpleConversion(String.class);
 		assertNotNull(lvConversion.getConverterInterceptorHandler());

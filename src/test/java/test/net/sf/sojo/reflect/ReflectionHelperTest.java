@@ -33,9 +33,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import junit.framework.TestCase;
 import net.sf.sojo.core.reflect.ReflectionHelper;
 import net.sf.sojo.util.ThrowableWrapper;
+import org.junit.Test;
 import test.net.sf.sojo.model.Node;
 import test.net.sf.sojo.model.NotJavaBean;
 import test.net.sf.sojo.model.Primitive;
@@ -44,8 +44,11 @@ import test.net.sf.sojo.model.Test2Exception;
 import test.net.sf.sojo.model.TestException;
 import test.net.sf.sojo.model.TestExceptionWithBadConstructor;
 
-public class ReflectionHelperTest extends TestCase {
+import static org.junit.Assert.*;
 
+public class ReflectionHelperTest {
+
+	@Test
 	public void testIsSimpleDataType() throws Exception {
 		assertTrue(ReflectionHelper.isSimpleType(String.class));
 		assertTrue(ReflectionHelper.isSimpleType(Boolean.class));
@@ -73,7 +76,8 @@ public class ReflectionHelperTest extends TestCase {
 		assertTrue(ReflectionHelper.isSimpleType(Time.class));
 		assertTrue(ReflectionHelper.isSimpleType(Timestamp.class));		
 	}
-	
+
+	@Test
 	public void testIsNotSimpleDataType() throws Exception {
 		assertFalse(ReflectionHelper.isSimpleType(ArrayList.class));
 		assertFalse(ReflectionHelper.isSimpleType(Math.class));
@@ -81,7 +85,8 @@ public class ReflectionHelperTest extends TestCase {
 		assertFalse(ReflectionHelper.isSimpleType(new HashMap<Object, Object>()));
 		assertFalse(ReflectionHelper.isSimpleType((Object) null));
 	}
-	
+
+	@Test
 	public void testCreateNewSimpleObject() throws Exception {
 		assertNull(ReflectionHelper.createNewSimpleObject(null, "8"));
 		assertEquals("8", ReflectionHelper.createNewSimpleObject(Map.class, "8"));
@@ -127,7 +132,8 @@ public class ReflectionHelperTest extends TestCase {
 		assertEquals(new java.sql.Time(lvDate), ReflectionHelper.createNewSimpleObject(java.sql.Time.class, "" + lvDate));
 		assertEquals(new java.sql.Timestamp(lvDate), ReflectionHelper.createNewSimpleObject(java.sql.Timestamp.class, "" + lvDate));
 	}
-	
+
+	@Test
 	public void testCreateNewSimpleObjectWithInvalidClass() throws Exception {
 		try {
 			ReflectionHelper.createNewSimpleObject(Class.class, "class invalid.Class");
@@ -136,7 +142,8 @@ public class ReflectionHelperTest extends TestCase {
 			assertNotNull(e);
 		}
 	}
-	
+
+	@Test
 	public void testFindConstructorByParameterTypes() throws Exception {
 		Constructor<?> lvConstructor = ReflectionHelper.findConstructorByParameterTypes(ArrayList.class, new Class [] { int.class });
 		assertNotNull(lvConstructor);
@@ -145,12 +152,13 @@ public class ReflectionHelperTest extends TestCase {
 		assertEquals(new ArrayList<Object>(), lvConstructor.newInstance(new Object[] { Integer.valueOf("0") }));
 	}
 
+	@Test
 	public void testNotFindConstructorByParameterTypes() throws Exception {
 		Constructor<?> lvConstructor = ReflectionHelper.findConstructorByParameterTypes(ArrayList.class, new Class [] { String.class });
 		assertNull(lvConstructor);
 	}
-	
-	
+
+	@Test
 	public void testIsMapTypeByClass() throws Exception {
 		assertTrue(ReflectionHelper.isMapType(Map.class));
 		assertTrue(ReflectionHelper.isMapType(HashMap.class));
@@ -165,7 +173,8 @@ public class ReflectionHelperTest extends TestCase {
 		
 		assertFalse(ReflectionHelper.isMapType(Node.class));
 	}
-	
+
+	@Test
 	public void testIsIterateableTypeByClass() throws Exception {
 		assertTrue(ReflectionHelper.isIterateableType(List.class));
 		assertTrue(ReflectionHelper.isIterateableType(ArrayList.class));
@@ -186,6 +195,7 @@ public class ReflectionHelperTest extends TestCase {
 		assertFalse(ReflectionHelper.isIterateableType(Node.class));
 	}
 
+	@Test
 	public void testIsComplexTypeByClass() throws Exception {
 		assertTrue(ReflectionHelper.isComplexType(Node.class));
 		
@@ -198,11 +208,13 @@ public class ReflectionHelperTest extends TestCase {
 		assertFalse(ReflectionHelper.isComplexType(null));
 		assertFalse(ReflectionHelper.isComplexType(String.class));
 	}
-	
+
+	@Test
 	public void testIsSimpleWithNullValue() throws Exception {
 		assertFalse(ReflectionHelper.isSimpleType((Class<?>) null));
 	}
-	
+
+	@Test
 	public void testAddSimple() throws Exception {
 		assertFalse(ReflectionHelper.isSimpleType(Node.class));
 		
@@ -216,11 +228,13 @@ public class ReflectionHelperTest extends TestCase {
 		ReflectionHelper.removeSimpleType(null);
 	}
 
+	@Test
 	public void testIsIterateableType() throws Exception {
 		Class<?> c[] = new Class[] { Node.class };
 		assertTrue(ReflectionHelper.isIterateableType(c.getClass()));
 	}
 
+	@Test
 	public void testCreateBeanFromMapWithNullValue() throws Exception {
 		try {
 			ReflectionHelper.createBeanFromMap(null, null);
@@ -229,7 +243,8 @@ public class ReflectionHelperTest extends TestCase {
 			assertNotNull(e);
 		}
 	}
-	
+
+	@Test
 	public void testCreateBeanFromMapWithEmptyMap() throws Exception {
 		try {
 			ReflectionHelper.createBeanFromMap(new HashMap<Object, Object>(), null);
@@ -247,6 +262,7 @@ public class ReflectionHelperTest extends TestCase {
 		assertTrue(lvBean instanceof Node);
 	}
 
+	@Test
 	public void testCreateBeanFromMapWithMap() throws Exception {
 		Map<String, Serializable> lvMap = new HashMap<String, Serializable>();
 		lvMap.put("class", Node.class.getName());
@@ -261,6 +277,7 @@ public class ReflectionHelperTest extends TestCase {
 		assertTrue(lvBean instanceof Node);
 	}
 
+	@Test
 	public void testCreateBeanFromMapWithInvalidClass() throws Exception {
 		try {
 			ReflectionHelper.createBeanFromMap(null, Long.class);
@@ -269,7 +286,8 @@ public class ReflectionHelperTest extends TestCase {
 			assertNotNull(e);
 		}
 	}
-	
+
+	@Test
 	public void testCreateBeanFromMapWithInvalidClass2() throws Exception {
 		try {
 			Map<String, String> lvMap = new HashMap<String, String>();
@@ -281,6 +299,7 @@ public class ReflectionHelperTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testCreateBeanFromMapWithInvalidClass3() throws Exception {
 		try {
 			Map<String, String> lvMap = new HashMap<String, String>();
@@ -292,6 +311,7 @@ public class ReflectionHelperTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testIsComplexMapType() throws Exception {
 		assertFalse(ReflectionHelper.isComplexMapType(null));
 		assertFalse(ReflectionHelper.isComplexMapType(String.class));
@@ -308,6 +328,7 @@ public class ReflectionHelperTest extends TestCase {
 		assertTrue(ReflectionHelper.isComplexMapType(NotJavaBean.class));
 	}
 
+	@Test
 	public void testCreateNewThrowableInstanceForNPE() throws Exception {
 		ThrowableWrapper lvWrapper = new ThrowableWrapper(new NullPointerException("JUnit-Test"));
 		Throwable lvThrowable = ReflectionHelper.createThrowable(lvWrapper);
@@ -316,6 +337,7 @@ public class ReflectionHelperTest extends TestCase {
 		assertEquals("JUnit-Test", lvThrowable.getMessage());
 	}
 
+	@Test
 	public void testCreateNewThrowableInstanceForError() throws Exception {
 		ThrowableWrapper lvWrapper = new ThrowableWrapper(new Error("JUnit-Error"));
 		Throwable lvThrowable = ReflectionHelper.createThrowable(lvWrapper);
@@ -324,6 +346,7 @@ public class ReflectionHelperTest extends TestCase {
 		assertEquals("JUnit-Error", lvThrowable.getMessage());
 	}
 
+	@Test
 	public void testCreateNewThrowableInstanceWithInvalidClassName() throws Exception {
 		ThrowableWrapper lvWrapper = new ThrowableWrapper(new Error("JUnit-Error"));
 		lvWrapper.setExceptionClassName("not.valid.class.name");
@@ -332,7 +355,8 @@ public class ReflectionHelperTest extends TestCase {
 		assertEquals(lvThrowable.getClass(), InstantiationException.class);
 		assertEquals("java.lang.ClassNotFoundException: not.valid.class.name", lvThrowable.getMessage());
 	}
-	
+
+	@Test
 	public void testCreateNewThrowableInstanceWithTestException() throws Exception {
 		ThrowableWrapper lvWrapper = new ThrowableWrapper(new TestException());
 		Throwable lvThrowable = ReflectionHelper.createThrowable(lvWrapper);
@@ -341,6 +365,7 @@ public class ReflectionHelperTest extends TestCase {
 		assertNull(lvThrowable.getMessage());
 	}
 
+	@Test
 	public void testCreateNewThrowableInstanceWithTest2Exception() throws Exception {
 		ThrowableWrapper lvWrapper = new ThrowableWrapper(new Test2Exception("JUnit-Message", new Exception("Cause")));
 		Throwable lvThrowable = ReflectionHelper.createThrowable(lvWrapper);
@@ -354,6 +379,7 @@ public class ReflectionHelperTest extends TestCase {
 		assertNull(lvCause.getCause());
 	}
 
+	@Test
 	public void testCreateNewThrowableInstanceWithDoubleNestedException() throws Exception {
 		ThrowableWrapper lvWrapper = new ThrowableWrapper(new Test2Exception("JUnit-Message", 
 															new Exception("Cause", 
@@ -370,6 +396,7 @@ public class ReflectionHelperTest extends TestCase {
 		assertNotNull(lvCause.getCause());
 	}
 
+	@Test
 	public void testCreateNewThrowableInstanceWithTargetClass() throws Exception {
 		ThrowableWrapper lvWrapper = new ThrowableWrapper(new Exception("Test-Exception"));
 		Throwable lvThrowable = ReflectionHelper.createThrowable(lvWrapper);
@@ -377,6 +404,7 @@ public class ReflectionHelperTest extends TestCase {
 		assertEquals("Test-Exception", lvThrowable.getMessage());
 	}
 
+	@Test
 	public void testCreateNewThrowableInstanceWithBadTargetClass() throws Exception {
 		ThrowableWrapper lvWrapper = new ThrowableWrapper(new Exception("Test-Exception"));
 		Throwable lvThrowable = ReflectionHelper.createThrowable(lvWrapper, String.class);
@@ -384,12 +412,14 @@ public class ReflectionHelperTest extends TestCase {
 		assertTrue(lvThrowable.getMessage().startsWith("The Class: " + String.class.getName()));
 	}
 
+	@Test
 	public void testExceptionWithoutConstructor() throws Exception {
 		ThrowableWrapper lvWrapper = new ThrowableWrapper(new TestExceptionWithBadConstructor(new BigDecimal("0.07")));
 		Throwable lvThrowable = ReflectionHelper.createThrowable(lvWrapper);
 		assertEquals(InstantiationException.class, lvThrowable.getClass());
 	}
-	
+
+	@Test
 	public void testCreateNewIteratableInstance() throws Exception {
 		try {
 			ReflectionHelper.createNewIterableInstance(Long.class, 0);
