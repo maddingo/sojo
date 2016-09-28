@@ -15,12 +15,15 @@
  */	
 package test.net.sf.sojo.conversion;
 
-import junit.framework.TestCase;
 import net.sf.sojo.core.Converter;
 import net.sf.sojo.core.conversion.NullConversion;
+import org.junit.Test;
 
-public class NullConversionTest extends TestCase {
+import static org.junit.Assert.*;
 
+public class NullConversionTest {
+
+	@Test
 	public void testNullReplaceString() throws Exception {
 		String lvNullReplaceString = "~null~replace~string~";
 		Converter c = new Converter();
@@ -30,6 +33,7 @@ public class NullConversionTest extends TestCase {
 		assertEquals(lvNullReplaceString, lvResult);
 	}
 
+	@Test
 	public void testNullReplaceStringAndConvertBack() throws Exception {
 		String lvNullReplaceString = "~null~replace~string~";
 		Converter c = new Converter();
@@ -42,6 +46,7 @@ public class NullConversionTest extends TestCase {
 		assertNull(lvResult);
 	}
 
+	@Test
 	public void testNullReplaceString2() throws Exception {
 		String lvNullReplaceString = null;
 		Converter c = new Converter();
@@ -51,7 +56,7 @@ public class NullConversionTest extends TestCase {
 		assertEquals(lvNullReplaceString, lvResult);
 	}
 
-
+	@Test
 	public void testNullReplaceStringMultiple() throws Exception {
 		Converter c = new Converter();
 		Object lvResult = c.convert(null);

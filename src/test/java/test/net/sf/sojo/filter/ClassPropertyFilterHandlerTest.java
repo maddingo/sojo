@@ -17,18 +17,21 @@ package test.net.sf.sojo.filter;
 
 import java.util.Date;
 
-import junit.framework.TestCase;
 import net.sf.sojo.common.ObjectUtil;
 import net.sf.sojo.core.filter.ClassPropertyFilter;
 import net.sf.sojo.core.filter.ClassPropertyFilterHandlerImpl;
 import net.sf.sojo.core.filter.ClassPropertyFilterHelper;
+import org.junit.Test;
 import test.net.sf.sojo.model.Car;
 import test.net.sf.sojo.model.Customer;
 import test.net.sf.sojo.model.Node;
 import test.net.sf.sojo.model.Primitive;
 
-public class ClassPropertyFilterHandlerTest extends TestCase {
+import static org.junit.Assert.*;
 
+public class ClassPropertyFilterHandlerTest {
+
+	@Test
 	public void testAddTwoClasses2ClassPropertyFilterHandler() throws Exception {
 		ClassPropertyFilter lvFilter1 = ClassPropertyFilterHelper.createClassPropertyFilterByClass(Car.class);
 		ClassPropertyFilter lvFilter2 = new ClassPropertyFilter(Customer.class, new String[] { "firstName", "lastName" });
@@ -42,6 +45,7 @@ public class ClassPropertyFilterHandlerTest extends TestCase {
 		assertEquals(2, lvFilter2.getPropertySize());
 	}
 
+	@Test
 	public void testAddClassPropertyFilterByClasses() throws Exception {
 		ClassPropertyFilterHandlerImpl lvHandler = new ClassPropertyFilterHandlerImpl();
 		assertEquals(0, lvHandler.getClassPropertyFilterSize());
@@ -52,7 +56,8 @@ public class ClassPropertyFilterHandlerTest extends TestCase {
 		lvHandler.addClassPropertyFilterByFilterClasses(new Class[] { Car.class, Node.class } );
 		assertEquals(2, lvHandler.getClassPropertyFilterSize());
 	}
-	
+
+	@Test
 	public void testAddClassesAndConvertNodeWithoutFilter() throws Exception {
 		ClassPropertyFilterHandlerImpl lvHandler = new ClassPropertyFilterHandlerImpl();
 		lvHandler.addClassPropertyFilterByFilterClasses(new Class[] { Car.class, Customer.class, Primitive.class });
@@ -68,7 +73,8 @@ public class ClassPropertyFilterHandlerTest extends TestCase {
 		
 		assertEquals("Node", lvNodeAfter.getName());
 	}
-	
+
+	@Test
 	public void testRemovePropertiesFromFilterHandler() throws Exception {
 		ClassPropertyFilterHandlerImpl lvHandler = new ClassPropertyFilterHandlerImpl(new Class[] { Car.class, Customer.class, Primitive.class, Node.class, String.class });
 		lvHandler.getClassPropertyFilterByClass(Node.class).removeProperties(null);
@@ -89,6 +95,7 @@ public class ClassPropertyFilterHandlerTest extends TestCase {
 		assertNull(lvCarAfter.getDescription());
 	}
 
+	@Test
 	public void testname() throws Exception {
 		String lvMsg = ClassPropertyFilterHelper.validateClassPropertyFilter(new ClassPropertyFilter());
 		assertNotNull(lvMsg);

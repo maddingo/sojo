@@ -23,44 +23,51 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import junit.framework.TestCase;
 import net.sf.sojo.common.ObjectGraphWalker;
 import net.sf.sojo.common.ObjectUtil;
 import net.sf.sojo.interchange.json.JsonParser;
 import net.sf.sojo.interchange.json.JsonParserException;
 import net.sf.sojo.interchange.json.JsonSerializer;
 import net.sf.sojo.interchange.json.JsonWalkerInterceptor;
+import org.junit.Test;
 import test.net.sf.sojo.model.Address;
 import test.net.sf.sojo.model.Car;
 import test.net.sf.sojo.model.Customer;
 import test.net.sf.sojo.model.Node;
 import test.net.sf.sojo.model.Primitive;
 
-public class JsonParserTest extends TestCase {
+import static org.junit.Assert.*;
 
+public class JsonParserTest {
+
+	@Test
 	public void testNull() throws Exception {
 		Object lvResult = new JsonParser().parse(null);
 		assertNull(lvResult);
 	}
 
+	@Test
 	public void testSimpleEmptyString() throws Exception {
 		String s = "\"\"";
 		Object lvResult = new JsonParser().parse(s);
 		assertEquals("", lvResult);
 	}
 
+	@Test
 	public void testSimpleString() throws Exception {
 		String s = "\"Simple-Test-String\"";
 		Object lvResult = new JsonParser().parse(s);
 		assertEquals("Simple-Test-String", lvResult);
 	}
 
+	@Test
 	public void testSimpleStringWithSemiColonOnEnd() throws Exception {
 		String s = "\"Simple-Test-String\";";
 		Object lvResult = new JsonParser().parse(s);
 		assertEquals("Simple-Test-String", lvResult);
 	}
 
+	@Test
 	public void testSimpleSpecialString() throws Exception {
 		JsonParser lvJsonParser = new JsonParser();
 		String s = "\"Test \\ String\";";
@@ -93,6 +100,7 @@ public class JsonParserTest extends TestCase {
 		assertEquals("Test / String", lvResult);
 	}
 
+	@Test
 	public void testInvalidSimpleString() throws Exception {
 		String s = "Invalid-String";
 		try {
@@ -102,7 +110,8 @@ public class JsonParserTest extends TestCase {
 			assertNotNull(e);
 		}		
 	}
-	
+
+	@Test
 	public void testInvalidSimpleString2() throws Exception {
 		String s = "\"Invalid-String";
 		try {
@@ -113,7 +122,7 @@ public class JsonParserTest extends TestCase {
 		}		
 	}
 
-
+	@Test
 	public void testSimpleBoolean() throws Exception {
 		String s = "true";
 		Object lvResult = new JsonParser().parse(s);
@@ -124,13 +133,14 @@ public class JsonParserTest extends TestCase {
 		assertEquals(Boolean.FALSE, lvResult);
 	}
 
+	@Test
 	public void testSimpleNullString() throws Exception {
 		String s = "null";
 		Object lvResult = new JsonParser().parse(s);
 		assertNull(lvResult);
 	}
 
-
+	@Test
 	public void testSimpleLong() throws Exception {
 		String s = "4711";
 		JsonParser lvJsonParser = new JsonParser();
@@ -162,6 +172,7 @@ public class JsonParserTest extends TestCase {
 		assertEquals(new Long("1"), lvResult);
 	}
 
+	@Test
 	public void testSimpleDouble() throws Exception {
 		String s = "47.11";
 		JsonParser lvJsonParser = new JsonParser();
@@ -210,13 +221,15 @@ public class JsonParserTest extends TestCase {
 
 	}
 
+	@Test
 	public void testEmptyArray() throws Exception {
 		String s = "[]";
 		Object lvResult = new JsonParser().parse(s);
 		List<?> lvList = (List<?>) lvResult;
 		assertEquals(0, lvList.size());
 	}
-	
+
+	@Test
 	public void testSimpleArray() throws Exception {
 		String s = "[true, false, true, null]";
 		Object lvResult = new JsonParser().parse(s);
@@ -228,6 +241,7 @@ public class JsonParserTest extends TestCase {
 		assertNull(lvList.get(3));
 	}
 
+	@Test
 	public void testSimpleArray2() throws Exception {
 		String s = "[1, 22, 33.3, \"nUll\"]";
 		Object lvResult = new JsonParser().parse(s);
@@ -239,6 +253,7 @@ public class JsonParserTest extends TestCase {
 		assertEquals("nUll", lvList.get(3));
 	}
 
+	@Test
 	public void testNestedArray() throws Exception {
 		String s = "[2.005, .017, \"a\", [9087, 987654, null] ]";
 		Object lvResult = new JsonParser().parse(s);
@@ -251,6 +266,7 @@ public class JsonParserTest extends TestCase {
 		assertEquals(3, lvInnerList.size());
 	}
 
+	@Test
 	public void testNestedArray2() throws Exception {
 		String s = "[2.005, .017, \"a\", [9087, 987654, null], 54.32 ]";
 		Object lvResult = new JsonParser().parse(s);
@@ -265,13 +281,15 @@ public class JsonParserTest extends TestCase {
 		assertEquals(new Double("54.32"), lvList.get(4));
 	}
 
+	@Test
 	public void testEmptyObject() throws Exception {
 		String s = "{}";
 		Object lvResult = new JsonParser().parse(s);
 		Map<?, ?> lvMap = (Map<?, ?>) lvResult;
 		assertEquals(0, lvMap.size());
 	}
-	
+
+	@Test
 	public void testEmptyListInObject() throws Exception {
 		String s = "{\"empty\" : []}";
 		Object lvResult = new JsonParser().parse(s);
@@ -280,6 +298,7 @@ public class JsonParserTest extends TestCase {
 		assertEquals(Collections.emptyList(), lvMap.get("empty"));
 	}
 
+	@Test
 	public void testEmptyObjectInListIn() throws Exception {
 		String s = "[ { } ]";
 		Object lvResult = new JsonParser().parse(s);
@@ -288,7 +307,7 @@ public class JsonParserTest extends TestCase {
 		assertEquals(new HashMap<Object, Object>(), lvList.get(0));
 	}
 
-
+	@Test
 	public void testSimpleObject() throws Exception {
 		String s = "{\"k1\" : true, \"k2\" : false, \"k3\" : true, \"k4\" : null}";
 		Object lvResult = new JsonParser().parse(s);
@@ -301,6 +320,7 @@ public class JsonParserTest extends TestCase {
 		assertTrue(lvMap.containsKey("k4"));
 	}
 
+	@Test
 	public void testSimpleObject2() throws Exception {
 		String s = "{\"k1\" : 1, \"k2\" : 22, \"k3\" : 33.3, \"k4\" : \"VaLue\"}";
 		Object lvResult = new JsonParser().parse(s);
@@ -312,6 +332,7 @@ public class JsonParserTest extends TestCase {
 		assertEquals("VaLue", lvMap.get("k4"));
 	}
 
+	@Test
 	public void testSimpleObject3() throws Exception {
 		String s = "{\"k1\" : 1, \"k1\" : 22, \"k3\" : null, \"k4\" : \"VaLue\"}";
 		Object lvResult = new JsonParser().parse(s);
@@ -324,6 +345,7 @@ public class JsonParserTest extends TestCase {
 		assertEquals("VaLue", lvMap.get("k4"));
 	}
 
+	@Test
 	public void testNestedObject() throws Exception {
 		String s = "{\"k1\" : 1, \"k2\" : 22, \"k3\" : 33.3, \"k4\" : {\"k1\" : \"VaLue\"}}";
 		Object lvResult = new JsonParser().parse(s);
@@ -336,6 +358,7 @@ public class JsonParserTest extends TestCase {
 		assertEquals("VaLue", lvInnerMap.get("k1"));
 	}
 
+	@Test
 	public void testNestedObject2() throws Exception {
 		String s = "{\"k1\" : 1, \"k2\" : 22, \"k3\" : 33.3, \"k4\" : {\"k1\" : \"VaLue\"}, \"k5\" : \"c\"}";
 		Object lvResult = new JsonParser().parse(s);
@@ -350,6 +373,7 @@ public class JsonParserTest extends TestCase {
 		assertEquals("c", lvMap.get("k5"));
 	}
 
+	@Test
 	public void testArrayInObject() throws Exception {
 		String s = "{\"k1\" : 1, \"k2\" : 22, \"k3\" : 33.3, " +
 				"\"array\" : [2.005, .017, \"a\", [9087, 987654, null] ], " +
@@ -376,7 +400,8 @@ public class JsonParserTest extends TestCase {
 		assertEquals(new Long("987654"), lvInnerList.get(1));
 		assertNull(lvInnerList.get(2));
 	}
-	
+
+	@Test
 	public void testFromSimpleObject2JsonAndBack() throws Exception {
 		Car lvCar = new Car();
 		lvCar.setName("BMW");
@@ -396,7 +421,8 @@ public class JsonParserTest extends TestCase {
 		assertEquals("My car", lvCarAfter.getDescription());
 		assertEquals(new Date(987654321).getTime() / 1000, lvCarAfter.getBuild().getTime() / 1000);
 	}
-	
+
+	@Test
 	public void testFromSimpleObjectWithProperties2JsonAndBack() throws Exception {
 		Car lvCar = new Car();
 		lvCar.setName("BMW");
@@ -432,7 +458,8 @@ public class JsonParserTest extends TestCase {
 		assertEquals(new Long("123"), lvList.get(1));
 		assertEquals("Z", lvList.get(2));
 	}
-	
+
+	@Test
 	public void testSimpleNode2JsonAndBack() throws Exception {
 		Node lvNode = new Node("N1");
 		
@@ -452,6 +479,7 @@ public class JsonParserTest extends TestCase {
 		assertNull(lvNodeAfter.getParent());
 	}
 
+	@Test
 	public void testNodeWithChilds2JsonAndBack() throws Exception {
 		Node lvNode = new Node("N1");
 		Node lvNode1 = new Node("N1-1");
@@ -477,6 +505,7 @@ public class JsonParserTest extends TestCase {
 		assertEquals("N1-2", ((Node) lvNodeAfter.getChildren().get(1)).getName());
 	}
 
+	@Test
 	public void testNodeWithNamedChilds2JsonAndBack() throws Exception {
 		Node lvNode = new Node("N1");
 		Node lvNode1 = new Node("N1-1");
@@ -501,7 +530,8 @@ public class JsonParserTest extends TestCase {
 		assertEquals("N1-1", ((Node) lvNodeAfter.getNamedChildren().get("N1-1")).getName());
 		assertEquals("N1-2", ((Node) lvNodeAfter.getNamedChildren().get("N1-2")).getName());
 	}
-	
+
+	@Test
 	public void testNodeWithCycle2Json() throws Exception {
 		Node lvNode = new Node("N1");
 		Node lvNode1 = new Node("N1-1");
@@ -529,6 +559,7 @@ public class JsonParserTest extends TestCase {
 		assertEquals(lvNodeAfter, lvNodeAfter.getChildren().get(2));
 	}
 
+	@Test
 	public void testNodeWithCycle2Json2() throws Exception {
 		Node lvNode = new Node("N1");
 		lvNode.setParent(lvNode);
@@ -546,7 +577,8 @@ public class JsonParserTest extends TestCase {
 
 		assertEquals(lvNodeAfter, lvNodeAfter.getParent());
 	}
-	
+
+	@Test
 	public void testPrimitive() throws Exception {
 		Primitive lvPrimitive = Primitive.createPrimitiveExample();
 		
@@ -563,6 +595,7 @@ public class JsonParserTest extends TestCase {
 		assertEquals(lvPrimitive, lvPrimitiveAfter);
 	}
 
+	@Test
 	public void testCustomer2JsonAndBack() throws Exception {
 		Customer lvCustomer = new Customer();
 		lvCustomer.setLastName("Json");
@@ -618,7 +651,8 @@ public class JsonParserTest extends TestCase {
 		assertEquals(a1After, lvAddress[0]);
 		assertEquals(a2After, lvAddress[1]);
 	}
-	
+
+	@Test
 	public void testDoubleBackslashAndQuota() throws Exception {
 		String jsonString = "{ \"str1\": \"abc\\\\\", \"str2\": \"def\" }";
         JsonSerializer serializer = new JsonSerializer();

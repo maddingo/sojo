@@ -20,16 +20,19 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-import junit.framework.TestCase;
 import net.sf.sojo.core.Converter;
 import net.sf.sojo.core.UniqueIdGenerator;
 import net.sf.sojo.core.conversion.ComplexBean2MapConversion;
 import net.sf.sojo.core.conversion.IterateableMap2MapConversion;
+import org.junit.Test;
 import test.net.sf.sojo.model.Car;
 import test.net.sf.sojo.model.Node;
 
-public class ComplexBean2MapConversionTest extends TestCase {
+import static org.junit.Assert.*;
 
+public class ComplexBean2MapConversionTest {
+
+	@Test
 	public void testSimpleBean() throws Exception {
 		Converter c = new Converter(); 
 		c.addConversion(new ComplexBean2MapConversion());
@@ -45,7 +48,8 @@ public class ComplexBean2MapConversionTest extends TestCase {
 		Object o = lvMap.get(UniqueIdGenerator.UNIQUE_ID_PROPERTY);
 		assertEquals(UniqueIdGenerator.MINIMAL_UNIQUE_ID, Integer.valueOf(o.toString()).intValue());
 	}
-	
+
+	@Test
 	public void testSimpleBeanWithRelation() throws Exception {
 		Converter c = new Converter();
 		c.addConversion(new ComplexBean2MapConversion());
@@ -72,6 +76,7 @@ public class ComplexBean2MapConversionTest extends TestCase {
 		assertEquals(1, Integer.valueOf(o.toString()).intValue());
 	}
 
+	@Test
 	public void testSimpleBeanWithRelationWithSameNode() throws Exception {
 		Converter c = new Converter();
 		c.addConversion(new ComplexBean2MapConversion());
@@ -93,6 +98,7 @@ public class ComplexBean2MapConversionTest extends TestCase {
 		assertEquals(UniqueIdGenerator.UNIQUE_ID_PROPERTY + "0", lvUniqueId);
 	}
 
+	@Test
 	public void testNullValueForBean() throws Exception {
 		Converter c = new Converter();
 		c.addConversion(new ComplexBean2MapConversion());
@@ -100,7 +106,8 @@ public class ComplexBean2MapConversionTest extends TestCase {
 		Object lvResult = c.convert(null);
 		assertNull(lvResult);
 	}
-	
+
+	@Test
 	public void testNodeWithNamedChildren() throws Exception {		
 		Converter c = new Converter();
 		c.addConversion(new ComplexBean2MapConversion());
@@ -126,6 +133,7 @@ public class ComplexBean2MapConversionTest extends TestCase {
 		assertEquals(lvNodeName2, lvMap2.get("name"));		
 	}
 
+	@Test
 	public void testNodeWithNamedChildrenWithSameReference() throws Exception {		
 		Converter c = new Converter();
 		c.addConversion(new ComplexBean2MapConversion());
@@ -152,6 +160,7 @@ public class ComplexBean2MapConversionTest extends TestCase {
 		assertEquals(lvNodeName2, lvMap2.get("name"));		
 	}
 
+	@Test
 	public void testConversionWithBadTotype() throws Exception {
 		try {
 			new ComplexBean2MapConversion(ArrayList.class);
@@ -160,6 +169,8 @@ public class ComplexBean2MapConversionTest extends TestCase {
 			assertNotNull(e);
 		}
 	}
+
+	@Test
 	public void testConversionWithBadTotype2() throws Exception {
 		try {
 			new ComplexBean2MapConversion(Map.class);
@@ -169,6 +180,7 @@ public class ComplexBean2MapConversionTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testConversionDirect() throws Exception {		
 		Converter c = new Converter();
 		c.addConversion(new ComplexBean2MapConversion());
@@ -193,6 +205,7 @@ public class ComplexBean2MapConversionTest extends TestCase {
 
 	}
 
+	@Test
 	public void testIgnoreNullValues() throws Exception {
 		Converter c = new Converter();
 		ComplexBean2MapConversion lvBean2MapConversion = new ComplexBean2MapConversion();

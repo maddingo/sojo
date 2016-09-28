@@ -23,7 +23,6 @@ import java.util.Map;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import junit.framework.TestCase;
 import net.sf.sojo.core.ConversionException;
 import net.sf.sojo.core.UniqueIdGenerator;
 import net.sf.sojo.core.filter.ClassPropertyFilter;
@@ -33,12 +32,16 @@ import net.sf.sojo.core.reflect.ReflectionFieldHelper;
 import net.sf.sojo.interchange.Serializer;
 import net.sf.sojo.interchange.SerializerException;
 import net.sf.sojo.interchange.object.ObjectSerializer;
+import org.junit.Test;
 import test.net.sf.sojo.model.ABean;
 import test.net.sf.sojo.model.BBean;
 import test.net.sf.sojo.model.Car;
 
-public class ObjectSerializerTest extends TestCase {
+import static org.junit.Assert.*;
 
+public class ObjectSerializerTest {
+
+	@Test
 	public void testSimpleStringSerialize() throws Exception {
 		ObjectSerializer lvSerializer = new ObjectSerializer();
 		Object lvResult = lvSerializer.serialize("Ferrari");
@@ -48,6 +51,7 @@ public class ObjectSerializerTest extends TestCase {
 		assertEquals("Ferrari", o);
 	}
 
+	@Test
 	public void testSimpleStringSerializeWithOutConvert() throws Exception {
 		ObjectSerializer lvSerializer = new ObjectSerializer();
 		lvSerializer.setConvertBySerialization(false);
@@ -58,6 +62,7 @@ public class ObjectSerializerTest extends TestCase {
 		assertEquals("Ferrari", o);
 	}
 
+	@Test
 	public void testSimpleObjectSerialize() throws Exception {
 		Car lvCar = new Car("Ferrari");
 		ObjectSerializer lvSerializer = new ObjectSerializer();
@@ -68,7 +73,8 @@ public class ObjectSerializerTest extends TestCase {
 		Car lvCarAfter = (Car) o;
 		assertEquals(lvCar.getName(), lvCarAfter.getName());
 	}
-	
+
+	@Test
 	public void testSerializeException() throws Exception {
 		Car lvCar = new Car("Ferrari");
 		ObjectSerializer lvSerializer = new ObjectSerializer();
@@ -80,12 +86,14 @@ public class ObjectSerializerTest extends TestCase {
 			assertNotNull(e);
 		}
 	}
-	
+
+	@Test
 	public void testMessageForSerializerException() throws Exception {
 		SerializerException lvException = new SerializerException("MyMessage");
 		assertEquals("MyMessage", lvException.getMessage());
 	}
-	
+
+	@Test
 	public void testSerializeInFile() throws Exception {
 		String lvTempDir = System.getProperties().getProperty("java.io.tmpdir");
 		String lvFile = lvTempDir + File.separatorChar + "Car.ser";
@@ -100,6 +108,7 @@ public class ObjectSerializerTest extends TestCase {
 		assertEquals(lvCar.getName(), lvCarAfter.getName());
 	}
 
+	@Test
 	public void testSerializeInFileWithFaultInPath() throws Exception {
 		String lvTempDir = System.getProperties().getProperty("java.io.tmpdir");
 		String lvFile = lvTempDir + "bad-path/Car.ser";
@@ -121,6 +130,7 @@ public class ObjectSerializerTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testDeSerializeWithException() throws Exception {
 		try {
 			new ObjectSerializer().deserialize(null);
@@ -130,6 +140,7 @@ public class ObjectSerializerTest extends TestCase {
 		}		
 	}
 
+	@Test
 	public void testDeSerializeObjectWithException() throws Exception {
 		try {
 			new ObjectSerializer().deserialize("Dummy");
@@ -138,7 +149,8 @@ public class ObjectSerializerTest extends TestCase {
 			assertNotNull(e);
 		}		
 	}
-	
+
+	@Test
 	public void testSerializeWithClassPathFilter() throws Exception {
 		Serializer lvSerializer = new ObjectSerializer();
 		ClassPropertyFilter lvFilter = ClassPropertyFilterHelper.createClassPropertyFilterByClass(Car.class).removeProperty("build").removeProperty("description");
@@ -156,6 +168,7 @@ public class ObjectSerializerTest extends TestCase {
 		assertEquals("This is my car", lvCarAfter.getDescription());
 	}
 
+	@Test
 	public void testDeSerializeWithOutRootClass() throws Exception {
 		Serializer lvSerializer = new ObjectSerializer();
 		Map<String, String> lvMap = new HashMap<String, String>();
@@ -168,7 +181,8 @@ public class ObjectSerializerTest extends TestCase {
 		assertEquals("This BMW is my Car", lvMapAfter.get("description"));
 		assertFalse("Map don't contains class attribute", lvMap.containsKey("class"));
 	}
-	
+
+	@Test
 	public void testDeSerializeWithRootClass() throws Exception {
 		Serializer lvSerializer = new ObjectSerializer();
 		Map<String, String> lvMap = new HashMap<String, String>();
@@ -180,7 +194,8 @@ public class ObjectSerializerTest extends TestCase {
 		assertEquals("BMW", lvCarAfter.getName());
 		assertEquals("This BMW is my Car", lvCarAfter.getDescription());
 	}
-	
+
+	@Test
 	public void testDeSerializeException() throws Exception {
 		Serializer lvSerializer = new ObjectSerializer();
 		Exception lvException = new ConversionException("JUnit-Test-Exception");
@@ -190,7 +205,8 @@ public class ObjectSerializerTest extends TestCase {
 		assertNull(e.getCause());
 		assertTrue(5 < e.getStackTrace().length);
 	}
-	
+
+	@Test
 	public void testDeSerializeNestedException() throws Exception {
 		Serializer lvSerializer = new ObjectSerializer();
 		Exception lvException = new ConversionException("JUnit-Test-Exception", new NullPointerException("Nested"));
@@ -204,7 +220,7 @@ public class ObjectSerializerTest extends TestCase {
 		assertTrue(5 < lvNestedExc.getStackTrace().length);
 	}
 
-
+	@Test
 	public void testSerializeWithPropertyFilter() throws Exception {
 		Car lvCar = new Car("BMW");
 		lvCar.setBuild(new Date());
@@ -221,6 +237,7 @@ public class ObjectSerializerTest extends TestCase {
 		assertNull(lvCarAfter.getBuild());
 	}
 
+	@Test
 	public void testSerializeWithoutPropertyFilter() throws Exception {
 		Car lvCar = new Car("BMW");
 		lvCar.setBuild(new Date(1));
@@ -249,6 +266,7 @@ public class ObjectSerializerTest extends TestCase {
 
 	}
 
+	@Test
 	public void testSerializeWithPropertyFilterAndFilteringClass() throws Exception {
 		Car lvCar = new Car("BMW");
 		lvCar.setBuild(new Date());
@@ -273,6 +291,7 @@ public class ObjectSerializerTest extends TestCase {
 		assertNull(lvCarAfter.getBuild());
 	}
 
+	@Test
 	public void testSerializeWithPropertyFilterAndFilteringUniqueId() throws Exception {
 		Car lvCar = new Car("BMW");
 		lvCar.setBuild(new Date());
@@ -298,6 +317,7 @@ public class ObjectSerializerTest extends TestCase {
 		assertNull(lvCarAfter.getBuild());
 	}
 
+	@Test
 	public void testMultipleReferences() throws Exception {
 	    BBean b = new BBean();
 	    ABean a = new ABean();
@@ -318,8 +338,9 @@ public class ObjectSerializerTest extends TestCase {
 	    assertTrue (ades.getThirdRef() == bBeanAfter);
 	    assertTrue (ades.getFourthRef() != null);
 	    assertTrue (ades.getFourthRef() == bBeanAfter);
-	} 
+	}
 
+	@Test
 	public void testTransformDefaultMutableTreeNode() throws Exception {
 		String lvFilter[] = new String [] {"class", "parent", "children", "userObject", "allowsChildren"};
 		ReflectionFieldHelper.addAllFields2MapByClass(DefaultMutableTreeNode.class, lvFilter);

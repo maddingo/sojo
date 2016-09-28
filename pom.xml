@@ -16,6 +16,10 @@ This is a refactored version of the original sojo at http://sojo.sf.net for Java
     <version>7</version>
   </parent>
   
+  <properties>
+    <junit.version>4.12</junit.version>
+  </properties>
+  
   <scm>
   	<url>http://github.com/maddingo/sojo</url>
     <connection>scm:git:http://github.com/maddingo/sojo.git</connection>
@@ -36,7 +40,7 @@ This is a refactored version of the original sojo at http://sojo.sf.net for Java
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.10</version>
+      <version>${junit.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>

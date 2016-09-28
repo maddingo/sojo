@@ -18,21 +18,24 @@ package test.net.sf.sojo.reflect;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import org.hamcrest.CoreMatchers;
-import org.junit.Assert;
 
 import net.sf.sojo.core.reflect.ReflectionFieldHelper;
 
+import org.hamcrest.CoreMatchers;
+import org.junit.Assert;
+import org.junit.Test;
 import test.net.sf.sojo.model.Car;
 import test.net.sf.sojo.model.Node;
 import test.net.sf.sojo.model.SubNode;
-import junit.framework.TestCase;
 
-public class ReflectionFieldHelperTest extends TestCase {
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.*;
+import static org.junit.Assert.*;
+
+public class ReflectionFieldHelperTest {
 
 	private Field findFieldByName (Field pvField[], String pvFieldName) {
 		Field lvField = null;
@@ -44,7 +47,8 @@ public class ReflectionFieldHelperTest extends TestCase {
 		}
 		return lvField;
 	}
-	
+
+	@Test
 	public void testFindFields() throws Exception {
 		Field lvFields[] = ReflectionFieldHelper.getAllFieldsByClass(Node.class);
 
@@ -64,7 +68,8 @@ public class ReflectionFieldHelperTest extends TestCase {
 		assertEquals(lvField.getName(), "namedChildren");
 		assertEquals(lvField.getType(), Map.class);
 	}
-	
+
+	@Test
 	public void testFindFields2 () throws Exception {
 		Field lvFields[] = ReflectionFieldHelper.getAllFieldsByClass(Node.class); 
 		Field lvSubFields[] = ReflectionFieldHelper.getAllFieldsByClass(SubNode.class);
@@ -72,12 +77,14 @@ public class ReflectionFieldHelperTest extends TestCase {
 		assertTrue(lvFields.length < lvSubFields.length);
 		assertEquals( (lvFields.length + 1), lvSubFields.length);
 	}
-	
+
+	@Test
 	public void testContainsClass() throws Exception {
 		boolean b = ReflectionFieldHelper.containsClass(DefaultMutableTreeNode.class);
 		assertFalse(b);
 	}
-	
+
+	@Test
 	public void testAddAllFields2MapByClass() throws Exception {
 		boolean b = ReflectionFieldHelper.containsClass(DefaultMutableTreeNode.class);
 		assertFalse(b);
@@ -95,7 +102,8 @@ public class ReflectionFieldHelperTest extends TestCase {
 		b = ReflectionFieldHelper.containsClass(DefaultMutableTreeNode.class);
 		assertFalse(b);
 	}
-	
+
+	@Test
 	public void testAddAllField2MapsByClass() throws Exception {
 		Map<?, ?> lvFieldMap = ReflectionFieldHelper.getAllSetFieldMapsByClass(DefaultMutableTreeNode.class, null);
 		assertNotNull(lvFieldMap);
@@ -112,12 +120,13 @@ public class ReflectionFieldHelperTest extends TestCase {
 		b = ReflectionFieldHelper.containsClass(DefaultMutableTreeNode.class);
 		assertFalse(b);
 	}
-	
+
+	@Test
 	public void testFieldFilter() throws Exception {
 		Map<?, ?> lvFieldMap = ReflectionFieldHelper.getAllSetFieldMapsByClass(DefaultMutableTreeNode.class, null);
 		// The number of properties depends on the Jvm
-		Assert.assertThat(Integer.valueOf(lvFieldMap.size()), CoreMatchers.anyOf(CoreMatchers.is(5), CoreMatchers.is(6)));
-		
+		assertThat(Integer.valueOf(lvFieldMap.size()), anyOf(is(5), is(6)));
+
 		// add class
 		ReflectionFieldHelper.addAllFields2MapByClass(DefaultMutableTreeNode.class, null);
 		String lvFilter[] = new String [] {"parent", "children", "userObject", "allowsChildren"};
@@ -126,7 +135,8 @@ public class ReflectionFieldHelperTest extends TestCase {
 		// remove class
 		ReflectionFieldHelper.removePropertiesByClass(DefaultMutableTreeNode.class);
 	}
-	
+
+	@Test
 	public void testSetterAndGetter() throws Exception {
 		Map<?, ?> lvMapGet = ReflectionFieldHelper.getAllGetFieldMapsByClass(Car.class, null);
 		Map<?, ?> lvMapSet = ReflectionFieldHelper.getAllSetFieldMapsByClass(Car.class, null);
