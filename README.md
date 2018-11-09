@@ -2,6 +2,8 @@ SOJO - Simple Old Java Objects
 ==============================
 [![Build Status](https://travis-ci.org/maddingo/sojo.png)](https://travis-ci.org/maddingo/sojo)
 
+[![](https://codescene.io/projects/3650/status.svg) Get more details at **codescene.io**.](https://codescene.io/projects/3650/jobs/latest-successful/results)
+
 This repository was copied from revision 257 of the SOJO subversion repository trunk 
 at https://sojo.svn.sourceforge.net/svnroot/sojo/trunk/
 
