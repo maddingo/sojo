@@ -5,7 +5,7 @@ SOJO - Simple Old Java Objects
 [![](https://codescene.io/projects/3650/status.svg) Get more details at **codescene.io**.](https://codescene.io/projects/3650/jobs/latest-successful/results)
 
 This repository was copied from revision 257 of the SOJO subversion repository trunk 
-at https://sojo.svn.sourceforge.net/svnroot/sojo/trunk/
+at https://sourceforge.net/p/sojo/code/257/tree/trunk/
 
 Documentation can be found on the original project site at http://sojo.sf.net 
 
