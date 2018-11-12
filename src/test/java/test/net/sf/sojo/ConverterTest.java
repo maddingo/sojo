@@ -31,8 +31,7 @@ import java.util.Properties;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import org.hamcrest.CoreMatchers;
-import org.junit.Assert;
+import org.hamcrest.Matchers;
 
 import junit.framework.TestCase;
 import net.sf.sojo.common.ObjectUtil;
@@ -59,6 +58,9 @@ import test.net.sf.sojo.model.Car;
 import test.net.sf.sojo.model.Customer;
 import test.net.sf.sojo.model.Node;
 import test.net.sf.sojo.model.Primitive;
+
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
 
 public class ConverterTest extends TestCase {
 	
@@ -1390,32 +1392,32 @@ public class ConverterTest extends TestCase {
 		a.setCity("Hier");
 		lvCustomer.getAddresses().add(a);
 		
-		Map<String, Object> lvMap = new HashMap<String, Object>();
+		Map<String, Object> lvMap = new LinkedHashMap<String, Object>();
 		lvMap.put("KEY_1", a);
 		lvMap.put("KEY_2", lvCustomer);
 		
 		// convert 
 		Object lvSimple = c.convert(lvMap);
-		Assert.assertThat(lvSimple, CoreMatchers.instanceOf(Map.class));
-		Map<?,?> lvSimpleMap = (Map<?, ?>)lvSimple;
-		Assert.assertThat(lvSimpleMap.get("1~_-_~KEY_2"), CoreMatchers.instanceOf(LinkedHashMap.class));
-		Assert.assertThat(lvSimpleMap.get("2~_-_~KEY_1"), CoreMatchers.is((Object)"~unique-id~1"));
-		
+		assertThat(lvSimple, Matchers.instanceOf(Map.class));
+		Map<String,Object> lvSimpleMap = (Map<String, Object>)lvSimple;
+		assertThat(lvSimpleMap, hasEntry(startsWith("1~_-_~KEY_"), instanceOf(LinkedHashMap.class)));
+        assertThat(lvSimpleMap, hasEntry(startsWith("2~_-_~KEY_"), instanceOf(LinkedHashMap.class)));
+
 		lvInterceptor.setMakeSimple(false);
 		Object lvComplex = c.convert(lvSimple);
 		
-		Assert.assertThat(lvComplex, CoreMatchers.is(CoreMatchers.notNullValue()));
-		Assert.assertThat(lvComplex, CoreMatchers.instanceOf(Map.class));
+		assertThat(lvComplex, Matchers.is(notNullValue()));
+		assertThat(lvComplex, Matchers.instanceOf(Map.class));
 		Map<?,?> lvMapAfter = (Map<?,?>) lvComplex;
-		Assert.assertThat(lvMapAfter.size(), CoreMatchers.is(2));
-		Assert.assertThat(lvMapAfter.get("KEY_1"), CoreMatchers.instanceOf(Address.class));
+		assertThat(lvMapAfter.size(), Matchers.is(2));
+		assertThat(lvMapAfter.get("KEY_1"), Matchers.instanceOf(Address.class));
 		Address aAfter = (Address) lvMapAfter.get("KEY_1");
-		Assert.assertThat(lvMapAfter.get("KEY_2"), CoreMatchers.instanceOf(Customer.class));
+		assertThat(lvMapAfter.get("KEY_2"), Matchers.instanceOf(Customer.class));
 		Customer cAfter = (Customer)lvMapAfter.get("KEY_2");
-		Assert.assertThat(aAfter.getCity(), CoreMatchers.is("Hier"));
-		Assert.assertThat(cAfter.getLastName(), CoreMatchers.is("Test-Kunde"));
-		Assert.assertThat(cAfter.getAddresses().size(), CoreMatchers.is(1));
-		Assert.assertThat(cAfter.getAddresses().iterator().next(), CoreMatchers.is((Object)aAfter));
+		assertThat(aAfter.getCity(), Matchers.is("Hier"));
+		assertThat(cAfter.getLastName(), Matchers.is("Test-Kunde"));
+		assertThat(cAfter.getAddresses().size(), Matchers.is(1));
+		assertThat(cAfter.getAddresses().iterator().next(), Matchers.is((Object)aAfter));
 	}
 
 	public void testObjectFoundForHashCodeByMakeComplex_2() throws Exception {
