@@ -1392,7 +1392,7 @@ public class ConverterTest extends TestCase {
 		a.setCity("Hier");
 		lvCustomer.getAddresses().add(a);
 		
-		Map<String, Object> lvMap = new HashMap<String, Object>();
+		Map<String, Object> lvMap = new LinkedHashMap<String, Object>();
 		lvMap.put("KEY_1", a);
 		lvMap.put("KEY_2", lvCustomer);
 		
@@ -1402,8 +1402,8 @@ public class ConverterTest extends TestCase {
 		Map<String,Object> lvSimpleMap = (Map<String, Object>)lvSimple;
 //		assertThat(lvSimpleMap, allOf(hasKey(startsWith("1~_-_~KEY_")), hasKey(startsWith("2~_-_~KEY_"))));
 //		assertThat(lvSimpleMap.values(), everyItem(instanceOf(LinkedHashMap.class)));
-		assertThat(lvSimpleMap.get("1~_-_~KEY_2"), instanceOf(LinkedHashMap.class));
-		assertThat(lvSimpleMap.get("2~_-_~KEY_1"), is((Object)"~unique-id~1"));
+		assertThat(lvSimpleMap.get("1~_-_~KEY_1"), instanceOf(LinkedHashMap.class));
+		assertThat(lvSimpleMap.get("2~_-_~KEY_2"), is((Object)"~unique-id~1"));
 		
 		lvInterceptor.setMakeSimple(false);
 		Object lvComplex = c.convert(lvSimple);
