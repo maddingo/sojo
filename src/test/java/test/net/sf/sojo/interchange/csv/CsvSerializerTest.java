@@ -15,16 +15,6 @@
  */
 package test.net.sf.sojo.interchange.csv;
 
-import java.math.BigDecimal;
-import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-
 import junit.framework.TestCase;
 import net.sf.sojo.core.ConversionException;
 import net.sf.sojo.core.UniqueIdGenerator;
@@ -35,11 +25,17 @@ import net.sf.sojo.interchange.csv.CsvParser;
 import net.sf.sojo.interchange.csv.CsvParserException;
 import net.sf.sojo.interchange.csv.CsvSerializer;
 import net.sf.sojo.interchange.csv.CsvWalkerInterceptor;
-import test.net.sf.sojo.model.Address;
-import test.net.sf.sojo.model.Car;
-import test.net.sf.sojo.model.Customer;
-import test.net.sf.sojo.model.Node;
-import test.net.sf.sojo.model.SpecialTypeBean;
+import test.net.sf.sojo.model.*;
+
+import java.math.BigDecimal;
+import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.emptyIterableOf;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.junit.Assert.assertThat;
 
 public class CsvSerializerTest extends TestCase {
 	
@@ -381,46 +377,43 @@ public class CsvSerializerTest extends TestCase {
 	}
 
 	public void testSerializeStringMap() throws Exception {
-		Map<String, String> lvMap = new HashMap<String, String>();
+		Map<String, String> lvMap = new LinkedHashMap<String, String>();
 		lvMap.put("k1", "v1");
 		lvMap.put("k2", "v2");
 		lvMap.put("k3", "v3");
 		Object o = csvSerializer.serialize(lvMap);
-		assertEquals("v3,v1,v2", o);
+		assertEquals("v1,v2,v3", o);
 	}
 
 	public void testDeSerializeStringMap() throws Exception {
-		Map<String, String> lvMap = new HashMap<String, String>();
+		Map<String, String> lvMap = new LinkedHashMap<String, String>();
 		lvMap.put("k1", "v1");
 		lvMap.put("k2", "v2");
 		lvMap.put("k3", "v3");
 		Object o = csvSerializer.serialize(lvMap);
 		o = csvSerializer.deserialize(o);
-		List<?> l = (List<?>) o;
-		assertEquals(3, l.size());
-		assertEquals("v3", l.get(0));
-		assertEquals("v1", l.get(1));
-		assertEquals("v2", l.get(2));
+		assertThat(o, instanceOf(List.class));
+		assertThat((List<String>)o, contains("v1", "v2", "v3"));
 	}
 
 	public void testSerializeStringMapWithNamesInFirstRow() throws Exception {
-		Map<String, String> lvMap = new HashMap<String, String>();
+		Map<String, String> lvMap = new LinkedHashMap<String, String>();
 		lvMap.put("k1", "v1");
 		lvMap.put("k2", "v2");
 		lvMap.put("k3", "v3");
 		csvSerializer.setWithPropertyNamesInFirstLine(true);
 		Object o = csvSerializer.serialize(lvMap);
-		assertEquals("k3,k1,k2" + CsvParser.CRLF + "v3,v1,v2", o);
+		assertEquals("k1,k2,k3" + CsvParser.CRLF + "v1,v2,v3", o);
 	}
 
-	public void __testSimpleBean() throws Exception {
+	public void testSimpleBean() throws Exception {
 		Car lvCar = new Car("My Car");
 		lvCar.setDescription("This is my car.");
 		Object o = csvSerializer.serialize(lvCar);
 		assertEquals("0,test.net.sf.sojo.model.Car,This is my car.,My Car", o);
 	}
 
-	public void __testSimpleBeanWithNamesInFirstRow() throws Exception {
+	public void testSimpleBeanWithNamesInFirstRow() throws Exception {
 		Car lvCar = new Car("My Car");
 		lvCar.setDescription("This is my car.");
 		csvSerializer.setWithPropertyNamesInFirstLine(true);
