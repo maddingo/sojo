@@ -1400,10 +1400,10 @@ public class ConverterTest extends TestCase {
 		Object lvSimple = c.convert(lvMap);
 		assertThat(lvSimple, Matchers.instanceOf(Map.class));
 		Map<String,Object> lvSimpleMap = (Map<String, Object>)lvSimple;
-		assertThat(lvSimpleMap, allOf(hasKey(startsWith("1~_-_~KEY_")), hasKey(startsWith("2~_-_~KEY_"))));
-		assertThat(lvSimpleMap.values(), everyItem(instanceOf(LinkedHashMap.class)));
-//		assertThat(lvSimpleMap.get("1~_-_~KEY_2"), instanceOf(LinkedHashMap.class));
-//		assertThat(lvSimpleMap.get("2~_-_~KEY_1"), is((Object)"~unique-id~1"));
+//		assertThat(lvSimpleMap, allOf(hasKey(startsWith("1~_-_~KEY_")), hasKey(startsWith("2~_-_~KEY_"))));
+//		assertThat(lvSimpleMap.values(), everyItem(instanceOf(LinkedHashMap.class)));
+		assertThat(lvSimpleMap.get("1~_-_~KEY_2"), instanceOf(LinkedHashMap.class));
+		assertThat(lvSimpleMap.get("2~_-_~KEY_1"), is((Object)"~unique-id~1"));
 		
 		lvInterceptor.setMakeSimple(false);
 		Object lvComplex = c.convert(lvSimple);
