@@ -24,6 +24,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -848,4 +849,16 @@ public class XmlRpcSerializerTest extends TestCase {
 		ReflectionFieldHelper.removePropertiesByClass(DefaultMutableTreeNode.class);
 	}
 
+	public void testExNullInMap() {
+	    Map<String, String> map = new LinkedHashMap<>();
+
+	    map.put("First Key", "First Value");
+	    map.put("Second Key", null);
+	    map.put("Third Key", "Third Value");
+        Object serMap = xmlRpcSerializer.serialize(map);
+        assertNotNull(serMap);
+
+        Object deserMap = xmlRpcSerializer.deserialize(serMap);
+        assertEquals(map, deserMap);
+    }
 }

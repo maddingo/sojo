@@ -52,7 +52,7 @@ public class XmlRpcContentHandler extends DefaultHandler {
 		validTags.put("member", "");
 		validTags.put("methodCall", "");
 		validTags.put("methodResponse", "");
-	};
+	}
 	
 	@Override
 	public void startDocument() throws SAXException { 
