@@ -20,19 +20,14 @@ import java.math.BigInteger;
 import java.net.URL;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import junit.framework.TestCase;
 import net.sf.sojo.core.ConversionException;
 import net.sf.sojo.core.UniqueIdGenerator;
+import net.sf.sojo.core.conversion.Simple2SimpleConversion;
 import net.sf.sojo.core.filter.ClassPropertyFilter;
 import net.sf.sojo.core.filter.ClassPropertyFilterHandlerImpl;
 import net.sf.sojo.core.filter.ClassPropertyFilterHelper;
@@ -51,6 +46,9 @@ import test.net.sf.sojo.model.Customer;
 import test.net.sf.sojo.model.Node;
 import test.net.sf.sojo.model.Primitive;
 import test.net.sf.sojo.model.SpecialTypeBean;
+
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertThat;
 
 public class XmlRpcSerializerTest extends TestCase {
 
@@ -451,14 +449,33 @@ public class XmlRpcSerializerTest extends TestCase {
 	
 	public void testPrimitive() throws Exception {
 		Primitive p = Primitive.createPrimitiveExample();
-		
-		Object lvResult = xmlRpcSerializer.serialize(p);
-		lvResult = xmlRpcSerializer.deserialize(lvResult);
-		Primitive pAfter = (Primitive) lvResult;
 
-		assertEquals(p.getBooleanValue(), pAfter.getBooleanValue());
+		Object lvResultSer = xmlRpcSerializer.serialize(p);
+		Object lvResultDeser = xmlRpcSerializer.deserialize(lvResultSer);
+		assertThat(lvResultDeser, is(instanceOf(Primitive.class)));
+
+		assertEquals(p, lvResultDeser);
 	}
-	
+
+	public void testCharPrimitive() {
+	    CharPrimitive p = new CharPrimitive();
+	    p.setCharVal('a');
+	    Object lvResultSer = xmlRpcSerializer.serialize(p);
+
+	    assertThat((String)lvResultSer, containsString("<name>charVal</name><value><string>a</string></value>"));
+        Object lvResultDeser = xmlRpcSerializer.deserialize(lvResultSer);
+        assertThat(lvResultDeser, is(instanceOf(CharPrimitive.class)));
+
+        assertThat((CharPrimitive)lvResultDeser, is(equalTo(p)));
+    }
+
+    public void testSimpleChar() {
+	    Object lvResultSer = xmlRpcSerializer.serialize('A');
+	    Object lvResultDeser = xmlRpcSerializer.deserialize(lvResultSer);
+	    assertThat(lvResultDeser, instanceOf(String.class));
+	    assertThat(lvResultDeser.toString(), equalTo("A"));
+    }
+
 	public void testBeanWithCycle() throws Exception {
 		Node n = new Node("ROOT");
 		Node n1 = new Node("N1");
@@ -848,4 +865,41 @@ public class XmlRpcSerializerTest extends TestCase {
 		ReflectionFieldHelper.removePropertiesByClass(DefaultMutableTreeNode.class);
 	}
 
+	public void testWithNullValueInMap() {
+	    Map<String, String> map = new LinkedHashMap<>();
+
+	    map.put("First Key", "First Value");
+	    map.put("Second Key", null);
+	    map.put("Third Key", "Third Value");
+        Object serMap = xmlRpcSerializer.serialize(map);
+        assertNotNull(serMap);
+
+        Object deserMap = xmlRpcSerializer.deserialize(serMap);
+        assertEquals(map, deserMap);
+    }
+
+    public static class CharPrimitive {
+	    private char charVal;
+
+        public void setCharVal(char charVal) {
+            this.charVal = charVal;
+        }
+
+        public char getCharVal() {
+            return charVal;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            CharPrimitive that = (CharPrimitive) o;
+            return charVal == that.charVal;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(charVal);
+        }
+    }
 }

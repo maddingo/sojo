@@ -70,12 +70,7 @@ public class XmlRpcWalkerInterceptor implements WalkerInterceptor {
 	
 	@Override
 	public boolean visitElement(Object pvKey, int pvIndex, Object pvValue, int pvType, String pvPath, int pvNumberOfRecursion) {
-		if (pvType == Constants.TYPE_NULL) {
-			createParamTag(pvPath, "<param>");
-			mapping2XmlRpcDataType(pvValue);
-			createParamTag(pvPath, "</param>");
-		}
-		else if (pvType == Constants.TYPE_SIMPLE) {
+		if (pvType == Constants.TYPE_SIMPLE || pvType == Constants.TYPE_NULL) {
 			createParamTag(pvPath, "<param>"); 
 			if (pvKey != null) { createMemberTag(pvKey); }
 			mapping2XmlRpcDataType(pvValue);
@@ -138,22 +133,21 @@ public class XmlRpcWalkerInterceptor implements WalkerInterceptor {
 		if (pvValue == null) {
 			xmlRpcString.append("<ex:nil>null</ex:nil>");
 		}
-		else if (pvValue.getClass().equals(String.class)) {
+		else if (pvValue instanceof String || pvValue instanceof Character) {
 			String s = pvValue.toString();
 			s = s.replaceAll("<", "&lt;");
 			s = s.replaceAll(">", "&gt;");
 			xmlRpcString.append("<string>").append(s).append("</string>");
-//			xmlRpcString.append(s);
 		}
-		else if (pvValue.getClass().equals(Integer.class)) {
+		else if (pvValue instanceof Integer) {
 			xmlRpcString.append("<i4>").append(pvValue).append("</i4>");
 		}
-		else if (pvValue.getClass().equals(Boolean.class)) {
+		else if (pvValue instanceof Boolean) {
 			Boolean lvBoolean = Boolean.valueOf(pvValue.toString());
 			int b = (lvBoolean.equals(Boolean.TRUE) ? 1 : 0);
 			xmlRpcString.append("<boolean>").append(b).append("</boolean>");
 		}
-		else if (pvValue.getClass().equals(Double.class)) {
+		else if (pvValue instanceof Double) {
 			xmlRpcString.append("<double>").append(pvValue).append("</double>");
 		}
 		else if (pvValue instanceof Date) {
@@ -162,7 +156,7 @@ public class XmlRpcWalkerInterceptor implements WalkerInterceptor {
 			String s = sdf.format(d);
 			xmlRpcString.append("<dateTime.iso8601>").append(s).append("</dateTime.iso8601>");
 		}
-		
+
 		// ----------------- Apache XML-RPC Extensions -----------------
 		else if (pvValue.getClass().equals(Byte.class)) {
 			xmlRpcString.append("<ex:i1>").append(pvValue).append("</ex:i1>");

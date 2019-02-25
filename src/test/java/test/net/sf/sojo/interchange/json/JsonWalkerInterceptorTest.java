@@ -15,16 +15,17 @@
  */	
 package test.net.sf.sojo.interchange.json;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import junit.framework.TestCase;
 import net.sf.sojo.common.ObjectGraphWalker;
 import net.sf.sojo.core.Constants;
 import net.sf.sojo.interchange.SerializerException;
 import net.sf.sojo.interchange.json.JsonWalkerInterceptor;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.either;
+import static org.hamcrest.Matchers.equalTo;
 
 public class JsonWalkerInterceptorTest extends TestCase {
 
@@ -195,8 +196,8 @@ public class JsonWalkerInterceptorTest extends TestCase {
 		assertTrue(lvInterceptor.getWithNullValuesInMap());
 	}
 	
-	public void __testMapWithNullValue() throws Exception {
-		Map<String, String> map = new HashMap<String, String>();
+	public void testMapWithNullValue() throws Exception {
+		Map<String, String> map = new LinkedHashMap<String, String>();
 		map.put( "name", "json" );
 		map.put( "null", null);
 
@@ -204,8 +205,9 @@ public class JsonWalkerInterceptorTest extends TestCase {
 		walker.walk(map);
 		jsonInterceptor.setWithNullValuesInMap(false); 
 		
-		String s = "{\"null\":null,\"name\":\"json\"}";
-		assertEquals(s, jsonInterceptor.getJsonString());
+		String s1 = "{\"null\":null,\"name\":\"json\"}";
+        String s2 = "{\"name\":\"json\",\"null\":null}";
+		assertThat(jsonInterceptor.getJsonString(), either(equalTo(s1)).or(equalTo(s2)));
 	}
 
 	public void testMapWithOutNullValue() throws Exception {
@@ -243,5 +245,20 @@ public class JsonWalkerInterceptorTest extends TestCase {
 			assertNotNull(e);
 		}
 	}
+
+	/*
+    public void testExNullInMap() {
+        Map<String, String> map = new LinkedHashMap<>();
+
+        map.put("First Key", "First Value");
+        map.put("Second Key", null);
+        map.put("Third Key", "Third Value");
+        Object serMap = walker.serialize(map);
+        assertNotNull(serMap);
+
+        Object deserMap = walker.deserialize(serMap);
+        assertEquals(map, deserMap);
+    }*/
+
 
 }
