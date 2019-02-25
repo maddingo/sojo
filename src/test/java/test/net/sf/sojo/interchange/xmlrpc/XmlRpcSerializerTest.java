@@ -53,6 +53,9 @@ import test.net.sf.sojo.model.Node;
 import test.net.sf.sojo.model.Primitive;
 import test.net.sf.sojo.model.SpecialTypeBean;
 
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertThat;
+
 public class XmlRpcSerializerTest extends TestCase {
 
 	private XmlRpcSerializer xmlRpcSerializer = new XmlRpcSerializer();
@@ -453,13 +456,25 @@ public class XmlRpcSerializerTest extends TestCase {
 	public void testPrimitive() throws Exception {
 		Primitive p = Primitive.createPrimitiveExample();
 		
-		Object lvResult = xmlRpcSerializer.serialize(p);
-		lvResult = xmlRpcSerializer.deserialize(lvResult);
-		Primitive pAfter = (Primitive) lvResult;
+		Object lvResultSer = xmlRpcSerializer.serialize(p);
+		Object lvResultDeser = xmlRpcSerializer.deserialize(lvResultSer);
+		assertThat(lvResultDeser, is(instanceOf(Primitive.class)));
 
-		assertEquals(p.getBooleanValue(), pAfter.getBooleanValue());
+		assertEquals(p, lvResultDeser);
 	}
-	
+
+	public void testCharPrimitive() {
+	    CharPrimitive p = new CharPrimitive();
+	    p.setCharVal('a');
+	    Object lvResultSer = xmlRpcSerializer.serialize(p);
+
+	    assertThat((String)lvResultSer, containsString("<name>charVal</name><value>a</value>"));
+        Object lvResultDeser = xmlRpcSerializer.deserialize(lvResultSer);
+        assertThat(lvResultDeser, is(instanceOf(CharPrimitive.class)));
+
+        assertEquals(p, lvResultDeser);
+    }
+
 	public void testBeanWithCycle() throws Exception {
 		Node n = new Node("ROOT");
 		Node n1 = new Node("N1");
@@ -849,7 +864,7 @@ public class XmlRpcSerializerTest extends TestCase {
 		ReflectionFieldHelper.removePropertiesByClass(DefaultMutableTreeNode.class);
 	}
 
-	public void testExNullInMap() {
+	public void testWithNullValueInMap() {
 	    Map<String, String> map = new LinkedHashMap<>();
 
 	    map.put("First Key", "First Value");
@@ -860,5 +875,17 @@ public class XmlRpcSerializerTest extends TestCase {
 
         Object deserMap = xmlRpcSerializer.deserialize(serMap);
         assertEquals(map, deserMap);
+    }
+
+    public static class CharPrimitive {
+	    private char charVal;
+
+        public void setCharVal(char charVal) {
+            this.charVal = charVal;
+        }
+
+        public char getCharVal() {
+            return charVal;
+        }
     }
 }

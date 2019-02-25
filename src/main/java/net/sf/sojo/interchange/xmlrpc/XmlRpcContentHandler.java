@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
@@ -73,7 +74,7 @@ public class XmlRpcContentHandler extends DefaultHandler {
 			stack.push(new ArrayList<Object>());
 		}
 		else if ("struct".equals(pvName)) {
-			stack.push(new HashMap<Object, Object>());
+			stack.push(new LinkedHashMap<Object, Object>());
 		}
 		else if ("fault".equals(pvName)) {
 			isFault = true;
@@ -90,15 +91,17 @@ public class XmlRpcContentHandler extends DefaultHandler {
 			else if (lvCurrentStackObj instanceof Map) {
 				Map<Object, Object> lvMap = (Map<Object, Object>) lvCurrentStackObj;
 				lvMap.put(pvName, pvValue);
-				if ("key".equals(pvName)) {
-					for (Map.Entry<?, Object> lvEntry : lvMap.entrySet()) {
-						if (lvEntry.getValue() == null) {
-							lvEntry.setValue(pvValue);
-						}
-					}
-				}
-				lvMap.remove("key");
+				for (Map.Entry entry : lvMap.entrySet()) {
+				    if (entry.getKey().equals(pvName)) {
+				        stack.push(entry);
+				        break;
+                    }
+                }
 			}
+			else if (lvCurrentStackObj instanceof Map.Entry) {
+                ((Map.Entry)lvCurrentStackObj).setValue(pvValue);
+                stack.pop();
+            }
 			else {
 				if (NonCriticalExceptionHandler.isNonCriticalExceptionHandlerEnabled()) {
 					NonCriticalExceptionHandler.handleException(XmlRpcContentHandler.class, "Not supported Object in Stack: " + lvCurrentStackObj);
@@ -209,9 +212,16 @@ public class XmlRpcContentHandler extends DefaultHandler {
 		else if ("methodName".equals(pvName)) { 
 			methodName = value;	
 		}
-		else if ("name".equals(pvName)) { 
+		else if ("name".equals(pvName)) {
 			addValue(value, null);
 		}
+		else if ("member".equals(pvName)) {
+		    // make sure the stack does not contain a map entry, can be caused by improper serialization
+            if (stack.peek() instanceof Map.Entry) {
+                stack.pop();
+            }
+        }
+
 		
 		
 		else if (validTags.containsKey(pvName) == false)  

@@ -70,12 +70,7 @@ public class XmlRpcWalkerInterceptor implements WalkerInterceptor {
 	
 	@Override
 	public boolean visitElement(Object pvKey, int pvIndex, Object pvValue, int pvType, String pvPath, int pvNumberOfRecursion) {
-		if (pvType == Constants.TYPE_NULL) {
-			createParamTag(pvPath, "<param>");
-			mapping2XmlRpcDataType(pvValue);
-			createParamTag(pvPath, "</param>");
-		}
-		else if (pvType == Constants.TYPE_SIMPLE) {
+		if (pvType == Constants.TYPE_SIMPLE || pvType == Constants.TYPE_NULL) {
 			createParamTag(pvPath, "<param>"); 
 			if (pvKey != null) { createMemberTag(pvKey); }
 			mapping2XmlRpcDataType(pvValue);
