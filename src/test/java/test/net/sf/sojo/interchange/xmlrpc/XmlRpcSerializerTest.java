@@ -455,7 +455,7 @@ public class XmlRpcSerializerTest extends TestCase {
 	
 	public void testPrimitive() throws Exception {
 		Primitive p = Primitive.createPrimitiveExample();
-		
+
 		Object lvResultSer = xmlRpcSerializer.serialize(p);
 		Object lvResultDeser = xmlRpcSerializer.deserialize(lvResultSer);
 		assertThat(lvResultDeser, is(instanceOf(Primitive.class)));
