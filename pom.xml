@@ -3,7 +3,7 @@
     <groupId>net.sf.sojo</groupId>
     <artifactId>sojo</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.13-SNAPSHOT</version>
+    <version>1.0.13</version>
     <name>SOJO</name>
     <url>http://sojo.sourceforge.net</url>
     
@@ -21,7 +21,7 @@
         <url>http://github.com/maddingo/sojo</url>
         <connection>scm:git:http://github.com/maddingo/sojo</connection>
         <developerConnection>scm:git:ssh://git@github.com/maddingo/sojo</developerConnection>
-      <tag>HEAD</tag>
+      <tag>sojo-1.0.13</tag>
   </scm>
     
     <dependencyManagement>
