@@ -2,7 +2,7 @@ SOJO - Simple Old Java Objects
 ==============================
 [![Build Status](https://travis-ci.org/maddingo/sojo.png)](https://travis-ci.org/maddingo/sojo)
 
-Available on Maven Central: [![Maven Central](https://img.shields.io/maven-central/v/no.maddin.mockjdbc/mock-jdbc.svg?style=plastic)](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22sojo%22%20g%3A%22net.sf.sojo%22)
+Available on Maven Central: [![Maven Central](https://img.shields.io/maven-central/v/net.sf.sojo/sojo.svg?style=plastic)](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22sojo%22%20g%3A%22net.sf.sojo%22)
 
 [![](https://codescene.io/projects/3650/status.svg) Get more details at **codescene.io**.](https://codescene.io/projects/3650/jobs/latest-successful/results)
 
