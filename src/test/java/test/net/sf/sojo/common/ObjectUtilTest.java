@@ -31,9 +31,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
-
 import javax.swing.tree.DefaultMutableTreeNode;
-
 import junit.framework.TestCase;
 import net.sf.sojo.common.CompareResult;
 import net.sf.sojo.common.ObjectUtil;
@@ -205,9 +203,9 @@ public class ObjectUtilTest extends TestCase {
 		CompareResult cr[] = lvObjectUtil.compareAll(lvCar2, lvCar1);
 		assertEquals(1, cr.length);
 		assertEquals("description", cr[0].differentPath);
-		assertEquals("special car", cr[0].differentValue1);
-		assertNull(cr[0].differentValue2);
-		
+		assertNull(cr[0].differentValue1);
+		assertEquals("special car", cr[0].differentValue2);
+
 		cr = lvObjectUtil.compareAll(lvCar1, lvCar2);
 		assertEquals(1, cr.length);
 		assertEquals("description", cr[0].differentPath);
@@ -226,16 +224,29 @@ public class ObjectUtilTest extends TestCase {
 		lvCar2.setBuild(lvDate);
 		
 		CompareResult cr[] = lvObjectUtil.compareAll(lvCar1, lvCar2);
-		assertEquals(1, cr.length);
-		assertEquals("description", cr[0].differentPath);
-		assertEquals("special car", cr[0].differentValue1);
-		assertNull(cr[0].differentValue2);
-		
+		assertEquals(2, cr.length);
+
+		assertEquals(2, cr.length);
+
+		assertEquals("build", cr[0].differentPath);
+		assertNull(cr[0].differentValue1);
+		assertEquals(lvDate, cr[0].differentValue2);
+
+		assertEquals("description", cr[1].differentPath);
+		assertEquals("special car", cr[1].differentValue1);
+		assertNull(cr[1].differentValue2);
+
 		cr = lvObjectUtil.compareAll(lvCar2, lvCar1);
-		assertEquals(1, cr.length);
+
+		assertEquals(2, cr.length);
 		assertEquals("build", cr[0].differentPath);
 		assertEquals(lvDate, cr[0].differentValue1);
 		assertNull(cr[0].differentValue2);
+
+		assertEquals(2, cr.length);
+		assertEquals("description", cr[1].differentPath);
+		assertNull(cr[1].differentValue1);
+		assertEquals("special car", cr[1].differentValue2);
 	}
 
 	public void testEqualsDifferrentNodeBean() throws Exception {
@@ -547,7 +558,7 @@ public class ObjectUtilTest extends TestCase {
 		assertEquals("name", lvResult.differentPath);
 		assertEquals("Test-Node", lvResult.differentValue1);
 		assertEquals("Test-Node-OTHER", lvResult.differentValue2);
-		assertEquals(2, lvResult.numberOfRecursion);
+		assertEquals(1, lvResult.numberOfRecursion);
 	}
 	
 	public void testCompareSimpleCarBean() throws Exception {
@@ -570,14 +581,14 @@ public class ObjectUtilTest extends TestCase {
 		assertEquals("properties(key)", lvResult.differentPath);
 		assertEquals("value", lvResult.differentValue1);
 		assertEquals("value-NEW", lvResult.differentValue2);
-		assertEquals(5, lvResult.numberOfRecursion);
+		assertEquals(1, lvResult.numberOfRecursion);
 		
 		lvResult = new ObjectUtil().compare(lvCar2, lvCar1);
 		assertNotNull(lvResult);
 		assertEquals("properties(key)", lvResult.differentPath);
 		assertEquals("value-NEW", lvResult.differentValue1);
 		assertEquals("value", lvResult.differentValue2);
-		assertEquals(5, lvResult.numberOfRecursion);
+		assertEquals(1, lvResult.numberOfRecursion);
 	}
 
 	public void testCompareAllSimpleCarBean() throws Exception {
@@ -600,14 +611,14 @@ public class ObjectUtilTest extends TestCase {
 		assertEquals("properties(key)", lvResult[0].differentPath);
 		assertEquals("value", lvResult[0].differentValue1);
 		assertEquals("value-NEW", lvResult[0].differentValue2);
-		assertEquals(5, lvResult[0].numberOfRecursion);
+		assertEquals(1, lvResult[0].numberOfRecursion);
 		
 		lvResult = new ObjectUtil().compareAll(lvCar2, lvCar1);
 		assertNotNull(lvResult);
 		assertEquals("properties(key)", lvResult[0].differentPath);
 		assertEquals("value-NEW", lvResult[0].differentValue1);
 		assertEquals("value", lvResult[0].differentValue2);
-		assertEquals(5, lvResult[0].numberOfRecursion);
+		assertEquals(1, lvResult[0].numberOfRecursion);
 	}
 	
 	public void testCompareAllSimpleCarBeanWithMoreDifferents() throws Exception {
@@ -624,14 +635,14 @@ public class ObjectUtilTest extends TestCase {
 		CompareResult lvResult[] = new ObjectUtil().compareAll(lvCar1, lvCar2);
 		assertNotNull(lvResult);
 		assertEquals(2, lvResult.length);
+
+		assertEquals("name", lvResult[0].differentPath);
+		assertEquals("Audi", lvResult[0].differentValue1);
+		assertEquals("BMW", lvResult[0].differentValue2);
 		
-		assertEquals("description", lvResult[0].differentPath);
-		assertEquals("my car", lvResult[0].differentValue1);
-		assertEquals("your car", lvResult[0].differentValue2);
-		
-		assertEquals("name", lvResult[1].differentPath);
-		assertEquals("Audi", lvResult[1].differentValue1);
-		assertEquals("BMW", lvResult[1].differentValue2);
+		assertEquals("description", lvResult[1].differentPath);
+		assertEquals("my car", lvResult[1].differentValue1);
+		assertEquals("your car", lvResult[1].differentValue2);
 	}
 
 	public void testCompareAllSimpleCarBeanWithMoreDifferentsInverse() throws Exception {
@@ -648,15 +659,15 @@ public class ObjectUtilTest extends TestCase {
 		CompareResult lvResult[] = new ObjectUtil().compareAll(lvCar2, lvCar1);
 		assertNotNull(lvResult);
 		assertEquals(2, lvResult.length);
-		
-		assertEquals("description", lvResult[0].differentPath);
-		assertEquals("your car", lvResult[0].differentValue1);		
-		assertEquals("my car", lvResult[0].differentValue2);
 
+		assertEquals("name", lvResult[0].differentPath);
+		assertEquals("BMW", lvResult[0].differentValue1);
+		assertEquals("Audi", lvResult[0].differentValue2);
 		
-		assertEquals("name", lvResult[1].differentPath);
-		assertEquals("BMW", lvResult[1].differentValue1);
-		assertEquals("Audi", lvResult[1].differentValue2);
+		assertEquals("description", lvResult[1].differentPath);
+		assertEquals("your car", lvResult[1].differentValue1);
+		assertEquals("my car", lvResult[1].differentValue2);
+
 	}
 
 	public void testCompareAllSimpleCarBeanWithMoreDifferentsInverseBug() throws Exception {
