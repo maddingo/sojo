@@ -1,6 +1,6 @@
 SOJO - Simple Old Java Objects
 ==============================
-[![Build status](https://github.com/github/maddingo/sojo/actions/workflows/maven.yml/badge.svg)](https://github.com/maddingo/sojo/actions)
+[![Build status](https://github.com/maddingo/sojo/actions/workflows/maven.yml/badge.svg)](https://github.com/maddingo/sojo/actions)
 
 
 Available on Maven Central: [![Maven Central](https://img.shields.io/maven-central/v/net.sf.sojo/sojo.svg?style=plastic)](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22sojo%22%20g%3A%22net.sf.sojo%22)
