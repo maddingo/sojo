@@ -3,7 +3,7 @@
     <groupId>net.sf.sojo</groupId>
     <artifactId>sojo</artifactId>
     <packaging>jar</packaging>
-    <version>1.1.0</version>
+    <version>1.1.1-SNAPSHOT</version>
     <name>SOJO</name>
     <url>https://github.com/maddingo/sojo</url>
     
@@ -21,7 +21,7 @@
         <url>https://github.com/maddingo/sojo</url>
         <connection>scm:git:https://github.com/maddingo/sojo</connection>
         <developerConnection>scm:git:ssh://git@github.com/maddingo/sojo</developerConnection>
-        <tag>sojo-1.1.0</tag>
+        <tag>HEAD</tag>
     </scm>
     
     <dependencyManagement>
