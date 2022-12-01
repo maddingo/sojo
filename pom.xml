@@ -3,12 +3,12 @@
     <groupId>net.sf.sojo</groupId>
     <artifactId>sojo</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.14-SNAPSHOT</version>
+    <version>1.1.0-SNAPSHOT</version>
     <name>SOJO</name>
     <url>https://github.com/maddingo/sojo</url>
     
     <description>Simplified Old Java Objects.
-        This is a refactored version of the original sojo at http://sojo.sf.net for Java 1.7+.
+        This is a refactored version of the original sojo at https://sojo.sourceforge.net/ for Java 8+.
     </description>
     
     <!--parent>
