@@ -305,7 +305,7 @@ public final class ObjectUtil {
 		return lvCompareToValue;
 	}
 
-	private CompareResult[] compareIntern(final Object pvObject1, final Object pvObject2, boolean pvBreakByFindDifferents) {
+	private CompareResult[] compareIntern(final Object pvObject1, final Object pvObject2, boolean pvBreakByFindDifferences) {
 		CompareResult[] lvResult = null;
 
 		if (pvObject1 != null && pvObject2 != null) {
@@ -329,8 +329,8 @@ public final class ObjectUtil {
 
 			Set<String> paths = getAllPathsForMaps(lvPathes1.keySet(), lvPathes2.keySet());
 
-			List<CompareResult> lvCompareResultsList = new ArrayList<CompareResult>();
-			compareTwoMaps(paths, lvPathes1, lvPathes2, pvBreakByFindDifferents, lvCompareResultsList);
+			List<CompareResult> lvCompareResultsList = new ArrayList<>();
+			compareTwoMaps(paths, lvPathes1, lvPathes2, pvBreakByFindDifferences, lvCompareResultsList);
 
 			if (lvCompareResultsList.size() > 0) {
 				lvResult = lvCompareResultsList.toArray(new CompareResult[lvCompareResultsList.size()]);
@@ -344,9 +344,7 @@ public final class ObjectUtil {
 	private static void compareTwoMaps(Set<String> mapsPaths, Map<String, Object> pvMap1, Map<String, Object> pvMap2, boolean pvBreakByFindDifferents,
 		List<CompareResult> pvCompareResultsList) {
 
-		int lvNumberOfRecursion = 0;
 		for (String path : mapsPaths) {
-			lvNumberOfRecursion++;
 
 			Object lvValue1 = pvMap1.get(path);
 			Object lvValue2 = pvMap2.get(path);
@@ -357,9 +355,7 @@ public final class ObjectUtil {
 				lvCompareResult.differentPath = path;
 				lvCompareResult.differentValue1 = lvValue1;
 				lvCompareResult.differentValue2 = lvValue2;
-				lvCompareResult.numberOfRecursion = lvNumberOfRecursion;
-				//				lvCompareResult.key = lvPath1;
-				//				lvCompareResult.index = lvIndex;
+				lvCompareResult.numberOfRecursion = recursionFromPath(path);
 				pvCompareResultsList.add(lvCompareResult);
 				if (pvBreakByFindDifferents) {
 					break;
@@ -369,7 +365,20 @@ public final class ObjectUtil {
 		}
 	}
 
-    private static Set<String> getAllPathsForMaps(Collection<String> lvPaths1, Collection<String> lvPaths2) {
+	private static int recursionFromPath(String path) {
+		int recursion = -1;
+		if (path != null) {
+
+			recursion = 1;
+			int p = 0;
+			for (p = path.indexOf('.', p); p >= 0; p = path.indexOf('.', p + 1)) {
+				recursion++;
+			}
+		}
+		return recursion;
+	}
+
+	private static Set<String> getAllPathsForMaps(Collection<String> lvPaths1, Collection<String> lvPaths2) {
         Set<String> distinctPaths = new HashSet<>();
 
         distinctPaths.addAll(lvPaths1);
@@ -377,5 +386,4 @@ public final class ObjectUtil {
 
         return distinctPaths;
     }
-
 }

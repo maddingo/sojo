@@ -5,7 +5,7 @@
     <packaging>jar</packaging>
     <version>1.0.14-SNAPSHOT</version>
     <name>SOJO</name>
-    <url>http://sojo.sourceforge.net</url>
+    <url>https://github.com/maddingo/sojo</url>
     
     <description>Simplified Old Java Objects.
         This is a refactored version of the original sojo at http://sojo.sf.net for Java 1.7+.
@@ -18,11 +18,11 @@
     </parent-->
     
     <scm>
-        <url>http://github.com/maddingo/sojo</url>
-        <connection>scm:git:http://github.com/maddingo/sojo</connection>
+        <url>https://github.com/maddingo/sojo</url>
+        <connection>scm:git:https://github.com/maddingo/sojo</connection>
         <developerConnection>scm:git:ssh://git@github.com/maddingo/sojo</developerConnection>
-      <tag>HEAD</tag>
-  </scm>
+        <tag>HEAD</tag>
+    </scm>
     
     <dependencyManagement>
         <dependencies>
@@ -227,7 +227,7 @@
     <contributors>
         <contributor>
             <name>Martin Goldhahn</name>
-            <timezone>+1</timezone>
+            <timezone>Europe/Oslo</timezone>
             <url>https://github.com/maddingo</url>
         </contributor>
         <contributor>
