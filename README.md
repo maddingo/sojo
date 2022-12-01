@@ -17,5 +17,5 @@ Sojo is now available in the Maven Central repository
     <dependency>
       <groupId>net.sf.sojo</groupId>
       <artifactId>sojo</groupId>
-      <version>1.0.8</groupId>
+      <version>1.0.13</groupId>
     </dependency>
